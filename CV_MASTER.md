@@ -39,7 +39,7 @@ Rules for any agent using this file:
 | Medium | https://medium.com/@soyluisguinea | web, print |
 | LinkedIn | TODO | web, print |
 | Spotify / artist links | TODO | web |
-| Photo | `profile_pic.png` and `cover.png` in repo root. Check both against BRAND.md section 13 before use; optimise (WebP/AVIF, under 300 KB) | web |
+| Photo | `profile_pic.png` is Luis's real profile photo used on social media; publication authorised. `cover.png` is a real photograph of Jazztone Studios taken by Luis; publication authorised. Check both against BRAND.md section 13 before use; optimise derivatives (WebP/AVIF, under 300 KB) without overwriting originals. | web |
 
 ---
 
@@ -47,11 +47,11 @@ Rules for any agent using this file:
 
 ### Long (web, EN)
 
-I work where creative and analytical thinking meet. For ten years I have been inside the music business as a label founder, A&R and producer; in parallel I build data systems and automations that turn messy information into decisions. Lately I write about how artists actually grow, using data to test the stories the music industry tells itself. I work in English and Spanish, from Valencia.
+I work where creative and analytical thinking meet. For 10+ years I have been inside the music business as a label founder, A&R and producer; in parallel I build data systems and automations that turn messy information into decisions. Lately I write about how artists actually grow, using data to test the stories the music industry tells itself. I work in English and Spanish, from Valencia.
 
 ### Short (print, EN)
 
-Music producer, A&R and data analyst with ten years in the Latin music industry. I combine production and artist development with Python, SQL and Chartmetric analysis, and publish data-driven music research in English and Spanish.
+Music producer, A&R and technology and automation developer with 10+ years in the Latin music industry. I combine production and artist development with Python, SQL and Chartmetric analysis, and publish data-driven music research in English and Spanish.
 
 ### Tailored one-liners (for applications, not the site)
 
@@ -169,17 +169,17 @@ Published on Medium. Tools across all pieces: Chartmetric (including API), Pytho
 Ordered newest first. `dates` use the format shown on the site.
 
 ### Music Producer · Jazztone Studios, Valencia
-- dates: TODO start – Present
+- dates: Jan 2026 – Present
 - facets: `music`
-- visibility: web, print · status: verified (start date TODO)
+- visibility: web, print · status: verified
 - Produce and arrange for independent artists across Latin jazz and pop.
 - Compose music for film projects in Mexico and for advertising.
 
-### Brand & Digital Growth · Family hospitality venture, Valencia
+### Brand & Digital Growth · Santo Chilaquil, Valencia
 - dates: Feb 2025 – Present
 - facets: `business`, `creative`, `data`
-- visibility: web, print as "family hospitality venture" · status: VERIFY
-- private: the venture is Santo Chilaquil. Do not name it publicly unless Luis decides otherwise.
+- visibility: web, print · status: verified for role, venture name and responsibilities; metrics below remain VERIFY
+- Public naming authorised by Luis: use Santo Chilaquil.
 - Developed the branding and launch strategy.
 - Social content and Meta Ads campaigns. Claimed 30%+ monthly growth (VERIFY period and base).
 - CRM and automated promotional workflows. Claimed 100+ weekly customers retained (VERIFY).
@@ -195,13 +195,16 @@ Ordered newest first. `dates` use the format shown on the site.
 - Organised and maintained the catalogue in DISCO.
 - Optimised databases and ran data analysis in Python and SQL.
 
-### Data Analyst · Panaria
-- dates: Aug 2024 – TODO end
-- facets: `data`
-- visibility: web, print · status: verified (end date TODO)
-- Built a real-time extraction from the payment system into a SQL database on AWS EC2.
-- Designed an automated Python reporting framework: sales trends, loss prevention, data leakage, estimations and forecasting.
-- Title note: older CV says "Data Scientist". Use "Data Analyst" unless Luis prefers otherwise.
+### Information Technology & Automation Developer · Grupo Botanas
+- dates: Present
+- facets: `data`, `projects`, `business`
+- visibility: web, print · status: verified
+- Develops information technology and automation systems for Grupo Botanas.
+- Created LedgerApp.
+- Created the Digital Signage system.
+- Built the POS and QR-based digital menu system.
+- Implemented social-media workflows and NFC-based review systems.
+- Additional systems and results must only be added when documented and verified.
 
 ### Singer-Songwriter & Producer · Independent
 - dates: Jan 2022 – Present
@@ -211,7 +214,8 @@ Ordered newest first. `dates` use the format shown on the site.
 - Composed for films distributed by major platforms. TODO: film titles.
 - Negotiated a sync deal for an advertising campaign. TODO: brand or campaign if public.
 - Performed live and managed concert production. TODO: venues.
-- Older CV counts: "12 original songs", "23 singles and multiple albums". VERIFY which figure is correct before publishing either.
+- Released 12 original songs as an independent artist.
+- Produced 23 singles for other artists. These are production credits, not Luis's own artist releases.
 
 ### A&R Manager · Tipazo Music Group
 - dates: Oct 2022 – May 2023
@@ -241,7 +245,7 @@ Ordered newest first. `dates` use the format shown on the site.
 - Launched and marketed more than 50 artists in the Mexican market, reaching over 10 million streams.
 - Ran release campaigns and tours end to end.
 - Sync placements in film and advertising. TODO: examples.
-- Note: the label continues as Luis's own imprint (Moctezuma Music). The site can present 2015–2023 as the artist services period and the imprint as ongoing. Luis to confirm wording.
+- After Aug 2023, Moctezuma Music ceased operating as an active record label but remains active as a consultancy for independent artists and as a production company.
 
 ### Key Account Brand Manager · Parvin Music
 - dates: Jun 2021 – Jul 2022
@@ -285,11 +289,19 @@ Ordered newest first. `dates` use the format shown on the site.
 
 ### LedgerApp
 - facets: `projects`, `data`, `business`
-- visibility: web · status: TODO (needs case study content)
+- visibility: web · status: verified as a project created by Luis for Grupo Botanas; case study content remains TODO
 - What it is: financial and operational management system for restaurants.
 - Stack: Next.js, Supabase, Last.app POS integration, Google Calendar, MCP servers.
-- Case study TODO (BRAND.md section 21): context, problem, role, process, solution, result, metrics, screenshots.
+- Authorship/context: created by Luis for Grupo Botanas.
+- Case study TODO (BRAND.md section 21): problem, process, solution, result, metrics, screenshots.
 - Privacy: do not show real revenue or customer data. Use anonymised or demo data.
+
+### Digital Signage
+- facets: `projects`, `data`, `business`
+- visibility: web · status: verified as a project created by Luis for Grupo Botanas; case study content remains TODO
+- What it is: a digital signage system created for Grupo Botanas.
+- Authorship/context: created by Luis for Grupo Botanas.
+- Case study TODO (BRAND.md section 21): architecture, problem, process, solution, result, metrics, screenshots.
 
 ### MCP integrations for restaurant data
 - facets: `projects`, `data`
