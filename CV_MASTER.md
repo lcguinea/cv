@@ -367,12 +367,9 @@ No information exclusive to the previous `CV_MASTER.md` was removed; unresolved 
 
 ## 10. Open items for Luis
 
-1. Jazztone Studios start date.
-2. Panaria end date.
-3. Hospitality venture metrics: confirm 30%+ growth, 100+ weekly customers, and what "positive ROI" measured.
-4. Singer-songwriter release count: 12 songs or 23 singles?
-5. Film titles, sync brand, venues and voice work clients.
-6. LinkedIn URL, Spotify links, and whether the existing profile_pic.png and cover.png fit the documentary style.
-7. LedgerApp case study content and demo screenshots.
-8. Whether "Ya estoy aquí" pieces appear on the site.
-9. Whether Santo Chilaquil is named publicly.
+1. Hospitality venture metrics: confirm 30%+ growth, 100+ weekly customers, and what "positive ROI" measured.
+2. Film titles, sync brand, venues and voice work clients.
+3. LinkedIn URL and Spotify links.
+4. LedgerApp and Digital Signage case study content, results, metrics and demo screenshots.
+5. Whether "Ya estoy aquí" pieces appear on the site.
+6. Start date for the current Grupo Botanas role.
