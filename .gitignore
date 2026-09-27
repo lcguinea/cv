@@ -1,0 +1,6 @@
+# macOS
+.DS_Store
+
+# claude-orchestrator (Argos): memoria durable y estado local
+.orchestrator/
+estado/
