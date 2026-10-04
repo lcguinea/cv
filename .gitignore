@@ -4,3 +4,46 @@
 # claude-orchestrator (Argos): memoria durable y estado local
 .orchestrator/
 estado/
+
+# Audios privados del catálogo musical (masters sin publicar, no se versionan)
+One Page Luis Guinea/audios/
+
+# Ningún audio es versionable en ninguna ruta (masters y audios completos privados, también
+# bajo One Page Luis Guinea/assets/). Extensiones = AUDIO_EXTENSIONS de
+# data/music-catalog/check_public_music.py, sin distinguir mayúsculas.
+*.[mM][pP]3
+*.[wW][aA][vV]
+*.[wW][aA][vV][eE]
+*.[mM]4[aA]
+*.[aA][iI][fF]
+*.[aA][iI][fF][fF]
+*.[aA][iI][fF][cC]
+*.[fF][lL][aA][cC]
+*.[oO][gG][gG]
+*.[oO][gG][aA]
+*.[aA][aA][cC]
+*.[oO][pP][uU][sS]
+*.[wW][mM][aA]
+*.[mM][pP]4
+*.[aA][lL][aA][cC]
+*.[cC][aA][fF]
+*.[mM][pP]2
+*.[mM][kK][aA]
+*.[aA][mM][rR]
+*.[aA][uU]
+*.[aA][cC]3
+*.[dD][tT][sS]
+*.[wW][eE][bB][aA]
+*.[wW][eE][bB][mM]
+*.[mM][iI][dD][iI]
+*.[mM][iI][dD]
+*.[aA][pP][eE]
+*.[wW][vV]
+# Única excepción: .mp3 públicos validados, directamente bajo previews.
+!assets/
+!assets/audio/
+!assets/audio/previews/
+!assets/audio/previews/*.mp3
+
+# Python
+__pycache__/

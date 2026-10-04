@@ -1,0 +1,968 @@
+{
+  "schema": "human_review_decisions-v1",
+  "source": "One Page Luis Guinea/CLASIFICACION_HUMANA_MUSICA.md",
+  "source_status": "fuente humana autoritativa",
+  "review_date": "2026-09-28",
+  "evidence": "human_review",
+  "authority_rules": [
+    "Estos valores humanos tienen prioridad sobre predicciones ML/Essentia.",
+    "ML puede conservarse como evidencia separada, nunca sustituir estas decisiones.",
+    "No inferir campos ausentes.",
+    "No truncar listas para ajustarlas a cardinalidades antiguas: adaptar el esquema con el mínimo cambio necesario.",
+    "`tempo_class` es técnico; notas de percepción no autorizan rellenar `perceived_tempo`.",
+    "Mantener separados obra, versión y asset.",
+    "No declarar dos archivos como el mismo máster técnico sin evidencia.",
+    "`evidence: human_review` identifica estas decisiones."
+  ],
+  "schema_notes": [
+    "values: transcripción literal de los campos del documento. El campo `vocals` del documento se guarda como `vocals_instrumental` (nombre del campo en vocabularies.json). Campos ausentes en el documento se omiten: desconocido permanece sin clasificar.",
+    "key: tonalidad tal cual; key_confidence = \"probable\" solo cuando el documento marca «(probable)».",
+    "notes: líneas no estructuradas de cada sección, literales y en orden. negative_decisions: decisiones negativas literales (separadas por «; » en el documento).",
+    "catalog_link.status: mapped solo si el documento confirma la identidad de obra, si la decisión estructural del documento la fija, si el work_id ya estaba establecido por el banco Essentia (audio_links_sample15.json), o si RETIRED_WORKS_INVENTORY.md sustenta un candidato único en catalog_master.json por título, artista y año y una decisión humana explícita de Luis Guinea lo confirma. En otro caso unmapped, con candidates como evidencia no vinculante.",
+    "relations: relaciones obra/versión/asset, ambigüedades y discrepancias que el documento obliga a conservar. Las duraciones son evidencia técnica, no identidad de máster."
+  ],
+  "classifications": [
+    {
+      "review_id": "01",
+      "heading": "Abrazo Imaginario — Ricardo Bojalil (2022)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "abrazo-imaginario--ricardo-bojalil--2022", "candidates": [], "detail": "work_id del banco Essentia (audio_links_sample15.json: vínculo nombre+duración ±1,0 s, TAXONOMY.md §12); título, artista y año coinciden con el encabezado del documento humano."},
+      "values": {
+        "catalog_category": "artist",
+        "genre": ["pop"],
+        "subgenre": ["pop_ballad"],
+        "mood": ["warm", "intimate", "melancholic"],
+        "emotion": ["love", "longing", "hope"],
+        "energy": "medium",
+        "tempo_bpm": 124,
+        "tempo_class": "fast",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love"],
+        "use_scene": ["romantic_scene", "reflective_montage", "brand_storytelling"],
+        "key": "F# major",
+        "evidence": "human_review"
+      },
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        { "name": "Ricardo Bojalil", "roles": ["vocal_performer"] },
+        { "name": "Luis Guinea", "roles": ["songwriter", "producer", "recording_engineer"] }
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-09-30",
+        "statement": "Ricardo Bojalil es el intérprete vocal; Luis Guinea compuso/escribió la canción, la produjo y realizó la grabación. Estos créditos rigen la faceta pública; el valor literal values.catalog_category=artist del documento humano (carpeta Cantautor) se conserva sin cambios."
+      }
+    },
+    {
+      "review_id": "02",
+      "heading": "Hace Tanto Tiempo — Luis Guinea (2021)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "hace-tanto-tiempo--luis-guinea--2021", "candidates": [], "detail": "work_id del banco Essentia (audio_links_sample15.json: vínculo nombre+duración ±1,0 s, TAXONOMY.md §12); título, artista y año coinciden con el encabezado del documento humano."},
+      "values": {
+        "genre": ["pop", "folk_singer_songwriter"],
+        "subgenre": ["acoustic_pop"],
+        "mood": ["warm", "intimate", "melancholic"],
+        "emotion": ["longing", "nostalgia", "love"],
+        "energy": "medium",
+        "tempo_bpm": 130,
+        "tempo_class": "fast",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love", "passage_of_time"],
+        "use_scene": ["romantic_scene", "reflective_montage"],
+        "key": "C minor",
+        "evidence": "human_review"
+      },
+      "notes": ["Nota: percepción más moderada que la clase técnica; no inferir `perceived_tempo`."],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "03",
+      "heading": "Nuestro Hogar — Luis Guinea (2022)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "nuestro-hogar--luis-guinea--2022", "candidates": [], "detail": "work_id del banco Essentia (audio_links_sample15.json: vínculo nombre+duración ±1,0 s, TAXONOMY.md §12); título, artista y año coinciden con el encabezado del documento humano."},
+      "values": {
+        "genre": ["pop", "rock"],
+        "subgenre": ["pop_rock"],
+        "mood": ["warm", "bright"],
+        "emotion": ["love", "hope", "gratitude"],
+        "energy": "medium",
+        "tempo_bpm": 126,
+        "tempo_class": "fast",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love", "home_belonging"],
+        "use_scene": ["romantic_scene", "wedding", "uplifting_montage", "brand_storytelling"],
+        "key": "Bb major",
+        "evidence": "human_review"
+      },
+      "notes": [],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "04",
+      "heading": "Volver a Verte — Luis Guinea (2020)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "volver-a-verte--luis-guinea--2020", "candidates": [], "detail": "work_id del banco Essentia (audio_links_sample15.json: vínculo nombre+duración ±1,0 s, TAXONOMY.md §12); título, artista y año coinciden con el encabezado del documento humano."},
+      "values": {
+        "genre": ["pop", "latin_traditional"],
+        "subgenre": ["bolero"],
+        "mood": ["warm", "intimate", "dreamy"],
+        "emotion": ["love", "longing", "nostalgia"],
+        "energy": "low",
+        "tempo_bpm": 95,
+        "tempo_class": "medium",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love", "passage_of_time"],
+        "use_scene": ["romantic_scene", "reflective_montage", "lifestyle_commercial"],
+        "key": "Bb major",
+        "key_confidence": "probable",
+        "evidence": "human_review"
+      },
+      "notes": [],
+      "negative_decisions": ["no `bossa_nova`"]
+    },
+    {
+      "review_id": "05",
+      "heading": "12 Meses — Rogelio Edel (2022)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "12-meses--rogelio-edel--2022", "candidates": [], "detail": "work_id del banco Essentia (audio_links_sample15.json: vínculo nombre+duración ±1,0 s, TAXONOMY.md §12); título, artista y año coinciden con el encabezado del documento humano."},
+      "values": {
+        "genre": ["pop", "folk_singer_songwriter"],
+        "subgenre": ["acoustic_pop"],
+        "mood": ["warm", "intimate", "melancholic"],
+        "emotion": ["longing", "nostalgia", "love"],
+        "energy": "medium",
+        "tempo_bpm": 105,
+        "tempo_class": "medium",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love", "passage_of_time"],
+        "use_scene": ["romantic_scene", "reflective_montage", "lifestyle_commercial"],
+        "key": "E major",
+        "evidence": "human_review"
+      },
+      "notes": [],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "06",
+      "heading": "Allá — Rogelio Edel (2022)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "alla--rogelio-edel--2022", "candidates": [], "detail": "work_id del banco Essentia (audio_links_sample15.json: vínculo nombre+duración ±1,0 s, TAXONOMY.md §12); título, artista y año coinciden con el encabezado del documento humano."},
+      "values": {
+        "genre": ["pop"],
+        "subgenre": ["pop_ballad"],
+        "mood": ["warm", "intimate", "melancholic"],
+        "emotion": ["longing", "love", "hope"],
+        "energy": "medium",
+        "tempo_bpm": 102,
+        "tempo_class": "medium",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love"],
+        "use_scene": ["romantic_scene", "reflective_montage", "wedding"],
+        "key": "C major",
+        "evidence": "human_review"
+      },
+      "notes": [],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "07",
+      "heading": "Anoche Me Enamoré — Rogelio Edel (2021)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "anoche-me-enamore--rogelio-edel--2021", "candidates": [], "detail": "work_id del banco Essentia (audio_links_sample15.json: vínculo nombre+duración ±1,0 s, TAXONOMY.md §12); título, artista y año coinciden con el encabezado del documento humano."},
+      "values": {
+        "genre": ["pop"],
+        "subgenre": ["acoustic_pop"],
+        "mood": ["warm", "intimate", "bright"],
+        "emotion": ["love", "joy", "hope"],
+        "energy": "medium",
+        "tempo_bpm": 115,
+        "tempo_class": "fast",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love"],
+        "use_scene": ["romantic_scene", "wedding", "lifestyle_commercial"],
+        "key": "E major",
+        "evidence": "human_review"
+      },
+      "notes": [],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "08",
+      "heading": "Eres Veneno — Rogelio Edel (2024)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "eres-veneno--rogelio-edel--2024", "candidates": [], "detail": "work_id del banco Essentia (audio_links_sample15.json: vínculo nombre+duración ±1,0 s, TAXONOMY.md §12); título, artista y año coinciden con el encabezado del documento humano."},
+      "values": {
+        "genre": ["pop", "rock"],
+        "subgenre": ["pop_rock", "soft_rock"],
+        "mood": ["melancholic", "tense"],
+        "emotion": ["heartbreak", "longing", "anger"],
+        "energy": "high",
+        "tempo_bpm": 155,
+        "tempo_class": "very_fast",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["breakup"],
+        "use_scene": ["dramatic_moment", "reflective_montage"],
+        "key": "G major",
+        "evidence": "human_review"
+      },
+      "notes": ["Nota: 155 BPM fue resolución humana; 103 BPM se consideró outlier."],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "09",
+      "heading": "Imagina — Rogelio Edel (2024)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "imagina--rogelio-edel--2024", "candidates": [], "detail": "work_id del banco Essentia (audio_links_sample15.json: vínculo nombre+duración ±1,0 s, TAXONOMY.md §12); título, artista y año coinciden con el encabezado del documento humano."},
+      "values": {
+        "genre": ["pop"],
+        "subgenre": ["acoustic_pop"],
+        "mood": ["warm", "intimate", "dreamy"],
+        "emotion": ["love", "longing", "hope"],
+        "energy": "low",
+        "tempo_bpm": 78,
+        "tempo_class": "slow",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love"],
+        "use_scene": ["romantic_scene", "reflective_montage", "lifestyle_commercial"],
+        "key": "E major",
+        "evidence": "human_review"
+      },
+      "notes": [],
+      "negative_decisions": ["no `reggaeton`"]
+    },
+    {
+      "review_id": "10",
+      "heading": "Invencible — Ana Guinea (2021)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "invencible--ana-guinea--2021", "candidates": [], "detail": "work_id del banco Essentia (audio_links_sample15.json: vínculo nombre+duración ±1,0 s, TAXONOMY.md §12); título, artista y año coinciden con el encabezado del documento humano."},
+      "values": {
+        "genre": ["pop", "rock"],
+        "subgenre": ["pop_ballad", "pop_rock"],
+        "mood": ["warm", "epic"],
+        "emotion": ["hope", "determination"],
+        "energy": "high",
+        "tempo_bpm": 80,
+        "tempo_class": "slow",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["female_lead"],
+        "language": ["es"],
+        "theme": ["self_empowerment"],
+        "use_scene": ["uplifting_montage", "dramatic_moment", "brand_storytelling"],
+        "key": "G major",
+        "evidence": "human_review"
+      },
+      "notes": ["Nota: 80 BPM fue resolución humana frente a detección automática double-time de 162."],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "11",
+      "heading": "La Bamba — Rogelio Edel (2022)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "la-bamba--rogelio-edel--2022", "candidates": [], "detail": "work_id del banco Essentia (audio_links_sample15.json: vínculo nombre+duración ±1,0 s, TAXONOMY.md §12); título, artista y año coinciden con el encabezado del documento humano."},
+      "values": {
+        "genre": ["reggae"],
+        "subgenre": ["reggae_pop"],
+        "mood": ["bright", "warm", "playful", "groovy"],
+        "emotion": ["joy"],
+        "energy": "high",
+        "tempo_bpm": 140,
+        "tempo_class": "very_fast",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["celebration"],
+        "use_scene": ["party_celebration", "lifestyle_commercial"],
+        "key": "C major",
+        "evidence": "human_review"
+      },
+      "notes": [],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "12",
+      "heading": "Me Voy — Rogelio Edel + Asociación Nacional de Ex Integrantes de la Rondalla de Saltillo (2025)",
+      "reviewed_asset": "No Vuelvas_Master_4.0.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "me-voy--rogelio-edel--2025", "candidates": [], "detail": "work_id del banco Essentia (audio_links_sample15.json: vínculo nombre+duración ±1,0 s, TAXONOMY.md §12); título, artista y año coinciden con el encabezado del documento humano."},
+      "values": {
+        "genre": ["pop", "folk_singer_songwriter"],
+        "subgenre": ["acoustic_pop"],
+        "mood": ["warm", "melancholic", "intimate"],
+        "emotion": ["heartbreak", "longing", "determination"],
+        "energy": "medium",
+        "tempo_bpm": 87,
+        "tempo_class": "slow",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead", "group_lead"],
+        "language": ["es"],
+        "theme": ["breakup", "farewell_loss"],
+        "use_scene": ["dramatic_moment", "reflective_montage"],
+        "key": "C# minor",
+        "key_confidence": "probable",
+        "evidence": "human_review"
+      },
+      "notes": [
+        "Asset/master histórico: `No Vuelvas_Master_4.0.mp3`; título canónico: “Me Voy”.",
+        "Nota: 87 BPM fue resolución humana frente a 172–174 double-time."
+      ],
+      "negative_decisions": ["no flamenco"]
+    },
+    {
+      "review_id": "13",
+      "heading": "Si Antes Te Hubiera Conocido – Cover Acústico — Ana Guinea & Luis Guinea (2024)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "si-antes-te-hubiera-conocido-cover-acustico--ana-guinea--2024", "candidates": [], "detail": "work_id del banco Essentia (audio_links_sample15.json: vínculo nombre+duración ±1,0 s, TAXONOMY.md §12); título, artista y año coinciden con el encabezado del documento humano."},
+      "values": {
+        "genre": ["pop", "folk_singer_songwriter"],
+        "subgenre": ["acoustic_pop"],
+        "mood": ["warm", "intimate", "bright"],
+        "emotion": ["love", "longing", "joy"],
+        "energy": "medium",
+        "tempo_bpm": 118,
+        "tempo_class": "fast",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["female_lead", "male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love"],
+        "use_scene": ["romantic_scene", "wedding", "lifestyle_commercial"],
+        "key": "B major",
+        "key_confidence": "probable",
+        "version_type": "cover_acoustic",
+        "evidence": "human_review"
+      },
+      "notes": [],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "14",
+      "heading": "Vida Tras Vida — Ana Guinea (2024)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "vida-tras-vida--ana-guinea--2024", "candidates": [], "detail": "work_id del banco Essentia (audio_links_sample15.json: vínculo nombre+duración ±1,0 s, TAXONOMY.md §12); título, artista y año coinciden con el encabezado del documento humano."},
+      "values": {
+        "genre": ["pop", "folk_singer_songwriter"],
+        "subgenre": ["indie_folk", "pop_rock"],
+        "mood": ["warm", "melancholic", "intimate"],
+        "emotion": ["love", "longing", "hope"],
+        "energy": "medium",
+        "tempo_bpm": 100,
+        "tempo_class": "medium",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["female_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love", "passage_of_time"],
+        "use_scene": ["romantic_scene", "reflective_montage", "dramatic_moment"],
+        "key": "Eb minor",
+        "evidence": "human_review"
+      },
+      "notes": [],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "15",
+      "heading": "Volver a Verte — Ana Guinea (2022)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "volver-a-verte--ana-guinea--2022", "candidates": [], "detail": "work_id del banco Essentia (audio_links_sample15.json: vínculo nombre+duración ±1,0 s, TAXONOMY.md §12); título, artista y año coinciden con el encabezado del documento humano."},
+      "values": {
+        "genre": ["pop", "folk_singer_songwriter"],
+        "subgenre": ["acoustic_pop", "indie_folk"],
+        "mood": ["warm", "intimate", "melancholic"],
+        "emotion": ["longing", "love", "nostalgia"],
+        "energy": "low",
+        "tempo_bpm": 100,
+        "tempo_class": "medium",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["female_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love", "passage_of_time"],
+        "use_scene": ["romantic_scene", "reflective_montage", "lifestyle_commercial"],
+        "key": "D major",
+        "evidence": "human_review"
+      },
+      "notes": ["Registro distinto de “Volver a Verte — Luis Guinea (2020)”."],
+      "negative_decisions": ["no fado"]
+    },
+    {
+      "review_id": "16",
+      "heading": "Agua de Mar",
+      "reviewed_asset": "Agua de Mar (Master).mp3",
+      "catalog_link": {"status": "unmapped", "work_id": null, "candidates": ["agua-de-mar--luis-guinea--2021"], "detail": "Sin mapear: el documento humano no confirma la identidad de obra y el audio no quedó vinculado en audio_links_onepage.json; la coincidencia de título no basta (TAXONOMY.md §0.5 y §12). Requiere confirmación humana. El asset revisado «Agua de Mar (Master).mp3» no figura en audio_links_onepage.json, que solo registra «Aguita de Mar (Master).mp3» (discrepancia sin resolver, R08). Reinvestigado: el MP3 local mide 193.778 s (ffprobe) frente a 190936 ms del audio_ref del catálogo (delta 2.842 s, fuera de ±1.0 s); «Aguita de Mar (Master).mp3» ya no existe en audios/ y no hay evidencia de que sea el mismo asset que «Agua de Mar (Master).mp3». Sigue abierto.", "findings": [{"source": "One Page Luis Guinea/audios/Cantautor/Agua de Mar (Master).mp3", "citation": "ffprobe = 193.778417 s; catalog agua-de-mar--luis-guinea--2021 duration_ms = 190936 (delta 2.842 s > 1.0 s)"}, {"source": "One Page Luis Guinea/lista_archivos_audio_LuisGuinea.xlsx", "citation": "sin filas «Agua de Mar» ni «Aguita de Mar»: la organización declarada de los audios no aporta el vínculo"}]},
+      "values": {
+        "genre": ["pop", "folk_singer_songwriter"],
+        "subgenre": ["acoustic_pop"],
+        "mood": ["warm", "bright", "playful"],
+        "emotion": ["love", "joy"],
+        "energy": "medium",
+        "tempo_bpm": 117,
+        "tempo_class": "fast",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love"],
+        "use_scene": ["romantic_scene", "lifestyle_commercial", "road_trip_travel"],
+        "evidence": "human_review"
+      },
+      "notes": [
+        "Asset revisado: `Agua de Mar (Master).mp3`.",
+        "Ambigüedad: un manifiesto previo contiene `Aguita de Mar (Master).mp3`. NO afirmar que ambos nombres sean el mismo asset técnico sin evidencia adicional."
+      ],
+      "negative_decisions": ["no `latin_traditional`", "no `dreamy`"]
+    },
+    {
+      "review_id": "17",
+      "heading": "Antes de Irme — Mariachi",
+      "reviewed_asset": "Antes de Irme (Mariachi).mp3",
+      "catalog_link": {"status": "mapped", "work_id": "antes-de-irme--luis-guinea--2023", "candidates": [], "detail": "Decisión estructural del documento humano (Antes de Irme = una sola obra con dos versiones); la inspección confirma que antes-de-irme--luis-guinea--2023 es la única entrada «Antes de Irme» de catalog_master.json. No se establece a qué versión corresponde su audio_ref publicado (R03)."},
+      "values": {
+        "genre": ["regional_mexican"],
+        "subgenre": ["mariachi_ranchera"],
+        "mood": ["warm", "melancholic", "intimate"],
+        "emotion": ["love", "longing", "sorrow"],
+        "energy": "medium",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love", "farewell_loss"],
+        "use_scene": ["romantic_scene", "dramatic_moment", "reflective_montage"],
+        "version_type": "mariachi",
+        "evidence": "human_review"
+      },
+      "notes": [
+        "Asset: `Antes de Irme (Mariachi).mp3`.",
+        "No existe BPM humano fijo aprobado."
+      ],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "18",
+      "heading": "Antes de Irme — acústica/piano",
+      "reviewed_asset": "Antes de irme (final).m4a",
+      "catalog_link": {"status": "mapped", "work_id": "antes-de-irme--luis-guinea--2023", "candidates": [], "detail": "Decisión estructural del documento humano (Antes de Irme = una sola obra con dos versiones); la inspección confirma que antes-de-irme--luis-guinea--2023 es la única entrada «Antes de Irme» de catalog_master.json. No se establece a qué versión corresponde su audio_ref publicado (R03)."},
+      "values": {
+        "genre": ["pop", "folk_singer_songwriter"],
+        "subgenre": ["acoustic_pop"],
+        "mood": ["warm", "intimate", "melancholic"],
+        "emotion": ["love", "longing", "sorrow"],
+        "energy": "low",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love", "farewell_loss"],
+        "use_scene": ["romantic_scene", "dramatic_moment", "reflective_montage"],
+        "version_type": "acoustic_piano",
+        "evidence": "human_review"
+      },
+      "notes": [
+        "Asset: `Antes de irme (final).m4a`.",
+        "Misma composición/obra que #17; modelar como otra versión, no otra obra."
+      ],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "19",
+      "heading": "Así habla el amor",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "unmapped", "work_id": null, "candidates": [], "detail": "Sin mapear: catalog_master.json (91 obras) no tiene ninguna entrada con este título. Requiere decisión humana; no se inventa la relación. Reinvestigado: existe un registro fuente en la hoja Local (inédito) pero no en catalog_master.json; darlo de alta exige decisión de modelado (catálogo de inéditos), no tomada.", "findings": [{"source": "One Page Luis Guinea/catalogo_sin_duplicados_con_isrc_prioridad.xlsx (hoja Local)", "citation": "fila con Track Name «Así Habla El Amor», Artists «Luis Guinea»; solo título y artista, sin ISRC ni duración; hoja de inéditos fuera de catalog_master.json (SCHEMA.md: «La hoja Local (55 inéditos) queda fuera»)"}]},
+      "values": {
+        "genre": ["pop", "folk_singer_songwriter"],
+        "subgenre": ["acoustic_pop"],
+        "mood": ["warm", "bright", "intimate"],
+        "emotion": ["love", "joy", "gratitude"],
+        "energy": "medium",
+        "tempo_bpm": 152,
+        "tempo_class": "very_fast",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love"],
+        "use_scene": ["romantic_scene", "wedding", "lifestyle_commercial", "brand_storytelling"],
+        "evidence": "human_review"
+      },
+      "notes": ["Nota: percepción más moderada; no inferir `perceived_tempo`."],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "20",
+      "heading": "Bendito Cacao — Luis Guinea",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "bendito-cacao--karla-bravo--2022", "candidates": [], "detail": "Identidad de obra demostrada por evidencia factual (no solo por nombre): audio local de la carpeta Cantautor con título y artista del encabezado y duración ffprobe 284.183 s frente a 284177 ms del catálogo (delta 0.006 s, tolerancia ±1.0 s de TAXONOMY.md §12). Solo identidad de OBRA: el audio local es «Master 1.1» y el audio_ref del catálogo «Master 1.2»; no se afirma que sean el mismo asset técnico.", "evidence": [{"source": "One Page Luis Guinea/audios/Cantautor/Bendito Cacao - Luis Guinea - Master 1.1.mp3", "citation": "ffprobe format=duration = 284.183220 s; catalog_master.json duration_ms = 284177 (delta 0.006 s)"}, {"source": "data/music-catalog/catalog_master.json", "citation": "bendito-cacao--karla-bravo--2022: title «Bendito Cacao», artists [Karla Bravo, Luis Guinea], audio_ref «Bendito Cacao - Luis Guinea - Master 1.2.wav»; único registro con ese título"}, {"source": "One Page Luis Guinea/lista_archivos_audio_LuisGuinea.xlsx", "citation": "fila 3: «Bendito Cacao - Luis Guinea - Master 1.1.wav» en Artistas/Luis Guinea (misma familia de nombre que el audio_ref)"}]},
+      "values": {
+        "genre": ["pop", "folk_singer_songwriter"],
+        "subgenre": ["acoustic_pop"],
+        "mood": ["warm", "bright", "playful"],
+        "emotion": ["joy", "gratitude"],
+        "energy": "medium",
+        "tempo_bpm": 199,
+        "tempo_class": "very_fast",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["food_drink"],
+        "use_scene": ["lifestyle_commercial", "brand_storytelling"],
+        "evidence": "human_review"
+      },
+      "notes": ["`food_drink` es extensión aprobada. No sustituir por `celebration`. No se aprobó `food_beverage_commercial`."],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "21",
+      "heading": "De Cabeza — Luis Guinea",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "de-cabeza--luis-guinea--2020", "candidates": [], "detail": "Identidad de obra demostrada por evidencia factual (no solo por nombre): el MP3 local De Cabeza - Luis Guinea.mp3 está en la misma carpeta de origen que el audio_ref del catálogo (Mundo De Cabeza MASTER DC V2_01.wav) y su duración ffprobe 233.163 s coincide con 233107 ms del catálogo (delta 0.056 s, tolerancia ±1.0 s). Solo identidad de OBRA; no se afirma equivalencia técnica MP3↔WAV.", "evidence": [{"source": "One Page Luis Guinea/audios/Cantautor/De Cabeza - Luis Guinea.mp3", "citation": "ffprobe format=duration = 233.163200 s; catalog_master.json duration_ms = 233107 (delta 0.056 s)"}, {"source": "One Page Luis Guinea/lista_archivos_audio_LuisGuinea.xlsx", "citation": "filas 199 y 202: «De Cabeza - Luis Guinea.mp3» y «Mundo De Cabeza MASTER DC V2_01.wav» (= audio_ref del catálogo) en la misma carpeta Artistas/Luis Guinea/De Cabeza/"}, {"source": "data/music-catalog/catalog_master.json", "citation": "de-cabeza--luis-guinea--2020: title «De Cabeza», artists [Luis Guinea] (= artista del encabezado #21); único registro con ese título"}]},
+      "values": {
+        "genre": ["pop", "rock"],
+        "subgenre": ["pop_rock", "soft_rock"],
+        "mood": ["warm", "bright"],
+        "emotion": ["love", "joy"],
+        "energy": "medium",
+        "tempo_bpm": 81,
+        "tempo_class": "slow",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love"],
+        "use_scene": ["romantic_scene", "wedding", "uplifting_montage", "lifestyle_commercial"],
+        "evidence": "human_review"
+      },
+      "notes": ["Nota: tiene movimiento/empuje pese a la clase técnica lenta; no inferir `perceived_tempo`."],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "22",
+      "heading": "El Feo",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "unmapped", "work_id": null, "candidates": [], "detail": "Sin mapear: catalog_master.json (91 obras) no tiene ninguna entrada con este título. Requiere decisión humana; no se inventa la relación."},
+      "values": {
+        "genre": ["regional_mexican"],
+        "subgenre": ["mariachi_ranchera"],
+        "mood": ["bright", "playful", "vintage"],
+        "emotion": ["joy", "love"],
+        "energy": "high",
+        "tempo_bpm": 129,
+        "tempo_class": "fast",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love"],
+        "use_scene": ["party_celebration", "lifestyle_commercial", "brand_storytelling"],
+        "evidence": "human_review"
+      },
+      "notes": ["No crear theme de humor; se consideró tono narrativo."],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "23",
+      "heading": "El Beso — Tufic / Luis Guinea",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "unmapped", "work_id": null, "candidates": [], "detail": "Sin mapear: catalog_master.json (91 obras) no tiene ninguna entrada con este título. Requiere decisión humana; no se inventa la relación. Reinvestigado: CV_MASTER.md (l. 213) cita «El Beso» como último sencillo publicado, pero no figura en la hoja Released ni en catalog_master.json: discrepancia entre fuentes sin resolver.", "findings": [{"source": "CV_MASTER.md", "citation": "l. 213: «Released original singles with editorial playlist placements on Spotify and Deezer, most recently \"El Beso\".»"}]},
+      "values": {
+        "genre": ["pop", "latin_traditional"],
+        "subgenre": ["bolero"],
+        "mood": ["warm", "intimate", "vintage"],
+        "emotion": ["love", "longing"],
+        "energy": "medium",
+        "tempo_bpm": 108,
+        "tempo_class": "medium",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love"],
+        "use_scene": ["romantic_scene", "wedding", "lifestyle_commercial", "reflective_montage"],
+        "evidence": "human_review"
+      },
+      "notes": ["Producción contemporánea con lenguaje de bolero; no implica bolero tradicional ortodoxo."],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "24",
+      "heading": "Hasta El Altar",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "unmapped", "work_id": null, "candidates": [], "detail": "Sin mapear: catalog_master.json (91 obras) no tiene ninguna entrada con este título. Requiere decisión humana; no se inventa la relación. Reinvestigado: existe un registro fuente en la hoja Local (inédito) pero no en catalog_master.json; darlo de alta exige decisión de modelado (catálogo de inéditos), no tomada.", "findings": [{"source": "One Page Luis Guinea/catalogo_sin_duplicados_con_isrc_prioridad.xlsx (hoja Local)", "citation": "fila con Track Name «Hasta El Altar», Artists «Luis Guinea»; solo título y artista, sin ISRC ni duración; hoja de inéditos fuera de catalog_master.json (SCHEMA.md: «La hoja Local (55 inéditos) queda fuera»)"}]},
+      "values": {
+        "genre": ["pop", "folk_singer_songwriter"],
+        "subgenre": ["acoustic_pop"],
+        "mood": ["warm", "bright", "intimate"],
+        "emotion": ["love", "joy", "hope"],
+        "energy": "medium",
+        "tempo_bpm": 108,
+        "tempo_class": "medium",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love"],
+        "use_scene": ["wedding", "romantic_scene", "uplifting_montage", "lifestyle_commercial"],
+        "evidence": "human_review"
+      },
+      "notes": ["No se aprobó `theme: commitment`."],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "25",
+      "heading": "Hasta Que Lleguemos Al Mar — Luis Guinea",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "hasta-que-lleguemos-al-mar--luis-guinea--2024", "candidates": [], "detail": "Identidad de obra demostrada por evidencia factual (no solo por nombre): el MP3 local está en la misma carpeta de origen que Hasta Que Lleguemos Al Mar (FINALMIX).wav (= audio_ref del catálogo) y su duración ffprobe 264.611 s coincide con 264611 ms del catálogo (delta 0.000 s, tolerancia ±1.0 s). Solo identidad de OBRA; no se afirma equivalencia técnica MP3↔WAV.", "evidence": [{"source": "One Page Luis Guinea/audios/Cantautor/Hasta Que Lleguemos Al Mar - Luis Guinea.mp3", "citation": "ffprobe format=duration = 264.611292 s; catalog_master.json duration_ms = 264611 (delta 0.000 s)"}, {"source": "One Page Luis Guinea/lista_archivos_audio_LuisGuinea.xlsx", "citation": "filas 8 y 9: «Hasta Que Lleguemos Al Mar (FINALMIX).wav» (= audio_ref del catálogo) y «Hasta Que Lleguemos Al Mar - Luis Guinea.mp3» en la misma carpeta Artistas/Luis Guinea/Hasta Que Lleguemos Al Mar/"}, {"source": "data/music-catalog/catalog_master.json", "citation": "hasta-que-lleguemos-al-mar--luis-guinea--2024: title igual, artists [Luis Guinea, Tony Barhoum] incluye al artista del encabezado #25; único registro con ese título"}]},
+      "values": {
+        "genre": ["pop", "folk_singer_songwriter"],
+        "subgenre": ["acoustic_pop"],
+        "mood": ["warm", "bright"],
+        "emotion": ["love", "joy", "hope"],
+        "energy": "medium",
+        "tempo_bpm": 136,
+        "tempo_class": "fast",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love", "journey_travel"],
+        "use_scene": ["road_trip_travel", "romantic_scene", "uplifting_montage", "lifestyle_commercial"],
+        "evidence": "human_review"
+      },
+      "notes": [],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "26",
+      "heading": "Inenarrable (Qué Suerte) — PianoVoz",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "unmapped", "work_id": null, "candidates": [], "detail": "Sin mapear: catalog_master.json (91 obras) no tiene ninguna entrada con este título. Requiere decisión humana; no se inventa la relación. Reinvestigado: la hoja Local tiene «Inenarrable» (Luis Guinea, Mario Molina Moro), no en catalog_master.json; que sea la misma obra que «Inenarrable (Qué Suerte) — PianoVoz» no está demostrado y darlo de alta exige decisión de modelado no tomada.", "findings": [{"source": "One Page Luis Guinea/catalogo_sin_duplicados_con_isrc_prioridad.xlsx (hoja Local)", "citation": "fila con Track Name «Inenarrable», Artists «Luis Guinea, Mario Molina Moro»; solo título y artista, sin ISRC ni duración; hoja de inéditos fuera de catalog_master.json (SCHEMA.md: «La hoja Local (55 inéditos) queda fuera»)"}]},
+      "values": {
+        "genre": ["pop", "folk_singer_songwriter"],
+        "subgenre": ["acoustic_pop"],
+        "mood": ["warm", "intimate", "melancholic"],
+        "emotion": ["love", "longing", "vulnerability"],
+        "energy": "low",
+        "tempo_class": "free_time",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love"],
+        "use_scene": ["romantic_scene", "reflective_montage", "dramatic_moment"],
+        "version_type": "piano_vocal",
+        "evidence": "human_review"
+      },
+      "notes": ["No registrar BPM fijo; las estimaciones variaron aproximadamente 129–161 por rubato."],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "27",
+      "heading": "Junto A Mí",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "unmapped", "work_id": null, "candidates": [], "detail": "Sin mapear: catalog_master.json (91 obras) no tiene ninguna entrada con este título. Requiere decisión humana; no se inventa la relación. Reinvestigado: existe un registro fuente en la hoja Local (inédito) pero no en catalog_master.json; darlo de alta exige decisión de modelado (catálogo de inéditos), no tomada.", "findings": [{"source": "One Page Luis Guinea/catalogo_sin_duplicados_con_isrc_prioridad.xlsx (hoja Local)", "citation": "fila con Track Name «Junto A Mí», Artists «Luis Guinea»; solo título y artista, sin ISRC ni duración; hoja de inéditos fuera de catalog_master.json (SCHEMA.md: «La hoja Local (55 inéditos) queda fuera»)"}]},
+      "values": {
+        "genre": ["pop", "folk_singer_songwriter"],
+        "subgenre": ["acoustic_pop"],
+        "mood": ["warm", "intimate", "melancholic"],
+        "emotion": ["love", "longing", "hope"],
+        "energy": "medium",
+        "tempo_bpm": 152,
+        "tempo_class": "very_fast",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love"],
+        "use_scene": ["romantic_scene", "reflective_montage", "wedding"],
+        "evidence": "human_review"
+      },
+      "notes": ["Nota: también se detectó half-time ~76; mantener 152 técnico y no inferir `perceived_tempo`."],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "28",
+      "heading": "La Martiniana",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "unmapped", "work_id": null, "candidates": [], "detail": "Sin mapear: catalog_master.json (91 obras) no tiene ninguna entrada con este título. Requiere decisión humana; no se inventa la relación."},
+      "values": {
+        "genre": ["regional_mexican"],
+        "subgenre": ["mariachi_ranchera"],
+        "mood": ["warm", "melancholic", "epic"],
+        "emotion": ["love", "longing", "sorrow"],
+        "energy": "high",
+        "tempo_bpm": 152,
+        "tempo_class": "very_fast",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love", "farewell_loss"],
+        "use_scene": ["dramatic_moment", "reflective_montage", "end_credits"],
+        "evidence": "human_review"
+      },
+      "notes": ["`mariachi_ranchera` es aproximación amplia; no crear extensión sin decisión humana."],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "29",
+      "heading": "Me Equivoqué — Regional Mexicano",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "unmapped", "work_id": null, "candidates": [], "detail": "Sin mapear: catalog_master.json (91 obras) no tiene ninguna entrada con este título. Requiere decisión humana; no se inventa la relación. Reinvestigado: la hoja Local tiene «Me Equivoqué» (Luis Guinea), no en catalog_master.json; la variante «Regional Mexicano» del encabezado no está demostrada como la misma obra/versión y darlo de alta exige decisión de modelado no tomada.", "findings": [{"source": "One Page Luis Guinea/catalogo_sin_duplicados_con_isrc_prioridad.xlsx (hoja Local)", "citation": "fila con Track Name «Me Equivoqué», Artists «Luis Guinea»; solo título y artista, sin ISRC ni duración; hoja de inéditos fuera de catalog_master.json (SCHEMA.md: «La hoja Local (55 inéditos) queda fuera»)"}]},
+      "values": {
+        "genre": ["regional_mexican"],
+        "subgenre": ["mariachi_ranchera"],
+        "mood": ["melancholic", "tense"],
+        "emotion": ["heartbreak", "sorrow", "vulnerability"],
+        "energy": "high",
+        "tempo_bpm": 162,
+        "tempo_class": "very_fast",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["breakup"],
+        "use_scene": ["dramatic_moment", "reflective_montage"],
+        "evidence": "human_review"
+      },
+      "notes": [],
+      "negative_decisions": ["no `romantic_love`"]
+    },
+    {
+      "review_id": "30",
+      "heading": "Ojos Marrones",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "unmapped", "work_id": null, "candidates": [], "detail": "Sin mapear: catalog_master.json (91 obras) no tiene ninguna entrada con este título. Requiere decisión humana; no se inventa la relación. Reinvestigado: la única coincidencia es de duración (208.515 s ≈ Cómo Decirte 208500 ms, delta 0.015 s) sin coincidencia de título ni fuente que las relacione; una coincidencia de duración por sí sola no prueba identidad.", "findings": [{"source": "One Page Luis Guinea/audios/Cantautor/Ojos Marrones_MocteMaster 1.0.mp3", "citation": "ffprobe = 208.515146 s; candidato descartado como prueba: como-decirte--luis-guinea--2022"}]},
+      "values": {
+        "genre": ["pop", "folk_singer_songwriter"],
+        "subgenre": ["acoustic_pop"],
+        "mood": ["warm", "bright", "playful"],
+        "emotion": ["love", "joy"],
+        "energy": "medium",
+        "tempo_bpm": 123,
+        "tempo_class": "fast",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["romantic_love"],
+        "use_scene": ["romantic_scene", "lifestyle_commercial", "wedding", "uplifting_montage"],
+        "evidence": "human_review"
+      },
+      "notes": [],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "31",
+      "heading": "Promesas Decepciones",
+      "reviewed_asset": "Promesas Decepciones (Master).mp3",
+      "catalog_link": {"status": "unmapped", "work_id": null, "candidates": [], "detail": "Sin mapear: catalog_master.json (91 obras) no tiene ninguna entrada con este título. Requiere decisión humana; no se inventa la relación."},
+      "values": {
+        "genre": ["pop", "folk_singer_songwriter"],
+        "subgenre": ["acoustic_pop"],
+        "mood": ["melancholic", "intimate"],
+        "emotion": ["heartbreak", "sorrow", "vulnerability"],
+        "energy": "medium",
+        "tempo_bpm": 136,
+        "tempo_class": "fast",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["es"],
+        "theme": ["breakup"],
+        "use_scene": ["dramatic_moment", "reflective_montage"],
+        "evidence": "human_review"
+      },
+      "notes": [
+        "Asset revisado: `Promesas Decepciones (Master).mp3`.",
+        "Nota: percepción más moderada que la clase técnica."
+      ],
+      "negative_decisions": ["no `farewell_loss`", "no `longing`"]
+    },
+    {
+      "review_id": "32",
+      "heading": "How Deep Is Your Love — Luis Guinea (2022)",
+      "reviewed_asset": "How Deep Is Your Love_1.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "how-deep-is-your-love--luis-guinea--2022", "candidates": [], "detail": "Identidad humana de obra confirmada en el documento para el MP3 revisado. No implica identidad técnica entre el MP3, el MP4 del inventario previo ni el máster del catálogo (R04–R06)."},
+      "values": {
+        "genre": ["pop", "rnb_soul"],
+        "subgenre": ["contemporary_rnb"],
+        "mood": ["warm", "intimate", "dreamy"],
+        "emotion": ["love", "longing", "vulnerability"],
+        "energy": "low",
+        "tempo_bpm": 103,
+        "tempo_class": "medium",
+        "vocals_instrumental": "vocal",
+        "vocal_type": ["male_lead"],
+        "language": ["en"],
+        "theme": ["romantic_love"],
+        "use_scene": ["romantic_scene", "reflective_montage", "lifestyle_commercial"],
+        "evidence": "human_review"
+      },
+      "notes": [
+        "Identidad humana confirmada: el MP3 revisado corresponde a `how-deep-is-your-love--luis-guinea--2022`.",
+        "Asset revisado: `How Deep Is Your Love_1.mp3`.",
+        "### Assets de How Deep Is Your Love",
+        "- MP3 revisado: duración aproximada `254.64 s`.",
+        "- Inventario previo: `Cantautor/How Deep Is Your Love.mp4`, ~`242.876 s`.",
+        "- Catálogo: `how-deep-is-your-love--luis-guinea--2022`, duración registrada `244.000 s`.",
+        "- El MP4 quedó `ambiguous`: delta ~1.124 s, superior a tolerancia ±1.0 s.",
+        "- La confirmación humana establece identidad de obra del MP3, NO identidad binaria entre masters.",
+        "- No afirmar que MP3 y MP4 sean el mismo máster técnico."
+      ],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "33",
+      "heading": "Adiós Amor (Versión Bolero) — Luis Guinea (2020)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "adios-amor-version-bolero--luis-guinea--2020", "candidates": [], "detail": "Identidad sustentada por RETIRED_WORKS_INVENTORY.md: candidato único en catalog_master.json, con título, artista y año coincidentes; confirmada por decisión humana explícita de Luis Guinea."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["artist", "producer"]},
+        {"name": "Salvador Garza", "roles": ["songwriter"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-01",
+        "statement": "Luis es intérprete principal y productor, no compositor; la compuso Salvador Garza. Faceta Artist.",
+        "public_facet": "Artist"
+      }
+    },
+    {
+      "review_id": "34",
+      "heading": "Blue Moon — Luis Guinea (2015)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "blue-moon--luis-guinea--2015", "candidates": [], "detail": "Identidad sustentada por RETIRED_WORKS_INVENTORY.md: candidato único en catalog_master.json, con título, artista y año coincidentes; confirmada por decisión humana explícita de Luis Guinea."},
+      "values": {"evidence": "human_review"},
+      "notes": ["La decisión humana explícita prevalece sobre inferencias acerca de otras canciones homónimas."],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["songwriter", "artist", "producer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-01",
+        "statement": "Luis es compositor, intérprete principal y productor. Faceta Composer.",
+        "public_facet": "Composer"
+      }
+    },
+    {
+      "review_id": "35",
+      "heading": "Cómo Decirte — Luis Guinea, Pablo Delgado (2022)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "como-decirte--luis-guinea--2022", "candidates": [], "detail": "Identidad sustentada por RETIRED_WORKS_INVENTORY.md: candidato único en catalog_master.json, con título, artistas y año coincidentes; confirmada por decisión humana explícita de Luis Guinea."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["artist", "songwriter", "producer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-01",
+        "statement": "Luis es coautor, coproductor y cointérprete. Faceta Producer.",
+        "public_facet": "Producer"
+      }
+    },
+    {
+      "review_id": "36",
+      "heading": "A Escondidas — Isabella Macías (2018)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "a-escondidas--isabella-macias--2018", "candidates": [], "detail": "Identidad sustentada por RETIRED_WORKS_INVENTORY.md: candidato único en catalog_master.json, con título, artista y año coincidentes; confirmada por decisión humana explícita de Luis Guinea."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-01",
+        "statement": "Luis es productor únicamente. Faceta Producer.",
+        "public_facet": "Producer"
+      }
+    },
+    {
+      "review_id": "37",
+      "heading": "Lo Que Queda de Mí — Escala de Grises (2016)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "lo-que-queda-de-mi--escala-de-grises--2016", "candidates": [], "detail": "Identidad sustentada por RETIRED_WORKS_INVENTORY.md: candidato único en catalog_master.json, con título, artista y año coincidentes; confirmada por decisión humana explícita de Luis Guinea."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["songwriter", "producer", "artist"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-01",
+        "statement": "Luis es coautor, productor y cointérprete. Faceta Producer.",
+        "public_facet": "Producer"
+      }
+    },
+    {
+      "review_id": "38",
+      "heading": "Shape of You - Acoustic — Segundo Piso (2017)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "shape-of-you-acoustic--segundo-piso--2017", "candidates": [], "detail": "Identidad sustentada por RETIRED_WORKS_INVENTORY.md: candidato único en catalog_master.json, con título, artista y año coincidentes; confirmada por decisión humana explícita de Luis Guinea."},
+      "values": {"evidence": "human_review"},
+      "notes": ["La discrepancia técnica sigue abierta: el MP3 Shape of you.mp3 dura 365,4 s y la pista publicada 184 s; no se infiere que sean la misma versión ni el mismo máster."],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-01",
+        "statement": "Luis es productor únicamente; es un cover. Faceta Producer. No atribuyas a Luis composición, interpretación ni recording_engineer.",
+        "public_facet": "Producer"
+      }
+    },
+    {
+      "review_id": "39",
+      "heading": "Ya No Soy Esclavo — Patty Gleason (2020)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "ya-no-soy-esclavo--patty-gleason--2020", "candidates": [], "detail": "Identidad sustentada por RETIRED_WORKS_INVENTORY.md: candidato único en catalog_master.json, con título, artista y año coincidentes; confirmada por decisión humana explícita de Luis Guinea."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-01",
+        "statement": "Luis no participó; debe permanecer fuera del catálogo público."
+      },
+      "public_exclusion": true
+    },
+    {
+      "review_id": "40",
+      "heading": "Lo Que Venga — Patty Gleason (2020)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "lo-que-venga--patty-gleason--2020", "candidates": [], "detail": "Identidad sustentada por RETIRED_WORKS_INVENTORY.md: candidato único en catalog_master.json, con título, artista y año coincidentes; confirmada por decisión humana explícita de Luis Guinea."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-01",
+        "statement": "Luis no participó; debe permanecer fuera del catálogo público."
+      },
+      "public_exclusion": true
+    }
+  ],
+  "relations": [
+    {"relation_id": "R01", "type": "work_version", "review_ids": ["17"], "work_id": "antes-de-irme--luis-guinea--2023", "version_type": "mariachi", "asset": "Antes de Irme (Mariachi).mp3", "duration_s": null, "link_status": "version_of_work", "statement": "Antes de Irme es una sola obra; esta es su versión mariachi. Sin BPM humano fijo aprobado."},
+    {"relation_id": "R02", "type": "work_version", "review_ids": ["18"], "work_id": "antes-de-irme--luis-guinea--2023", "version_type": "acoustic_piano", "asset": "Antes de irme (final).m4a", "duration_s": null, "link_status": "version_of_work", "statement": "Misma composición/obra que #17: otra versión, no otra obra. Sin BPM."},
+    {"relation_id": "R03", "type": "catalog_audio_ref", "review_ids": ["17", "18"], "work_id": "antes-de-irme--luis-guinea--2023", "version_type": null, "asset": "Antes de Irme_Master.wav", "duration_s": null, "link_status": "not_asserted", "statement": "audio_ref de la entrada publicada en catalog_master.json. El documento humano no dice a cuál de las dos versiones corresponde; no se asigna."},
+    {"relation_id": "R04", "type": "human_work_identity", "review_ids": ["32"], "work_id": "how-deep-is-your-love--luis-guinea--2022", "version_type": null, "asset": "How Deep Is Your Love_1.mp3", "duration_s": "254.64", "link_status": "work_identity_confirmed", "statement": "Identidad humana de obra del MP3 revisado (duración aproximada). NO establece identidad binaria entre masters."},
+    {"relation_id": "R05", "type": "inventory_asset", "review_ids": ["32"], "work_id": "how-deep-is-your-love--luis-guinea--2022", "version_type": null, "asset": "Cantautor/How Deep Is Your Love.mp4", "duration_s": "242.876", "link_status": "ambiguous", "statement": "Inventario previo (audio_links_onepage.json): delta ~1.124 s, superior a la tolerancia ±1.0 s. No afirmar que MP3 y MP4 sean el mismo máster técnico."},
+    {"relation_id": "R06", "type": "catalog_record", "review_ids": ["32"], "work_id": "how-deep-is-your-love--luis-guinea--2022", "version_type": null, "asset": null, "duration_s": "244.000", "link_status": "catalog_duration", "statement": "Duración registrada en catalog_master.json; evidencia técnica, no identidad de máster."},
+    {"relation_id": "R07", "type": "reviewed_asset", "review_ids": ["16"], "work_id": null, "version_type": null, "asset": "Agua de Mar (Master).mp3", "duration_s": null, "link_status": "reviewed_asset", "statement": "La clasificación #16 pertenece a «Agua de Mar» y a este asset revisado."},
+    {"relation_id": "R08", "type": "name_discrepancy", "review_ids": ["16"], "work_id": null, "version_type": null, "asset": "Cantautor/Aguita de Mar (Master).mp3", "duration_s": null, "link_status": "unresolved_discrepancy", "statement": "Referencia histórica de un manifiesto previo (audio_links_onepage.json). Sin evidencia de identidad técnica con «Agua de Mar (Master).mp3»: no se fusionan ni se vinculan."},
+    {"relation_id": "R09", "type": "distinct_records", "review_ids": ["04", "15"], "work_id": null, "version_type": null, "asset": null, "duration_s": null, "link_status": "distinct", "statement": "«Volver a Verte» de Luis Guinea (2020, volver-a-verte--luis-guinea--2020) y de Ana Guinea (2022, volver-a-verte--ana-guinea--2022) son registros distintos."},
+    {"relation_id": "R10", "type": "historical_asset_name", "review_ids": ["12"], "work_id": "me-voy--rogelio-edel--2025", "version_type": null, "asset": "No Vuelvas_Master_4.0.mp3", "duration_s": null, "link_status": "historical_asset", "statement": "Asset/master histórico con nombre «No Vuelvas»; el título canónico de la obra es «Me Voy»."},
+    {"relation_id": "R11", "type": "technical_discrepancy", "review_ids": ["38"], "work_id": "shape-of-you-acoustic--segundo-piso--2017", "version_type": null, "asset": "Shape of you.mp3", "duration_s": "365.4", "link_status": "unresolved_discrepancy", "statement": "El MP3 dura 365,4 s frente a 184 s de la pista publicada. La decisión humana confirma únicamente el crédito de producción y que la obra es un cover; no resuelve la identidad de versión ni de máster."}
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "schema": "audio-ref-corrections-v1",
+  "description": "Correcciones humanas explícitas de audio_ref que build_catalog.py aplica sobre el valor de la fuente principal. Los XLSX no se modifican: el valor original se conserva en internal/provenance.json y la corrección queda registrada en internal/conflicts.* con resolución resuelto_humano.",
+  "corrections": [
+    {
+      "work_id": "hace-tanto-tiempo--luis-guinea--2021",
+      "source_value": "Llegue Muy Tarde.wav",
+      "corrected_value": "Hace Tanto Tiempo.mp3",
+      "authority": "decisión humana explícita de Luis Guinea",
+      "date": "2026-10-01",
+      "statement": "Hace Tanto Tiempo.mp3 es la fuente correcta de la obra (#02). El audio_ref «Llegue Muy Tarde.wav» de la fuente principal es erróneo: nombra otra obra publicada (llegue-muy-tarde--valeria-ferro--2023).",
+      "evidence": [
+        "One Page Luis Guinea/audios/Cantautor/Hace Tanto Tiempo.mp3: ffprobe 135.747 s frente a duration_ms 135933 del catálogo (Δ 0,186 s); etiquetas artist «Luis Guinea» y date «2021», coherentes con la obra.",
+        "data/music-catalog/spikes/essentia/audio_links_onepage.json: vínculo inequívoco por título con la misma duración y sha256 2f7d30560f48…"
+      ]
+    }
+  ]
+}

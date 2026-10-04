@@ -1,0 +1,261 @@
+{
+  "schema": "music-preview-manifest-v1",
+  "description": "Autoridad declarativa de los previews de /music/: una entrada por obra de public_music_selection.json. generate_music_previews.py genera los derivados de las entradas verified; generate_public_music_data.py publica solo su nombre de fichero. Las fuentes son masters privados (One Page Luis Guinea/audios/, ignorado por Git) y nunca se publican.",
+  "output_dir": "assets/audio/previews",
+  "policy": {
+    "id": "uniform-start30-v1",
+    "start_s": 30.0,
+    "duration_s": 44.5,
+    "fade_in_s": 0.5,
+    "fade_out_s": 2.0,
+    "format": "mp3",
+    "codec": "libmp3lame",
+    "bitrate": "128k",
+    "sample_rate": 44100,
+    "channels": 2,
+    "rationale": "No existía criterio previo de recorte. Política uniforme y determinista, sin análisis musical: empieza en el segundo 30 de la fuente y codifica 44,5 s (ffprobe informa < 45,000 s), con fundidos cortos para evitar cortes bruscos. Sin metadatos embebidos y con flags bitexact: la misma fuente produce los mismos bytes."
+  },
+  "entries": [
+    {
+      "review_id": "33",
+      "work_id": "adios-amor-version-bolero--luis-guinea--2020",
+      "status": "blocked",
+      "source": null,
+      "source_sha256": null,
+      "preview": null,
+      "trim_policy": null,
+      "blocked_reason": "Ningún archivo de One Page Luis Guinea/audios concuerda a la vez en título, artista y duración con la obra (catálogo 164,210 s; audio_ref null). La única coincidencia de duración la contradicen nombre, artista, año y un vínculo previo con otra obra.",
+      "candidates": [
+        {
+          "source": "One Page Luis Guinea/audios/Productor/Ana Guinea/Si Antes Te Hubiera Conocido (Version Acustica).mp3",
+          "duration_s": 164.211,
+          "delta_s": 0.001,
+          "rejected_because": "Etiquetas title «Si Antes Te Hubiera Conocido (», artist «Ana Guinea, Luis Guinea», date 2024, frente a «Adiós Amor (Versión Bolero)» de Luis Guinea (2020). audio_links_onepage.json ya lo vincula por audio_ref a si-antes-te-hubiera-conocido-cover-acustico--ana-guinea--2024 (Δ 0,062 s). La duración sola no basta."
+        },
+        {
+          "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/Te Extraño_Master.mp3",
+          "duration_s": 165.384,
+          "delta_s": 1.174,
+          "rejected_because": "Fuera de la tolerancia ±1,0 s; título y carpeta (Rogelio Edel) no corresponden."
+        }
+      ],
+      "evidence_needed": "Copiar a One Page Luis Guinea/audios el asset que citan los inventarios: «Adios Amor (Master).wav» (lista_archivos_audio_LuisGuinea.xlsx fila 242, carpeta Artistas/Luis Guinea/Adiós Amor (Versión Bolero)/) o «Adios Amor (Master).mp3» (fila 108, Shows 2020/Audios/), y comprobar con ffprobe una duración dentro de ±1,0 s de 164,210 s. Otra vía: una decisión humana explícita que nombre el archivo."
+    },
+    {
+      "review_id": "25",
+      "work_id": "hasta-que-lleguemos-al-mar--luis-guinea--2024",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Cantautor/Hasta Que Lleguemos Al Mar - Luis Guinea.mp3",
+      "source_sha256": "2344a7f8c84ca64c903b9698008ea3039383d4361a3fd960d62554f4265be94f",
+      "preview": "assets/audio/previews/hasta-que-lleguemos-al-mar--luis-guinea--2024.mp3",
+      "trim_policy": "uniform-start30-v1",
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "human_review_decisions.json #25 catalog_link.evidence: identidad de obra respaldada por ffprobe 264,611 s frente a duration_ms 264611 (Δ 0,000 s).",
+          "Etiquetas title «Hasta Que Lleguemos Al Mar», artist «Luis Guinea», date 2024, coherentes con la obra.",
+          "lista_archivos_audio_LuisGuinea.xlsx filas 8 y 9: el MP3 está en la misma carpeta que «Hasta Que Lleguemos Al Mar (FINALMIX).wav», el audio_ref del catálogo."
+        ]
+      }
+    },
+    {
+      "review_id": "02",
+      "work_id": "hace-tanto-tiempo--luis-guinea--2021",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Cantautor/Hace Tanto Tiempo.mp3",
+      "source_sha256": "2f7d30560f48b03e369045a55be5f76e01abd07814b9238cb055ae10a40b40d5",
+      "preview": "assets/audio/previews/hace-tanto-tiempo--luis-guinea--2021.mp3",
+      "trim_policy": "uniform-start30-v1",
+      "association": {
+        "basis": "human_authorization",
+        "authority": "decisión humana explícita de Luis Guinea (2026-10-01): Hace Tanto Tiempo.mp3 es la fuente correcta; el audio_ref se corrige en audio_ref_corrections.json.",
+        "evidence": [
+          "ffprobe 135,747 s frente a duration_ms 135933 (Δ 0,186 s); etiquetas artist «Luis Guinea», date 2021.",
+          "audio_links_onepage.json: vínculo inequívoco por título, mismo sha256.",
+          "Los inventarios citan dos ficheros con este nombre (lista_archivos_audio_LuisGuinea.xlsx fila 228, Artistas/Luis Guinea/Hace Tanto Tiempo/; lista_archivos_audio_Songwriting.xlsx fila 16, Maquetas/). La decisión humana fija el archivo local, sin afirmar equivalencia con el máster WAV."
+        ]
+      }
+    },
+    {
+      "review_id": "34",
+      "work_id": "blue-moon--luis-guinea--2015",
+      "status": "blocked",
+      "source": null,
+      "source_sha256": null,
+      "preview": null,
+      "trim_policy": null,
+      "blocked_reason": "Ningún archivo de One Page Luis Guinea/audios coincide por nombre, etiquetas ni duración (catálogo 288,000 s; audio_ref null; ningún asset en lista_archivos_audio_*.xlsx).",
+      "candidates": [
+        {
+          "source": "One Page Luis Guinea/audios/Cantautor/Bendito Cacao - Luis Guinea - Master 1.1.mp3",
+          "duration_s": 284.183,
+          "delta_s": -3.817,
+          "rejected_because": "Fuera de la tolerancia ±1,0 s y título distinto; su duración coincide con bendito-cacao--karla-bravo--2022 (Δ 0,006 s)."
+        }
+      ],
+      "evidence_needed": "Un audio de «Blue Moon» (álbum Memories, 2015) en One Page Luis Guinea/audios con duración dentro de ±1,0 s de 288,000 s, o una decisión humana explícita que nombre el archivo."
+    },
+    {
+      "review_id": "04",
+      "work_id": "volver-a-verte--luis-guinea--2020",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Cantautor/Volver A Verte_Final.m4a",
+      "source_sha256": "a1bbb816cd752e3d4d6aed34c658c1e9525bd6dd5a0b960ba478e019de3d6577",
+      "preview": "assets/audio/previews/volver-a-verte--luis-guinea--2020.mp3",
+      "trim_policy": "uniform-start30-v1",
+      "association": {
+        "basis": "human_authorization",
+        "authority": "fuente identificada previamente y autorizada expresamente por el usuario para #04, aunque no se haya demostrado la equivalencia exacta con el WAV.",
+        "evidence": [
+          "audio_links_onepage.json: vínculo inequívoco por audio_ref (stem «Volver A Verte_Final» = audio_ref «Volver A Verte_Final.wav»), ffprobe 210,069 s frente a 210011 ms (Δ 0,058 s), mismo sha256.",
+          "Carpeta Cantautor (Luis Guinea). Registro distinto de volver-a-verte--ana-guinea--2022 (relación R09)."
+        ]
+      }
+    },
+    {
+      "review_id": "35",
+      "work_id": "como-decirte--luis-guinea--2022",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Pablo Delgado/PDelgado_Cómo Decirte_MixV1_.mp3",
+      "source_sha256": "0d04d6ea68884a921f19876afe56e7b169ae354b64c8025260a1137ddfe43291",
+      "preview": "assets/audio/previews/como-decirte--luis-guinea--2022.mp3",
+      "trim_policy": "uniform-start30-v1",
+      "association": {
+        "basis": "human_authorization",
+        "authority": "decisión humana explícita del usuario: Mix V1 es la fuente correcta de #35 pese a la diferencia aproximada de 3,5 s.",
+        "evidence": [
+          "ffprobe 212,000 s frente a duration_ms 208500 (Δ 3,500 s, fuera de ±1,0 s; aceptado por la autorización humana).",
+          "Nombre «PDelgado_Cómo Decirte_MixV1_» en la carpeta Productor/Pablo Delgado; artistas de la obra: Luis Guinea, Pablo Delgado.",
+          "RETIRED_WORKS_INVENTORY.md §3: único audio local de la obra. No se afirma que sea la misma mezcla que «PDelgado_Cómo Decirte_SPOTIFY.wav»."
+        ]
+      }
+    },
+    {
+      "review_id": "03",
+      "work_id": "nuestro-hogar--luis-guinea--2022",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Cantautor/Nuestro Hogar - Master 1.0.mp3",
+      "source_sha256": "7352c870c5db83aa18ba3c751ce4e0283f47839c7113cbff661aa6cfc6be4480",
+      "preview": "assets/audio/previews/nuestro-hogar--luis-guinea--2022.mp3",
+      "trim_policy": "uniform-start30-v1",
+      "association": {
+        "basis": "human_authorization",
+        "authority": "fuente identificada previamente y autorizada expresamente por el usuario para #03, aunque no se haya demostrado la equivalencia exacta con el WAV.",
+        "evidence": [
+          "audio_links_onepage.json: vínculo inequívoco por audio_ref (stem «Nuestro Hogar - Master 1.0» = audio_ref «Nuestro Hogar - Master 1.0.wav»), ffprobe 220,067 s frente a 220067 ms (Δ 0,000 s), mismo sha256."
+        ]
+      }
+    },
+    {
+      "review_id": "05",
+      "work_id": "12-meses--rogelio-edel--2022",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/Rogelio Edel - 12 meses - Master 2.0.mp3",
+      "source_sha256": "dc6ffe013bc6d6141e1bcca8e18b9617b73db8be9e9acd005b9552f1701d3272",
+      "preview": "assets/audio/previews/12-meses--rogelio-edel--2022.mp3",
+      "trim_policy": "uniform-start30-v1",
+      "association": {
+        "basis": "human_authorization",
+        "authority": "fuente identificada previamente y autorizada expresamente por el usuario para #05, aunque no se haya demostrado la equivalencia exacta con el WAV.",
+        "evidence": [
+          "audio_links_onepage.json: vínculo inequívoco por audio_ref (stem «Rogelio Edel - 12 meses - Master 2.0»), ffprobe 237,383 s frente a 237383 ms (Δ 0,000 s), mismo sha256."
+        ]
+      }
+    },
+    {
+      "review_id": "11",
+      "work_id": "la-bamba--rogelio-edel--2022",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/Rogelio_Bamba_JCMxMster.mp3",
+      "source_sha256": "ba456152768c8e213aeb180524732636400df3f6db94d50f4f9db9e7d87ca568",
+      "preview": "assets/audio/previews/la-bamba--rogelio-edel--2022.mp3",
+      "trim_policy": "uniform-start30-v1",
+      "association": {
+        "basis": "human_authorization",
+        "authority": "fuente identificada previamente y autorizada expresamente por el usuario para #11, aunque no se haya demostrado la equivalencia exacta con el WAV.",
+        "evidence": [
+          "audio_links_onepage.json: vínculo inequívoco por audio_ref (stem «Rogelio_Bamba_JCMxMster»), ffprobe 215,072 s frente a 215071 ms (Δ 0,001 s), mismo sha256."
+        ]
+      }
+    },
+    {
+      "review_id": "36",
+      "work_id": "a-escondidas--isabella-macias--2018",
+      "status": "blocked",
+      "source": null,
+      "source_sha256": null,
+      "preview": null,
+      "trim_policy": null,
+      "blocked_reason": "El audio_ref «A ESCONDIDAS MSTR 1.5.m4a» (vinculado en Drive Producciones/Bela/ con Δ 0,056 s, RETIRED_WORKS_INVENTORY.md §4) no está en One Page Luis Guinea/audios, y ningún archivo local coincide por nombre ni etiquetas (catálogo 173,072 s).",
+      "candidates": [
+        {
+          "source": "One Page Luis Guinea/audios/Cantautor/Me Equivoqué (Regional Mexicano).mp3",
+          "duration_s": 174.811,
+          "delta_s": 1.739,
+          "rejected_because": "Fuera de la tolerancia ±1,0 s; título distinto y carpeta Cantautor (Luis Guinea), no Isabella Macías."
+        }
+      ],
+      "evidence_needed": "Copiar «A ESCONDIDAS MSTR 1.5.m4a» a One Page Luis Guinea/audios (p. ej. Productor/Isabella Macías/) y comprobar con ffprobe una duración dentro de ±1,0 s de 173,072 s."
+    },
+    {
+      "review_id": "37",
+      "work_id": "lo-que-queda-de-mi--escala-de-grises--2016",
+      "status": "blocked",
+      "source": null,
+      "source_sha256": null,
+      "preview": null,
+      "trim_policy": null,
+      "blocked_reason": "El audio_ref «Lo Que Queda De Mí.mp3» solo consta como demo en Drive (lista_archivos_audio_Songwriting.xlsx fila 151, Songwriting/Demo Editoras/) y no está en One Page Luis Guinea/audios. Ningún archivo local coincide por nombre ni etiquetas (catálogo 210,000 s). Las coincidencias de duración son pistas de otras obras.",
+      "candidates": [
+        {
+          "source": "One Page Luis Guinea/audios/Cantautor/Volver A Verte_Final.m4a",
+          "duration_s": 210.069,
+          "delta_s": 0.069,
+          "rejected_because": "Es la fuente de #04 (volver-a-verte--luis-guinea--2020, vínculo por audio_ref, Δ 0,058 s); título distinto. La duración sola no basta."
+        },
+        {
+          "source": "One Page Luis Guinea/audios/Cantautor/Ojos Marrones_MocteMaster 1.0.mp3",
+          "duration_s": 208.515,
+          "delta_s": -1.485,
+          "rejected_because": "Fuera de la tolerancia ±1,0 s y título distinto."
+        }
+      ],
+      "evidence_needed": "Copiar a One Page Luis Guinea/audios el audio de la versión publicada de Escala de Grises (duración dentro de ±1,0 s de 210,000 s). Si la versión publicada fuese la demo «Lo Que Queda De Mí.mp3» de Songwriting/Demo Editoras/ (Δ 0,077 s según audio_links.json), copiarla y confirmarlo con una decisión humana. No se afirma que la demo y la versión publicada sean el mismo máster."
+    },
+    {
+      "review_id": "01",
+      "work_id": "abrazo-imaginario--ricardo-bojalil--2022",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Cantautor/Abrazo Imaginario - Master 1.1.mp3",
+      "source_sha256": "915f7795fc49ad2e986219e781456292b7baf4bbf1f79d40e2f4f7840fa164e2",
+      "preview": "assets/audio/previews/abrazo-imaginario--ricardo-bojalil--2022.mp3",
+      "trim_policy": "uniform-start30-v1",
+      "association": {
+        "basis": "human_authorization",
+        "authority": "fuente identificada previamente y autorizada expresamente por el usuario para #01, aunque no se haya demostrado la equivalencia exacta con el WAV.",
+        "evidence": [
+          "audio_links_onepage.json y audio_links_sample15.json: vínculo inequívoco por audio_ref (stem «Abrazo Imaginario - Master 1.1»), ffprobe 313,681 s frente a 313680 ms (Δ 0,001 s), mismo sha256."
+        ]
+      }
+    },
+    {
+      "review_id": "38",
+      "work_id": "shape-of-you-acoustic--segundo-piso--2017",
+      "status": "blocked",
+      "source": null,
+      "source_sha256": null,
+      "preview": null,
+      "trim_policy": null,
+      "blocked_reason": "El audio_ref «Shape of you.mp3» no está en One Page Luis Guinea/audios y, según la relación R11, dura 365,4 s frente a los 184,000 s publicados (discrepancia abierta). Ningún archivo local coincide por nombre ni etiquetas.",
+      "candidates": [
+        {
+          "source": "One Page Luis Guinea/audios/Coautorías/It Feels Like Falling In Love_1.mp3",
+          "duration_s": 185.592,
+          "delta_s": 1.592,
+          "rejected_because": "Fuera de la tolerancia ±1,0 s; es otra canción (coautoría), no un cover de Shape of You."
+        }
+      ],
+      "evidence_needed": "Un audio de la versión publicada de Segundo Piso (duración dentro de ±1,0 s de 184,000 s) en One Page Luis Guinea/audios. Recortar el MP3 de 365,4 s no resolvería la discrepancia de versión (R11)."
+    }
+  ]
+}

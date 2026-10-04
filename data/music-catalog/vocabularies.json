@@ -1,0 +1,255 @@
+{
+  "version": "taxonomy-v1-draft",
+  "documentation": "data/music-catalog/TAXONOMY.md",
+  "status": "Propuesta pendiente de aprobación. No se aplica todavía a catalog_master.json.",
+  "fields": {
+    "genre": {
+      "cardinality": [1, 2],
+      "multi": true,
+      "terms": [
+        {"id": "pop", "label_en": "Pop", "label_es": "Pop", "definition": "Canción de estructura verso-estribillo con gancho melódico y producción orientada a radio o streaming."},
+        {"id": "rock", "label_en": "Rock", "label_es": "Rock", "definition": "La base es guitarra eléctrica y batería acústica con backbeat marcado."},
+        {"id": "folk_singer_songwriter", "label_en": "Folk / Singer-Songwriter", "label_es": "Folk / Cantautor", "definition": "Manda la letra y la voz. Acompañamiento acústico reducido (guitarra o piano) y producción mínima."},
+        {"id": "rnb_soul", "label_en": "R&B / Soul", "label_es": "R&B / Soul", "definition": "Groove de R&B o soul, con melismas vocales y armonía extendida."},
+        {"id": "hip_hop", "label_en": "Hip-Hop", "label_es": "Hip-Hop", "definition": "Producción basada en beats y loops, con rap o con estética de hip-hop."},
+        {"id": "electronic", "label_en": "Electronic", "label_es": "Electrónica", "definition": "Sintetizadores, secuencias y programación como base sonora principal."},
+        {"id": "jazz_blues", "label_en": "Jazz & Blues", "label_es": "Jazz y blues", "definition": "Lenguaje armónico o rítmico del jazz (swing, improvisación) o forma y color del blues."},
+        {"id": "latin_traditional", "label_en": "Latin Traditional", "label_es": "Latino tradicional", "definition": "Formas latinoamericanas tradicionales no bailables de salón: bolero, trova, son, bossa nova."},
+        {"id": "latin_tropical", "label_en": "Tropical", "label_es": "Tropical", "definition": "Ritmos tropicales bailables: salsa, bachata, cumbia, merengue."},
+        {"id": "latin_urban", "label_en": "Latin Urban", "label_es": "Urbano latino", "definition": "Reggaetón, dembow y trap latino."},
+        {"id": "regional_mexican", "label_en": "Regional Mexican", "label_es": "Regional mexicano", "definition": "Mariachi, ranchera, norteño, banda y corrido."},
+        {"id": "christian_worship", "label_en": "Christian & Worship", "label_es": "Cristiana y alabanza", "definition": "Música de alabanza, CCM o gospel: letra devocional y convenciones de producción del género. Si solo hay temática religiosa, se usa el tema faith_spirituality."},
+        {"id": "cinematic_classical", "label_en": "Cinematic & Classical", "label_es": "Cinematográfica y clásica", "definition": "Escritura orquestal o de cámara, piano neoclásico o música concebida como score."},
+        {"id": "reggae", "label_en": "Reggae", "label_es": "Reggae", "definition": "Ritmo de reggae como base. Extensión aprobada por revisión humana (CLASIFICACION_HUMANA_MUSICA.md, 2026-09-28)."}
+      ]
+    },
+    "subgenre": {
+      "cardinality": [0, 2],
+      "multi": true,
+      "terms": [
+        {"id": "pop_ballad", "parent": "pop", "label_en": "Pop Ballad", "label_es": "Balada pop", "definition": "Pop lento y lírico centrado en la voz. Incluye la balada romántica latina."},
+        {"id": "acoustic_pop", "parent": "pop", "label_en": "Acoustic Pop", "label_es": "Pop acústico", "definition": "Estructura y producción pop con instrumentación predominantemente acústica."},
+        {"id": "indie_pop", "parent": "pop", "label_en": "Indie Pop", "label_es": "Indie pop", "definition": "Pop con estética independiente: producción menos pulida y timbres menos convencionales."},
+        {"id": "synth_pop", "parent": "pop", "label_en": "Synth-Pop", "label_es": "Synth-pop", "definition": "Pop en el que los sintetizadores son la instrumentación principal."},
+        {"id": "dance_pop", "parent": "pop", "label_en": "Dance Pop", "label_es": "Dance pop", "definition": "Pop con pulso de pista de baile: bombo constante y energía alta."},
+        {"id": "pop_rock", "parent": "rock", "label_en": "Pop Rock", "label_es": "Pop rock", "definition": "Rock con estructura y ganchos pop."},
+        {"id": "soft_rock", "parent": "rock", "label_en": "Soft Rock", "label_es": "Soft rock", "definition": "Rock de dinámica contenida y sonido suave."},
+        {"id": "alternative_rock", "parent": "rock", "label_en": "Alternative Rock", "label_es": "Rock alternativo", "definition": "Rock con guitarras distorsionadas y estética alternativa."},
+        {"id": "indie_rock", "parent": "rock", "label_en": "Indie Rock", "label_es": "Indie rock", "definition": "Rock con estética y producción independientes."},
+        {"id": "indie_folk", "parent": "folk_singer_songwriter", "label_en": "Indie Folk", "label_es": "Indie folk", "definition": "Folk con estética independiente: capas acústicas, coros y ambientes."},
+        {"id": "contemporary_rnb", "parent": "rnb_soul", "label_en": "Contemporary R&B", "label_es": "R&B contemporáneo", "definition": "R&B con producción actual de beats programados."},
+        {"id": "neo_soul", "parent": "rnb_soul", "label_en": "Neo Soul", "label_es": "Neo soul", "definition": "Soul con armonía jazzística y groove relajado."},
+        {"id": "classic_soul", "parent": "rnb_soul", "label_en": "Classic Soul", "label_es": "Soul clásico", "definition": "Soul con instrumentación y producción de los años 60–70."},
+        {"id": "funk", "parent": "rnb_soul", "label_en": "Funk", "label_es": "Funk", "definition": "Groove sincopado con el bajo y la guitarra rítmica como protagonistas."},
+        {"id": "boom_bap", "parent": "hip_hop", "label_en": "Boom Bap", "label_es": "Boom bap", "definition": "Hip-hop con batería sampleada y swing de los años 90."},
+        {"id": "trap", "parent": "hip_hop", "label_en": "Trap", "label_es": "Trap", "definition": "Hi-hats rápidos, 808 y half-time. Si es en español y de la escena urbana latina, se usa latin_trap."},
+        {"id": "lofi_hip_hop", "parent": "hip_hop", "label_en": "Lo-Fi Hip-Hop", "label_es": "Lo-fi hip-hop", "definition": "Beat relajado con texturas degradadas a propósito."},
+        {"id": "ambient", "parent": "electronic", "label_en": "Ambient", "label_es": "Ambient", "definition": "Texturas sin pulso protagonista, orientadas a la atmósfera."},
+        {"id": "downtempo", "parent": "electronic", "label_en": "Downtempo / Chill", "label_es": "Downtempo / Chill", "definition": "Electrónica lenta y relajada con pulso presente."},
+        {"id": "house", "parent": "electronic", "label_en": "House", "label_es": "House", "definition": "Bombo a negras (four-on-the-floor), normalmente entre 115 y 130 BPM."},
+        {"id": "edm", "parent": "electronic", "label_en": "EDM", "label_es": "EDM", "definition": "Electrónica de festival con build-ups y drops."},
+        {"id": "vocal_jazz", "parent": "jazz_blues", "label_en": "Vocal Jazz", "label_es": "Jazz vocal", "definition": "Jazz centrado en una voz solista, a menudo sobre standards."},
+        {"id": "swing", "parent": "jazz_blues", "label_en": "Swing", "label_es": "Swing", "definition": "Pulso de swing propio de big band o combo."},
+        {"id": "lounge", "parent": "jazz_blues", "label_en": "Lounge", "label_es": "Lounge", "definition": "Jazz ligero de fondo, de dinámica suave."},
+        {"id": "blues", "parent": "jazz_blues", "label_en": "Blues", "label_es": "Blues", "definition": "Forma de blues (12 compases o similar) con escala y fraseo de blues."},
+        {"id": "bolero", "parent": "latin_traditional", "label_en": "Bolero", "label_es": "Bolero", "definition": "Bolero latinoamericano: ritmo de bolero, lento y romántico."},
+        {"id": "trova", "parent": "latin_traditional", "label_en": "Trova", "label_es": "Trova", "definition": "Canción de autor latinoamericana acompañada de guitarra."},
+        {"id": "son", "parent": "latin_traditional", "label_en": "Son", "label_es": "Son", "definition": "Son cubano o mexicano tradicional."},
+        {"id": "bossa_nova", "parent": "latin_traditional", "label_en": "Bossa Nova", "label_es": "Bossa nova", "definition": "Ritmo de bossa nova, con armonía y guitarra características."},
+        {"id": "salsa", "parent": "latin_tropical", "label_en": "Salsa", "label_es": "Salsa", "definition": "Clave de son, piano en montuno y metales."},
+        {"id": "bachata", "parent": "latin_tropical", "label_en": "Bachata", "label_es": "Bachata", "definition": "Requinto punteado y güira: ritmo de bachata."},
+        {"id": "cumbia", "parent": "latin_tropical", "label_en": "Cumbia", "label_es": "Cumbia", "definition": "Ritmo de cumbia, en cualquiera de sus variantes regionales."},
+        {"id": "merengue", "parent": "latin_tropical", "label_en": "Merengue", "label_es": "Merengue", "definition": "Ritmo de merengue: tambora y güira."},
+        {"id": "reggaeton", "parent": "latin_urban", "label_en": "Reggaeton", "label_es": "Reggaetón", "definition": "Patrón dembow como base rítmica."},
+        {"id": "latin_trap", "parent": "latin_urban", "label_en": "Latin Trap", "label_es": "Trap latino", "definition": "Trap de la escena urbana latina."},
+        {"id": "mariachi_ranchera", "parent": "regional_mexican", "label_en": "Mariachi / Ranchera", "label_es": "Mariachi / Ranchera", "definition": "Mariachi o canción ranchera."},
+        {"id": "norteno", "parent": "regional_mexican", "label_en": "Norteño", "label_es": "Norteño", "definition": "Acordeón y bajo sexto."},
+        {"id": "banda", "parent": "regional_mexican", "label_en": "Banda", "label_es": "Banda", "definition": "Banda sinaloense de viento y percusión."},
+        {"id": "corrido", "parent": "regional_mexican", "label_en": "Corrido", "label_es": "Corrido", "definition": "Forma narrativa de corrido, tradicional o tumbado."},
+        {"id": "worship", "parent": "christian_worship", "label_en": "Worship", "label_es": "Alabanza", "definition": "Canción congregacional de alabanza y adoración."},
+        {"id": "ccm", "parent": "christian_worship", "label_en": "Contemporary Christian", "label_es": "Cristiana contemporánea", "definition": "Pop o rock de letra cristiana, no concebido para el canto congregacional."},
+        {"id": "gospel", "parent": "christian_worship", "label_en": "Gospel", "label_es": "Góspel", "definition": "Góspel: coro, llamada y respuesta, raíz afroamericana."},
+        {"id": "orchestral_score", "parent": "cinematic_classical", "label_en": "Orchestral Score", "label_es": "Score orquestal", "definition": "Orquesta o simulación orquestal con escritura de score."},
+        {"id": "neoclassical", "parent": "cinematic_classical", "label_en": "Neoclassical", "label_es": "Neoclásica", "definition": "Piano o cuerdas de cámara con lenguaje minimalista o neoclásico."},
+        {"id": "trailer_epic", "parent": "cinematic_classical", "label_en": "Trailer / Epic", "label_es": "Tráiler / Épica", "definition": "Híbrido orquestal con percusión épica y estructura de tráiler."},
+        {"id": "reggae_pop", "parent": "reggae", "label_en": "Reggae Pop", "label_es": "Reggae pop", "definition": "Reggae con estructura y ganchos pop. Extensión aprobada por revisión humana (CLASIFICACION_HUMANA_MUSICA.md, 2026-09-28)."}
+      ]
+    },
+    "mood": {
+      "cardinality": [1, 4],
+      "multi": true,
+      "terms": [
+        {"id": "bright", "label_en": "Bright", "label_es": "Luminosa", "definition": "Armonía mayor y timbres claros: sensación de luz."},
+        {"id": "warm", "label_en": "Warm", "label_es": "Cálida", "definition": "Timbres acústicos o analógicos cercanos y armonía consonante: sensación de cobijo."},
+        {"id": "dreamy", "label_en": "Dreamy", "label_es": "Onírica", "definition": "Texturas difusas, reverberación amplia y pads: sensación de flotar."},
+        {"id": "intimate", "label_en": "Intimate", "label_es": "Íntima", "definition": "Arreglo mínimo y fuente cercana y seca: sensación de confidencia."},
+        {"id": "calm", "label_en": "Calm", "label_es": "Tranquila", "definition": "Sin tensión ni impulso rítmico marcado: estable y reposada."},
+        {"id": "melancholic", "label_en": "Melancholic", "label_es": "Melancólica", "definition": "Color menor o modal y melodía descendente: atmósfera grave sin llegar a oscura."},
+        {"id": "dark", "label_en": "Dark", "label_es": "Oscura", "definition": "Registro grave y disonancia: atmósfera ominosa."},
+        {"id": "tense", "label_en": "Tense", "label_es": "Tensa", "definition": "Ostinatos y armonía sin resolver: sensación de suspense."},
+        {"id": "epic", "label_en": "Epic", "label_es": "Épica", "definition": "Gran escala, crescendos, orquesta o coros: sensación de grandeza."},
+        {"id": "groovy", "label_en": "Groovy", "label_es": "Rítmica", "definition": "El ritmo es el protagonista e invita al movimiento."},
+        {"id": "playful", "label_en": "Playful", "label_es": "Juguetona", "definition": "Ligera y desenfadada, con giros inesperados."},
+        {"id": "vintage", "label_en": "Vintage", "label_es": "Vintage", "definition": "La producción evoca a propósito una época pasada. Describe el sonido, no la emoción de añoranza (esa es nostalgia en emotion)."}
+      ]
+    },
+    "emotion": {
+      "cardinality": [0, 3],
+      "multi": true,
+      "terms": [
+        {"id": "joy", "label_en": "Joy", "label_es": "Alegría", "definition": "Felicidad o euforia expresada."},
+        {"id": "love", "label_en": "Love", "label_es": "Amor", "definition": "Afecto o ternura hacia alguien. Vale para amor de pareja, familiar o fraternal."},
+        {"id": "longing", "label_en": "Longing", "label_es": "Anhelo", "definition": "Deseo de alguien o algo ausente, sin pérdida definitiva."},
+        {"id": "heartbreak", "label_en": "Heartbreak", "label_es": "Desamor", "definition": "Dolor por una ruptura o un rechazo amoroso."},
+        {"id": "sorrow", "label_en": "Sorrow", "label_es": "Pesar", "definition": "Tristeza por una pérdida no amorosa: muerte, despedida o fracaso."},
+        {"id": "hope", "label_en": "Hope", "label_es": "Esperanza", "definition": "Expectativa positiva ante el futuro."},
+        {"id": "nostalgia", "label_en": "Nostalgia", "label_es": "Nostalgia", "definition": "Añoranza de un pasado recordado."},
+        {"id": "gratitude", "label_en": "Gratitude", "label_es": "Gratitud", "definition": "Agradecimiento expresado."},
+        {"id": "determination", "label_en": "Determination", "label_es": "Determinación", "definition": "Voluntad de superar, resistir o conseguir algo."},
+        {"id": "vulnerability", "label_en": "Vulnerability", "label_es": "Vulnerabilidad", "definition": "Fragilidad, miedo o confesión expuesta."},
+        {"id": "anger", "label_en": "Anger", "label_es": "Rabia", "definition": "Enfado, reproche o rebeldía."},
+        {"id": "peace", "label_en": "Peace", "label_es": "Paz", "definition": "Serenidad interior o reconciliación. Es un estado emocional, no un rasgo sonoro (ese es calm en mood)."}
+      ]
+    },
+    "energy": {
+      "cardinality": [1, 1],
+      "multi": false,
+      "terms": [
+        {"id": "very_low", "ordinal": 1, "label_en": "Very Low", "label_es": "Muy baja", "definition": "Casi estática. Uno o dos instrumentos, dinámica pp–p y sin percusión, o con percusión apenas perceptible."},
+        {"id": "low", "ordinal": 2, "label_en": "Low", "label_es": "Baja", "definition": "Suave y contenida. Arreglo reducido; percusión ligera o ausente; dinámica p–mp."},
+        {"id": "medium", "ordinal": 3, "label_en": "Medium", "label_es": "Media", "definition": "Pulso estable con banda completa o arreglo medio y dinámica mf. Ni empuja ni reposa."},
+        {"id": "high", "ordinal": 4, "label_en": "High", "label_es": "Alta", "definition": "Impulso claro. Arreglo denso, batería marcada y dinámica f."},
+        {"id": "very_high", "ordinal": 5, "label_en": "Very High", "label_es": "Muy alta", "definition": "Intensidad máxima sostenida. Dinámica ff durante la mayor parte de la pista; himno o agresividad."}
+      ]
+    },
+    "tempo_class": {
+      "cardinality": [0, 1],
+      "multi": false,
+      "terms": [
+        {"id": "very_slow", "bpm_min": 40, "bpm_max": 69, "label_en": "Very Slow", "label_es": "Muy lento", "definition": "Menos de 70 BPM."},
+        {"id": "slow", "bpm_min": 70, "bpm_max": 89, "label_en": "Slow", "label_es": "Lento", "definition": "De 70 a 89 BPM."},
+        {"id": "medium", "bpm_min": 90, "bpm_max": 114, "label_en": "Medium", "label_es": "Medio", "definition": "De 90 a 114 BPM."},
+        {"id": "fast", "bpm_min": 115, "bpm_max": 139, "label_en": "Fast", "label_es": "Rápido", "definition": "De 115 a 139 BPM."},
+        {"id": "very_fast", "bpm_min": 140, "bpm_max": 220, "label_en": "Very Fast", "label_es": "Muy rápido", "definition": "140 BPM o más."},
+        {"id": "free_time", "label_en": "Free Time", "label_es": "Tempo libre", "definition": "Sin pulso estable (rubato o ad libitum). Tempo/BPM queda vacío."}
+      ]
+    },
+    "vocals_instrumental": {
+      "cardinality": [1, 1],
+      "multi": false,
+      "terms": [
+        {"id": "vocal", "label_en": "Vocal", "label_es": "Vocal", "definition": "Contiene letra inteligible: cantada, rapeada o hablada."},
+        {"id": "wordless_vocal", "label_en": "Wordless Vocal", "label_es": "Voz sin letra", "definition": "Hay voz humana pero ninguna palabra inteligible: vocalise, tarareo, coros de vocales o chops."},
+        {"id": "instrumental", "label_en": "Instrumental", "label_es": "Instrumental", "definition": "Ninguna voz humana en toda la pista."}
+      ]
+    },
+    "vocal_type": {
+      "cardinality": [0, 3],
+      "multi": true,
+      "terms": [
+        {"id": "male_lead", "kind": "lead", "label_en": "Male Lead", "label_es": "Voz principal masculina", "definition": "Voz principal de timbre adulto masculino. Describe el timbre, no la identidad de quien canta."},
+        {"id": "female_lead", "kind": "lead", "label_en": "Female Lead", "label_es": "Voz principal femenina", "definition": "Voz principal de timbre adulto femenino. Describe el timbre, no la identidad de quien canta."},
+        {"id": "child_lead", "kind": "lead", "label_en": "Child Lead", "label_es": "Voz principal infantil", "definition": "Voz principal infantil."},
+        {"id": "group_lead", "kind": "lead", "label_en": "Group / Choir Lead", "label_es": "Grupo o coro principal", "definition": "La voz principal la lleva un grupo o coro, al unísono o en armonía."},
+        {"id": "rap", "kind": "delivery", "label_en": "Rap", "label_es": "Rap", "definition": "Una parte sustancial de la voz principal es rapeada."},
+        {"id": "spoken_word", "kind": "delivery", "label_en": "Spoken Word", "label_es": "Voz hablada", "definition": "Una parte sustancial de la voz principal es hablada o recitada."}
+      ]
+    },
+    "language": {
+      "cardinality": [0, 2],
+      "multi": true,
+      "terms": [
+        {"id": "es", "label_en": "Spanish", "label_es": "Español", "definition": "ISO 639-1 es."},
+        {"id": "en", "label_en": "English", "label_es": "Inglés", "definition": "ISO 639-1 en."},
+        {"id": "pt", "label_en": "Portuguese", "label_es": "Portugués", "definition": "ISO 639-1 pt."},
+        {"id": "fr", "label_en": "French", "label_es": "Francés", "definition": "ISO 639-1 fr."},
+        {"id": "it", "label_en": "Italian", "label_es": "Italiano", "definition": "ISO 639-1 it."},
+        {"id": "de", "label_en": "German", "label_es": "Alemán", "definition": "ISO 639-1 de."}
+      ]
+    },
+    "theme": {
+      "cardinality": [0, 3],
+      "multi": true,
+      "terms": [
+        {"id": "romantic_love", "label_en": "Romantic Love", "label_es": "Amor romántico", "definition": "La letra trata de una relación amorosa: enamoramiento, deseo o compromiso."},
+        {"id": "breakup", "label_en": "Breakup", "label_es": "Ruptura", "definition": "La letra trata del final de una relación o de su imposibilidad."},
+        {"id": "family", "label_en": "Family", "label_es": "Familia", "definition": "Madres, padres, hijos, hermanos o vínculo familiar."},
+        {"id": "friendship", "label_en": "Friendship", "label_es": "Amistad", "definition": "Vínculo de amistad."},
+        {"id": "faith_spirituality", "label_en": "Faith & Spirituality", "label_es": "Fe y espiritualidad", "definition": "Dios, fe, oración o búsqueda espiritual."},
+        {"id": "self_empowerment", "label_en": "Self-Empowerment", "label_es": "Superación", "definition": "Superación personal, resiliencia o ambición."},
+        {"id": "home_belonging", "label_en": "Home & Belonging", "label_es": "Hogar y pertenencia", "definition": "Hogar, raíces, lugar de origen o identidad."},
+        {"id": "journey_travel", "label_en": "Journey & Travel", "label_es": "Viaje", "definition": "Viaje físico, camino o partida hacia algo nuevo."},
+        {"id": "celebration", "label_en": "Celebration", "label_es": "Celebración", "definition": "Fiesta, celebración o disfrute del momento."},
+        {"id": "passage_of_time", "label_en": "Passage of Time", "label_es": "Paso del tiempo", "definition": "Recuerdos, crecer, envejecer o el tiempo que pasa."},
+        {"id": "farewell_loss", "label_en": "Farewell & Loss", "label_es": "Despedida y pérdida", "definition": "Muerte, duelo o despedida no amorosa."},
+        {"id": "nature", "label_en": "Nature", "label_es": "Naturaleza", "definition": "Mar, paisaje o elementos naturales como asunto central."},
+        {"id": "holiday_christmas", "label_en": "Christmas / Holidays", "label_es": "Navidad y fiestas", "definition": "La letra trata de la Navidad o de las fiestas de fin de año."},
+        {"id": "food_drink", "label_en": "Food & Drink", "label_es": "Comida y bebida", "definition": "La letra trata de comida o bebida como asunto central. Extensión aprobada por revisión humana (CLASIFICACION_HUMANA_MUSICA.md, 2026-09-28); no sustituye a celebration."}
+      ]
+    },
+    "use_scene": {
+      "cardinality": [0, 4],
+      "multi": true,
+      "terms": [
+        {"id": "romantic_scene", "label_en": "Romantic Scene", "label_es": "Escena romántica", "definition": "Encuentro, cita, beso o reconciliación de pareja en pantalla."},
+        {"id": "dramatic_moment", "label_en": "Dramatic Moment", "label_es": "Momento dramático", "definition": "Clímax emocional, revelación o confrontación en ficción."},
+        {"id": "reflective_montage", "label_en": "Reflective Montage", "label_es": "Montaje reflexivo", "definition": "Montaje de recuerdo, soledad, introspección o paso del tiempo."},
+        {"id": "uplifting_montage", "label_en": "Uplifting Montage", "label_es": "Montaje de superación", "definition": "Montaje de progreso, entrenamiento, logro o cambio positivo."},
+        {"id": "party_celebration", "label_en": "Party / Celebration", "label_es": "Fiesta o celebración", "definition": "Fiesta, bar o celebración, diegética o no."},
+        {"id": "road_trip_travel", "label_en": "Road Trip / Travel", "label_es": "Viaje en carretera", "definition": "Carretera, viaje o desplazamiento con paisaje."},
+        {"id": "family_moment", "label_en": "Family Moment", "label_es": "Momento familiar", "definition": "Reunión familiar, infancia o vínculo entre generaciones."},
+        {"id": "wedding", "label_en": "Wedding", "label_es": "Boda", "definition": "Ceremonia, primer baile o vídeo de boda."},
+        {"id": "holiday_season", "label_en": "Holiday Season", "label_es": "Temporada navideña", "definition": "Contenido o campaña de Navidad y fin de año, aunque la letra no trate de ello."},
+        {"id": "faith_based_content", "label_en": "Faith-Based Content", "label_es": "Contenido religioso", "definition": "Película, serie, evento o campaña de temática religiosa."},
+        {"id": "opening_titles", "label_en": "Opening Titles", "label_es": "Créditos iniciales", "definition": "Apertura de película o serie."},
+        {"id": "end_credits", "label_en": "End Credits", "label_es": "Créditos finales", "definition": "Cierre de película o serie."},
+        {"id": "brand_storytelling", "label_en": "Brand Storytelling", "label_es": "Publicidad emocional", "definition": "Publicidad con narrativa emocional: institucional, causas o marca."},
+        {"id": "lifestyle_commercial", "label_en": "Lifestyle Commercial", "label_es": "Publicidad lifestyle", "definition": "Publicidad de producto o lifestyle de tono ligero."},
+        {"id": "documentary", "label_en": "Documentary", "label_es": "Documental", "definition": "Documental o reportaje, bajo narración o en transición."}
+      ]
+    }
+  },
+  "separate_fields": {
+    "version_type": {
+      "cardinality": [0, 1],
+      "multi": false,
+      "note": "Campo objetivo aparte (TAXONOMY.md §13.1), no es Genre. Solo contiene los términos aprobados por revisión humana; no se infiere del título.",
+      "terms": [
+        {"id": "cover_acoustic", "label_en": "Acoustic Cover", "label_es": "Cover acústico", "definition": "Cover en versión acústica."},
+        {"id": "mariachi", "label_en": "Mariachi", "label_es": "Mariachi", "definition": "Versión con arreglo de mariachi."},
+        {"id": "acoustic_piano", "label_en": "Acoustic / Piano", "label_es": "Acústica / piano", "definition": "Versión acústica con piano."},
+        {"id": "piano_vocal", "label_en": "Piano & Vocal", "label_es": "Piano y voz", "definition": "Versión de piano y voz."}
+      ]
+    }
+  },
+  "amendments": [
+    {
+      "date": "2026-09-28",
+      "source": "One Page Luis Guinea/CLASIFICACION_HUMANA_MUSICA.md",
+      "evidence": "human_review",
+      "changes": [
+        "genre: + reggae",
+        "subgenre: + reggae_pop (padre reggae)",
+        "theme: + food_drink",
+        "mood: cardinalidad 1–3 → 1–4",
+        "emotion: cardinalidad 0–2 → 0–3",
+        "separate_fields.version_type: cover_acoustic, mariachi, acoustic_piano, piano_vocal",
+        "evidence_classes: + human_review",
+        "tempo_class free_time: ya existía; confirmado sin cambios"
+      ],
+      "not_created": [
+        "perceived_tempo: no existe vocabulario humano aprobado",
+        "theme commitment",
+        "theme de humor",
+        "use_scene food_beverage_commercial"
+      ]
+    }
+  ],
+  "evidence_classes": [
+    {"id": "objetivo", "definition": "El valor está en una fuente existente (celda de un XLSX original o metadata declarada por el titular), con referencia exacta. No interviene ningún juicio."},
+    {"id": "analisis_audio", "definition": "El valor se obtiene analizando directamente un audio local inequívocamente vinculado a la obra: nombre verificado y duración dentro de la tolerancia. Se registran el sha256 del audio y el método."},
+    {"id": "pendiente_humano", "definition": "No hay evidencia suficiente. El campo queda vacío y marcado para revisión humana."},
+    {"id": "revision_humana", "definition": "Reservado para la fase siguiente: valor asignado por una persona tras escuchar, con revisor y fecha. En la muestra v1 no se usa."},
+    {"id": "human_review", "definition": "Valor aprobado por revisión humana documentada en One Page Luis Guinea/CLASIFICACION_HUMANA_MUSICA.md (2026-09-28). Tiene autoridad sobre las sugerencias automáticas (ML/Essentia), que solo se conservan como evidencia separada."}
+  ]
+}

@@ -1,0 +1,4486 @@
+[
+  {
+    "id": "12-meses--rogelio-edel--2022",
+    "title": "12 Meses",
+    "artists": [
+      "Rogelio Edel"
+    ],
+    "credits": [],
+    "release": {
+      "album": "12 Meses",
+      "date": "2022-11-12",
+      "year": 2022,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 237383,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772200007",
+    "spotify": {
+      "track_id": "3qCmV19uaDkZ9KVrh3IRxE",
+      "url": "https://open.spotify.com/track/3qCmV19uaDkZ9KVrh3IRxE"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/12 Meses - Rogelio Edel.jpg",
+      "web_file": "assets/images/12-Meses---Rogelio-Edel.webp"
+    },
+    "audio_ref": "Rogelio Edel - 12 meses - Master 2.0.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "a-escondidas--isabella-macias--2018",
+    "title": "A Escondidas",
+    "artists": [
+      "Isabella Macías"
+    ],
+    "credits": [],
+    "release": {
+      "album": "A Escondidas",
+      "date": "2018-10-19",
+      "year": 2018,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 173072,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE771800054",
+    "spotify": {
+      "track_id": "3TxEPlJdYUVLY9rCeMX5PQ",
+      "url": "https://open.spotify.com/track/3TxEPlJdYUVLY9rCeMX5PQ"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/a-escondidas/1438065646?i=1438065655&uo=4",
+      "track_id": "1438065655",
+      "collection_id": "1438065646",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/A Escondidas - Isabella Macías.jpg",
+      "web_file": "assets/images/A-Escondidas---Isabella-Macías.webp"
+    },
+    "audio_ref": "A ESCONDIDAS MSTR 1.5.m4a",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "a-mi-lado-estaras--patty-gleason--2020",
+    "title": "A Mi Lado Estarás",
+    "artists": [
+      "Patty Gleason",
+      "Ana Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers",
+      "date": "2020-09-12",
+      "year": 2020,
+      "type": "album",
+      "track_number": 6,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 336987,
+    "explicit": false,
+    "is_collaboration": true,
+    "isrc": null,
+    "spotify": {
+      "track_id": "6RO6o8raZzz9ipAFo9rd7q",
+      "url": "https://open.spotify.com/track/6RO6o8raZzz9ipAFo9rd7q"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/A Mi Lado Estarás - Patty Gleason.jpg",
+      "web_file": "assets/images/A-Mi-Lado-Estarás---Patty-Gleason.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "a-million-dreams-acoustic-cover--isabella-macias--2018",
+    "title": "A Million Dreams - Acoustic Cover",
+    "artists": [
+      "Isabella Macías"
+    ],
+    "credits": [],
+    "release": {
+      "album": "A Million Dreams (Acoustic Cover)",
+      "date": "2018-03-20",
+      "year": 2018,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 282000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "QZ5AB1896763",
+    "spotify": {
+      "track_id": "66mgnYgTgCu46XvCahtCRZ",
+      "url": "https://open.spotify.com/track/66mgnYgTgCu46XvCahtCRZ"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/a-million-dreams-acoustic-cover/1364477422?i=1364477424&uo=4",
+      "track_id": "1364477424",
+      "collection_id": "1364477422",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/A Million Dreams - Acoustic Cover - Isabella Macías.jpg",
+      "web_file": "assets/images/A-Million-Dreams---Acoustic-Cover---Isabella-Macías.webp"
+    },
+    "audio_ref": "A Million Dreams (Master).m4a",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "a-puro-dolor-medley--mandala-love--2022",
+    "title": "A Puro Dolor - Medley",
+    "artists": [
+      "Mandala LOVE"
+    ],
+    "credits": [],
+    "release": {
+      "album": "A Puro Dolor - Medley",
+      "date": "2022-08-19",
+      "year": 2022,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 337285,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772200004",
+    "spotify": {
+      "track_id": "5Wo0f9kCLJMWUjeILVE5oX",
+      "url": "https://open.spotify.com/track/5Wo0f9kCLJMWUjeILVE5oX"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/a-puro-dolor-medley/1638433863?i=1638434043&uo=4",
+      "track_id": "1638434043",
+      "collection_id": "1638433863",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/A Puro Dolor - Medley - Mandala LOVE.jpg",
+      "web_file": "assets/images/A-Puro-Dolor---Medley---Mandala-LOVE.webp"
+    },
+    "audio_ref": "MEDLEY A PURO DOLOR MASTER 2448.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "abrazo-imaginario--ricardo-bojalil--2022",
+    "title": "Abrazo Imaginario",
+    "artists": [
+      "Ricardo Bojalil"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Abrazo Imaginario",
+      "date": "2022-10-22",
+      "year": 2022,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 313680,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772200009",
+    "spotify": {
+      "track_id": "2nwUkVqWx2iWQ3OyWISF12",
+      "url": "https://open.spotify.com/track/2nwUkVqWx2iWQ3OyWISF12"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Abrazo Imaginario - Ricardo Bojalil.jpg",
+      "web_file": "assets/images/Abrazo-Imaginario---Ricardo-Bojalil.webp"
+    },
+    "audio_ref": "Abrazo Imaginario - Master 1.1.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "adios-amor-version-bolero--luis-guinea--2020",
+    "title": "Adiós Amor (Versión Bolero)",
+    "artists": [
+      "Luis Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Adiós Amor (Versión Bolero)",
+      "date": "2020-05-22",
+      "year": 2020,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 164210,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": null,
+    "spotify": {
+      "track_id": "5YcQoICyxYXRf2u9yt7g91",
+      "url": "https://open.spotify.com/track/5YcQoICyxYXRf2u9yt7g91"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/adi%C3%B3s-amor-versi%C3%B3n-bolero/1511082479?i=1511082480&uo=4",
+      "track_id": "1511082480",
+      "collection_id": "1511082479",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Adiós Amor (Versión Bolero) - Luis Guinea.jpg",
+      "web_file": "assets/images/Adiós-Amor-Versión-Bolero---Luis-Guinea.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "agua-de-mar--luis-guinea--2021",
+    "title": "Agua de Mar",
+    "artists": [
+      "Luis Guinea",
+      "Salo",
+      "Efra Ardila"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Agua de Mar",
+      "date": "2021-04-23",
+      "year": 2021,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 190936,
+    "explicit": false,
+    "is_collaboration": true,
+    "isrc": "MXE772100002",
+    "spotify": {
+      "track_id": "7Is7VTCSFn5j0aTZYIVwcF",
+      "url": "https://open.spotify.com/track/7Is7VTCSFn5j0aTZYIVwcF"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/agua-de-mar/1560809123?i=1560809235&uo=4",
+      "track_id": "1560809235",
+      "collection_id": "1560809123",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Agua de Mar - Luis Guinea.jpg",
+      "web_file": "assets/images/Agua-de-Mar---Luis-Guinea.webp"
+    },
+    "audio_ref": "AGUA DE MAR_SALO x EFRA x LUISG_MstrbyPach 1 [4824].wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "ain-t-no-sunshine--lucide--2017",
+    "title": "Ain't No Sunshine",
+    "artists": [
+      "Lucide",
+      "Adal Pérez Guacamole"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Ain't No Sunshine - Single",
+      "date": "2017-06-01",
+      "year": 2017,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 330000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "US7VG1775078",
+    "spotify": {
+      "track_id": "2m9GjAJYC4vKWXM8cB2EQl",
+      "url": "https://open.spotify.com/track/2m9GjAJYC4vKWXM8cB2EQl"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/aint-no-sunshine/1243443159?i=1243443214&uo=4",
+      "track_id": "1243443214",
+      "collection_id": "1243443159",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Ain't No Sunshine - Lucide.jpg",
+      "web_file": "assets/images/Aint-No-Sunshine---Lucide.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "aleluya-en-la-tierra--patty-gleason--2020",
+    "title": "Aleluya (En la Tierra)",
+    "artists": [
+      "Patty Gleason"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers",
+      "date": "2020-09-12",
+      "year": 2020,
+      "type": "album",
+      "track_number": 10,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 331045,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": null,
+    "spotify": {
+      "track_id": "1qO8ghKV2TnFM88BAiy1nH",
+      "url": "https://open.spotify.com/track/1qO8ghKV2TnFM88BAiy1nH"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/aleluya-en-la-tierra/1529758912?i=1529758922&uo=4",
+      "track_id": "1529758922",
+      "collection_id": "1529758912",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Aleluya (En la Tierra) - Patty Gleason.jpg",
+      "web_file": "assets/images/Aleluya-En-la-Tierra---Patty-Gleason.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "alguien-como-yo--segundo-piso--2014",
+    "title": "Alguien Como Yo",
+    "artists": [
+      "Segundo Piso"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Alguien Como Yo",
+      "date": "2014-05-16",
+      "year": 2014,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 234453,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "BGA471403747",
+    "spotify": {
+      "track_id": "2NWJm2xmebgdU438Ssx4uC",
+      "url": "https://open.spotify.com/track/2NWJm2xmebgdU438Ssx4uC"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Alguien Como Yo - Segundo Piso.jpg",
+      "web_file": "assets/images/Alguien-Como-Yo---Segundo-Piso.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "alla--rogelio-edel--2022",
+    "title": "Allá",
+    "artists": [
+      "Rogelio Edel"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Allá",
+      "date": "2022-03-11",
+      "year": 2022,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 226519,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "QM4TW2270122",
+    "spotify": {
+      "track_id": "1iablUnA3Ybv2Z6GFXDdLF",
+      "url": "https://open.spotify.com/track/1iablUnA3Ybv2Z6GFXDdLF"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Allá - Rogelio Edel.jpg",
+      "web_file": "assets/images/Allá---Rogelio-Edel.webp"
+    },
+    "audio_ref": "Allá_LGMix.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "anoche-me-enamore--rogelio-edel--2021",
+    "title": "Anoche Me Enamoré",
+    "artists": [
+      "Rogelio Edel"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Anoche Me Enamoré",
+      "date": "2021-03-26",
+      "year": 2021,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 161347,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "QM6MZ2113591",
+    "spotify": {
+      "track_id": "2HeSUoZcZqXR1h4SHeqPM0",
+      "url": "https://open.spotify.com/track/2HeSUoZcZqXR1h4SHeqPM0"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Anoche Me Enamoré - Rogelio Edel.jpg",
+      "web_file": "assets/images/Anoche-Me-Enamoré---Rogelio-Edel.webp"
+    },
+    "audio_ref": "Anoche (Master)_1.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "anoche-me-enamore--rogelio-edel--2024",
+    "title": "Anoche Me Enamoré",
+    "artists": [
+      "Rogelio Edel"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Anoche Me Enamoré",
+      "date": "2024-04-27",
+      "year": 2024,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 139779,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772400003",
+    "spotify": {
+      "track_id": "0LTXXWK0EaCDBKfDJdSi7F",
+      "url": "https://open.spotify.com/track/0LTXXWK0EaCDBKfDJdSi7F"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Anoche Me Enamoré - Rogelio Edel.jpg",
+      "web_file": "assets/images/Anoche-Me-Enamoré---Rogelio-Edel.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "antes-de-irme--luis-guinea--2023",
+    "title": "Antes de Irme",
+    "artists": [
+      "Luis Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Antes de Irme",
+      "date": "2023-06-24",
+      "year": 2023,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 294867,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772300015",
+    "spotify": {
+      "track_id": "5QV4IuAriodva0JovTZtOQ",
+      "url": "https://open.spotify.com/track/5QV4IuAriodva0JovTZtOQ"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/antes-de-irme/1693305724?i=1693305725&uo=4",
+      "track_id": "1693305725",
+      "collection_id": "1693305724",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Antes de Irme - Luis Guinea.jpg",
+      "web_file": "assets/images/Antes-de-Irme---Luis-Guinea.webp"
+    },
+    "audio_ref": "Antes de Irme_Master.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "aranza-s-lullaby--luis-guinea--2015",
+    "title": "Aranza's Lullaby",
+    "artists": [
+      "Luis Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Memories",
+      "date": "2015-09-08",
+      "year": 2015,
+      "type": "single",
+      "track_number": 3,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 344000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": null,
+    "spotify": {
+      "track_id": "1l0fup98cEG9pqTfIhim1V",
+      "url": "https://open.spotify.com/track/1l0fup98cEG9pqTfIhim1V"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/aranzas-lullaby/1036707293?i=1036707668&uo=4",
+      "track_id": "1036707668",
+      "collection_id": "1036707293",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Aranza's Lullaby - Luis Guinea.jpg",
+      "web_file": "assets/images/Aranzas-Lullaby---Luis-Guinea.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "bajo-la-mesa--mireles--2021",
+    "title": "Bajo la Mesa",
+    "artists": [
+      "Mireles",
+      "Rogelio Edel"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Bajo la Mesa",
+      "date": "2021-05-21",
+      "year": 2021,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 157912,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": null,
+    "spotify": {
+      "track_id": "4kfjEGyamyK4rencwys8jE",
+      "url": "https://open.spotify.com/track/4kfjEGyamyK4rencwys8jE"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Bajo la Mesa - Mireles.jpg",
+      "web_file": "assets/images/Bajo-la-Mesa---Mireles.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "bendito-cacao--karla-bravo--2022",
+    "title": "Bendito Cacao",
+    "artists": [
+      "Karla Bravo",
+      "Luis Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Bendito Cacao",
+      "date": "2022-09-09",
+      "year": 2022,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 284177,
+    "explicit": false,
+    "is_collaboration": true,
+    "isrc": "MXE772200005",
+    "spotify": {
+      "track_id": "0AmRjeFvmkwv0jUaD4HDeU",
+      "url": "https://open.spotify.com/track/0AmRjeFvmkwv0jUaD4HDeU"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/bendito-cacao/1644411243?i=1644411245&uo=4",
+      "track_id": "1644411245",
+      "collection_id": "1644411243",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Bendito Cacao - Karla Bravo.jpg",
+      "web_file": "assets/images/Bendito-Cacao---Karla-Bravo.webp"
+    },
+    "audio_ref": "Bendito Cacao - Luis Guinea - Master 1.2.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "blue-moon--luis-guinea--2015",
+    "title": "Blue Moon",
+    "artists": [
+      "Luis Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Memories",
+      "date": "2015-09-08",
+      "year": 2015,
+      "type": "single",
+      "track_number": 2,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 288000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": null,
+    "spotify": {
+      "track_id": "6ps2n4H2sRBDXuuN4rjerE",
+      "url": "https://open.spotify.com/track/6ps2n4H2sRBDXuuN4rjerE"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/blue-moon/1036707293?i=1036707301&uo=4",
+      "track_id": "1036707301",
+      "collection_id": "1036707293",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Blue Moon - Luis Guinea.jpg",
+      "web_file": "assets/images/Blue-Moon---Luis-Guinea.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "city-of-stars-cover--ana-guinea--2020",
+    "title": "City Of Stars - Cover",
+    "artists": [
+      "Ana Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers, Vol. 1",
+      "date": "2020-05-08",
+      "year": 2020,
+      "type": "album",
+      "track_number": 4,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 146000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772000016",
+    "spotify": {
+      "track_id": "4wf17Db29hZ3l9NfKHHSbR",
+      "url": "https://open.spotify.com/track/4wf17Db29hZ3l9NfKHHSbR"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/city-of-stars-cover/1511814289?i=1511814294&uo=4",
+      "track_id": "1511814294",
+      "collection_id": "1511814289",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/City Of Stars - Cover - Ana Guinea.jpg",
+      "web_file": "assets/images/City-Of-Stars---Cover---Ana-Guinea.webp"
+    },
+    "audio_ref": "City of Stars (Master).wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "close-to-you-cover--ana-guinea--2020",
+    "title": "Close To You - Cover",
+    "artists": [
+      "Ana Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers, Vol. 1",
+      "date": "2020-05-08",
+      "year": 2020,
+      "type": "album",
+      "track_number": 2,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 214000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772000014",
+    "spotify": {
+      "track_id": "58XcnQZS8uCHSVMMc46s5W",
+      "url": "https://open.spotify.com/track/58XcnQZS8uCHSVMMc46s5W"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/close-to-you-cover/1511814289?i=1511814292&uo=4",
+      "track_id": "1511814292",
+      "collection_id": "1511814289",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Close To You - Cover - Ana Guinea.jpg",
+      "web_file": "assets/images/Close-To-You---Cover---Ana-Guinea.webp"
+    },
+    "audio_ref": "Close to you - Carpenters (Master).wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "como-decirte--luis-guinea--2022",
+    "title": "Cómo Decirte",
+    "artists": [
+      "Luis Guinea",
+      "Pablo Delgado"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Cómo Decirte",
+      "date": "2022-10-14",
+      "year": 2022,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 208500,
+    "explicit": false,
+    "is_collaboration": true,
+    "isrc": "MXE772200006",
+    "spotify": {
+      "track_id": "2T15xUXrJrH58vTzSiJI7q",
+      "url": "https://open.spotify.com/track/2T15xUXrJrH58vTzSiJI7q"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/c%C3%B3mo-decirte/1646476100?i=1646476110&uo=4",
+      "track_id": "1646476110",
+      "collection_id": "1646476100",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Cómo Decirte - Luis Guinea.jpg",
+      "web_file": "assets/images/Cómo-Decirte---Luis-Guinea.webp"
+    },
+    "audio_ref": "PDelgado_Cómo Decirte_SPOTIFY.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "contigo-aprendi-cover--ana-guinea--2020",
+    "title": "Contigo Aprendí - Cover",
+    "artists": [
+      "Ana Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers, Vol. 1",
+      "date": "2020-05-08",
+      "year": 2020,
+      "type": "album",
+      "track_number": 10,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 117000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772000022",
+    "spotify": {
+      "track_id": "4SdqGQEaxfRhDzoY0zvAWe",
+      "url": "https://open.spotify.com/track/4SdqGQEaxfRhDzoY0zvAWe"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/contigo-aprend%C3%AD-cover/1511814289?i=1511814302&uo=4",
+      "track_id": "1511814302",
+      "collection_id": "1511814289",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Contigo Aprendí - Cover - Ana Guinea.jpg",
+      "web_file": "assets/images/Contigo-Aprendí---Cover---Ana-Guinea.webp"
+    },
+    "audio_ref": "Contigo Aprendi_Master.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "cotton-fields--rogelio-edel--2024",
+    "title": "Cotton Fields",
+    "artists": [
+      "Rogelio Edel"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Cotton Fields",
+      "date": "2024-08-02",
+      "year": 2024,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 123250,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772400006",
+    "spotify": {
+      "track_id": "3WKAV3107VososWrkXYX64",
+      "url": "https://open.spotify.com/track/3WKAV3107VososWrkXYX64"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Cotton Fields - Rogelio Edel.jpg",
+      "web_file": "assets/images/Cotton-Fields---Rogelio-Edel.webp"
+    },
+    "audio_ref": "Cotton Fields.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "cuerdas-de-amor--ana-guinea--2020",
+    "title": "Cuerdas de Amor",
+    "artists": [
+      "Ana Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Cuerdas de Amor",
+      "date": "2020-07-10",
+      "year": 2020,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 292788,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772000030",
+    "spotify": {
+      "track_id": "2f1PZ1H43NXh8F4N8yzmZf",
+      "url": "https://open.spotify.com/track/2f1PZ1H43NXh8F4N8yzmZf"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/cuerdas-de-amor/1524106114?i=1524106115&uo=4",
+      "track_id": "1524106115",
+      "collection_id": "1524106114",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Cuerdas de Amor - Ana Guinea.jpg",
+      "web_file": "assets/images/Cuerdas-de-Amor---Ana-Guinea.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "de-cabeza--luis-guinea--2020",
+    "title": "De Cabeza",
+    "artists": [
+      "Luis Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "De Cabeza",
+      "date": "2020-07-03",
+      "year": 2020,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 233107,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772000027",
+    "spotify": {
+      "track_id": "33ZyQUvxu7RhtaHyN1G8YM",
+      "url": "https://open.spotify.com/track/33ZyQUvxu7RhtaHyN1G8YM"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/de-cabeza/1515987674?i=1515987682&uo=4",
+      "track_id": "1515987682",
+      "collection_id": "1515987674",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/De Cabeza - Luis Guinea.jpg",
+      "web_file": "assets/images/De-Cabeza---Luis-Guinea.webp"
+    },
+    "audio_ref": "Mundo De Cabeza MASTER DC V2_01.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "dejala-que-vuelva--rogelio-edel--2021",
+    "title": "Déjala Que Vuelva",
+    "artists": [
+      "Rogelio Edel"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Déjala Que Vuelva",
+      "date": "2021-07-02",
+      "year": 2021,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 219277,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "QMFME2100363",
+    "spotify": {
+      "track_id": "7odDDItiDVl3dgen6gJsbt",
+      "url": "https://open.spotify.com/track/7odDDItiDVl3dgen6gJsbt"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Déjala Que Vuelva - Rogelio Edel.jpg",
+      "web_file": "assets/images/Déjala-Que-Vuelva---Rogelio-Edel.webp"
+    },
+    "audio_ref": "Dejala que vuelva (mix5).wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "despacito--dalex-alvarez--2017",
+    "title": "Despacito",
+    "artists": [
+      "Dalex Álvarez",
+      "Luis Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Despacito",
+      "date": "2017-03-21",
+      "year": 2017,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 224318,
+    "explicit": false,
+    "is_collaboration": true,
+    "isrc": "US7VG1736871",
+    "spotify": {
+      "track_id": "7lBATaZUmwjtS6AkYSoeFJ",
+      "url": "https://open.spotify.com/track/7lBATaZUmwjtS6AkYSoeFJ"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/despacito-feat-luis-guinea/1217600809?i=1217600822&uo=4",
+      "track_id": "1217600822",
+      "collection_id": "1217600809",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Despacito - Dalex Álvarez.jpg",
+      "web_file": "assets/images/Despacito---Dalex-Álvarez.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "don-t-you-worry-child--luis-guinea--2014",
+    "title": "Don't You Worry Child",
+    "artists": [
+      "Luis Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Don't You Worry Child",
+      "date": "2014-04-18",
+      "year": 2014,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 289047,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "BGA471402935",
+    "spotify": {
+      "track_id": "5FVkNrKdtee8RtugRE54Cc",
+      "url": "https://open.spotify.com/track/5FVkNrKdtee8RtugRE54Cc"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/dont-you-worry-child/869634162?i=869634175&uo=4",
+      "track_id": "869634175",
+      "collection_id": "869634162",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Don't You Worry Child - Luis Guinea.jpg",
+      "web_file": "assets/images/Dont-You-Worry-Child---Luis-Guinea.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "eco--ana-guinea--2022",
+    "title": "Eco",
+    "artists": [
+      "Ana Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Eco",
+      "date": "2022-11-04",
+      "year": 2022,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 221199,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772200011",
+    "spotify": {
+      "track_id": "0HSDx2WsLLRqSHB4eRf69Z",
+      "url": "https://open.spotify.com/track/0HSDx2WsLLRqSHB4eRf69Z"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/eco/1652912347?i=1652912348&uo=4",
+      "track_id": "1652912348",
+      "collection_id": "1652912347",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Eco - Ana Guinea.jpg",
+      "web_file": "assets/images/Eco---Ana-Guinea.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "el-ganador--isabella-macias--2018",
+    "title": "El Ganador",
+    "artists": [
+      "Isabella Macías"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Mamma Mia!",
+      "date": "2018-07-19",
+      "year": 2018,
+      "type": "single",
+      "track_number": 3,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 174404,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE771800038",
+    "spotify": {
+      "track_id": "5Qbro5CwttUNaV3DyoGFDt",
+      "url": "https://open.spotify.com/track/5Qbro5CwttUNaV3DyoGFDt"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/el-ganador/1415802609?i=1415802827&uo=4",
+      "track_id": "1415802827",
+      "collection_id": "1415802609",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/El Ganador - Isabella Macías.jpg",
+      "web_file": "assets/images/El-Ganador---Isabella-Macías.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "en-libertad-cover--ana-guinea--2020",
+    "title": "En Libertad - Cover",
+    "artists": [
+      "Ana Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers, Vol. 1",
+      "date": "2020-05-08",
+      "year": 2020,
+      "type": "album",
+      "track_number": 11,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 196005,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772000023",
+    "spotify": {
+      "track_id": "63axGyUKj5xZOSKU2YBMsO",
+      "url": "https://open.spotify.com/track/63axGyUKj5xZOSKU2YBMsO"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/en-libertad-cover/1511814289?i=1511814303&uo=4",
+      "track_id": "1511814303",
+      "collection_id": "1511814289",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/En Libertad - Cover - Ana Guinea.jpg",
+      "web_file": "assets/images/En-Libertad---Cover---Ana-Guinea.webp"
+    },
+    "audio_ref": "En Libertad (Master).wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "eres-veneno--rogelio-edel--2024",
+    "title": "Eres Veneno",
+    "artists": [
+      "Rogelio Edel"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Eres Veneno",
+      "date": "2024-03-21",
+      "year": 2024,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 264266,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772400002",
+    "spotify": {
+      "track_id": "08cc8kbNxA9gzghBi0ZmSJ",
+      "url": "https://open.spotify.com/track/08cc8kbNxA9gzghBi0ZmSJ"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Eres Veneno - Rogelio Edel.jpg",
+      "web_file": "assets/images/Eres-Veneno---Rogelio-Edel.webp"
+    },
+    "audio_ref": "Eres Veneno_LGMaster3.0.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "fue-en-un-cafe--rogelio-edel--2023",
+    "title": "Fué en un Café",
+    "artists": [
+      "Rogelio Edel"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Fué en un Café",
+      "date": "2023-02-24",
+      "year": 2023,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 171840,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772300002",
+    "spotify": {
+      "track_id": "1Xw3vYqsq2sIKBGunIOHgt",
+      "url": "https://open.spotify.com/track/1Xw3vYqsq2sIKBGunIOHgt"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Fué en un Café - Rogelio Edel.jpg",
+      "web_file": "assets/images/Fué-en-un-Café---Rogelio-Edel.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "hace-tanto-tiempo--luis-guinea--2021",
+    "title": "Hace Tanto Tiempo",
+    "artists": [
+      "Luis Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Hace Tanto Tiempo",
+      "date": "2021-11-05",
+      "year": 2021,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 135933,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772100011",
+    "spotify": {
+      "track_id": "6skD4aWsvYoBoRpxmYkA4G",
+      "url": "https://open.spotify.com/track/6skD4aWsvYoBoRpxmYkA4G"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/hace-tanto-tiempo/1590243054?i=1590243065&uo=4",
+      "track_id": "1590243065",
+      "collection_id": "1590243054",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Hace Tanto Tiempo - Luis Guinea.jpg",
+      "web_file": "assets/images/Hace-Tanto-Tiempo---Luis-Guinea.webp"
+    },
+    "audio_ref": "Hace Tanto Tiempo.mp3",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "hasta-que-lleguemos-al-mar--luis-guinea--2024",
+    "title": "Hasta Que Lleguemos Al Mar",
+    "artists": [
+      "Luis Guinea",
+      "Tony Barhoum"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Hasta Que Lleguemos Al Mar",
+      "date": "2024-07-24",
+      "year": 2024,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 264611,
+    "explicit": false,
+    "is_collaboration": true,
+    "isrc": "QM6P42473603",
+    "spotify": {
+      "track_id": "0kfbpBjVoJ9hrNbS8S4CzM",
+      "url": "https://open.spotify.com/track/0kfbpBjVoJ9hrNbS8S4CzM"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/hasta-que-lleguemos-al-mar-feat-tony-barhoum/1753986775?i=1753986777&uo=4",
+      "track_id": "1753986777",
+      "collection_id": "1753986775",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Hasta Que Lleguemos Al Mar - Luis Guinea.jpg",
+      "web_file": "assets/images/Hasta-Que-Lleguemos-Al-Mar---Luis-Guinea.webp"
+    },
+    "audio_ref": "Hasta Que Lleguemos Al Mar (FINALMIX).wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "how-deep-is-your-love--luis-guinea--2022",
+    "title": "How Deep Is Your Love",
+    "artists": [
+      "Luis Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "How Deep Is Your Love",
+      "date": "2022-03-04",
+      "year": 2022,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 244000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772200002",
+    "spotify": {
+      "track_id": "1vCDbcL9Abks55R52iQqJM",
+      "url": "https://open.spotify.com/track/1vCDbcL9Abks55R52iQqJM"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/how-deep-is-your-love/318621285?i=318621495&uo=4",
+      "track_id": "318621495",
+      "collection_id": "318621285",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/How Deep Is Your Love - Luis Guinea.jpg",
+      "web_file": "assets/images/How-Deep-Is-Your-Love---Luis-Guinea.webp"
+    },
+    "audio_ref": "Luis Guinea - How deep is your love (Cover) - Master 2.1 (48-24).wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "i-ll-be-home-for-christmas--louisiana--2012",
+    "title": "I'll Be Home for Christmas",
+    "artists": [
+      "Louisiana"
+    ],
+    "credits": [],
+    "release": {
+      "album": "I'll Be Home for Christmas",
+      "date": "2012-12-07",
+      "year": 2012,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 214000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "QZ5AB1811329",
+    "spotify": {
+      "track_id": "7JuHynwMp9Zf0t4wePjEHF",
+      "url": "https://open.spotify.com/track/7JuHynwMp9Zf0t4wePjEHF"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/ill-be-home-for-christmas/826069735?i=826069832&uo=4",
+      "track_id": "826069832",
+      "collection_id": "826069735",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/I'll Be Home for Christmas - Louisiana.jpg",
+      "web_file": "assets/images/Ill-Be-Home-for-Christmas---Louisiana.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "imagina--rogelio-edel--2024",
+    "title": "Imagina",
+    "artists": [
+      "Rogelio Edel"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Imagina",
+      "date": "2024-11-17",
+      "year": 2024,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 139186,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772400014",
+    "spotify": {
+      "track_id": "7Lq7aB25fYkHRnqEQtXRlF",
+      "url": "https://open.spotify.com/track/7Lq7aB25fYkHRnqEQtXRlF"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Imagina - Rogelio Edel.jpg",
+      "web_file": "assets/images/Imagina---Rogelio-Edel.webp"
+    },
+    "audio_ref": "Imagina_Master3.0.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "in-my-life--rogelio-edel--2021",
+    "title": "In My Life",
+    "artists": [
+      "Rogelio Edel"
+    ],
+    "credits": [],
+    "release": {
+      "album": "In My Life",
+      "date": "2021-09-24",
+      "year": 2021,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 155044,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": null,
+    "spotify": {
+      "track_id": "10Hi3n9Rmq1PEt0OeNWh9t",
+      "url": "https://open.spotify.com/track/10Hi3n9Rmq1PEt0OeNWh9t"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/In My Life - Rogelio Edel.jpg",
+      "web_file": "assets/images/In-My-Life---Rogelio-Edel.webp"
+    },
+    "audio_ref": "In my life_master1_1.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "in-my-life-cover--rogelio-edel--2021",
+    "title": "In My Life - Cover",
+    "artists": [
+      "Rogelio Edel"
+    ],
+    "credits": [],
+    "release": {
+      "album": "In My Life (Cover)",
+      "date": "2021-09-24",
+      "year": 2021,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 155044,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": null,
+    "spotify": {
+      "track_id": "7fxYNb7nWn9uiH51kcubNt",
+      "url": "https://open.spotify.com/track/7fxYNb7nWn9uiH51kcubNt"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/In My Life - Cover - Rogelio Edel.jpg",
+      "web_file": "assets/images/In-My-Life---Cover---Rogelio-Edel.webp"
+    },
+    "audio_ref": "In my life_master1_1.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "invencible--ana-guinea--2021",
+    "title": "Invencible",
+    "artists": [
+      "Ana Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Invencible",
+      "date": "2021-08-27",
+      "year": 2021,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 234000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772100007",
+    "spotify": {
+      "track_id": "0z1Pi9lRDMKqAFoi0pcO6P",
+      "url": "https://open.spotify.com/track/0z1Pi9lRDMKqAFoi0pcO6P"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/invencible/1578942061?i=1578942498&uo=4",
+      "track_id": "1578942498",
+      "collection_id": "1578942061",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Invencible - Ana Guinea.jpg",
+      "web_file": "assets/images/Invencible---Ana-Guinea.webp"
+    },
+    "audio_ref": "LANDR-INVENCIBLE FULL MIX-Balanced-Medium.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "jesus-set-me-free--luis-guinea--2021",
+    "title": "Jesus, Set Me Free",
+    "artists": [
+      "Luis Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Jesus, Set Me Free",
+      "date": "2021-04-04",
+      "year": 2021,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 276666,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772100003",
+    "spotify": {
+      "track_id": "5mXgC2NM69EeDqIyLEKuMv",
+      "url": "https://open.spotify.com/track/5mXgC2NM69EeDqIyLEKuMv"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/jesus-set-me-free/1561677374?i=1561677375&uo=4",
+      "track_id": "1561677375",
+      "collection_id": "1561677374",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Jesus, Set Me Free - Luis Guinea.jpg",
+      "web_file": "assets/images/Jesus-Set-Me-Free---Luis-Guinea.webp"
+    },
+    "audio_ref": "Jesus, set me free (master3).wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "la-bamba--rogelio-edel--2022",
+    "title": "La Bamba",
+    "artists": [
+      "Rogelio Edel"
+    ],
+    "credits": [],
+    "release": {
+      "album": "La Bamba",
+      "date": "2022-07-15",
+      "year": 2022,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 215071,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "QM6N22280962",
+    "spotify": {
+      "track_id": "7mg971LrsXCfcHFptsUdUJ",
+      "url": "https://open.spotify.com/track/7mg971LrsXCfcHFptsUdUJ"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/La Bamba - Rogelio Edel.jpg",
+      "web_file": "assets/images/La-Bamba---Rogelio-Edel.webp"
+    },
+    "audio_ref": "Rogelio_Bamba_JCMxMster.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "la-bendicion--patty-gleason--2020",
+    "title": "La Bendición",
+    "artists": [
+      "Patty Gleason"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers",
+      "date": "2020-09-12",
+      "year": 2020,
+      "type": "album",
+      "track_number": 5,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 417289,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": null,
+    "spotify": {
+      "track_id": "1geRQJmuVLaqopy991RBW5",
+      "url": "https://open.spotify.com/track/1geRQJmuVLaqopy991RBW5"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/la-bendici%C3%B3n/1508805370?i=1508805372&uo=4",
+      "track_id": "1508805372",
+      "collection_id": "1508805370",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/La Bendición - Patty Gleason.jpg",
+      "web_file": "assets/images/La-Bendición---Patty-Gleason.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "levanto-un-aleluya--patty-gleason--2020",
+    "title": "Levanto un Aleluya",
+    "artists": [
+      "Patty Gleason",
+      "Edel Hernández"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers",
+      "date": "2020-09-12",
+      "year": 2020,
+      "type": "album",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 341158,
+    "explicit": false,
+    "is_collaboration": true,
+    "isrc": null,
+    "spotify": {
+      "track_id": "3pGpq1bqgpNjhkvP3GP1OA",
+      "url": "https://open.spotify.com/track/3pGpq1bqgpNjhkvP3GP1OA"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Levanto un Aleluya - Patty Gleason.jpg",
+      "web_file": "assets/images/Levanto-un-Aleluya---Patty-Gleason.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "levanto-un-aleluya-acustica--patty-gleason--2020",
+    "title": "Levanto un Aleluya (Acústica)",
+    "artists": [
+      "Patty Gleason",
+      "Brenda Gleason"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers",
+      "date": "2020-09-12",
+      "year": 2020,
+      "type": "album",
+      "track_number": 11,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 332819,
+    "explicit": false,
+    "is_collaboration": true,
+    "isrc": null,
+    "spotify": {
+      "track_id": "1pT5h6BBD19zXKLUg1cvF8",
+      "url": "https://open.spotify.com/track/1pT5h6BBD19zXKLUg1cvF8"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/levanto-un-aleluya-ac%C3%BAstica-feat-brenda-gleason/1529758912?i=1529758923&uo=4",
+      "track_id": "1529758923",
+      "collection_id": "1529758912",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Levanto un Aleluya (Acústica) - Patty Gleason.jpg",
+      "web_file": "assets/images/Levanto-un-Aleluya-Acústica---Patty-Gleason.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "llegue-muy-tarde--valeria-ferro--2023",
+    "title": "Llegue Muy Tarde",
+    "artists": [
+      "Valeria Ferro"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Llegue Muy Tarde",
+      "date": "2023-01-05",
+      "year": 2023,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 215000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "QZW9M2287667",
+    "spotify": {
+      "track_id": "0KKNvV4gKX15VgisBNis2p",
+      "url": "https://open.spotify.com/track/0KKNvV4gKX15VgisBNis2p"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Llegue Muy Tarde - Valeria Ferro.jpg",
+      "web_file": "assets/images/Llegue-Muy-Tarde---Valeria-Ferro.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "lo-haras-otra-vez--patty-gleason--2020",
+    "title": "Lo Harás Otra Vez",
+    "artists": [
+      "Patty Gleason"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers",
+      "date": "2020-09-12",
+      "year": 2020,
+      "type": "album",
+      "track_number": 3,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 357444,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": null,
+    "spotify": {
+      "track_id": "4tOymJpR6VlRnLasrETTOp",
+      "url": "https://open.spotify.com/track/4tOymJpR6VlRnLasrETTOp"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Lo Harás Otra Vez - Patty Gleason.jpg",
+      "web_file": "assets/images/Lo-Harás-Otra-Vez---Patty-Gleason.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "lo-que-queda-de-mi--escala-de-grises--2016",
+    "title": "Lo Que Queda de Mí",
+    "artists": [
+      "Escala de Grises"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Lo Que Queda de Mí",
+      "date": "2016-08-24",
+      "year": 2016,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 210000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "QZ5AB1602754",
+    "spotify": {
+      "track_id": "0NHcgqhNuRg1KDPHCOPkxF",
+      "url": "https://open.spotify.com/track/0NHcgqhNuRg1KDPHCOPkxF"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/sin-perd%C3%B3n-feat-jaro-desperdizio-sin-h/1450759900?i=1450759903&uo=4",
+      "track_id": "1450759903",
+      "collection_id": "1450759900",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Lo Que Queda de Mí - Escala de Grises.jpg",
+      "web_file": "assets/images/Lo-Que-Queda-de-Mí---Escala-de-Grises.webp"
+    },
+    "audio_ref": "Lo Que Queda De Mí.mp3",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "lo-que-venga--patty-gleason--2020",
+    "title": "Lo Que Venga",
+    "artists": [
+      "Patty Gleason"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers",
+      "date": "2020-09-12",
+      "year": 2020,
+      "type": "album",
+      "track_number": 7,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 385192,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": null,
+    "spotify": {
+      "track_id": "7HgAGSIx8SLDENCSpYGUEQ",
+      "url": "https://open.spotify.com/track/7HgAGSIx8SLDENCSpYGUEQ"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/lo-que-venga/1529758912?i=1529758919&uo=4",
+      "track_id": "1529758919",
+      "collection_id": "1529758912",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Lo Que Venga - Patty Gleason.jpg",
+      "web_file": "assets/images/Lo-Que-Venga---Patty-Gleason.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "me-llamas-version-acustica--segundo-piso--2017",
+    "title": "Me Llamas - Versión Acústica",
+    "artists": [
+      "Segundo Piso"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Me Llamas (Versión Acústica)",
+      "date": "2017-01-01",
+      "year": 2017,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 210000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "US7VG1711932",
+    "spotify": {
+      "track_id": "1NNNDr8YjI7oIzEksdi5ap",
+      "url": "https://open.spotify.com/track/1NNNDr8YjI7oIzEksdi5ap"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Me Llamas - Versión Acústica - Segundo Piso.jpg",
+      "web_file": "assets/images/Me-Llamas---Versión-Acústica---Segundo-Piso.webp"
+    },
+    "audio_ref": "Me Llamas.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "me-voy--rogelio-edel--2025",
+    "title": "Me Voy",
+    "artists": [
+      "Rogelio Edel",
+      "Asociación Nacional de Ex Integrantes de la Rondalla de Saltillo"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Me Voy",
+      "date": "2025-02-28",
+      "year": 2025,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 179956,
+    "explicit": false,
+    "is_collaboration": true,
+    "isrc": "MXE772400016",
+    "spotify": {
+      "track_id": "0U8xVB2vxHNBDF2osciCSJ",
+      "url": "https://open.spotify.com/track/0U8xVB2vxHNBDF2osciCSJ"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Me Voy - Rogelio Edel.jpg",
+      "web_file": "assets/images/Me-Voy---Rogelio-Edel.webp"
+    },
+    "audio_ref": "No Vuelvas_Master_4.0.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "medley-cumbia-sabrosa--mandala-love--2023",
+    "title": "Medley Cumbia Sabrosa",
+    "artists": [
+      "Mandala LOVE"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Medley Cumbia Sabrosa",
+      "date": "2023-10-28",
+      "year": 2023,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 320495,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772300019",
+    "spotify": {
+      "track_id": "6qe9oL2ciit6TsiOoCsQOD",
+      "url": "https://open.spotify.com/track/6qe9oL2ciit6TsiOoCsQOD"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Medley Cumbia Sabrosa - Mandala LOVE.jpg",
+      "web_file": "assets/images/Medley-Cumbia-Sabrosa---Mandala-LOVE.webp"
+    },
+    "audio_ref": "MANDALA MSTRD 2 2448.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "memories-of-a-broken-heart--luis-guinea--2015",
+    "title": "Memories of a Broken Heart",
+    "artists": [
+      "Luis Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Memories",
+      "date": "2015-09-08",
+      "year": 2015,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 267345,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "BGA471521986",
+    "spotify": {
+      "track_id": "49CIzjoxBcXxFyQUHJO0lZ",
+      "url": "https://open.spotify.com/track/49CIzjoxBcXxFyQUHJO0lZ"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/beneath-feat-shivangi-sharma/1715259796?i=1715260280&uo=4",
+      "track_id": "1715260280",
+      "collection_id": "1715259796",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Memories of a Broken Heart - Luis Guinea.jpg",
+      "web_file": "assets/images/Memories-of-a-Broken-Heart---Luis-Guinea.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "million-reasons--louisiana--2017",
+    "title": "Million Reasons",
+    "artists": [
+      "Louisiana"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Million Reasons",
+      "date": "2017-03-10",
+      "year": 2017,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 199615,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "US7VG1731827",
+    "spotify": {
+      "track_id": "14pSyZqxqYAOuxGk4ErhNb",
+      "url": "https://open.spotify.com/track/14pSyZqxqYAOuxGk4ErhNb"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/million-reasons/1214430412?i=1214430471&uo=4",
+      "track_id": "1214430471",
+      "collection_id": "1214430412",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Million Reasons - Louisiana.jpg",
+      "web_file": "assets/images/Million-Reasons---Louisiana.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "nada-mas--patty-gleason--2020",
+    "title": "Nada Más",
+    "artists": [
+      "Patty Gleason",
+      "Andrea Gleason"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers",
+      "date": "2020-09-12",
+      "year": 2020,
+      "type": "album",
+      "track_number": 4,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 348285,
+    "explicit": false,
+    "is_collaboration": true,
+    "isrc": null,
+    "spotify": {
+      "track_id": "0roqh4ojW6PNRYASPDISsa",
+      "url": "https://open.spotify.com/track/0roqh4ojW6PNRYASPDISsa"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Nada Más - Patty Gleason.jpg",
+      "web_file": "assets/images/Nada-Más---Patty-Gleason.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "nuestro-hogar--luis-guinea--2022",
+    "title": "Nuestro Hogar",
+    "artists": [
+      "Luis Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Nuestro Hogar",
+      "date": "2022-11-11",
+      "year": 2022,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 220067,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772200008",
+    "spotify": {
+      "track_id": "4OSmpgaAruD1A2jVsRGggw",
+      "url": "https://open.spotify.com/track/4OSmpgaAruD1A2jVsRGggw"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/nuestro-hogar/1650682678?i=1650682681&uo=4",
+      "track_id": "1650682681",
+      "collection_id": "1650682678",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Nuestro Hogar - Luis Guinea.jpg",
+      "web_file": "assets/images/Nuestro-Hogar---Luis-Guinea.webp"
+    },
+    "audio_ref": "Nuestro Hogar - Master 1.0.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "perdoname-rica-y-apretadita-no-me-trates-de-enganar-todavia--mandala-love--2023",
+    "title": "Perdóname / Rica y Apretadita / No Me Trates de Engañar / Todavía",
+    "artists": [
+      "Mandala LOVE"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Perdóname / Rica y Apretadita / No Me Trates de Engañar / Todavía",
+      "date": "2023-01-27",
+      "year": 2023,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 201562,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772300001",
+    "spotify": {
+      "track_id": "4xS1NSxhOjXYM3mO7SEc3f",
+      "url": "https://open.spotify.com/track/4xS1NSxhOjXYM3mO7SEc3f"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Perdóname _ Rica y Apretadita _ No Me Trates de Engañar _ Todavía - Mandala LOVE.jpg",
+      "web_file": "assets/images/Perdóname-_-Rica-y-Apretadita-_-No-Me-Trates-de-Engañar-_-Todavía---Mandala-LOVE.webp"
+    },
+    "audio_ref": "FACTORÍA MSTRD.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "piotr-s-call--luis-guinea--2015",
+    "title": "Piotr's Call",
+    "artists": [
+      "Luis Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Memories",
+      "date": "2015-09-08",
+      "year": 2015,
+      "type": "single",
+      "track_number": 4,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 307936,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": null,
+    "spotify": {
+      "track_id": "4UshDBRiIWNTiHsVUkh4o8",
+      "url": "https://open.spotify.com/track/4UshDBRiIWNTiHsVUkh4o8"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/piotrs-call/1036707293?i=1036707710&uo=4",
+      "track_id": "1036707710",
+      "collection_id": "1036707293",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Piotr's Call - Luis Guinea.jpg",
+      "web_file": "assets/images/Piotrs-Call---Luis-Guinea.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "por-que-lloras--renata-isabel--2017",
+    "title": "¿Por Qué Lloras?",
+    "artists": [
+      "Renata Isabel",
+      "Luis Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "¿Por Qué Lloras?",
+      "date": "2017-11-11",
+      "year": 2017,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 219428,
+    "explicit": false,
+    "is_collaboration": true,
+    "isrc": "QZ5AB1792819",
+    "spotify": {
+      "track_id": "1aR2fOzskaE3yDkuRvIbji",
+      "url": "https://open.spotify.com/track/1aR2fOzskaE3yDkuRvIbji"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/¿Por Qué Lloras? - Renata Isabel.jpg",
+      "web_file": "assets/images/Por-Qué-Lloras---Renata-Isabel.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "quien-soy-acustica--louisiana--2017",
+    "title": "Quién Soy - Acústica",
+    "artists": [
+      "Louisiana"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Quién Soy - Single",
+      "date": "2017-07-01",
+      "year": 2017,
+      "type": "single",
+      "track_number": 2,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 235200,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "US7VG1794103",
+    "spotify": {
+      "track_id": "3qV1Sg2W1yCxbDLqDZWtVK",
+      "url": "https://open.spotify.com/track/3qV1Sg2W1yCxbDLqDZWtVK"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/qui%C3%A9n-soy-ac%C3%BAstica/1255287953?i=1255287955&uo=4",
+      "track_id": "1255287955",
+      "collection_id": "1255287953",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Quién Soy - Acústica - Louisiana.jpg",
+      "web_file": "assets/images/Quién-Soy---Acústica---Louisiana.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "rey-de-reyes--patty-gleason--2020",
+    "title": "Rey de Reyes",
+    "artists": [
+      "Patty Gleason",
+      "Jay Castro"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers",
+      "date": "2020-09-12",
+      "year": 2020,
+      "type": "album",
+      "track_number": 8,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 259588,
+    "explicit": false,
+    "is_collaboration": true,
+    "isrc": null,
+    "spotify": {
+      "track_id": "6lXO3fVZmidzcSkvWbVAWy",
+      "url": "https://open.spotify.com/track/6lXO3fVZmidzcSkvWbVAWy"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Rey de Reyes - Patty Gleason.jpg",
+      "web_file": "assets/images/Rey-de-Reyes---Patty-Gleason.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "robarte-un-beso--isabella-macias--2018",
+    "title": "Robarte un Beso",
+    "artists": [
+      "Isabella Macías",
+      "Pedro Massucatti"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Robarte un Beso (Versión Acústica)",
+      "date": "2018-03-01",
+      "year": 2018,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 211333,
+    "explicit": false,
+    "is_collaboration": true,
+    "isrc": "QZ5AB1878094",
+    "spotify": {
+      "track_id": "0H7g1g9P4MsRkKLL9u0iR5",
+      "url": "https://open.spotify.com/track/0H7g1g9P4MsRkKLL9u0iR5"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/robarte-un-beso-feat-pedro-massucatti/1354186458?i=1354186464&uo=4",
+      "track_id": "1354186464",
+      "collection_id": "1354186458",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Robarte un Beso - Isabella Macías.jpg",
+      "web_file": "assets/images/Robarte-un-Beso---Isabella-Macías.webp"
+    },
+    "audio_ref": "Robarte Un Beso (Master).m4a",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "say-a-little-prayer-cover--ana-guinea--2020",
+    "title": "Say a Little Prayer - Cover",
+    "artists": [
+      "Ana Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers, Vol. 1",
+      "date": "2020-05-08",
+      "year": 2020,
+      "type": "album",
+      "track_number": 5,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 178000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772000017",
+    "spotify": {
+      "track_id": "27A45gSBshLLaUbak3HMrK",
+      "url": "https://open.spotify.com/track/27A45gSBshLLaUbak3HMrK"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/say-a-little-prayer-cover/1511814289?i=1511814296&uo=4",
+      "track_id": "1511814296",
+      "collection_id": "1511814289",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Say a Little Prayer - Cover - Ana Guinea.jpg",
+      "web_file": "assets/images/Say-a-Little-Prayer---Cover---Ana-Guinea.webp"
+    },
+    "audio_ref": "Say a little prayer (Master).wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "shallow-cover--ana-guinea--2020",
+    "title": "Shallow - Cover",
+    "artists": [
+      "Ana Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers, Vol. 1",
+      "date": "2020-05-08",
+      "year": 2020,
+      "type": "album",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 214000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772000013",
+    "spotify": {
+      "track_id": "03QOcSxnDcKbl5x31xnsnS",
+      "url": "https://open.spotify.com/track/03QOcSxnDcKbl5x31xnsnS"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/shallow-cover/1511814289?i=1511814291&uo=4",
+      "track_id": "1511814291",
+      "collection_id": "1511814289",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Shallow - Cover - Ana Guinea.jpg",
+      "web_file": "assets/images/Shallow---Cover---Ana-Guinea.webp"
+    },
+    "audio_ref": "Shallow (Master)_2.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "shape-of-you-acoustic--segundo-piso--2017",
+    "title": "Shape of You - Acoustic",
+    "artists": [
+      "Segundo Piso"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Shape of You (Acoustic)",
+      "date": "2017-07-14",
+      "year": 2017,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 184000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "QZ5AB1787944",
+    "spotify": {
+      "track_id": "5okglbp7JgAhMOlOWZvGNM",
+      "url": "https://open.spotify.com/track/5okglbp7JgAhMOlOWZvGNM"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Shape of You - Acoustic - Segundo Piso.jpg",
+      "web_file": "assets/images/Shape-of-You---Acoustic---Segundo-Piso.webp"
+    },
+    "audio_ref": "Shape of you.mp3",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "si-antes-te-hubiera-conocido-cover-acustico--ana-guinea--2024",
+    "title": "Si Antes Te Hubiera Conocido - Cover Acústico",
+    "artists": [
+      "Ana Guinea",
+      "Luis Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Si Antes Te Hubiera Conocido (Cover Acústico)",
+      "date": "2024-11-01",
+      "year": 2024,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 164149,
+    "explicit": false,
+    "is_collaboration": true,
+    "isrc": "MXE772400013",
+    "spotify": {
+      "track_id": "5KCaXK0wajcxQYY2lG7iCa",
+      "url": "https://open.spotify.com/track/5KCaXK0wajcxQYY2lG7iCa"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/si-antes-te-hubiera-conocido-cover-ac%C3%BAstico/1777121473?i=1777121474&uo=4",
+      "track_id": "1777121474",
+      "collection_id": "1777121473",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Si Antes Te Hubiera Conocido - Cover Acústico - Ana Guinea.jpg",
+      "web_file": "assets/images/Si-Antes-Te-Hubiera-Conocido---Cover-Acústico---Ana-Guinea.webp"
+    },
+    "audio_ref": "Si Antes Te Hubiera Conocido (Version Acustica).wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "si-estas-de-paso--allan-perz--2016",
+    "title": "Si Estás De Paso",
+    "artists": [
+      "Allan Perz"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Si Estás De Paso",
+      "date": "2016-02-16",
+      "year": 2016,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 210000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "BGA471601298",
+    "spotify": {
+      "track_id": "1K1qUd3A0LxXimr38tKXbV",
+      "url": "https://open.spotify.com/track/1K1qUd3A0LxXimr38tKXbV"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/si-est%C3%A1s-de-paso/1085877558?i=1085877562&uo=4",
+      "track_id": "1085877562",
+      "collection_id": "1085877558",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Si Estás De Paso - Allan Perz.jpg",
+      "web_file": "assets/images/Si-Estás-De-Paso---Allan-Perz.webp"
+    },
+    "audio_ref": "Si Estás de Paso (masterizada).mp3",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "sin-mirar-atras--alexander-acha--2024",
+    "title": "Sin Mirar Atrás",
+    "artists": [
+      "Alexander Acha"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Sin Mirar Atrás",
+      "date": "2024-07-19",
+      "year": 2024,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 240000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "QZNJY2416303",
+    "spotify": {
+      "track_id": "5qYnqKEOeYHmjZlGOVJ8ZX",
+      "url": "https://open.spotify.com/track/5qYnqKEOeYHmjZlGOVJ8ZX"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/sin-mirar-atr%C3%A1s/1755456334?i=1755456335&uo=4",
+      "track_id": "1755456335",
+      "collection_id": "1755456334",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Sin Mirar Atrás - Alexander Acha.jpg",
+      "web_file": "assets/images/Sin-Mirar-Atrás---Alexander-Acha.webp"
+    },
+    "audio_ref": "Sin Mirar Atrás.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "soledad-y-el-mar-cover--ana-guinea--2020",
+    "title": "Soledad y el Mar - Cover",
+    "artists": [
+      "Ana Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers, Vol. 1",
+      "date": "2020-05-08",
+      "year": 2020,
+      "type": "album",
+      "track_number": 6,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 194157,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772000018",
+    "spotify": {
+      "track_id": "6QWMvk0iiZaWdf1XasyatQ",
+      "url": "https://open.spotify.com/track/6QWMvk0iiZaWdf1XasyatQ"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/soledad-y-el-mar-cover/1511814289?i=1511814297&uo=4",
+      "track_id": "1511814297",
+      "collection_id": "1511814289",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Soledad y el Mar - Cover - Ana Guinea.jpg",
+      "web_file": "assets/images/Soledad-y-el-Mar---Cover---Ana-Guinea.webp"
+    },
+    "audio_ref": "Soledad Y El Mar (Master).wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "sonambulo--rogelio-edel--2023",
+    "title": "Sonámbulo",
+    "artists": [
+      "Rogelio Edel"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Sonámbulo",
+      "date": "2023-09-24",
+      "year": 2023,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 183636,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772300018",
+    "spotify": {
+      "track_id": "1DbCAiiFcUS7GdKJ0dtEkT",
+      "url": "https://open.spotify.com/track/1DbCAiiFcUS7GdKJ0dtEkT"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Sonámbulo - Rogelio Edel.jpg",
+      "web_file": "assets/images/Sonámbulo---Rogelio-Edel.webp"
+    },
+    "audio_ref": "Rogelio_Sleepwalk_JCMxMstr.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "sublime-gracia--patty-gleason--2020",
+    "title": "Sublime Gracia",
+    "artists": [
+      "Patty Gleason"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers",
+      "date": "2020-09-12",
+      "year": 2020,
+      "type": "album",
+      "track_number": 9,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 241697,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": null,
+    "spotify": {
+      "track_id": "6z95aHBNuh0XvrHkbXv2s0",
+      "url": "https://open.spotify.com/track/6z95aHBNuh0XvrHkbXv2s0"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/sublime-gracia/1225440383?i=1225440399&uo=4",
+      "track_id": "1225440399",
+      "collection_id": "1225440383",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Sublime Gracia - Patty Gleason.jpg",
+      "web_file": "assets/images/Sublime-Gracia---Patty-Gleason.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "sunday-morning--rogelio-edel--2021",
+    "title": "Sunday Morning",
+    "artists": [
+      "Rogelio Edel"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Sunday Morning",
+      "date": "2021-05-14",
+      "year": 2021,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 219000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "QM6N22159568",
+    "spotify": {
+      "track_id": "0z9XG3ZwoOCwKQYN29NxxE",
+      "url": "https://open.spotify.com/track/0z9XG3ZwoOCwKQYN29NxxE"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Sunday Morning - Rogelio Edel.jpg",
+      "web_file": "assets/images/Sunday-Morning---Rogelio-Edel.webp"
+    },
+    "audio_ref": "Sunday Morning (Master7).wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "super-heroe--edson-corona--2017",
+    "title": "Súper Héroe",
+    "artists": [
+      "Edson Corona",
+      "Charlie B"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Súper Héroe",
+      "date": "2017-02-14",
+      "year": 2017,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 246857,
+    "explicit": false,
+    "is_collaboration": true,
+    "isrc": "US7VG1720431",
+    "spotify": {
+      "track_id": "59XnNI0i5votgdiRntQQS6",
+      "url": "https://open.spotify.com/track/59XnNI0i5votgdiRntQQS6"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/s%C3%BAper-h%C3%A9roe-feat-charlie-b/1211402702?i=1211403019&uo=4",
+      "track_id": "1211403019",
+      "collection_id": "1211402702",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Súper Héroe - Edson Corona.jpg",
+      "web_file": "assets/images/Súper-Héroe---Edson-Corona.webp"
+    },
+    "audio_ref": "Quisiera Ser Un Súper Héroe.mp3",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "te-espere-cover--ana-guinea--2020",
+    "title": "Te Esperé - Cover",
+    "artists": [
+      "Ana Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers, Vol. 1",
+      "date": "2020-05-08",
+      "year": 2020,
+      "type": "album",
+      "track_number": 9,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 204000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772000021",
+    "spotify": {
+      "track_id": "3NwB9q2fcZVG3TPRR1vN1f",
+      "url": "https://open.spotify.com/track/3NwB9q2fcZVG3TPRR1vN1f"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/te-esper%C3%A9-cover/1511814289?i=1511814300&uo=4",
+      "track_id": "1511814300",
+      "collection_id": "1511814289",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Te Esperé - Cover - Ana Guinea.jpg",
+      "web_file": "assets/images/Te-Esperé---Cover---Ana-Guinea.webp"
+    },
+    "audio_ref": "Te Esperé (Master 44.1).wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "the-scientist-cover--ana-guinea--2020",
+    "title": "The Scientist - Cover",
+    "artists": [
+      "Ana Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers, Vol. 1",
+      "date": "2020-05-08",
+      "year": 2020,
+      "type": "album",
+      "track_number": 8,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 282945,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772000020",
+    "spotify": {
+      "track_id": "7Dse7wOZM5rK9t3BV4Vvpa",
+      "url": "https://open.spotify.com/track/7Dse7wOZM5rK9t3BV4Vvpa"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/the-scientist-cover/1511814289?i=1511814299&uo=4",
+      "track_id": "1511814299",
+      "collection_id": "1511814289",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/The Scientist - Cover - Ana Guinea.jpg",
+      "web_file": "assets/images/The-Scientist---Cover---Ana-Guinea.webp"
+    },
+    "audio_ref": "The Scientist - Coldplay (Master).wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "todo-pasara--lenny--2020",
+    "title": "Todo Pasará",
+    "artists": [
+      "Lenny",
+      "Tamara Herrera",
+      "Luis Guinea",
+      "Isis Cruz",
+      "Cintya Fuente",
+      "Dalex Álvarez",
+      "Leon Yamil",
+      "Santi Márquez"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Todo Pasará",
+      "date": "2020-07-01",
+      "year": 2020,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 275370,
+    "explicit": false,
+    "is_collaboration": true,
+    "isrc": "UKXN22049068",
+    "spotify": {
+      "track_id": "5jhcQhcTzcLpeRorqxkUmC",
+      "url": "https://open.spotify.com/track/5jhcQhcTzcLpeRorqxkUmC"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/todo-pasar%C3%A1-feat-isis-cruz-cintya-fuente-dalex-%C3%A1lvarez/1521325783?i=1521325787&uo=4",
+      "track_id": "1521325787",
+      "collection_id": "1521325783",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Todo Pasará - Lenny.jpg",
+      "web_file": "assets/images/Todo-Pasará---Lenny.webp"
+    },
+    "audio_ref": "Colab Mocte_Todo Pasará_48kHz_24Bits_PabloMix 4.0.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "toxic--isabella-macias--2018",
+    "title": "Toxic",
+    "artists": [
+      "Isabella Macías"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Toxic",
+      "date": "2018-08-17",
+      "year": 2018,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 172148,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE771800044",
+    "spotify": {
+      "track_id": "6KpAyN2i4hwcRDeWEZH7br",
+      "url": "https://open.spotify.com/track/6KpAyN2i4hwcRDeWEZH7br"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/toxic/1425367831?i=1425367834&uo=4",
+      "track_id": "1425367834",
+      "collection_id": "1425367831",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Toxic - Isabella Macías.jpg",
+      "web_file": "assets/images/Toxic---Isabella-Macías.webp"
+    },
+    "audio_ref": "Toxica_Master_English.mp3",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "toxica--isabella-macias--2018",
+    "title": "Tóxica",
+    "artists": [
+      "Isabella Macías"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Tóxica",
+      "date": "2018-08-17",
+      "year": 2018,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 172000,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE771800043",
+    "spotify": {
+      "track_id": "0TwsauaZpCghfKljxWk1cW",
+      "url": "https://open.spotify.com/track/0TwsauaZpCghfKljxWk1cW"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/t%C3%B3xica/1425363994?i=1425364248&uo=4",
+      "track_id": "1425364248",
+      "collection_id": "1425363994",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Tóxica - Isabella Macías.jpg",
+      "web_file": "assets/images/Tóxica---Isabella-Macías.webp"
+    },
+    "audio_ref": "Toxica_Master_Spanish.mp3",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "un-ano-cover--ana-guinea--2020",
+    "title": "Un Año - Cover",
+    "artists": [
+      "Ana Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers, Vol. 1",
+      "date": "2020-05-08",
+      "year": 2020,
+      "type": "album",
+      "track_number": 3,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 161684,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772000015",
+    "spotify": {
+      "track_id": "4JyIwQWacBb1DsqqFJNYOR",
+      "url": "https://open.spotify.com/track/4JyIwQWacBb1DsqqFJNYOR"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/un-a%C3%B1o-cover/1511814289?i=1511814293&uo=4",
+      "track_id": "1511814293",
+      "collection_id": "1511814289",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Un Año - Cover - Ana Guinea.jpg",
+      "web_file": "assets/images/Un-Año---Cover---Ana-Guinea.webp"
+    },
+    "audio_ref": "Un año - Sebastian Yatra y Reik (Master).wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "vengo-del-futuro-cover--ana-guinea--2020",
+    "title": "Vengo del Futuro - Cover",
+    "artists": [
+      "Ana Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers, Vol. 1",
+      "date": "2020-05-08",
+      "year": 2020,
+      "type": "album",
+      "track_number": 7,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 269600,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772000019",
+    "spotify": {
+      "track_id": "0ZWIqrcOXbesJ8K659JF4X",
+      "url": "https://open.spotify.com/track/0ZWIqrcOXbesJ8K659JF4X"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/vengo-del-futuro-cover/1511814289?i=1511814298&uo=4",
+      "track_id": "1511814298",
+      "collection_id": "1511814289",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Vengo del Futuro - Cover - Ana Guinea.jpg",
+      "web_file": "assets/images/Vengo-del-Futuro---Cover---Ana-Guinea.webp"
+    },
+    "audio_ref": "Vengo del Futuro (Master).wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "vida-tras-vida--ana-guinea--2024",
+    "title": "Vida Tras Vida",
+    "artists": [
+      "Ana Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Vida Tras Vida",
+      "date": "2024-08-30",
+      "year": 2024,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 196067,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "QM7282492877",
+    "spotify": {
+      "track_id": "7h5l3giLS5DV7bqjHGpXlk",
+      "url": "https://open.spotify.com/track/7h5l3giLS5DV7bqjHGpXlk"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/vida-tras-vida/1761408970?i=1761408977&uo=4",
+      "track_id": "1761408977",
+      "collection_id": "1761408970",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Vida Tras Vida - Ana Guinea.jpg",
+      "web_file": "assets/images/Vida-Tras-Vida---Ana-Guinea.webp"
+    },
+    "audio_ref": "Vida Tras Vida (FINALMIX).wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "volver-a-verte--ana-guinea--2022",
+    "title": "Volver a Verte",
+    "artists": [
+      "Ana Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Volver a Verte",
+      "date": "2022-08-19",
+      "year": 2022,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 216405,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772200003",
+    "spotify": {
+      "track_id": "0iCaxlngKnB62DCRrXmQZp",
+      "url": "https://open.spotify.com/track/0iCaxlngKnB62DCRrXmQZp"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/volver-a-verte/1636517395?i=1636517401&uo=4",
+      "track_id": "1636517401",
+      "collection_id": "1636517395",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Volver a Verte - Ana Guinea.jpg",
+      "web_file": "assets/images/Volver-a-Verte---Ana-Guinea.webp"
+    },
+    "audio_ref": "Ana Guinea - Volver a verte - Master 1.1.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "volver-a-verte--luis-guinea--2020",
+    "title": "Volver a Verte",
+    "artists": [
+      "Luis Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Volver a Verte",
+      "date": "2020-02-21",
+      "year": 2020,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 210011,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772000005",
+    "spotify": {
+      "track_id": "68KFZJM2TtOHV2u2aLPPU8",
+      "url": "https://open.spotify.com/track/68KFZJM2TtOHV2u2aLPPU8"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Volver a Verte - Luis Guinea.jpg",
+      "web_file": "assets/images/Volver-a-Verte---Luis-Guinea.webp"
+    },
+    "audio_ref": "Volver A Verte_Final.wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "wrecking-ball--louisiana--2014",
+    "title": "Wrecking Ball",
+    "artists": [
+      "Louisiana"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Wrecking Ball",
+      "date": "2014-05-16",
+      "year": 2014,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 242935,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "BGA471403807",
+    "spotify": {
+      "track_id": "4FjLEed4W0SGSQAOA1GMQF",
+      "url": "https://open.spotify.com/track/4FjLEed4W0SGSQAOA1GMQF"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/wrecking-ball/879723699?i=879723711&uo=4",
+      "track_id": "879723711",
+      "collection_id": "879723699",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Wrecking Ball - Louisiana.jpg",
+      "web_file": "assets/images/Wrecking-Ball---Louisiana.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "ya-no-creo--rogelio-edel--2024",
+    "title": "Ya No Creo",
+    "artists": [
+      "Rogelio Edel"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Ya No Creo",
+      "date": "2024-06-07",
+      "year": 2024,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 203403,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772400004",
+    "spotify": {
+      "track_id": "6JKDrkb4Dflc0PM48RLFJq",
+      "url": "https://open.spotify.com/track/6JKDrkb4Dflc0PM48RLFJq"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Ya No Creo - Rogelio Edel.jpg",
+      "web_file": "assets/images/Ya-No-Creo---Rogelio-Edel.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "ya-no-sigo-esperando--rogelio-edel--2023",
+    "title": "Ya No Sigo Esperando",
+    "artists": [
+      "Rogelio Edel"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Ya No Sigo Esperando",
+      "date": "2023-06-11",
+      "year": 2023,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 164456,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772300014",
+    "spotify": {
+      "track_id": "1nT89PizClVMFec7Oj7beO",
+      "url": "https://open.spotify.com/track/1nT89PizClVMFec7Oj7beO"
+    },
+    "apple_music": {
+      "url": null,
+      "track_id": null,
+      "collection_id": null,
+      "storefront": null
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Ya No Sigo Esperando - Rogelio Edel.jpg",
+      "web_file": "assets/images/Ya-No-Sigo-Esperando---Rogelio-Edel.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "ya-no-soy-esclavo--patty-gleason--2020",
+    "title": "Ya No Soy Esclavo",
+    "artists": [
+      "Patty Gleason"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers",
+      "date": "2020-09-12",
+      "year": 2020,
+      "type": "album",
+      "track_number": 2,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 275896,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": null,
+    "spotify": {
+      "track_id": "6A2nqVOHiPHf5PTxq1IoMG",
+      "url": "https://open.spotify.com/track/6A2nqVOHiPHf5PTxq1IoMG"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/ya-no-soy-esclavo/1529758912?i=1529758914&uo=4",
+      "track_id": "1529758914",
+      "collection_id": "1529758912",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/Ya No Soy Esclavo - Patty Gleason.jpg",
+      "web_file": "assets/images/Ya-No-Soy-Esclavo---Patty-Gleason.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "you-are-my-sunshine-cover--ana-guinea--2023",
+    "title": "You Are My Sunshine - Cover",
+    "artists": [
+      "Ana Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "You Are My Sunshine (Cover)",
+      "date": "2023-04-28",
+      "year": 2023,
+      "type": "single",
+      "track_number": 1,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 125059,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772300003",
+    "spotify": {
+      "track_id": "5BZn3QxfXWJLUtE3zo3RC3",
+      "url": "https://open.spotify.com/track/5BZn3QxfXWJLUtE3zo3RC3"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/you-are-my-sunshine-cover/1685730271?i=1685730272&uo=4",
+      "track_id": "1685730272",
+      "collection_id": "1685730271",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/You Are My Sunshine - Cover - Ana Guinea.jpg",
+      "web_file": "assets/images/You-Are-My-Sunshine---Cover---Ana-Guinea.webp"
+    },
+    "audio_ref": null,
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  },
+  {
+    "id": "you-say-cover--ana-guinea--2020",
+    "title": "You Say - Cover",
+    "artists": [
+      "Ana Guinea"
+    ],
+    "credits": [],
+    "release": {
+      "album": "Covers, Vol. 1",
+      "date": "2020-05-08",
+      "year": 2020,
+      "type": "album",
+      "track_number": 12,
+      "disc_number": 1,
+      "status": "released"
+    },
+    "duration_ms": 279562,
+    "explicit": false,
+    "is_collaboration": false,
+    "isrc": "MXE772000024",
+    "spotify": {
+      "track_id": "2jpLpF6U1KeBg4rFrVisCu",
+      "url": "https://open.spotify.com/track/2jpLpF6U1KeBg4rFrVisCu"
+    },
+    "apple_music": {
+      "url": "https://music.apple.com/mx/album/you-say-cover/1511814289?i=1511814304&uo=4",
+      "track_id": "1511814304",
+      "collection_id": "1511814289",
+      "storefront": "mx"
+    },
+    "artwork": {
+      "file": "One Page Luis Guinea/artworks/You Say - Cover - Ana Guinea.jpg",
+      "web_file": "assets/images/You-Say---Cover---Ana-Guinea.webp"
+    },
+    "audio_ref": "You Say (Master).wav",
+    "editorial": {
+      "genre": [],
+      "subgenre": [],
+      "mood": [],
+      "emotion": [],
+      "energy": null,
+      "tempo_bpm": null,
+      "vocals_instrumental": null,
+      "vocal_type": [],
+      "language": [],
+      "theme": [],
+      "use_scene": []
+    }
+  }
+]

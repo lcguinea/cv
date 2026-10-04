@@ -1,0 +1,19 @@
+{
+  "schema": "public-music-selection-v2",
+  "description": "Curated /music/ order. Work ids and roles resolve from verified human mappings and their role evidence.",
+  "entries": [
+    { "review_id": "33" },
+    { "review_id": "25" },
+    { "review_id": "02" },
+    { "review_id": "34" },
+    { "review_id": "04" },
+    { "review_id": "35" },
+    { "review_id": "03" },
+    { "review_id": "05" },
+    { "review_id": "11" },
+    { "review_id": "36" },
+    { "review_id": "37" },
+    { "review_id": "01" },
+    { "review_id": "38" }
+  ]
+}
