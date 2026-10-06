@@ -1,0 +1,10 @@
+# Spike Essentia: la salida lleva rutas absolutas de Google Drive (con el correo de la cuenta)
+# y predicciones sobre masters sin publicar. No se versiona sin revisión.
+__pycache__/
+out/
+audio_links.json
+audio_links_onepage.json
+audio_links_validation3.json
+audio_links_sample15.json
+human_classification_bank.xlsx
+human_classification_bank.json

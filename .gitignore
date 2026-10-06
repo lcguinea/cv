@@ -7,6 +7,9 @@ estado/
 
 # Audios privados del catálogo musical (masters sin publicar, no se versionan)
 One Page Luis Guinea/audios/
+# Carpeta privada completa (masters, inventarios XLSX, documentos de trabajo): nunca se versiona
+# ni se publica. El sitio solo usa derivados validados fuera de ella.
+One Page Luis Guinea/
 
 # Ningún audio es versionable en ninguna ruta (masters y audios completos privados, también
 # bajo One Page Luis Guinea/assets/). Extensiones = AUDIO_EXTENSIONS de
@@ -47,3 +50,10 @@ One Page Luis Guinea/audios/
 
 # Python
 __pycache__/
+
+# Salida local de build_catalog.py/verify_catalog.py: procedencia con rutas absolutas del equipo
+# del propietario, rutas de Google Drive y su correo. Privada; se regenera en local.
+data/music-catalog/internal/
+
+# Artefactos locales de verificación en navegador (capturas y snapshots de Playwright MCP).
+.playwright-mcp/
