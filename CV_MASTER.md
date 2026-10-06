@@ -94,7 +94,7 @@ Published on Medium. Tools across all pieces: Chartmetric (including API), Pytho
 
 ### 4.1 I Tracked a Phantom AI Artist for 18 Months. The Problem Isn't Technological, It's Economic
 
-- Language: EN / ES (ES title: "Llevo 18 meses espiando un catálogo generado por IA...")
+- Language: EN / ES (ES title: "Llevo 18 meses espiando un catálogo generado por IA: el problema no es tecnológico, es económico.")
 - Published: June 2026
 - URL: https://medium.com/@soyluisguinea/i-tracked-a-likely-ai-generated-artist-for-18-months-the-problem-is-bigger-than-i-thought-a9bbb92d93bc
 - Question: What happens to the streaming economy when a likely AI-generated catalogue competes for the same royalty pool as human artists?
@@ -341,7 +341,9 @@ Plain grouped lists. No bars, percentages or logos (BRAND.md section 30).
 
 - **Research & writing:** long-form and data journalism in English and Spanish, case studies, source and timeline verification.
 - **Data & technology:** Python, SQL, Chartmetric (including API), AWS (EC2), ETL and data pipelines, automation, Power BI, Tableau, Excel, Google Analytics, Next.js, Supabase, MCP servers.
-- **Music:** production, composition, arrangement, music direction, piano and keys, Pro Tools, Logic Pro, Ableton Live.
+- **Music:** production, composition, arrangement, music direction.
+- **Instruments (multi-instrumentalist):** piano, keyboards and synthesizers; drums and percussion; guitar and bass; flute, accordion and trumpet. Confirmed by Luis on 2026-10-06.
+- **Music software:** Pro Tools, Logic Pro X, Ableton Live, Sibelius. Sibelius and the full instrument list confirmed by Luis on 2026-10-06.
 - **Industry:** A&R, artist development, release planning, catalogue and licensing (DISCO), royalties, copyright registration, sync.
 - **Business:** brand strategy, digital marketing (Meta Ads, organic social), CRM, sales and team leadership, project and budget management, contracts.
 - **Visual:** Final Cut Pro, Photoshop, Illustrator.

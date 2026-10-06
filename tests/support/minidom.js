@@ -56,6 +56,8 @@ class Element extends Node {
   }
   get id() { return this.attrs.id || ''; }
   get className() { return this.attrs.class || ''; }
+  get lang() { return this.attrs.lang || ''; }
+  set lang(v) { this.attrs.lang = String(v); }
   setAttribute(k, v) { this.attrs[k] = String(v); }
   getAttribute(k) { return k in this.attrs ? this.attrs[k] : null; }
   hasAttribute(k) { return k in this.attrs; }

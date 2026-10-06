@@ -121,6 +121,36 @@ class StaticLinkTests(unittest.TestCase):
                     self.assertNotRegex(html, r"<a\b[^>]*>[^<]*%s" % re.escape(name))
 
 
+# Titles as published on Medium (the author's feed), keyed like ARTICLES. The English titles are the
+# CV_MASTER.md headings; the Spanish ones are the CV_MASTER.md "ES title" of the same article.
+TITLES = {
+    "a1-title": ("I Tracked a Phantom AI Artist for 18 Months. The Problem Isn't Technological, It's Economic",
+                 "Llevo 18 meses espiando un catálogo generado por IA: el problema no es tecnológico, es económico."),
+    "a2-title": ("Are We Measuring Artist Growth Wrong?", None),
+    "a3-title": ("Seven Days to Turn a Viral Moment into a Career", "Siete días para convertir un viral en una carrera"),
+    "a4-title": ("How RATA Turned an Explosion of Listeners into a Real Fan Base",
+                 "Cómo RATA convirtió una explosión de oyentes en una base real de fans"),
+}
+
+
+class SpanishArticleTitleTextTests(unittest.TestCase):
+    def test_titles_match_cv_master(self):
+        master = read("CV_MASTER.md")
+        for section, key in (("4.1", "a1-title"), ("4.2", "a2-title"), ("4.3", "a3-title"), ("4.4", "a4-title")):
+            block = master[master.index("### " + section):].split("\n### ", 1)[0]
+            en, es = TITLES[key]
+            with self.subTest(section=section):
+                self.assertEqual(re.search(r"### \d\.\d (.+)", block).group(1).strip(), en)
+                found = re.search(r'ES title: "([^"]+)"', block)
+                self.assertEqual(found and found.group(1), es)
+
+    def test_english_titles_are_the_no_javascript_fallback(self):
+        html = read("index.html")
+        for key, (en, _) in TITLES.items():
+            with self.subTest(article=key):
+                self.assertRegex(html, r'<h3 id="%s"[^>]*>%s</h3>' % (key, re.escape(en)))
+
+
 @unittest.skipUnless(NODE, "node not installed")
 class BehaviourTests(unittest.TestCase):
     def run_scenario(self, scenario):
@@ -152,6 +182,26 @@ class BehaviourTests(unittest.TestCase):
         self.assertEqual(out["notice"], " (se abre en una pestaña nueva)")
         self.assertEqual(out["read"], "Leer la investigación ↗")
         self.assertEqual(out["loadEs"], ARTICLES["a3-title"][1])
+
+    def test_language_switch_shows_the_published_spanish_titles_and_restores_the_english_ones(self):
+        out = self.run_scenario(
+            "const page = browser.tab().open('index.html'); await settle();"
+            "const titles = () => Object.fromEntries(['a1-title', 'a2-title', 'a3-title', 'a4-title'].map(id => {"
+            "  const h = page.$('#' + id); return [id, [h.textContent, h.closest('[lang]').getAttribute('lang')]]; }));"
+            "out.en = titles(); page.click('[data-lang=\"es\"]'); await settle(); out.es = titles();"
+            "out.described = page.$('a[aria-describedby=\"a3-title\"]').getAttribute('hreflang');"
+            "page.click('[data-lang=\"en\"]'); await settle(); out.back = titles();"
+            "browser.local['lg-language'] = 'es'; const fresh = browser.tab().open('index.html'); await settle();"
+            "out.load = fresh.$('#a4-title').textContent;"
+        )
+        for key, (en, es) in TITLES.items():
+            with self.subTest(article=key):
+                self.assertEqual(out["en"][key], [en, "en"])
+                # An English-only study keeps its title, marked as English, in the Spanish interface.
+                self.assertEqual(out["es"][key], [es, "es"] if es else [en, "en"])
+                self.assertEqual(out["back"][key], out["en"][key])
+        self.assertEqual(out["described"], "es")
+        self.assertEqual(out["load"], TITLES["a4-title"][1])
 
     def test_entity_role_titles_stay_translated_next_to_their_links(self):
         out = self.run_scenario(

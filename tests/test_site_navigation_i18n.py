@@ -145,7 +145,7 @@ class StringsTests(unittest.TestCase):
             self.assertNotIn(gone, self.en)
         self.assertEqual(self.en["writing.title"], "What streaming data says about how artists grow.")
         self.assertEqual(self.es["music.title"], "Lanzamientos como artista y productor, 2020–2024.")
-        self.assertEqual(self.es["skills.music"], "producción, composición, arreglos, dirección musical, piano y teclados.")
+        self.assertEqual(self.es["skills.music"], "producción, composición, arreglos, dirección musical.")
         self.assertNotIn("pool de", self.es["writing.a1"])
         self.assertFalse([k for k, v in self.es.items() if k.startswith("music.") and "preview" in v.lower()])
         # The long CV profile stays as it is in CV_MASTER.md.
@@ -306,9 +306,12 @@ class ProductionAuditCorrectionsTests(unittest.TestCase):
 
     def test_english_fragments_kept_in_the_spanish_interface_are_marked_as_english(self):
         home, cv = read("index.html"), read("cv.html")
-        self.assertIn('<p class="descriptor" lang="en" data-i18n="hero.title">', home)
-        for n in "1234":
-            self.assertIn(f'<h3 id="a{n}-title" lang="en">', home)
+        # The descriptor and the titles with a Spanish edition follow the page language; only the
+        # English-only and Spanish-only studies carry a fixed lang.
+        self.assertIn('<p class="descriptor" data-i18n="hero.title">', home)
+        for n in "134":
+            self.assertIn(f'<h3 id="a{n}-title" data-i18n="writing.a{n}Title">', home)
+        self.assertIn('<h3 id="a2-title" lang="en">Are We Measuring Artist Growth Wrong?</h3>', home)
         self.assertIn('<h3 id="a5-title" lang="es">', home)
         self.assertIn('<span data-i18n="education.ma">MA</span>, <span lang="en">Global Entertainment and Music Business</span>', home)
         self.assertIn('<span class="cv-degree" lang="en" data-i18n="cv.maField">Global Entertainment and Music Business</span>', cv)
@@ -342,15 +345,97 @@ class ProductionAuditCorrectionsTests(unittest.TestCase):
             "page.click('[data-lang=\"es\"]'); await settle(); out.es = [page.$('title').textContent, ...v()];"
             "page.click('[data-lang=\"en\"]'); await settle(); out.back = [page.$('title').textContent, ...v()];"
             "const home = browser.tab().open('index.html'); await settle(); home.click('[data-lang=\"es\"]'); await settle();"
-            "out.home = [home.$('.descriptor').getAttribute('lang'), home.$('[data-i18n=\"education.ma\"]').parentNode.textContent];"],
+            "out.home = [home.$('.descriptor').closest('[lang]').getAttribute('lang'), home.$('[data-i18n=\"education.ma\"]').parentNode.textContent];"],
             capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
         out = json.loads(result.stdout)
         self.assertEqual(out["en"], ["Music / Audio · Luis Guinea", "100%", "100%"])
         self.assertEqual(out["es"], ["Música / Audio · Luis Guinea", "100 %", "100 %"])
         self.assertEqual(out["back"], out["en"])
-        self.assertEqual(out["home"][0], "en")
+        self.assertEqual(out["home"][0], "es")
         self.assertTrue(out["home"][1].startswith("Máster, Global Entertainment and Music Business"), out["home"][1])
+
+
+SKILLS = {
+    "en": {
+        "instrumentsLabel": "Multi-instrumentalist",
+        "instruments": ("piano", "keyboards", "synthesizers", "drums", "percussion", "guitar", "bass", "flute", "accordion", "trumpet"),
+    },
+    "es": {
+        "instrumentsLabel": "Multiinstrumentista",
+        "instruments": ("piano", "teclados", "sintetizadores", "batería", "percusiones", "guitarra", "bajo", "flauta", "acordeón", "trompeta"),
+    },
+}
+SOFTWARE = ("Pro Tools", "Logic Pro X", "Ableton Live", "Sibelius", "Final Cut Pro", "Photoshop", "Illustrator")
+DATA_TOOLS = {
+    "en": ("Python", "SQL", "ETL", "Chartmetric", "Power BI", "Tableau", "Excel", "Google Analytics",
+           "AWS\u00a0(EC2)", "Next.js", "Supabase", "MCP servers"),
+    "es": ("Python", "SQL", "ETL", "Chartmetric", "Power BI", "Tableau", "Excel", "Google Analytics",
+           "AWS\u00a0(EC2)", "Next.js", "Supabase", "servidores MCP"),
+}
+
+
+@unittest.skipUnless(NODE, "node not installed")
+class DescriptorAndCapabilitiesTests(unittest.TestCase):
+    def run_scenario(self, scenario):
+        result = subprocess.run([NODE, str(RUNNER), str(ROOT), scenario], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return json.loads(result.stdout)
+
+    def test_descriptor_is_localised_only_in_spanish_and_follows_the_live_switch(self):
+        out = self.run_scenario(
+            "const page = browser.tab().open('index.html'); await settle();"
+            "const d = () => [page.$('.descriptor').textContent, page.$('.descriptor').closest('[lang]').getAttribute('lang')];"
+            "out.en = d(); page.click('[data-lang=\"es\"]'); await settle(); out.es = d();"
+            "page.click('[data-lang=\"en\"]'); await settle(); out.back = d();"
+            "browser.local['lg-language'] = 'es'; const fresh = browser.tab().open('index.html'); await settle();"
+            "out.load = fresh.$('.descriptor').textContent;")
+        self.assertEqual(out["en"], ["Creative × Analytical × Entrepreneurial", "en"])
+        self.assertEqual(out["es"], ["Creativo × Analítico × Emprendedor", "es"])
+        self.assertEqual(out["back"], out["en"])
+        self.assertEqual(out["load"], "Creativo × Analítico × Emprendedor")
+
+    def test_instruments_and_software_are_listed_apart_in_both_languages_on_home_and_cv(self):
+        out = self.run_scenario(
+            "const read = (page, scope, ns) => Object.fromEntries(['data', 'music', 'instruments', 'software'].flatMap(k => ["
+            "  [k + 'Label', page.$(scope + ' [data-i18n=\"' + ns + '.' + k + 'Label\"]').textContent],"
+            "  [k, page.$(scope + ' [data-i18n=\"' + ns + '.' + k + '\"]').textContent]]));"
+            "const home = browser.tab().open('index.html'); await settle(); const cv = browser.tab().open('cv.html'); await settle();"
+            "out.en = {home: read(home, '.skills-block', 'skills'), cv: read(cv, '.cv-skills', 'cv')};"
+            "home.click('[data-lang=\"es\"]'); cv.click('[data-lang=\"es\"]'); await settle();"
+            "out.es = {home: read(home, '.skills-block', 'skills'), cv: read(cv, '.cv-skills', 'cv')};")
+        for lang, expected in SKILLS.items():
+            for page in ("home", "cv"):
+                got = out[lang][page]
+                with self.subTest(lang=lang, page=page):
+                    self.assertEqual(got["instrumentsLabel"].rstrip(":"), expected["instrumentsLabel"])
+                    instruments = got["instruments"].lower()
+                    for name in expected["instruments"]:
+                        self.assertRegex(instruments, r"\b%s\b" % name)
+                    for name in SOFTWARE:
+                        self.assertIn(name, got["software"])
+                        # Software stays out of the instrument and music lines.
+                        self.assertNotIn(name, got["instruments"] + got["music"])
+                    for name in expected["instruments"]:
+                        self.assertNotIn(name, got["software"].lower())
+                    # Data tools stay in their own category, apart from the music and visual software.
+                    for name in DATA_TOOLS[lang]:
+                        self.assertIn(name, got["data"])
+                        self.assertNotIn(name, got["software"])
+                    for name in SOFTWARE:
+                        self.assertNotIn(name, got["data"])
+        self.assertEqual(out["es"]["home"]["softwareLabel"], "Software musical y visual:")
+        self.assertEqual(out["en"]["cv"]["softwareLabel"], "Music & visual software")
+
+    def test_no_javascript_fallback_of_the_cv_matches_the_english_strings(self):
+        data = strings()
+        en = flatten(data["en"])
+        cv = read("cv.html")
+        for key in ("data", "music", "instrumentsLabel", "instruments", "softwareLabel", "software"):
+            with self.subTest(key=key):
+                text = en["cv." + key].replace("&", "&amp;")
+                self.assertIn(f'<span data-i18n="cv.{key}">{text}</span>' if "Label" not in key
+                              else f'<strong data-i18n="cv.{key}">{text}</strong>', cv)
 
 
 if __name__ == "__main__":
