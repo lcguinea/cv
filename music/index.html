@@ -21,8 +21,8 @@
 <button id="next" class="ctl" type="button" data-i18n-label="music.next"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M11 2h2v12h-2zM2 2v12l8-6z"/></svg></button>
 </div>
 <div class="np-progress"><label class="sr-only" for="seek" data-i18n="music.seek"></label><input id="seek" type="range" min="0" max="0" step="0.1" value="0" disabled><p class="np-time" aria-hidden="true"><span id="time-current">0:00</span><span id="time-total">0:00</span></p></div>
+<div id="np-volume-field" class="np-volume"><label for="np-volume" data-i18n="player.volume">Volume</label><input id="np-volume" type="range" min="0" max="1" step="0.05" value="1"></div>
 <p id="np-status" class="np-status" role="status" aria-live="polite"></p>
-<audio id="player-audio" preload="none"></audio>
 </div>
 </article>
 </div></section>
@@ -34,105 +34,4 @@
 <p id="empty" class="empty-state" data-i18n="music.noResults" hidden></p>
 </div></section>
 </main><footer class="footer"><div class="wrap"><a href="../index.html" data-i18n="music.back"></a></div></footer>
-<script src="../js/strings.js"></script><script src="../js/i18n.js"></script><script src="../js/music-data.js"></script><script src="../js/site.js"></script><script>
-const $=id=>document.getElementById(id);
-const catalog=$('catalog'),search=$('search'),role=$('role'),count=$('count'),empty=$('empty'),audio=$('player-audio'),toggle=$('toggle'),seek=$('seek'),statusLine=$('np-status');
-const tracks=MUSIC_DATA;
-let active=0,visible=[],failed=false;
-function norm(value){return String(value||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')}
-function esc(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function previewUrl(name){return /^[a-z0-9][a-z0-9-]*\.mp3$/.test(String(name||''))?'../assets/audio/previews/'+encodeURIComponent(name):''}
-function artworkUrl(name){return '../assets/images/'+encodeURIComponent(name)}
-function roleKey(name){return 'music.role'+String(name).replace(/[^A-Za-z]/g,'')}
-function typeKey(name){return 'music.type'+String(name).replace(/[^A-Za-z]/g,'')}
-function pad(n){return String(n).padStart(2,'0')}
-function clock(seconds){const s=Math.max(0,Math.floor(Number.isFinite(seconds)?seconds:0));return Math.floor(s/60)+':'+pad(s%60)}
-// Composer is the public facet of a songwriting credit; the other facets match credits directly.
-function matchesRole(x,value){if(!value)return true;const credit=value==='Composer'?'Songwriter':value;return x.role===value||x.roles.includes(credit)}
-function matches(x,q){return !q||norm([x.title,x.artist,x.year,x.releaseType,x.role,x.roles.join(' '),x.roles.map(r=>t(roleKey(r))).join(' ')].join(' ')).includes(q)}
-function isPlaying(){return !audio.paused&&!audio.ended}
-function renderList(){
-  const q=norm(search.value);
-  visible=tracks.map((x,i)=>i).filter(i=>matchesRole(tracks[i],role.value)&&matches(tracks[i],q));
-  count.textContent=visible.length;
-  empty.hidden=visible.length>0;
-  catalog.innerHTML=visible.map(i=>{const x=tracks[i];return `<li><button type="button" class="pl-row" data-index="${i}" aria-current="false"><span class="pl-num">${pad(i+1)}</span><img class="pl-thumb" src="${artworkUrl(x.artwork)}" alt="" loading="lazy" width="56" height="56"><span class="pl-main"><span class="pl-title">${esc(x.title)}</span><span class="pl-artist">${esc(x.artist)}</span></span><span class="pl-roles">${x.roles.map(r=>`<span data-i18n="${roleKey(r)}">${esc(t(roleKey(r)))}</span>`).join(' · ')}</span><span class="pl-year">${x.year}</span><span class="pl-state"></span></button></li>`}).join('');
-  updateRows();
-}
-function updateRows(){
-  const playing=isPlaying();
-  catalog.querySelectorAll('.pl-row').forEach(row=>{
-    const current=Number(row.dataset.index)===active,state=row.querySelector('.pl-state');
-    row.setAttribute('aria-current',String(current));
-    row.classList.toggle('is-playing',current&&playing);
-    const key=current?(playing?'music.playing':'music.selected'):'';
-    if(key){state.setAttribute('data-i18n',key);state.textContent=t(key)}else{state.removeAttribute('data-i18n');state.textContent=''}
-  });
-}
-function updateLabels(){
-  const x=tracks[active];
-  document.querySelectorAll('[data-i18n-label]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.i18nLabel)));
-  toggle.setAttribute('aria-label',t(isPlaying()?'music.pause':'music.play')+': '+x.title);
-  $('np-art').alt=t('music.artworkAlt')+': '+x.title;
-  $('np-type').textContent=t(typeKey(x.releaseType));
-  seek.setAttribute('aria-valuetext',clock(audio.currentTime)+' '+t('music.of')+' '+clock(audio.duration));
-  $('np-roles').innerHTML=x.roles.map(r=>`<li data-i18n="${roleKey(r)}">${esc(t(roleKey(r)))}</li>`).join('');
-  if(failed)statusLine.textContent=t('music.loadError');
-}
-function updatePlayer(){
-  const x=tracks[active],playing=isPlaying();
-  toggle.dataset.state=playing?'playing':'paused';
-  if(!failed)statusLine.textContent=playing?t('music.playing')+': '+x.title+' · '+x.artist:(audio.currentTime>0?t('music.paused')+': '+x.title:'');
-  updateLabels();
-  updateRows();
-}
-function updateTime(){
-  const duration=Number.isFinite(audio.duration)?audio.duration:0;
-  seek.max=duration;seek.value=audio.currentTime||0;seek.disabled=!duration;
-  $('time-current').textContent=clock(audio.currentTime);$('time-total').textContent=clock(duration);
-  seek.setAttribute('aria-valuetext',clock(audio.currentTime)+' '+t('music.of')+' '+clock(duration));
-}
-// Shows track i on the stage; the single player-audio element guarantees one preview at a time.
-function select(i,play){
-  const x=tracks[i];
-  if(i!==active||!audio.getAttribute('src')){
-    audio.pause();
-    active=i;failed=false;
-    audio.src=previewUrl(x.preview);
-    $('np-art').src=artworkUrl(x.artwork);
-    $('np-index').textContent=pad(i+1)+' / '+pad(tracks.length);
-    $('np-title').textContent=x.title;
-    $('np-artist').textContent=x.artist;
-    $('np-year').textContent=x.year;
-    updateTime();
-  }
-  if(play)start();
-  updatePlayer();
-}
-function start(){const result=audio.play();if(result&&result.catch)result.catch(()=>{failed=true;updatePlayer()})}
-function step(delta){
-  const list=visible.length?visible:tracks.map((x,i)=>i),at=list.indexOf(active);
-  const next=at<0?list[delta>0?0:list.length-1]:list[(at+delta+list.length)%list.length];
-  select(next,isPlaying());
-}
-toggle.addEventListener('click',()=>{if(isPlaying())audio.pause();else start()});
-$('prev').addEventListener('click',()=>step(-1));
-$('next').addEventListener('click',()=>step(1));
-seek.addEventListener('input',()=>{audio.currentTime=Number(seek.value);updateTime()});
-catalog.addEventListener('click',event=>{const row=event.target.closest('.pl-row');if(!row)return;const i=Number(row.dataset.index);if(i===active&&isPlaying())audio.pause();else select(i,true)});
-catalog.addEventListener('keydown',event=>{
-  const rows=[...catalog.querySelectorAll('.pl-row')],at=rows.indexOf(document.activeElement);
-  const target={ArrowDown:at+1,ArrowUp:at-1,Home:0,End:rows.length-1}[event.key];
-  if(at<0||target===undefined||!rows[target])return;
-  event.preventDefault();rows[target].focus();
-});
-['play','pause','ended'].forEach(type=>audio.addEventListener(type,updatePlayer));
-['timeupdate','loadedmetadata','durationchange','emptied'].forEach(type=>audio.addEventListener(type,updateTime));
-audio.addEventListener('error',()=>{if(audio.getAttribute('src')){failed=true;updatePlayer()}});
-// Any other media element that starts on this page pauses the player, and vice versa.
-document.addEventListener('play',event=>document.querySelectorAll('audio,video').forEach(media=>{if(media!==event.target)media.pause()}),true);
-search.addEventListener('input',renderList);role.addEventListener('change',renderList);
-const baseSetLanguage=window.setLanguage;
-window.setLanguage=function(next){baseSetLanguage(next);updatePlayer()};
-document.addEventListener('DOMContentLoaded',()=>{$('total').textContent=tracks.length;renderList();select(0,false)});
-</script></body></html>
+<div id="mini-player" class="mini-player no-print" role="region" aria-label="Music player" data-i18n-label="player.region" hidden><span class="mp-progress" aria-hidden="true"><span id="mp-progress"></span></span><div class="wrap mp-inner"><img id="mp-art" class="mp-art" alt="" width="48" height="48"><p class="mp-text"><span id="mp-title" class="mp-title"></span><span id="mp-artist" class="mp-artist"></span></p><div class="mp-controls"><button id="mp-toggle" class="mp-btn mp-play" type="button" data-state="paused"><svg class="icon-play" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 2l10 6-10 6z"/></svg><svg class="icon-pause" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 2h3.5v12H3zM9.5 2H13v12H9.5z"/></svg></button><button id="mp-next" class="mp-btn" type="button" data-i18n-label="music.next"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M11 2h2v12h-2zM2 2v12l8-6z"/></svg></button><button id="mp-mute" class="mp-btn mp-mute" type="button" aria-pressed="false" data-i18n-label="player.mute"><svg class="icon-sound" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M1 5.5h3L8 2v12L4 10.5H1zM10 5.2a4 4 0 010 5.6l-.9-.9a2.7 2.7 0 000-3.8zM11.9 3.3a6.7 6.7 0 010 9.4l-.9-.9a5.4 5.4 0 000-7.6z"/></svg><svg class="icon-muted" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M1 5.5h3L8 2v12L4 10.5H1zM10 5.9l.9-.9 1.6 1.6 1.6-1.6.9.9L13.4 7.5l1.6 1.6-.9.9-1.6-1.6-1.6 1.6-.9-.9 1.6-1.6z"/></svg></button><label class="mp-volume"><span class="sr-only" data-i18n="player.volume">Volume</span><input id="mp-volume" type="range" min="0" max="1" step="0.05" value="1"></label><a id="mp-link" class="mp-link" href="#player" data-i18n="music.playerHeading">Player</a></div><p id="mp-status" class="sr-only" role="status" aria-live="polite"></p></div></div><script src="../js/strings.js"></script><script src="../js/i18n.js"></script><script src="../js/site.js"></script><script src="../js/music-data.js"></script><script src="../js/player.js"></script><script src="../js/music-page.js"></script></body></html>

@@ -31,6 +31,8 @@ import test_music_preview_frontend
 REPO = HERE.parent.parent
 MUSIC_HTML = REPO / "music" / "index.html"
 PUBLIC_JS = REPO / "js" / "music-data.js"
+PLAYER_JS = REPO / "js" / "player.js"
+MUSIC_PAGE_JS = REPO / "js" / "music-page.js"
 _REAL_PATH_IS_FILE = Path.is_file
 ARTWORK_DIR = REPO / "assets" / "images"
 PREVIEW_DIR = REPO / previews.OUTPUT_DIR
@@ -123,30 +125,31 @@ def _check():
 
     try:
         html = MUSIC_HTML.read_text(encoding="utf-8")
+        engine = PLAYER_JS.read_text(encoding="utf-8")
+        page = MUSIC_PAGE_JS.read_text(encoding="utf-8")
     except OSError as exc:
-        errors.append(f"cannot read music/index.html: {exc}")
-        html = ""
-    script_tag = re.search(
-        r"<script\s+[^>]*src=[\"']\.\./js/music-data\.js[\"'][^>]*></script>",
-        html,
-        re.IGNORECASE,
-    )
-    if not script_tag:
-        errors.append("music/index.html does not load ../js/music-data.js")
-    elif html.find("MUSIC_DATA", script_tag.end()) < 0:
-        errors.append("music/index.html does not consume MUSIC_DATA after loading it")
-    # One shared player element (exclusive playback) that only ever loads a validated preview.
-    if re.findall(r"<audio\b[^>]*>", html) != ['<audio id="player-audio" preload="none">'] \
-            or "audio.src=previewUrl(x.preview)" not in html:
-        errors.append("music/index.html must have exactly one <audio id=\"player-audio\" "
-                      "preload=\"none\"> whose source is only previewUrl(x.preview)")
-    if "'../assets/audio/previews/'+encodeURIComponent(name)" not in html or re.search(r"(?i)autoplay", html):
-        errors.append("music/index.html does not confine preview URLs to assets/audio/previews/")
-    consumed_fields = set(re.findall(r"\bx\.([A-Za-z_$][\w$]*)", html))
+        errors.append(f"cannot read the /music/ frontend: {exc}")
+        html = engine = page = ""
+    # /music/ loads the public data, then the global engine, then the page view, in that order.
+    scripts = re.findall(r"<script\s+[^>]*src=[\"']([^\"']+)[\"'][^>]*></script>", html, re.IGNORECASE)
+    if scripts[-3:] != ["../js/music-data.js", "../js/player.js", "../js/music-page.js"]:
+        errors.append("music/index.html must load ../js/music-data.js, ../js/player.js and ../js/music-page.js last, in that order")
+    if "window.MUSIC_DATA" not in engine:
+        errors.append("js/player.js does not consume MUSIC_DATA")
+    # One engine-owned player element (exclusive playback) that only ever loads a validated preview.
+    pages = [html] + [(REPO / rel).read_text(encoding="utf-8") for rel in ("index.html", "cv.html") if (REPO / rel).is_file()]
+    if any(re.search(r"<audio\b", markup) for markup in pages) or engine.count("createElement('audio')") != 1 \
+            or "audio.src=previewUrl(tracks[i].preview)" not in engine or re.search(r"createElement\(|new Audio\b|\.play\(", page):
+        errors.append("the global engine in js/player.js must own the only <audio> element, whose source "
+                      "is only previewUrl(tracks[i].preview); pages must not declare their own")
+    if "new URL('assets/audio/previews/'+encodeURIComponent(name),root)" not in engine \
+            or any(re.search(r"(?i)\bautoplay\b", markup) for markup in pages + [engine]):
+        errors.append("js/player.js does not confine preview URLs to assets/audio/previews/")
+    consumed_fields = set(re.findall(r"\bx\.([A-Za-z_$][\w$]*)", engine + page))
     expected_fields = set(generator.PUBLIC_FIELDS)
     if consumed_fields != expected_fields:
         errors.append(
-            "music/index.html field contract differs: "
+            "/music/ frontend field contract differs: "
             f"expected {sorted(expected_fields)}, found {sorted(consumed_fields)}"
         )
 
