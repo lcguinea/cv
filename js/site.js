@@ -4,6 +4,9 @@
   if(base)window.setLanguage=function(next){
     base(next);
     document.querySelectorAll('[data-i18n-label]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.i18nLabel)));
+    // Articles published in both languages point to the version in the page language.
+    const es=window.currentLanguage==='es';
+    document.querySelectorAll('a[data-href-en][data-href-es]').forEach(a=>{a.setAttribute('href',es?a.dataset.hrefEs:a.dataset.hrefEn);a.setAttribute('hreflang',es?'es':'en')});
     document.dispatchEvent(new CustomEvent('lg:language'));
   };
 })();

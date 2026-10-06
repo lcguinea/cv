@@ -15,12 +15,22 @@
   // Composer is the public facet of a songwriting credit; the other facets match credits directly.
   function matchesRole(x,value){if(!value)return true;const credit=value==='Composer'?'Songwriter':value;return x.role===value||x.roles.includes(credit)}
   function matches(x,q){return !q||norm([x.title,x.artist,x.year,x.releaseType,x.role,x.roles.join(' '),x.roles.map(r=>t(roleKey(r))).join(' ')].join(' ')).includes(q)}
+  // Streaming destinations certified in the public data; a platform without a URL gets no link.
+  const PLATFORMS=[['spotify','Spotify'],['appleMusic','Apple Music']];
+  function platformLinks(x){
+    const urls={spotify:x.spotify,appleMusic:x.appleMusic};
+    return PLATFORMS.filter(([key])=>urls[key]).map(([key,name])=>{
+      const url=urls[key];
+      const label=t('music.platformLink').replace('{title}',x.title).replace('{artist}',x.artist).replace('{platform}',name)+t('ui.newTab');
+      return `<li><a class="platform-link" href="${esc(url)}" target="_blank" rel="noopener" data-platform="${key}" aria-label="${esc(label)}">${name}<span aria-hidden="true"> ↗</span></a></li>`;
+    }).join('');
+  }
   function renderList(){
     const q=norm(search.value);
     visible=tracks.map((x,i)=>i).filter(i=>matchesRole(tracks[i],role.value)&&matches(tracks[i],q));
     count.textContent=visible.length;
     empty.hidden=visible.length>0;
-    catalog.innerHTML=visible.map(i=>{const x=tracks[i];return `<li><button type="button" class="pl-row" data-index="${i}" aria-current="false"><span class="pl-num">${pad(i+1)}</span><img class="pl-thumb" src="${P.artworkUrl(x.artwork)}" alt="" loading="lazy" width="56" height="56"><span class="pl-main"><span class="pl-title">${esc(x.title)}</span><span class="pl-artist">${esc(x.artist)}</span></span><span class="pl-roles">${x.roles.map(r=>`<span data-i18n="${roleKey(r)}">${esc(t(roleKey(r)))}</span>`).join(' · ')}</span><span class="pl-year">${x.year}</span><span class="pl-state"></span></button></li>`}).join('');
+    catalog.innerHTML=visible.map(i=>{const x=tracks[i];return `<li><button type="button" class="pl-row" data-index="${i}" aria-current="false"><span class="pl-num">${pad(i+1)}</span><img class="pl-thumb" src="${P.artworkUrl(x.artwork)}" alt="" loading="lazy" width="56" height="56"><span class="pl-main"><span class="pl-title">${esc(x.title)}</span><span class="pl-artist">${esc(x.artist)}</span></span><span class="pl-roles">${x.roles.map(r=>`<span data-i18n="${roleKey(r)}">${esc(t(roleKey(r)))}</span>`).join(' · ')}</span><span class="pl-year">${x.year}</span><span class="pl-state"></span></button>${(x.spotify||x.appleMusic)?`<ul class="pl-links">${platformLinks(x)}</ul>`:''}</li>`}).join('');
     updateRows();
   }
   function updateRows(){
@@ -49,6 +59,8 @@
     $('np-type').textContent=t(typeKey(x.releaseType));
     seek.setAttribute('aria-valuetext',clock(P.time())+' '+t('music.of')+' '+clock(P.duration()));
     $('np-roles').innerHTML=x.roles.map(r=>`<li data-i18n="${roleKey(r)}">${esc(t(roleKey(r)))}</li>`).join('');
+    $('np-links').innerHTML=platformLinks(x);
+    $('np-links-field').hidden=!(x.spotify||x.appleMusic);
     if(P.failed())statusLine.textContent=t('music.loadError');
   }
   function updatePlayer(){
@@ -86,7 +98,7 @@
   });
   search.addEventListener('input',renderList);role.addEventListener('change',renderList);
   P.on(type=>{if(type==='track')renderTrack();else if(type==='time')updateTime();else updatePlayer()});
-  document.addEventListener('lg:language',updatePlayer);
+  document.addEventListener('lg:language',()=>{renderList();updatePlayer()});
   $('total').textContent=tracks.length;
   renderList();renderTrack();
 })();

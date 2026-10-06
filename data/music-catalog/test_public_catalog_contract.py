@@ -6,7 +6,8 @@ in a browser-playable format (MPEG-1/2 Layer III, .mp3) and lasting 45 seconds o
 duration when the row has one, otherwise the real duration read from the MP3 frames). No public
 path may point to One Page Luis Guinea, to the private audio folder or to a master. Songs left out
 must be recorded in public_catalog_exclusions.json, and .gitignore must keep the private folder and
-every non-preview audio out of Git.
+every non-preview audio out of Git. `spotify` and `appleMusic` are optional: null, or an https URL of
+a Spotify track or an Apple Music album/song page; no other field may be published.
 
 Run: python3 data/music-catalog/test_public_catalog_contract.py   ->   PUBLIC_CATALOG_CONTRACT_OK
 """
@@ -31,7 +32,12 @@ GITIGNORE = REPO / ".gitignore"
 MAX_PREVIEW_S = 45.0
 PREVIEW_NAME = re.compile(r"^[a-z0-9][a-z0-9-]*\.mp3$")
 FORBIDDEN = re.compile(r"one page luis guinea|one%20page|audios/|master|\.\./|^/|\\", re.I)
-FIELDS = ("title", "artist", "role", "artwork", "releaseType", "year", "roles", "preview")
+FIELDS = ("title", "artist", "role", "artwork", "releaseType", "year", "roles", "preview",
+          "spotify", "appleMusic")
+PLATFORM_URLS = {
+    "spotify": re.compile(r"^https://open\.spotify\.com/track/[A-Za-z0-9]{22}$"),
+    "appleMusic": re.compile(r"^https://music\.apple\.com/[a-z]{2}/(?:album|song)/[A-Za-z0-9%._~/?=&-]+$"),
+}
 
 failures = []
 
@@ -211,6 +217,13 @@ def check_rows(text, rows):
         missing = [field for field in FIELDS if field not in row]
         if missing:
             fail(f"{label}: missing public fields {missing}")
+        extra = sorted(set(row) - set(FIELDS))
+        if extra:
+            fail(f"{label}: unexpected public fields {extra}")
+        for field, pattern in PLATFORM_URLS.items():
+            url = row.get(field)
+            if url is not None and not (isinstance(url, str) and pattern.match(url)):
+                fail(f"{label}: {field} is neither null nor a valid platform URL: {url!r}")
         preview = row.get("preview")
         if not isinstance(preview, str) or not PREVIEW_NAME.match(preview):
             fail(f"{label}: published without a valid preview file name: {preview!r}")

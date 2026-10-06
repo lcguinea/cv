@@ -95,3 +95,14 @@ html.js body{padding-bottom:4.5rem}
 .mp-btn:focus-visible,.mp-volume input:focus-visible,.mp-link:focus-visible,.menu-toggle:focus-visible,.tools button:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
 @media(max-width:700px){.mp-inner{gap:.6rem;min-height:60px}.mp-art{width:40px;height:40px}.mp-controls{gap:0}.mp-volume{display:none}.mp-link{padding:0 .25rem}}
 @media print{.mini-player{display:none}html.js body{padding-bottom:0}}
+
+/* External links: certified entities and streaming platforms open in a new tab */
+.entity-link{text-decoration-thickness:1px;text-decoration-color:color-mix(in srgb,currentColor 45%,transparent)}
+.entity-link:hover,.platform-link:hover{color:var(--accent);text-decoration-color:var(--accent)}
+.np-links ul{gap:.35rem 1.5rem}
+.platform-link{display:inline-flex;align-items:center;gap:.35em;min-height:44px;font:.72rem var(--mono);text-transform:uppercase;letter-spacing:.06em}
+.playlist li{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center}
+.pl-links{display:flex;gap:1rem;list-style:none;margin:0;padding:0 .5rem 0 1rem}
+.pl-links .platform-link{color:var(--muted)}
+.np-links[hidden]{display:none}
+@media(max-width:700px){.playlist li{grid-template-columns:1fr}.pl-links{padding:0 .25rem .35rem 5.5rem;margin-top:-.6rem}}

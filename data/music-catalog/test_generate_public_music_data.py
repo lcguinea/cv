@@ -72,7 +72,8 @@ class PublicMusicDataTests(unittest.TestCase):
         self.assertEqual(len(self.project_all()), 21)
         self.assertEqual(
             set(rows[0]),
-            {"title", "artist", "role", "artwork", "releaseType", "year", "roles", "preview"},
+            {"title", "artist", "role", "artwork", "releaseType", "year", "roles", "preview",
+             "spotify", "appleMusic"},
         )
         hasta = next(row for row in rows if row["title"] == "Hasta Que Lleguemos Al Mar")
         self.assertEqual(
@@ -86,6 +87,9 @@ class PublicMusicDataTests(unittest.TestCase):
                 "year": 2024,
                 "roles": ["Artist"],
                 "preview": "hasta-que-lleguemos-al-mar--luis-guinea--2024.mp3",
+                "spotify": "https://open.spotify.com/track/0kfbpBjVoJ9hrNbS8S4CzM",
+                "appleMusic": "https://music.apple.com/mx/album/hasta-que-lleguemos-al-mar-feat-"
+                              "tony-barhoum/1753986775?i=1753986777&uo=4",
             },
         )
         # Blue Moon (the only Composer facet) has no authorized preview, so it is excluded.
@@ -188,8 +192,10 @@ class PublicMusicDataTests(unittest.TestCase):
             "audio_ref",
             "One Page Luis Guinea",
             "Master.wav",
-            "spotify",
             "apple_music",
+            "track_id",
+            "collection_id",
+            "storefront",
             "isrc",
             "provenance",
             "conflict",
@@ -198,6 +204,8 @@ class PublicMusicDataTests(unittest.TestCase):
             "recording_engineer",
         ):
             self.assertNotIn(forbidden, javascript)
+        # Spotify appears only as the public field and its track URLs.
+        self.assertEqual(javascript.count("spotify"), 2 * len(rows))
         # `preview` contains the substring "review"; review ids/keys must still be absent.
         self.assertNotRegex(javascript, r"\breview")
 
@@ -311,6 +319,67 @@ class PublicMusicDataTests(unittest.TestCase):
             generator.serialize([row])
         with self.assertRaisesRegex(ValueError, "preview is required"):
             generator.serialize([dict(self.project()[0], preview=None)])
+
+    CERTIFIED_APPLE = {
+        "12 Meses": "https://music.apple.com/us/album/12-meses/1650041672?i=1650041673",
+        "La Bamba": "https://music.apple.com/us/album/la-bamba/1754643674?i=1754643675",
+        "Imagina": "https://music.apple.com/us/album/imagina/1778357807?i=1778357960",
+        "Abrazo Imaginario": "https://music.apple.com/mx/album/abrazo-imaginario-single/1846996818",
+    }
+    WITHOUT_APPLE = {"Allá", "Anoche Me Enamoré", "Eres Veneno"}
+
+    def test_streaming_links_come_from_the_catalogue_or_the_certified_additions_only(self):
+        rows = self.project()
+        works = {(row["title"], row["artist"]): row for row in rows}
+        for row in rows:
+            with self.subTest(title=row["title"], artist=row["artist"]):
+                work = next(w for w in self.master if w["title"] == row["title"]
+                            and ", ".join(w["artists"]) == row["artist"])
+                self.assertEqual(row["spotify"], work["spotify"]["url"])
+                registered = work["apple_music"]["url"]
+                expected = registered or self.CERTIFIED_APPLE.get(row["title"])
+                self.assertEqual(row["appleMusic"], expected)
+        self.assertTrue(all(row["spotify"] for row in rows))
+        self.assertEqual(sum(1 for row in rows if row["appleMusic"]), 12)
+        missing = {(row["title"], row["artist"]) for row in rows if row["appleMusic"] is None}
+        self.assertEqual(missing, {(t, "Rogelio Edel") for t in self.WITHOUT_APPLE}
+                         | {("Volver a Verte", "Luis Guinea")})
+        # Cómo Decirte keeps its registered URL (track 1646476110, the certified one's track).
+        self.assertIn("i=1646476110", works[("Cómo Decirte", "Luis Guinea, Pablo Delgado")]["appleMusic"])
+
+    def test_certified_links_never_replace_a_registered_url_and_are_validated(self):
+        links = json.loads(generator.PLATFORM_LINKS.read_text(encoding="utf-8"))
+        conflict = json.loads(json.dumps(links))
+        conflict["apple_music"].append({"work_id": "hace-tanto-tiempo--luis-guinea--2021",
+                                        "url": "https://music.apple.com/us/album/x/1?i=2"})
+        with self.assertRaisesRegex(ValueError, "already has a registered Apple Music URL"):
+            generator.project(self.master, self.selection, self.decisions, repo=REPO, links=conflict)
+        unknown = json.loads(json.dumps(links))
+        unknown["apple_music"].append({"work_id": "not-a-work", "url": "https://music.apple.com/us/song/1"})
+        with self.assertRaisesRegex(ValueError, "unknown works"):
+            generator.project(self.master, self.selection, self.decisions, repo=REPO, links=unknown)
+        for bad in ("http://music.apple.com/us/song/1", "https://evil.example/us/song/1",
+                    "https://music.apple.com/us/song/1'><script>", "javascript:alert(1)"):
+            broken = {"schema": links["schema"], "apple_music": [
+                {"work_id": "alla--rogelio-edel--2022", "url": bad}]}
+            with self.subTest(url=bad), self.assertRaisesRegex(ValueError, "not a valid public URL"):
+                generator.project(self.master, self.selection, self.decisions, repo=REPO, links=broken)
+        master = json.loads(json.dumps(self.master))
+        next(w for w in master if w["id"] == "alla--rogelio-edel--2022")["spotify"]["url"] = "https://x.example/t"
+        with self.assertRaisesRegex(ValueError, "Spotify is not a valid public URL"):
+            generator.project(master, self.selection, self.decisions, repo=REPO)
+
+    def test_absent_platforms_serialize_as_null_and_bad_urls_are_refused(self):
+        rows = self.project()
+        javascript = generator.serialize(rows)
+        self.assertEqual(javascript.count("appleMusic:null"), 4)
+        self.assertEqual(javascript.count("spotify:null"), 0)
+        no_links = dict(rows[0], spotify=None, appleMusic=None)
+        self.assertIn("spotify:null, appleMusic:null", generator.serialize([no_links]))
+        with self.assertRaisesRegex(ValueError, "ten-field public schema"):
+            generator.serialize([dict(rows[0], spotify="https://open.spotify.com/track/short")])
+        with self.assertRaisesRegex(ValueError, "ten-field public schema"):
+            generator.serialize([{k: v for k, v in rows[0].items() if k != "appleMusic"}])
 
     def test_checked_in_output_is_current_and_generation_is_deterministic(self):
         expected = generator.serialize(self.project())

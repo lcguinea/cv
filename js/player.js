@@ -94,6 +94,8 @@
   ['timeupdate','durationchange','loadedmetadata','emptied'].forEach(type=>audio.addEventListener(type,()=>{if(type==='timeupdate'&&Date.now()-lastSave>1000)save();emit('time')}));
   audio.addEventListener('error',()=>{if(audio.getAttribute('src')){failed=true;emit('state')}});
   window.addEventListener('pagehide',save);
+  // Opening a streaming platform (it plays the full track in another tab) pauses the preview.
+  ['click','auxclick'].forEach(type=>document.addEventListener(type,event=>{if(event.target&&event.target.closest&&event.target.closest('a[data-platform]'))audio.pause()},true));
   // Any other media element that starts on this page pauses the engine.
   document.addEventListener('play',event=>{if(event.target!==audio)audio.pause()},true);
   // Other tabs: whichever starts playing last is the only one that sounds.

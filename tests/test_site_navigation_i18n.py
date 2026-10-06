@@ -157,7 +157,7 @@ class HomeContentTests(unittest.TestCase):
         title = re.search(r"### 4\.5 (.+)", section).group(1).strip()
         url = re.search(r"- URL: (\S+)", section).group(1)
         html = read("index.html")
-        self.assertIn(f'<h3 lang="es">{title}</h3>', html)
+        self.assertIn(f'<h3 id="a5-title" lang="es">{title}</h3>', html)
         self.assertIn(f'href="{url}"', html)
         self.assertEqual(len(re.findall(r'href="https://medium\.com/@soyluisguinea/[^"]+"', html)), 5)
 

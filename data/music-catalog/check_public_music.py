@@ -182,6 +182,15 @@ def _check():
         lambda m: "preview:''" if m.group(1) in preview_names else m.group(0),
         actual_js,
     )
+    # The optional streaming fields are the only place a platform URL may appear, and only when
+    # it passes the generator's validation; anything else still trips the rules below.
+    def _valid_platforms(match):
+        spotify, apple = match.group(1), match.group(2)
+        ok = (spotify is None or generator.SPOTIFY_URL_RE.match(spotify)) and \
+             (apple is None or generator.APPLE_MUSIC_URL_RE.match(apple))
+        return "" if ok else match.group(0)
+    scanned_js = re.sub(r", spotify:(?:'([^']*)'|null), appleMusic:(?:'([^']*)'|null)",
+                        _valid_platforms, scanned_js)
     for label, pattern in forbidden.items():
         if re.search(pattern, scanned_js):
             errors.append(f"public JavaScript contains forbidden {label}")

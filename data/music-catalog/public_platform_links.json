@@ -1,0 +1,10 @@
+{
+  "schema": "public-platform-links-v1",
+  "description": "Apple Music destinations certified by Luis Guinea on 2026-10-06 for public works whose catalogue entry has no Apple Music URL. Each one was checked against the Apple Music page title and artist. The registered catalogue URLs take precedence and are never replaced; Cómo Decirte already has one registered (track 1646476110, the same track as the certified https://music.apple.com/es/song/1646476110), so it is not listed. Works without a certified URL publish no Apple Music link.",
+  "apple_music": [
+    {"work_id": "12-meses--rogelio-edel--2022", "url": "https://music.apple.com/us/album/12-meses/1650041672?i=1650041673"},
+    {"work_id": "la-bamba--rogelio-edel--2022", "url": "https://music.apple.com/us/album/la-bamba/1754643674?i=1754643675"},
+    {"work_id": "imagina--rogelio-edel--2024", "url": "https://music.apple.com/us/album/imagina/1778357807?i=1778357960"},
+    {"work_id": "abrazo-imaginario--ricardo-bojalil--2022", "url": "https://music.apple.com/mx/album/abrazo-imaginario-single/1846996818"}
+  ]
+}

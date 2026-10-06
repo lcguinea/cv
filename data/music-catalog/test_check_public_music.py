@@ -238,7 +238,9 @@ class CleanCheckoutReproducibilityTest(unittest.TestCase):
         self.assertIn(
             "{ title:'Hace Tanto Tiempo', artist:'Luis Guinea', role:'Artist', "
             "artwork:'Hace-Tanto-Tiempo---Luis-Guinea.webp', releaseType:'Single', year:2021, "
-            "roles:['Artist'], preview:'hace-tanto-tiempo--luis-guinea--2021.mp3' }",
+            "roles:['Artist'], preview:'hace-tanto-tiempo--luis-guinea--2021.mp3', "
+            "spotify:'https://open.spotify.com/track/6skD4aWsvYoBoRpxmYkA4G', "
+            "appleMusic:'https://music.apple.com/mx/album/hace-tanto-tiempo/1590243054?i=1590243065&uo=4' }",
             generated,
         )
 
