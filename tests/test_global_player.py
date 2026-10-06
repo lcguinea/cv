@@ -292,12 +292,15 @@ class GlobalPlayerTests(unittest.TestCase):
     def test_bar_labels_follow_the_language(self):
         out = self.run_scenario(
             "const page = browser.tab().open('index.html'); await settle(); page.click('[data-lang=\"es\"]'); await settle();"
+            "out.idle = state(page); page.click('#mp-toggle'); await settle();"
             "out.es = state(page); out.region = page.$('#mini-player').getAttribute('aria-label');"
             "out.next = page.$('#mp-next').getAttribute('aria-label'); out.mute = page.$('#mp-mute').getAttribute('aria-label');"
             "out.link = page.$('#mp-link').textContent; out.status = page.$('#mp-status').textContent;"
             "page.click('#mp-toggle'); await settle(); out.paused = state(page).bar.toggle;"
         )
-        # The language button is the first click outside the player, so it also starts the preview.
+        # The language button is a utility control: it does not start the preview.
+        self.assertFalse(out["idle"]["playing"])
+        self.assertEqual(out["idle"]["bar"]["toggle"], "Reproducir fragmento: " + out["idle"]["title"])
         self.assertEqual(out["es"]["bar"]["toggle"], "Pausar fragmento: " + out["es"]["title"])
         self.assertEqual(out["paused"], "Reproducir fragmento: " + out["es"]["title"])
         self.assertEqual((out["region"], out["next"], out["mute"], out["link"]),
@@ -349,6 +352,44 @@ class GlobalPlayerTests(unittest.TestCase):
         self.assertTrue(out["after"]["playing"])
         self.assertEqual(out["after"]["index"], out["next"]["index"])
 
+    def test_skip_links_language_theme_and_menu_do_not_trigger_the_autostart(self):
+        utility = ['.skip-link', '.skip-player', '[data-lang="es"]', '[data-lang="en"]',
+                   '[data-theme-choice="dark"]', '[data-theme-choice="light"]', '.menu-toggle']
+        out = self.run_scenario(
+            "for (const rel of ['index.html', 'cv.html']) { const page = browser.tab().open(rel); await settle();"
+            "  for (const sel of %s) { page.click(sel); await settle(); }"
+            "  const idle = state(page); page.click('h1'); await settle(); const go = state(page);"
+            "  page.click('h1'); await settle();"
+            "  out[rel] = {idle, go, plays: state(page).log.filter(e => e.startsWith('play:')).length}; }"
+            % json.dumps(utility)
+        )
+        for rel in ("index.html", "cv.html"):
+            with self.subTest(page=rel):
+                self.assertFalse(out[rel]["idle"]["playing"])
+                self.assertEqual([e for e in out[rel]["idle"]["log"] if e.startswith("play:")], [])
+                self.assertTrue(out[rel]["idle"]["session"]["auto"], "the autostart stays armed")
+                # The first eligible click still starts exactly one preview.
+                self.assertTrue(out[rel]["go"]["playing"])
+                self.assertEqual(out[rel]["plays"], 1)
+
+    def test_skip_to_player_focuses_the_play_button_on_home_and_cv(self):
+        out = self.run_scenario(
+            "for (const rel of ['index.html', 'cv.html']) { const page = browser.tab().open(rel, {autoplayBlocked: false}); await settle();"
+            "  const links = page.$$('.skip-link'); page.click('.skip-player'); await settle();"
+            "  const s = state(page); page.click(page.document.activeElement); await settle();"
+            "  out[rel] = {hrefs: links.map(a => a.getAttribute('href')), focused: page.document.activeElement.id,"
+            "    label: page.$('.skip-player').textContent, playing: s.playing, paused: !state(page).playing}; }"
+        )
+        self.assertEqual(out["index.html"]["hrefs"], ["#content", "#mini-player"])
+        self.assertEqual(out["cv.html"]["hrefs"], ["#cv-content", "#mini-player"])
+        for rel in ("index.html", "cv.html"):
+            with self.subTest(page=rel):
+                self.assertEqual(out[rel]["focused"], "mp-toggle")
+                self.assertEqual(out[rel]["label"], "Skip to music player")
+                # Autoplay was allowed, the skip link does not stop it, and the focused button pauses it.
+                self.assertTrue(out[rel]["playing"])
+                self.assertTrue(out[rel]["paused"])
+
     def test_the_autostart_stays_armed_across_pages_until_a_preview_plays(self):
         out = self.run_scenario(
             "const tab = browser.tab(); const home = tab.open('index.html'); await settle();"
@@ -380,6 +421,15 @@ class GlobalPlayerStaticTests(unittest.TestCase):
         css = (ROOT / "css" / "styles.css").read_text(encoding="utf-8")
         self.assertIn(".mp-btn{display:inline-grid;place-items:center;width:44px;height:44px;", css)
         self.assertIn("@media print{.mini-player{display:none}html.js body{padding-bottom:0}}", css)
+        # A focused skip link sits above the sticky header (z-index 30) and the bottom bar (25), so it is not hidden.
+        self.assertIn(".skip-link:focus{left:1rem;top:1rem;background:var(--bg);padding:.6rem;z-index:40}", css)
+        self.assertIn("html:not(.js) .skip-player{display:none}", css)
+        for rel, first in (("index.html", "#content"), ("cv.html", "#cv-content")):
+            html = (ROOT / rel).read_text(encoding="utf-8")
+            with self.subTest(page=rel):
+                links = re.findall(r'<a class="skip-link[^"]*" href="([^"]+)" data-i18n="([^"]+)"', html)
+                self.assertEqual(links, [(first, "ui.skip"), ("#mini-player", "ui.skipPlayer")])
+                self.assertLess(html.index('skip-player'), html.index("<header"))
 
 
 if __name__ == "__main__":

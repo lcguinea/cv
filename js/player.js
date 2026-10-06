@@ -93,9 +93,11 @@
     if(pendingTime>0){const at=Math.min(pendingTime,Math.max(0,audio.duration-.25));pendingTime=0;try{audio.currentTime=at}catch(e){}}
     knownDuration=duration();
   });
-  // Autostart: armed for a new session until the first preview plays. Clicks on the player itself are left to its controls.
-  const GESTURES=['click','touchend'],PLAYER_UI='#mini-player,#player,#catalog';
-  function onGesture(event){if(event.target&&event.target.closest&&event.target.closest(PLAYER_UI))return;if(!isPlaying())start()}
+  // Autostart: armed for a new session until the first preview plays. Clicks on the player itself are left to its controls,
+  // and utility controls (skip links, language, theme, menu) never start sound: they are often the first thing a keyboard or
+  // screen reader user activates.
+  const GESTURES=['click','touchend'],NO_AUTOSTART='#mini-player,#player,#catalog,.skip-link,[data-lang],[data-theme-choice],.menu-toggle';
+  function onGesture(event){if(event.target&&event.target.closest&&event.target.closest(NO_AUTOSTART))return;if(!isPlaying())start()}
   function armAutostart(){
     if(!autostart){autostart=true;GESTURES.forEach(type=>document.addEventListener(type,onGesture,true))}
     audio.preload='auto';start();
@@ -199,6 +201,8 @@
   }
   function tick(){const d=P.duration();progress.style.width=(d?Math.min(100,P.time()/d*100):0)+'%'}
   toggle.addEventListener('click',()=>P.toggle());
+  // "Skip to music player" lands on the play/pause button, so the audio can be paused in a couple of key presses.
+  document.querySelectorAll('a[href="#mini-player"]').forEach(a=>a.addEventListener('click',event=>{event.preventDefault();toggle.focus()}));
   $('mp-next').addEventListener('click',()=>P.next());
   mute.addEventListener('click',()=>P.setMuted(!P.muted()));
   volume.addEventListener('input',()=>P.setVolume(volume.value));
