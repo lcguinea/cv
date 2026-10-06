@@ -105,12 +105,16 @@ def _check():
         selection = json.loads(generator.SELECTION.read_text(encoding="utf-8"))
         decisions = json.loads(generator.DECISIONS.read_text(encoding="utf-8"))
         manifest = json.loads(generator.PREVIEW_MANIFEST.read_text(encoding="utf-8"))
-        rows = generator.project(master, selection, decisions, repo=REPO, manifest=manifest)
+        rows, exclusions = generator.project_with_exclusions(
+            master, selection, decisions, repo=REPO, manifest=manifest)
         expected_js = generator.serialize(rows)
         actual_js = PUBLIC_JS.read_text(encoding="utf-8")
+        expected_log = generator.exclusions_log(rows, exclusions, selection)
+        if json.loads(generator.EXCLUSIONS_LOG.read_text(encoding="utf-8")) != expected_log:
+            errors.append(f"{generator.EXCLUSIONS_LOG.name} is not identical to the current generator output")
     except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as exc:
         errors.append(f"cannot build the public projection: {exc}")
-        rows, decisions, selection, expected_js, actual_js = [], {}, {}, "", ""
+        rows, exclusions, decisions, selection, expected_js, actual_js = [], [], {}, {}, "", ""
         manifest = None
     preview_names = _check_previews(manifest, selection, decisions, errors, warnings)
 
@@ -131,15 +135,11 @@ def _check():
         errors.append("music/index.html does not load ../js/music-data.js")
     elif html.find("MUSIC_DATA", script_tag.end()) < 0:
         errors.append("music/index.html does not consume MUSIC_DATA after loading it")
-    if not re.search(
-        r"x\.preview&&previewUrl\(x\.preview\)\?`<audio\b[^>]*\bcontrols preload=\"none\" "
-        r"src=\"\$\{previewUrl\(x\.preview\)\}\"[^>]*></audio>`:"
-        r"`<span class=\"preview-status\"><i></i><span data-i18n=\"music\.noPreview\">"
-        r"\$\{t\('music\.noPreview'\)\}</span></span>`",
-        html,
-    ):
-        errors.append("music/index.html does not render <audio controls preload=\"none\"> only "
-                      "for x.preview with the music.noPreview fallback bound to data-i18n")
+    # One shared player element (exclusive playback) that only ever loads a validated preview.
+    if re.findall(r"<audio\b[^>]*>", html) != ['<audio id="player-audio" preload="none">'] \
+            or "audio.src=previewUrl(x.preview)" not in html:
+        errors.append("music/index.html must have exactly one <audio id=\"player-audio\" "
+                      "preload=\"none\"> whose source is only previewUrl(x.preview)")
     if "'../assets/audio/previews/'+encodeURIComponent(name)" not in html or re.search(r"(?i)autoplay", html):
         errors.append("music/index.html does not confine preview URLs to assets/audio/previews/")
     consumed_fields = set(re.findall(r"\bx\.([A-Za-z_$][\w$]*)", html))
@@ -159,7 +159,9 @@ def _check():
         if Path(artwork).name != artwork or not (REPO / "assets" / "images" / artwork).is_file():
             errors.append(f"public row {index} has a missing or unsafe artwork: {artwork!r}")
         preview = row.get("preview")
-        if preview is not None and preview not in preview_names:
+        if preview is None:
+            errors.append(f"public row {index} is published without a preview")
+        elif preview not in preview_names:
             errors.append(f"public row {index} publishes an unvalidated preview: {preview!r}")
 
     forbidden = {
@@ -216,7 +218,7 @@ def _check():
         f"{len(rows)} public works; {len(classifications)} classifications; "
         f"{len(mapped)} mappings; {len(open_cases)} open cases; "
         f"{len(preview_names)} validated previews (<= {previews.MAX_PREVIEW_S:.0f} s), "
-        f"{len(rows) - len(preview_names)} without preview"
+        f"{len(exclusions)} selected works excluded without a reproducible preview"
     )
     return 0
 
@@ -228,8 +230,8 @@ def _check_previews(manifest, selection, decisions, errors, warnings):
     except (ValueError, TypeError, AttributeError) as exc:
         errors.append(f"invalid preview manifest: {exc}")
         return set()
-    if len(entries) != 13:
-        errors.append(f"preview manifest has {len(entries)} entries, expected 13")
+    if len(entries) != 21:
+        errors.append(f"preview manifest has {len(entries)} entries, expected 21")
     verified = [entry for entry in entries if entry["status"] == "verified"]
     expected = {PurePosixPath(entry["preview"]).name for entry in verified}
 
@@ -256,6 +258,9 @@ def _check_previews(manifest, selection, decisions, errors, warnings):
                 errors.append(f"{label}: {exc}")
                 continue
             preview_sha = previews.sha256_file(output)
+            if preview_sha != entry["preview_sha256"]:
+                errors.append(f"{label}: preview sha256 differs from the manifest")
+                continue
             if preview_sha == entry["source_sha256"]:
                 errors.append(f"{label}: the preview is a copy of the private master")
                 continue
@@ -265,7 +270,7 @@ def _check_previews(manifest, selection, decisions, errors, warnings):
                     if previews.sha256_file(source) != entry["source_sha256"]:
                         raise ValueError("source sha256 differs from the manifest")
                     rebuilt = Path(tmp) / output.name
-                    previews.encode(source, rebuilt)
+                    previews.encode(source, rebuilt, entry)
                     if previews.sha256_file(rebuilt) != preview_sha:
                         raise ValueError("preview bytes differ from a fresh deterministic encode "
                                          "of the authorized source")

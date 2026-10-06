@@ -1,12 +1,138 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Luis Guinea music catalogue, production credits and artwork."><link rel="canonical" href="https://luisguinea.com/music/"><title>Music / Audio — Luis Guinea</title><link rel="stylesheet" href="../css/styles.css"></head>
-<body><a class="skip-link" href="#catalog" data-i18n="ui.skip"></a><header class="site-header"><div class="wrap header-inner"><a class="brand" href="../index.html">LUIS GUINEA<span> / MUSIC</span></a><nav class="nav" aria-label="Primary"><a href="../index.html#writing" data-i18n="nav.writing"></a><a href="../index.html#experience" data-i18n="nav.experience"></a><a href="../cv.html" data-i18n="nav.cv"></a><a href="../index.html#contact" data-i18n="nav.contact"></a></nav><div class="tools"><button data-lang="en" aria-pressed="true">EN</button><button data-lang="es" aria-pressed="false">ES</button><button data-theme-choice="dark" data-i18n="ui.dark"></button></div></div></header>
-<main><section class="music-hero wrap"><div><p class="eyebrow" data-i18n="music.label"></p><h1 data-i18n="music.title"></h1><p class="intro" data-i18n="music.intro"></p></div><img src="../assets/images/cover.webp" alt="Music catalogue cover"></section>
-<section class="music-catalog section"><div class="wrap"><div class="catalog-intro"><div class="notice"><strong data-i18n="music.top"></strong><br><span data-i18n="music.topNote"></span></div><p class="catalog-count"><span id="count">0</span> releases / documented catalogue</p></div><div class="music-toolbar"><label class="sr-only" for="search" data-i18n="music.search"></label><input id="search" type="search" data-i18n-placeholder="music.search"><label class="sr-only" for="role">Role</label><select id="role" aria-label="Filter by role"><option value="" data-i18n="music.all"></option><option value="Artist" data-i18n="music.artist"></option><option value="Producer" data-i18n="music.producer"></option><option value="Composer" data-i18n="music.composer"></option></select></div><div id="catalog" class="catalog editorial-catalog" aria-live="polite"></div></div></section></main><footer class="footer"><div class="wrap"><a href="../index.html" data-i18n="music.back"></a></div></footer>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Luis Guinea music catalogue, production credits and artwork."><link rel="canonical" href="https://luisguinea.com/music/"><link rel="icon" href="data:,"><title>Music / Audio — Luis Guinea</title><link rel="stylesheet" href="../css/styles.css"></head>
+<body><a class="skip-link" href="#player" data-i18n="ui.skip"></a><header class="site-header"><div class="wrap header-inner"><a class="brand" href="../index.html">LUIS GUINEA<span> / MUSIC</span></a><nav class="nav" aria-label="Primary" data-i18n-label="ui.primaryNav"><a href="../index.html#writing" data-i18n="nav.writing"></a><a href="../index.html#experience" data-i18n="nav.experience"></a><a href="../cv.html" data-i18n="nav.cv"></a><a href="../index.html#contact" data-i18n="nav.contact"></a></nav><div class="tools"><button data-lang="en" aria-pressed="true">EN</button><button data-lang="es" aria-pressed="false">ES</button><button data-theme-choice="dark" data-i18n="ui.dark"></button></div></div></header>
+<main>
+<section class="music-hero wrap"><div><p class="eyebrow" data-i18n="music.label"></p><h1 data-i18n="music.title"></h1></div><p class="intro" data-i18n="music.intro"></p></section>
+
+<section id="player" class="music-player section" aria-labelledby="player-heading"><div class="wrap">
+<h2 id="player-heading" class="sr-only" data-i18n="music.playerHeading"></h2>
+<article class="now-playing" aria-labelledby="np-title">
+<figure class="np-art"><img id="np-art" src="" alt="" width="640" height="640"></figure>
+<div class="np-info">
+<p class="eyebrow"><span data-i18n="music.nowSelected"></span> · <span id="np-index" class="np-index"></span></p>
+<h3 id="np-title" class="np-title"></h3>
+<p id="np-artist" class="np-artist"></p>
+<p class="np-meta"><span id="np-type"></span> · <span id="np-year"></span></p>
+<div class="np-credits"><p id="np-credits-label" data-i18n="music.creditsLabel"></p><ul id="np-roles" aria-labelledby="np-credits-label"></ul></div>
+<div class="np-controls" role="group" data-i18n-label="music.controls">
+<button id="prev" class="ctl" type="button" data-i18n-label="music.previous"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 2h2v12H3zM14 2v12L6 8z"/></svg></button>
+<button id="toggle" class="ctl ctl-play" type="button" data-state="paused"><svg class="icon-play" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 2l10 6-10 6z"/></svg><svg class="icon-pause" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 2h3.5v12H3zM9.5 2H13v12H9.5z"/></svg></button>
+<button id="next" class="ctl" type="button" data-i18n-label="music.next"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M11 2h2v12h-2zM2 2v12l8-6z"/></svg></button>
+</div>
+<div class="np-progress"><label class="sr-only" for="seek" data-i18n="music.seek"></label><input id="seek" type="range" min="0" max="0" step="0.1" value="0" disabled><p class="np-time" aria-hidden="true"><span id="time-current">0:00</span><span id="time-total">0:00</span></p></div>
+<p id="np-status" class="np-status" role="status" aria-live="polite"></p>
+<audio id="player-audio" preload="none"></audio>
+</div>
+</article>
+</div></section>
+
+<section class="music-catalog section" aria-labelledby="playlist-heading"><div class="wrap">
+<div class="playlist-head"><h2 id="playlist-heading" data-i18n="music.playlist"></h2><p class="catalog-count"><span id="count">0</span> / <span id="total">0</span> <span data-i18n="music.releases"></span></p></div>
+<div class="music-toolbar"><label class="sr-only" for="search" data-i18n="music.search"></label><input id="search" type="search" data-i18n-placeholder="music.search"><label class="sr-only" for="role" data-i18n="music.roleFilter"></label><select id="role"><option value="" data-i18n="music.all"></option><option value="Artist" data-i18n="music.artist"></option><option value="Producer" data-i18n="music.producer"></option><option value="Composer" data-i18n="music.composer"></option></select></div>
+<ol id="catalog" class="playlist" aria-labelledby="playlist-heading"></ol>
+<p id="empty" class="empty-state" data-i18n="music.noResults" hidden></p>
+</div></section>
+</main><footer class="footer"><div class="wrap"><a href="../index.html" data-i18n="music.back"></a></div></footer>
 <script src="../js/strings.js"></script><script src="../js/i18n.js"></script><script src="../js/music-data.js"></script><script src="../js/site.js"></script><script>
-const catalog=document.querySelector('#catalog'),search=document.querySelector('#search'),role=document.querySelector('#role'),count=document.querySelector('#count');
-function norm(value){return String(value||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
+const $=id=>document.getElementById(id);
+const catalog=$('catalog'),search=$('search'),role=$('role'),count=$('count'),empty=$('empty'),audio=$('player-audio'),toggle=$('toggle'),seek=$('seek'),statusLine=$('np-status');
+const tracks=MUSIC_DATA;
+let active=0,visible=[],failed=false;
+function norm(value){return String(value||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')}
+function esc(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function previewUrl(name){return /^[a-z0-9][a-z0-9-]*\.mp3$/.test(String(name||''))?'../assets/audio/previews/'+encodeURIComponent(name):''}
-function render(){const q=norm(search.value);const items=MUSIC_DATA.filter(x=>(!q||norm([x.title,x.artist,x.role,x.roles.join(' '),x.releaseType,x.year].join(' ')).includes(q))&&(!role.value||x.role===role.value));count.textContent=items.length;catalog.innerHTML=items.length?items.map((x,i)=>`<article class="track editorial-track"><div class="track-art"><img loading="lazy" src="../assets/images/${encodeURIComponent(x.artwork)}" alt="Artwork: ${x.title}"><span class="track-number">${String(i+1).padStart(2,'0')}</span></div><div class="track-info"><p class="track-kicker">${x.releaseType} / ${x.year} / ${x.roles.join(', ')}</p><h2 class="track-title">${x.title}</h2><p class="track-artist">${x.artist}</p><div class="track-details"><span>Credit: ${x.roles.join(', ')}</span>${x.preview&&previewUrl(x.preview)?`<audio class="track-preview" controls preload="none" src="${previewUrl(x.preview)}" aria-label="Preview: ${x.title}"></audio>`:`<span class="preview-status"><i></i><span data-i18n="music.noPreview">${t('music.noPreview')}</span></span>`}</div></div></article>`).join(''):`<p class="empty-state">${t('music.noResults')}</p>`}
-search.addEventListener('input',render);role.addEventListener('change',render);document.addEventListener('DOMContentLoaded',render);</script></body></html>
+function artworkUrl(name){return '../assets/images/'+encodeURIComponent(name)}
+function roleKey(name){return 'music.role'+String(name).replace(/[^A-Za-z]/g,'')}
+function typeKey(name){return 'music.type'+String(name).replace(/[^A-Za-z]/g,'')}
+function pad(n){return String(n).padStart(2,'0')}
+function clock(seconds){const s=Math.max(0,Math.floor(Number.isFinite(seconds)?seconds:0));return Math.floor(s/60)+':'+pad(s%60)}
+// Composer is the public facet of a songwriting credit; the other facets match credits directly.
+function matchesRole(x,value){if(!value)return true;const credit=value==='Composer'?'Songwriter':value;return x.role===value||x.roles.includes(credit)}
+function matches(x,q){return !q||norm([x.title,x.artist,x.year,x.releaseType,x.role,x.roles.join(' '),x.roles.map(r=>t(roleKey(r))).join(' ')].join(' ')).includes(q)}
+function isPlaying(){return !audio.paused&&!audio.ended}
+function renderList(){
+  const q=norm(search.value);
+  visible=tracks.map((x,i)=>i).filter(i=>matchesRole(tracks[i],role.value)&&matches(tracks[i],q));
+  count.textContent=visible.length;
+  empty.hidden=visible.length>0;
+  catalog.innerHTML=visible.map(i=>{const x=tracks[i];return `<li><button type="button" class="pl-row" data-index="${i}" aria-current="false"><span class="pl-num">${pad(i+1)}</span><img class="pl-thumb" src="${artworkUrl(x.artwork)}" alt="" loading="lazy" width="56" height="56"><span class="pl-main"><span class="pl-title">${esc(x.title)}</span><span class="pl-artist">${esc(x.artist)}</span></span><span class="pl-roles">${x.roles.map(r=>`<span data-i18n="${roleKey(r)}">${esc(t(roleKey(r)))}</span>`).join(' · ')}</span><span class="pl-year">${x.year}</span><span class="pl-state"></span></button></li>`}).join('');
+  updateRows();
+}
+function updateRows(){
+  const playing=isPlaying();
+  catalog.querySelectorAll('.pl-row').forEach(row=>{
+    const current=Number(row.dataset.index)===active,state=row.querySelector('.pl-state');
+    row.setAttribute('aria-current',String(current));
+    row.classList.toggle('is-playing',current&&playing);
+    const key=current?(playing?'music.playing':'music.selected'):'';
+    if(key){state.setAttribute('data-i18n',key);state.textContent=t(key)}else{state.removeAttribute('data-i18n');state.textContent=''}
+  });
+}
+function updateLabels(){
+  const x=tracks[active];
+  document.querySelectorAll('[data-i18n-label]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.i18nLabel)));
+  toggle.setAttribute('aria-label',t(isPlaying()?'music.pause':'music.play')+': '+x.title);
+  $('np-art').alt=t('music.artworkAlt')+': '+x.title;
+  $('np-type').textContent=t(typeKey(x.releaseType));
+  seek.setAttribute('aria-valuetext',clock(audio.currentTime)+' '+t('music.of')+' '+clock(audio.duration));
+  $('np-roles').innerHTML=x.roles.map(r=>`<li data-i18n="${roleKey(r)}">${esc(t(roleKey(r)))}</li>`).join('');
+  if(failed)statusLine.textContent=t('music.loadError');
+}
+function updatePlayer(){
+  const x=tracks[active],playing=isPlaying();
+  toggle.dataset.state=playing?'playing':'paused';
+  if(!failed)statusLine.textContent=playing?t('music.playing')+': '+x.title+' — '+x.artist:(audio.currentTime>0?t('music.paused')+': '+x.title:'');
+  updateLabels();
+  updateRows();
+}
+function updateTime(){
+  const duration=Number.isFinite(audio.duration)?audio.duration:0;
+  seek.max=duration;seek.value=audio.currentTime||0;seek.disabled=!duration;
+  $('time-current').textContent=clock(audio.currentTime);$('time-total').textContent=clock(duration);
+  seek.setAttribute('aria-valuetext',clock(audio.currentTime)+' '+t('music.of')+' '+clock(duration));
+}
+// Shows track i on the stage; the single player-audio element guarantees one preview at a time.
+function select(i,play){
+  const x=tracks[i];
+  if(i!==active||!audio.getAttribute('src')){
+    audio.pause();
+    active=i;failed=false;
+    audio.src=previewUrl(x.preview);
+    $('np-art').src=artworkUrl(x.artwork);
+    $('np-index').textContent=pad(i+1)+' / '+pad(tracks.length);
+    $('np-title').textContent=x.title;
+    $('np-artist').textContent=x.artist;
+    $('np-year').textContent=x.year;
+    updateTime();
+  }
+  if(play)start();
+  updatePlayer();
+}
+function start(){const result=audio.play();if(result&&result.catch)result.catch(()=>{failed=true;updatePlayer()})}
+function step(delta){
+  const list=visible.length?visible:tracks.map((x,i)=>i),at=list.indexOf(active);
+  const next=at<0?list[delta>0?0:list.length-1]:list[(at+delta+list.length)%list.length];
+  select(next,isPlaying());
+}
+toggle.addEventListener('click',()=>{if(isPlaying())audio.pause();else start()});
+$('prev').addEventListener('click',()=>step(-1));
+$('next').addEventListener('click',()=>step(1));
+seek.addEventListener('input',()=>{audio.currentTime=Number(seek.value);updateTime()});
+catalog.addEventListener('click',event=>{const row=event.target.closest('.pl-row');if(!row)return;const i=Number(row.dataset.index);if(i===active&&isPlaying())audio.pause();else select(i,true)});
+catalog.addEventListener('keydown',event=>{
+  const rows=[...catalog.querySelectorAll('.pl-row')],at=rows.indexOf(document.activeElement);
+  const target={ArrowDown:at+1,ArrowUp:at-1,Home:0,End:rows.length-1}[event.key];
+  if(at<0||target===undefined||!rows[target])return;
+  event.preventDefault();rows[target].focus();
+});
+['play','pause','ended'].forEach(type=>audio.addEventListener(type,updatePlayer));
+['timeupdate','loadedmetadata','durationchange','emptied'].forEach(type=>audio.addEventListener(type,updateTime));
+audio.addEventListener('error',()=>{if(audio.getAttribute('src')){failed=true;updatePlayer()}});
+// Any other media element that starts on this page pauses the player, and vice versa.
+document.addEventListener('play',event=>document.querySelectorAll('audio,video').forEach(media=>{if(media!==event.target)media.pause()}),true);
+search.addEventListener('input',renderList);role.addEventListener('change',renderList);
+const baseSetLanguage=window.setLanguage;
+window.setLanguage=function(next){baseSetLanguage(next);updatePlayer()};
+document.addEventListener('DOMContentLoaded',()=>{$('total').textContent=tracks.length;renderList();select(0,false)});
+</script></body></html>
