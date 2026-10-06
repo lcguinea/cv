@@ -75,12 +75,20 @@ class StaticTests(unittest.TestCase):
         tagged = [name for facets, name in entries if "ai" in facets.split()]
         self.assertEqual(tagged, ["santo", "peer", "botanas"])
 
-    def test_cv_systems_block_sits_between_profile_and_experience(self):
+    def test_cv_systems_block_follows_experience_and_precedes_education(self):
         html = read("cv.html")
-        order = [html.index(k) for k in ('data-i18n="cv.profile"', 'data-i18n="cv.systems"', 'data-i18n="cv.experience"')]
+        order = [html.index(k) for k in ('data-i18n="cv.profile"', 'data-i18n="cv.experience"', 'data-i18n="cv.systems"', 'data-i18n="cv.education"')]
         self.assertEqual(order, sorted(order))
-        block = html[order[1]:order[2]]
+        block = html[order[2]:order[3]]
         self.assertEqual(len(re.findall(r'<article class="cv-entry">', block)), 5)
+
+    def test_argos_case_no_longer_claims_this_site_was_built_with_it(self):
+        strings, cv = read("js/strings.js"), read("cv.html")
+        for gone in ("This site was built with it", "Este sitio se construyó con él"):
+            self.assertNotIn(gone, strings)
+            self.assertNotIn(gone, cv)
+        self.assertIn("argos: 'My own orchestrator, operated from Telegram: it assembles task-specific agent teams and dispatches work to Claude, Codex and Gemini.',", strings)
+        self.assertIn("argos: 'Orquestador propio que opero desde Telegram: forma equipos de agentes para cada tarea y reparte el trabajo entre Claude, Codex y Gemini.',", strings)
 
     def test_el_remedio_is_linked_once_per_page_as_a_new_tab(self):
         for rel in ("index.html", "cv.html"):

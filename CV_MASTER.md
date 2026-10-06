@@ -298,7 +298,6 @@ Ordered newest first. `dates` use the format shown on the site.
 - visibility: web, print · status: verified (Luis, 2026-10-06; BRAND.md section 35)
 - dates: 2026
 - What it is: Luis's own multi-agent orchestrator, operated from Telegram. It assembles task-specific agent teams and dispatches work to Claude, Codex (OpenAI) and Gemini (through the agy CLI; say "Gemini" in public copy).
-- Evidence: luisguinea.com was built with it, from a written brand and design system (BRAND.md).
 
 ### LedgerApp
 - facets: `projects`, `data`, `business`, `ai`
