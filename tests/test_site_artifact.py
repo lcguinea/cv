@@ -135,7 +135,7 @@ class PublicationFilesTest(unittest.TestCase):
             html = read(rel)
             og = dict(re.findall(r'<meta property="og:([a-z:_]+)" content="([^"]*)">', html))
             self.assertEqual(og["url"], url, rel)
-            self.assertEqual(og["title"], re.search(r"<title>(.*?)</title>", html).group(1), rel)
+            self.assertEqual(og["title"], re.search(r"<title[^>]*>(.*?)</title>", html).group(1), rel)
             self.assertEqual(og["description"], re.search(r'<meta name="description" content="([^"]*)">', html).group(1), rel)
             self.assertEqual(og["image"], SITE + "assets/images/profile.webp", rel)
 

@@ -178,7 +178,7 @@
     toggle.setAttribute('aria-label',t(playing?'music.pause':'music.play')+': '+x.title);
     mute.setAttribute('aria-pressed',String(P.muted()));
     volume.value=String(P.muted()?0:P.volume());
-    volume.setAttribute('aria-valuetext',Math.round((P.muted()?0:P.volume())*100)+' %');
+    volume.setAttribute('aria-valuetext',t('player.percent').replace('{n}',Math.round((P.muted()?0:P.volume())*100)));
     if(!stage)status.textContent=P.failed()?t('music.loadError'):(playing?t('music.playing')+': '+x.title+' · '+x.artist:'');
   }
   function tick(){const d=P.duration();progress.style.width=(d?Math.min(100,P.time()/d*100):0)+'%'}

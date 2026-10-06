@@ -102,6 +102,13 @@ class HeaderStaticTests(unittest.TestCase):
         self.assertIn("html.js .menu-toggle{display:inline-flex;align-items:center;margin-left:auto;min-height:44px;min-width:44px;", css)
         self.assertIn(".nav a[aria-current]{border-bottom-color:var(--accent)}", css)
 
+    def test_desktop_header_wraps_its_tools_instead_of_overflowing(self):
+        # Between the mobile breakpoint and about 1060px the brand, navigation and tools (the CV print button
+        # and the longer Spanish labels) do not fit on one line; the tools drop to a second line instead.
+        css = read("css/styles.css")
+        self.assertIn("@media(min-width:701px){.site-menu{flex-wrap:wrap;row-gap:0;justify-content:flex-end}}", css)
+        self.assertIn("html.js.menu-open .site-menu{display:flex;flex-direction:column;align-items:stretch;flex-wrap:nowrap;", css)
+
 
 @unittest.skipUnless(NODE, "node not installed")
 class StringsTests(unittest.TestCase):
@@ -237,6 +244,113 @@ class NavigationBehaviourTests(unittest.TestCase):
         self.assertEqual(out["facets"], [])
         self.assertEqual(out["experience"], ["#experience:true"])
         self.assertEqual(out["contact"], ["#contact:true"])
+
+
+
+def css_tokens(css):
+    """Colour tokens of the light (:root) and dark (:root[data-theme=dark]) themes."""
+    light = dict(re.findall(r"--([a-z]+):(#[0-9a-f]{3,6})", re.search(r":root\{([^}]*)\}", css).group(1)))
+    dark = dict(light, **dict(re.findall(r"--([a-z]+):(#[0-9a-f]{3,6})", re.search(r":root\[data-theme=dark\]\{([^}]*)\}", css).group(1))))
+    return light, dark
+
+
+def contrast(a, b):
+    def lum(color):
+        color = color.lstrip("#")
+        if len(color) == 3:
+            color = "".join(c * 2 for c in color)
+        def channel(v):
+            v /= 255
+            return v / 12.92 if v <= 0.03928 else ((v + 0.055) / 1.055) ** 2.4
+        r, g, b_ = (channel(int(color[i:i + 2], 16)) for i in (0, 2, 4))
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b_
+    hi, lo = sorted((lum(a), lum(b)), reverse=True)
+    return (hi + 0.05) / (lo + 0.05)
+
+
+class ProductionAuditCorrectionsTests(unittest.TestCase):
+    """Regressions found by the production audit of b070039: contrast, playlist columns, Music title,
+    volume value format, English fragments marked as English, and the corrected copy."""
+
+    def resolve(self, value, tokens):
+        m = re.fullmatch(r"var\(--([a-z]+)\)", value)
+        return tokens[m.group(1)] if m else value
+
+    def test_small_labels_on_inverted_and_accent_surfaces_reach_aa(self):
+        css = read("css/styles.css")
+        light, dark = css_tokens(css)
+        screen = css[:css.index("@media print")]
+        kicker = re.search(r"\.contact \.kicker\{color:([^}]+)\}", screen).group(1)
+        kicker_dark = re.search(r":root\[data-theme=dark\] \.contact \.kicker\{color:([^}]+)\}", screen).group(1)
+        # The contact section inverts the theme: its background is the theme's text colour.
+        self.assertGreaterEqual(contrast(self.resolve(kicker, light), light["ink"]), 4.5)
+        self.assertGreaterEqual(contrast(self.resolve(kicker_dark, dark), dark["text"]), 4.5)
+        # The dark article card is ink in both themes.
+        self.assertRegex(screen, r"\.writing-dark p,\.writing-dark \.metric,\.writing-dark \.article-index\{color:var\(--mist\)\}")
+        self.assertGreaterEqual(contrast(light["mist"], light["ink"]), 4.5)
+        # Text on the accent band.
+        facets = re.search(r"\.facets-section\{background:var\(--accent\);color:([^;]+);", screen).group(1)
+        labels = re.search(r"\.facets-section \.kicker,\.facets-section \.section-intro\{color:([^}]+)\}", screen).group(1)
+        for value in (facets, labels):
+            self.assertGreaterEqual(contrast(self.resolve(value, light), light["accent"]), 4.5)
+        # Print keeps the dark-on-white muted colour for the labels that changed.
+        self.assertIn(".contact .kicker,.writing-dark .article-index{color:var(--muted)}", css[css.index("@media print"):])
+
+    def test_playlist_columns_do_not_depend_on_the_number_of_platform_links(self):
+        css = read("css/styles.css")
+        self.assertIn(".playlist{display:grid;grid-template-columns:minmax(0,1fr) auto}", css)
+        self.assertIn(".playlist li{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-columns:subgrid;", css)
+        self.assertIn("@media(max-width:700px){.playlist{display:block}", css)
+        # A shared column must not squeeze "Apple Music" onto two lines.
+        self.assertIn(".pl-links .platform-link{color:var(--muted);white-space:nowrap}", css)
+
+    def test_english_fragments_kept_in_the_spanish_interface_are_marked_as_english(self):
+        home, cv = read("index.html"), read("cv.html")
+        self.assertIn('<p class="descriptor" lang="en" data-i18n="hero.title">', home)
+        for n in "1234":
+            self.assertIn(f'<h3 id="a{n}-title" lang="en">', home)
+        self.assertIn('<h3 id="a5-title" lang="es">', home)
+        self.assertIn('<span data-i18n="education.ma">MA</span>, <span lang="en">Global Entertainment and Music Business</span>', home)
+        self.assertIn('<span class="cv-degree" lang="en" data-i18n="cv.maField">Global Entertainment and Music Business</span>', cv)
+
+    def test_music_title_is_a_translated_string(self):
+        self.assertIn('<title data-i18n="music.pageTitle">Music / Audio · Luis Guinea</title>', read("music/index.html"))
+        # The section name in the brand mark stays MUSIC, like / CV and / 01.
+        self.assertIn('LUIS GUINEA<span> / MUSIC</span>', read("music/index.html"))
+
+    @unittest.skipUnless(NODE, "node not installed")
+    def test_corrected_copy(self):
+        data = strings()
+        en, es = flatten(data["en"]), flatten(data["es"])
+        self.assertTrue(en["writing.a4"].startswith("A study with Chartmetric data "))
+        self.assertTrue(es["writing.a4"].startswith("Un estudio con datos de Chartmetric "))
+        self.assertIn("19 artistas emergentes", es["writing.a2"])
+        self.assertIn("casos de estudio", es["skills.research"])
+        self.assertIn("planificación de lanzamientos", es["skills.industry"])
+        self.assertEqual((en["music.pageTitle"], es["music.pageTitle"]), ("Music / Audio · Luis Guinea", "Música / Audio · Luis Guinea"))
+        self.assertEqual((en["player.percent"], es["player.percent"]), ("{n}%", "{n} %"))
+        self.assertEqual((en["education.ma"], es["education.ma"]), ("MA", "Máster"))
+        # Left for an editorial decision.
+        self.assertEqual(en["ui.footerPlaces"], "Valencia / Mexico City")
+
+    @unittest.skipUnless(NODE, "node not installed")
+    def test_title_and_volume_value_follow_the_language(self):
+        result = subprocess.run([NODE, str(RUNNER), str(ROOT),
+            "const page = browser.tab().open('music/index.html'); await settle();"
+            "const v = () => [page.$('#np-volume').getAttribute('aria-valuetext'), page.$('#mp-volume').getAttribute('aria-valuetext')];"
+            "out.en = [page.$('title').textContent, ...v()];"
+            "page.click('[data-lang=\"es\"]'); await settle(); out.es = [page.$('title').textContent, ...v()];"
+            "page.click('[data-lang=\"en\"]'); await settle(); out.back = [page.$('title').textContent, ...v()];"
+            "const home = browser.tab().open('index.html'); await settle(); home.click('[data-lang=\"es\"]'); await settle();"
+            "out.home = [home.$('.descriptor').getAttribute('lang'), home.$('[data-i18n=\"education.ma\"]').parentNode.textContent];"],
+            capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        out = json.loads(result.stdout)
+        self.assertEqual(out["en"], ["Music / Audio · Luis Guinea", "100%", "100%"])
+        self.assertEqual(out["es"], ["Música / Audio · Luis Guinea", "100 %", "100 %"])
+        self.assertEqual(out["back"], out["en"])
+        self.assertEqual(out["home"][0], "en")
+        self.assertTrue(out["home"][1].startswith("Máster, Global Entertainment and Music Business"), out["home"][1])
 
 
 if __name__ == "__main__":

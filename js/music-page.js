@@ -68,7 +68,7 @@
     toggle.dataset.state=playing?'playing':'paused';
     if(!P.failed())statusLine.textContent=playing?t('music.playing')+': '+x.title+' · '+x.artist:(P.time()>0?t('music.paused')+': '+x.title:'');
     volume.value=String(P.muted()?0:P.volume());
-    volume.setAttribute('aria-valuetext',Math.round((P.muted()?0:P.volume())*100)+' %');
+    volume.setAttribute('aria-valuetext',t('player.percent').replace('{n}',Math.round((P.muted()?0:P.volume())*100)));
     updateLabels();
     updateRows();
   }
