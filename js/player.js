@@ -1,7 +1,9 @@
 // Global music engine shared by every page. It owns the only <audio> element, so the bottom bar and the large
 // player on /music/ are two views of one state and never sound together. Track, position and play state survive
-// page changes in sessionStorage; volume and mute live in localStorage. Nothing sounds without a user gesture:
-// a session starts on a random, paused track, and resuming after a page change is only attempted and may be refused.
+// page changes in sessionStorage; volume and mute live in localStorage. A new session starts a random track on its
+// own when the browser allows it; browsers usually refuse sound before the visitor interacts with the site, so until
+// the first preview has played, the first click or tap outside the player starts it. Resuming after a page change is
+// only attempted and may be refused.
 (function(){
   const tracks=window.MUSIC_DATA||[];
   if(!tracks.length)return;
@@ -20,7 +22,7 @@
   const audio=document.createElement('audio');
   audio.preload='none';
   const listeners=[];
-  let index=-1,failed=false,pendingTime=0,knownDuration=0,lastSave=0;
+  let index=-1,failed=false,pendingTime=0,knownDuration=0,lastSave=0,autostart=false;
   function emit(type){listeners.forEach(fn=>fn(type))}
   function isPlaying(){return !audio.paused&&!audio.ended}
   function time(){return audio.readyState>0?audio.currentTime:pendingTime}
@@ -34,7 +36,7 @@
   function save(){
     if(index<0)return;
     lastSave=Date.now();
-    session.set(SESSION_KEY,JSON.stringify({preview:tracks[index].preview,time:time(),duration:duration(),playing:isPlaying(),tab}));
+    session.set(SESSION_KEY,JSON.stringify({preview:tracks[index].preview,time:time(),duration:duration(),playing:isPlaying(),auto:autostart,tab}));
   }
   function load(i,at,length){
     audio.pause();
@@ -88,7 +90,15 @@
     if(pendingTime>0){const at=Math.min(pendingTime,Math.max(0,audio.duration-.25));pendingTime=0;try{audio.currentTime=at}catch(e){}}
     knownDuration=duration();
   });
-  ['play','pause'].forEach(type=>audio.addEventListener(type,()=>{save();emit('state')}));
+  // Autostart: armed for a new session until the first preview plays. Clicks on the player itself are left to its controls.
+  const GESTURES=['click','touchend'],PLAYER_UI='#mini-player,#player,#catalog';
+  function onGesture(event){if(event.target&&event.target.closest&&event.target.closest(PLAYER_UI))return;if(!isPlaying())start()}
+  function armAutostart(){
+    if(!autostart){autostart=true;GESTURES.forEach(type=>document.addEventListener(type,onGesture,true))}
+    audio.preload='auto';start();
+  }
+  function disarmAutostart(){if(autostart){autostart=false;GESTURES.forEach(type=>document.removeEventListener(type,onGesture,true))}}
+  ['play','pause'].forEach(type=>audio.addEventListener(type,()=>{if(type==='play')disarmAutostart();save();emit('state')}));
   // A finished preview moves on to another random one; the element already holds the user's permission to play.
   audio.addEventListener('ended',()=>{select(randomIndex(index),true)});
   ['timeupdate','durationchange','loadedmetadata','emptied'].forEach(type=>audio.addEventListener(type,()=>{if(type==='timeupdate'&&Date.now()-lastSave>1000)save();emit('time')}));
@@ -103,20 +113,20 @@
   try{if(window.BroadcastChannel){channel=new BroadcastChannel('lg-player');channel.onmessage=event=>{if(event.data&&event.data.type==='play')audio.pause()}}}catch(e){channel=null}
   audio.addEventListener('play',()=>{if(channel)channel.postMessage({type:'play'})});
 
-  // Restore this tab's session, or start a new one on a random track without sound.
+  // Restore this tab's session, or start a new one on a random track.
   function readSaved(){
     let saved=null;
     try{saved=JSON.parse(session.get(SESSION_KEY)||'null')}catch(e){saved=null}
     const i=saved?tracks.findIndex(x=>x.preview===saved.preview):-1;
-    return i>=0?{index:i,time:Math.max(0,Number(saved.time)||0),duration:Math.max(0,Number(saved.duration)||0),playing:saved.playing===true&&saved.tab===tab}:null;
+    return i>=0?{index:i,time:Math.max(0,Number(saved.time)||0),duration:Math.max(0,Number(saved.duration)||0),playing:saved.playing===true&&saved.tab===tab,auto:saved.auto===true}:null;
   }
   function resume(saved){
     const policy=navigator.getAutoplayPolicy?navigator.getAutoplayPolicy('mediaelement'):'';
     if(saved.playing&&policy!=='disallowed'){audio.preload='auto';start()}else save();
   }
   const saved=readSaved();
-  if(saved){load(saved.index,saved.time,saved.duration);resume(saved)}
-  else{load(randomIndex(-1),0,0);save()}
+  if(saved){load(saved.index,saved.time,saved.duration);if(saved.auto&&!saved.playing)armAutostart();else resume(saved)}
+  else{load(randomIndex(-1),0,0);armAutostart()}
   // Back/forward cache: this page comes back as it was left, so it catches up with what later pages saved.
   window.addEventListener('pageshow',event=>{
     if(!event.persisted)return;
@@ -125,6 +135,7 @@
     if(latest.index!==index)load(latest.index,latest.time,latest.duration);
     else if(Math.abs(time()-latest.time)>.5)seek(latest.time);
     if(!latest.playing)audio.pause();
+    if(!latest.auto)disarmAutostart();
     resume(latest);
   });
 

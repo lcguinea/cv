@@ -3,7 +3,8 @@
 
 The real pages run with their real scripts in tests/support/minidom.js. Media elements there refuse
 playback without a user gesture unless a page is opened with `autoplayBlocked: false`, and an element
-the user started once may keep playing, as in browsers. Math.random is fed from `browser.randomQueue`
+the user started once may keep playing, as in browsers. A new session tries to start on its own and,
+when refused, starts on the first click outside the player. Math.random is fed from `browser.randomQueue`
 (0.5 when empty), so random choices are deterministic. Requires Node.js; standard library only.
 
 Run: python3 -m unittest tests/test_global_player.py
@@ -45,7 +46,7 @@ class GlobalPlayerTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         return json.loads(result.stdout)
 
-    def test_every_page_has_one_engine_audio_and_no_sound_on_arrival(self):
+    def test_every_page_has_one_engine_audio_and_a_refused_autostart_stays_paused(self):
         out = self.run_scenario(
             "for (const rel of %s) { const page = browser.tab().open(rel); await settle(); out[rel] = state(page); }"
             % json.dumps(PAGES)
@@ -55,8 +56,9 @@ class GlobalPlayerTests(unittest.TestCase):
                 s = out[rel]
                 self.assertEqual((s["created"], s["markupAudio"]), (1, 0))
                 self.assertFalse(s["playing"])
-                self.assertFalse([e for e in s["log"] if e.startswith(("play:", "blocked:"))])
-                self.assertEqual(s["session"]["playing"], False)
+                # A new session asks to play on arrival; the browser refuses without a gesture.
+                self.assertEqual([e for e in s["log"] if e.startswith(("play:", "blocked:"))], ["blocked:engine"])
+                self.assertEqual((s["session"]["playing"], s["session"]["auto"]), (False, True))
                 self.assertEqual(s["bar"]["title"], s["title"])
                 self.assertEqual(s["bar"]["toggleState"], "paused")
                 self.assertEqual(s["bar"]["toggle"], "Play preview: " + s["title"])
@@ -254,10 +256,12 @@ class GlobalPlayerTests(unittest.TestCase):
             "const page = browser.tab().open('index.html'); await settle(); page.click('[data-lang=\"es\"]'); await settle();"
             "out.es = state(page); out.region = page.$('#mini-player').getAttribute('aria-label');"
             "out.next = page.$('#mp-next').getAttribute('aria-label'); out.mute = page.$('#mp-mute').getAttribute('aria-label');"
-            "out.link = page.$('#mp-link').textContent;"
-            "page.click('#mp-toggle'); await settle(); out.status = page.$('#mp-status').textContent;"
+            "out.link = page.$('#mp-link').textContent; out.status = page.$('#mp-status').textContent;"
+            "page.click('#mp-toggle'); await settle(); out.paused = state(page).bar.toggle;"
         )
-        self.assertEqual(out["es"]["bar"]["toggle"], "Reproducir fragmento: " + out["es"]["title"])
+        # The language button is the first click outside the player, so it also starts the preview.
+        self.assertEqual(out["es"]["bar"]["toggle"], "Pausar fragmento: " + out["es"]["title"])
+        self.assertEqual(out["paused"], "Reproducir fragmento: " + out["es"]["title"])
         self.assertEqual((out["region"], out["next"], out["mute"], out["link"]),
                          ("Reproductor de música", "Canción siguiente", "Silenciar", "Música"))
         self.assertTrue(out["status"].startswith("Sonando: "))
@@ -268,9 +272,55 @@ class GlobalPlayerTests(unittest.TestCase):
             "const tab = browser.tab({session: {'lg-player': JSON.stringify({preview: 'gone.mp3', time: 9, playing: true})}});"
             "const page = tab.open('index.html', {autoplayBlocked: false}); await settle(); out.s = state(page);"
         )
+        # Treated as a new session: a random track, from the start, which starts on its own when allowed.
         self.assertEqual(out["s"]["index"], 1)
-        self.assertFalse(out["s"]["playing"])
+        self.assertTrue(out["s"]["playing"])
         self.assertEqual(out["s"]["time"], 0)
+
+    def test_a_new_session_starts_on_its_own_when_the_browser_allows_it(self):
+        out = self.run_scenario(
+            "const page = browser.tab().open('index.html', {autoplayBlocked: false}); await settle(); out.s = state(page);"
+        )
+        self.assertTrue(out["s"]["playing"])
+        self.assertEqual(out["s"]["bar"]["toggleState"], "playing")
+        self.assertEqual((out["s"]["session"]["playing"], out["s"]["session"]["auto"]), (True, False))
+
+    def test_a_refused_autostart_starts_on_the_first_click_outside_the_player(self):
+        out = self.run_scenario(
+            "const page = browser.tab().open('index.html'); await settle(); out.arrival = state(page).playing;"
+            "page.click('h1'); await settle(); out.click = state(page);"
+            "page.click('#mp-toggle'); await settle(); out.paused = state(page).playing;"
+            "page.click('h1'); await settle(); out.again = state(page).playing;"
+        )
+        self.assertFalse(out["arrival"])
+        self.assertTrue(out["click"]["playing"])
+        self.assertEqual(out["click"]["session"]["auto"], False)
+        # Once a preview has played, a pause is respected: later clicks do not restart it.
+        self.assertEqual((out["paused"], out["again"]), (False, False))
+
+    def test_clicks_on_the_player_controls_do_not_trigger_the_autostart(self):
+        out = self.run_scenario(
+            "const page = browser.tab().open('music/index.html'); await settle(); const first = state(page).index;"
+            "browser.randomQueue.push(0.9); page.click('#mp-next'); await settle(); out.next = state(page);"
+            "out.changed = out.next.index !== first;"
+            "page.click('h1'); await settle(); out.after = state(page);"
+        )
+        self.assertTrue(out["changed"])
+        self.assertFalse(out["next"]["playing"])
+        self.assertTrue(out["next"]["session"]["auto"])
+        self.assertTrue(out["after"]["playing"])
+        self.assertEqual(out["after"]["index"], out["next"]["index"])
+
+    def test_the_autostart_stays_armed_across_pages_until_a_preview_plays(self):
+        out = self.run_scenario(
+            "const tab = browser.tab(); const home = tab.open('index.html'); await settle();"
+            "const cv = tab.open('cv.html'); await settle(); out.cv = state(cv);"
+            "cv.click('h1'); await settle(); out.click = state(cv);"
+        )
+        self.assertFalse(out["cv"]["playing"])
+        self.assertIn("blocked:engine", out["cv"]["log"])
+        self.assertTrue(out["cv"]["session"]["auto"])
+        self.assertTrue(out["click"]["playing"])
 
 
 class GlobalPlayerStaticTests(unittest.TestCase):

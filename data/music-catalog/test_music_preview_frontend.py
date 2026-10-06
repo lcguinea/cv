@@ -153,7 +153,8 @@ class MusicPlayerBehaviourTests(unittest.TestCase):
         self.assertTrue(state["audioSrc"].endswith("/assets/audio/previews/" + x["preview"]))
         self.assertEqual(state["audioCount"], 1)
         self.assertFalse(state["playing"])
-        self.assertFalse([e for e in state["log"] if e.startswith(("play:", "blocked:"))])
+        # A new session asks to play on arrival; without a gesture the browser refuses and it stays paused.
+        self.assertEqual([e for e in state["log"] if e.startswith(("play:", "blocked:"))], ["blocked:engine"])
         self.assertEqual(state["toggleLabel"], "Play preview: " + x["title"])
         self.assertEqual([r["current"] for r in state["rows"]].count("true"), 1)
         self.assertEqual([r["state"] for r in state["rows"] if r["current"] == "true"], ["Selected"])
