@@ -196,7 +196,8 @@ Ordered newest first. `dates` use the format shown on the site.
 - Optimised databases and ran data analysis in Python and SQL.
 
 ### Information Technology & Automation Developer · Grupo Botanas
-- dates: Present
+- dates: Jan 2024 – Present
+- start date confirmed by Luis on 2026-10-05 (Spanish: enero de 2024 – actualidad)
 - facets: `data`, `projects`, `business`
 - visibility: web, print · status: verified
 - Develops information technology and automation systems for Grupo Botanas.
@@ -372,4 +373,5 @@ No information exclusive to the previous `CV_MASTER.md` was removed; unresolved 
 3. LinkedIn URL and Spotify links.
 4. LedgerApp and Digital Signage case study content, results, metrics and demo screenshots.
 5. Whether "Ya estoy aquí" pieces appear on the site.
-6. Start date for the current Grupo Botanas role.
+
+Resolved on 2026-10-05: the start date of the current Grupo Botanas role is January 2024, confirmed by Luis (former open item 6).
