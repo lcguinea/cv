@@ -61,8 +61,8 @@ class GlobalPlayerTests(unittest.TestCase):
                 self.assertEqual(s["bar"]["toggleState"], "paused")
                 self.assertEqual(s["bar"]["toggle"], "Play preview: " + s["title"])
         # Bar link goes to Music from Home and CV; on Music it points to the large player.
-        self.assertEqual(out["index.html"]["bar"]["link"], "music/index.html")
-        self.assertEqual(out["cv.html"]["bar"]["link"], "music/index.html")
+        self.assertEqual(out["index.html"]["bar"]["link"], "music/")
+        self.assertEqual(out["cv.html"]["bar"]["link"], "music/")
         self.assertEqual(out["music/index.html"]["bar"]["link"], "#player")
         self.assertFalse(out["index.html"]["bar"]["hidden"])
         self.assertFalse(out["cv.html"]["bar"]["hidden"])

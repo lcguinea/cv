@@ -1,0 +1,45 @@
+# Builds the public site artifact from an explicit allowlist (tools/build_site.py) and deploys it to
+# GitHub Pages. Nothing is published until Pages is enabled with "GitHub Actions" as its source.
+# Manual only for now: no push trigger, so a push to main never deploys. tests/test_site_artifact.py
+# enforces this until publication is approved.
+name: GitHub Pages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build and validate _site
+        run: python3 tools/build_site.py --out _site
+      - name: Focused checks
+        run: |
+          python3 -m unittest tests/test_site_artifact.py
+          python3 data/music-catalog/test_public_catalog_contract.py
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

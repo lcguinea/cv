@@ -57,3 +57,6 @@ data/music-catalog/internal/
 
 # Artefactos locales de verificación en navegador (capturas y snapshots de Playwright MCP).
 .playwright-mcp/
+
+# Artefacto de GitHub Pages generado por tools/build_site.py.
+_site/

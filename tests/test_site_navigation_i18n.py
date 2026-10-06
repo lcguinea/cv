@@ -22,9 +22,9 @@ NODE = shutil.which("node")
 PAGES = {"index.html": "home", "cv.html": "cv", "music/index.html": "music"}
 NAV_KEYS = ["nav.research", "nav.experience", "nav.music", "nav.cv", "nav.contact"]
 NAV_HREFS = {
-    "home": ["#writing", "#experience", "music/index.html", "cv.html", "#contact"],
-    "cv": ["index.html#writing", "index.html#experience", "music/index.html", "cv.html", "index.html#contact"],
-    "music": ["../index.html#writing", "../index.html#experience", "index.html", "../cv.html", "../index.html#contact"],
+    "home": ["#writing", "#experience", "music/", "cv.html", "#contact"],
+    "cv": ["./#writing", "./#experience", "music/", "cv.html", "./#contact"],
+    "music": ["../#writing", "../#experience", "./", "../cv.html", "../#contact"],
 }
 CURRENT = {"home": None, "cv": "nav.cv", "music": "nav.music"}
 PUBLISHED_JS = ("strings.js", "i18n.js", "site.js", "player.js", "music-page.js", "theme-init.js")
