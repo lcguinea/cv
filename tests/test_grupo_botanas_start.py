@@ -73,9 +73,10 @@ def check_bilingual_key(file, path):
 
 
 def botanas_element(html, tag):
-    """The <tag ...>...</tag> element that contains Grupo Botanas."""
+    """The <tag ...>...</tag> experience entry for the Grupo Botanas role (other entries, such as the
+    systems built there, also name Grupo Botanas)."""
     for match in re.finditer(rf"<{tag}\b[^>]*>.*?</{tag}>", html, re.S):
-        if "Grupo Botanas" in match.group(0):
+        if "Grupo Botanas" in match.group(0) and "botanasRole" in match.group(0):
             return match.group(0)
     return None
 

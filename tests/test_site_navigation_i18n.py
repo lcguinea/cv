@@ -368,10 +368,10 @@ SKILLS = {
 }
 SOFTWARE = ("Pro Tools", "Logic Pro X", "Ableton Live", "Sibelius", "Final Cut Pro", "Photoshop", "Illustrator")
 DATA_TOOLS = {
-    "en": ("Python", "SQL", "ETL", "Chartmetric", "Power BI", "Tableau", "Excel", "Google Analytics",
-           "AWS\u00a0(EC2)", "Next.js", "Supabase", "MCP servers"),
-    "es": ("Python", "SQL", "ETL", "Chartmetric", "Power BI", "Tableau", "Excel", "Google Analytics",
-           "AWS\u00a0(EC2)", "Next.js", "Supabase", "servidores MCP"),
+    "en": ("Python", "SQL", "REST APIs", "ETL pipelines", "Chartmetric", "Power BI", "Tableau", "Excel",
+           "Google Analytics", "AWS\u00a0(EC2)", "Next.js", "Supabase"),
+    "es": ("Python", "SQL", "APIs REST", "pipelines ETL", "Chartmetric", "Power BI", "Tableau", "Excel",
+           "Google Analytics", "AWS\u00a0(EC2)", "Next.js", "Supabase"),
 }
 
 

@@ -47,7 +47,7 @@ Rules for any agent using this file:
 
 ### Long (web, EN)
 
-I work where creative and analytical thinking meet. For 10+ years I have been inside the music business as a label founder, A&R and producer; in parallel I build data systems and automations that turn messy information into decisions. Lately I write about how artists actually grow, using data to test the stories the music industry tells itself. I work in English and Spanish, from Valencia.
+I work where creative and analytical thinking meet. For 10+ years I have been inside the music business as a label founder, A&R and producer; in parallel I build data systems and automations that turn messy information into decisions. Today that work centres on AI systems: multi-agent workflows across Claude, Codex and Gemini, custom agents and MCP integrations built for real business operations. Lately I write about how artists actually grow, using data to test the stories the music industry tells itself. I work in English and Spanish, from Valencia.
 
 ### Short (print, EN)
 
@@ -58,6 +58,7 @@ Music producer, A&R and technology and automation developer with 10+ years in th
 - **Journalism:** I write about how artists actually grow, using data to test what the industry assumes.
 - **A&R:** I hear songs as a producer and read the numbers as an analyst.
 - **Data:** I turn operational and streaming data into automated reporting and clear decisions.
+- **AI systems:** I design and build AI and automation systems for real business operations, from multi-agent orchestration to MCP integrations with business data.
 - **Teaching:** Berklee graduate, pianist since childhood, with classroom experience in piano and music production.
 
 Spanish versions: translate naturally when building the ES site. Do not translate literally.
@@ -81,7 +82,6 @@ Only use these. Each one must stay attached to its context.
 | Team of 15 | Led as Sales Director, Melaleuca | verified |
 | 500+ customers | Acquired as Sales Director, Melaleuca | verified |
 | 30%+ monthly growth | Social and Meta Ads, family hospitality venture | VERIFY (period and base) |
-| 100+ weekly customers retained | CRM and automated promotions, family hospitality venture | VERIFY |
 | Positive ROI in under 3 months | Launch strategy, family hospitality venture | VERIFY (see note in section 5) |
 
 ---
@@ -175,16 +175,18 @@ Ordered newest first. `dates` use the format shown on the site.
 - Produce and arrange for independent artists across Latin jazz and pop.
 - Compose music for film projects in Mexico and for advertising.
 
-### Brand & Digital Growth · Santo Chilaquil, Valencia
+### Co-founder · Santo Chilaquil, Valencia
 - dates: Feb 2025 – Present
-- facets: `business`, `creative`, `data`
+- facets: `business`, `creative`, `data`, `ai`
 - visibility: web, print · status: verified for role, venture name and responsibilities; metrics below remain VERIFY
+- Role: co-founder (confirmed by Luis on 2026-10-06). Brand & Digital Growth are the functions he performs, not a separate role.
+- Santo Chilaquil is Luis's own venture and is NOT part of Grupo Botanas. Keep the two separate everywhere.
 - Public naming authorised by Luis: use Santo Chilaquil.
 - Developed the branding and launch strategy.
+- AI-produced visuals for the venue's screens, distributed through Dispra (see section 6, AI creative direction).
 - Social content and Meta Ads campaigns. Claimed 30%+ monthly growth (VERIFY period and base).
-- CRM and automated promotional workflows. Claimed 100+ weekly customers retained (VERIFY).
+- CRM and automated promotional workflows.
 - Local activations: flyers, collaborations, giveaways.
-- Built LedgerApp to run its finances (see section 6).
 - VERIFY note: an older CV claims "positive ROI in under three months". Keep it only if it refers to marketing spend, not to business profitability, and say so explicitly.
 
 ### A&R / Admin Intern · Peermusic Spain
@@ -194,15 +196,18 @@ Ordered newest first. `dates` use the format shown on the site.
 - Managed approvals for derivative work licensing with administration and legal teams.
 - Organised and maintained the catalogue in DISCO.
 - Optimised databases and ran data analysis in Python and SQL.
+- 2024, during the internship: built music analytics automation on the Chartmetric API (see section 6). This work is part of the internship, not a separate role.
 
 ### Information Technology & Automation Developer · Grupo Botanas
 - dates: Jan 2024 – Present
 - start date confirmed by Luis on 2026-10-05 (Spanish: enero de 2024 – actualidad)
-- facets: `data`, `projects`, `business`
+- facets: `data`, `projects`, `business`, `ai`
 - visibility: web, print · status: verified
-- Develops information technology and automation systems for Grupo Botanas.
-- Created LedgerApp.
-- Created the Digital Signage system.
+- Develops information technology, data and AI systems for Grupo Botanas.
+- Grupo Botanas includes the three El Remedio venues. Santo Chilaquil is not part of Grupo Botanas.
+- Created LedgerApp, connected to AI assistants through MCP.
+- Built the real-time transaction data pipeline on AWS EC2 and its automated reporting (see section 6).
+- Deployed Dispra, Luis's own digital signage platform, at Grupo Botanas.
 - Built the POS and QR-based digital menu system.
 - Implemented social-media workflows and NFC-based review systems.
 - Additional systems and results must only be added when documented and verified.
@@ -288,26 +293,61 @@ Ordered newest first. `dates` use the format shown on the site.
 
 ## 6. Projects & Systems
 
+### Argos
+- facets: `projects`, `ai`
+- visibility: web, print · status: verified (Luis, 2026-10-06; BRAND.md section 35)
+- dates: 2026
+- What it is: Luis's own multi-agent orchestrator, operated from Telegram. It assembles task-specific agent teams and dispatches work to Claude, Codex (OpenAI) and Gemini (through the agy CLI; say "Gemini" in public copy).
+- Evidence: luisguinea.com was built with it, from a written brand and design system (BRAND.md).
+
 ### LedgerApp
-- facets: `projects`, `data`, `business`
+- facets: `projects`, `data`, `business`, `ai`
 - visibility: web · status: verified as a project created by Luis for Grupo Botanas; case study content remains TODO
-- What it is: financial and operational management system for restaurants.
-- Stack: Next.js, Supabase, Last.app POS integration, Google Calendar, MCP servers.
+- dates: 2025–2026
+- What it is: financial and operational management system for restaurants. Pulls POS data from Last.app through its API and centralises revenue, costs and margins across venues.
+- AI integration: connected to AI assistants through MCP, so performance is queried in conversation (confirmed 2026-10-06).
+- Stack: Next.js, Supabase, Last.app POS API, Google Calendar, MCP servers.
 - Authorship/context: created by Luis for Grupo Botanas.
 - Case study TODO (BRAND.md section 21): problem, process, solution, result, metrics, screenshots.
 - Privacy: do not show real revenue or customer data. Use anonymised or demo data.
 
-### Digital Signage
-- facets: `projects`, `data`, `business`
-- visibility: web · status: verified as a project created by Luis for Grupo Botanas; case study content remains TODO
-- What it is: a digital signage system created for Grupo Botanas.
-- Authorship/context: created by Luis for Grupo Botanas.
+### Dispra
+- facets: `projects`, `business`, `ai`
+- visibility: web, print · status: verified (Luis, 2026-10-06); case study content remains TODO
+- What it is: Luis's own digital signage platform and brand. Formerly recorded here as "Digital Signage"; "Sign TV" in an older CV was an incorrect name.
+- Deployment: deployed at Grupo Botanas. Distributes the AI-produced visuals, with music, to the screens of the three El Remedio venues and Santo Chilaquil.
 - Case study TODO (BRAND.md section 21): architecture, problem, process, solution, result, metrics, screenshots.
 
-### MCP integrations for restaurant data
-- facets: `projects`, `data`
-- visibility: web · status: TODO
-- MCP servers connecting Last.app and LedgerApp data to AI assistants. TODO: confirm scope and authorship, add description.
+### AI creative direction for hospitality
+- facets: `creative`, `projects`, `ai`
+- visibility: web, print · status: verified (Luis, 2026-10-06)
+- Method: brand and visual manuals are built with AI first, then used to write the prompts for a separate image model.
+- Scope: four venues, the three El Remedio venues (Grupo Botanas) and Santo Chilaquil. All the visuals referred to were produced with AI ("all" is literal) and are distributed through Dispra.
+- Live example, authorised for public linking: El Remedio, identity, AI photography and landing page, https://lcguinea.github.io/landing-el-remedio/
+- Wording rule: no subjective claims such as "does not look generic" or "does not read as AI".
+
+### Real-time data pipeline and automated reporting
+- facets: `data`, `projects`
+- visibility: web, print · status: verified (Luis, 2026-10-06)
+- dates: 2024 – Present
+- Context: Grupo Botanas.
+- Extracts transaction data from the payment system and loads it in real time into a SQL database on AWS EC2.
+- Automated Python reporting on sales trends, loss prevention, data leakage, estimations and forecasting. No metrics documented; do not add any.
+
+### Custom AI agents
+- facets: `ai`
+- visibility: web (as a skill) · status: verified (Luis, 2026-10-06)
+- dates: 2026
+- Role-specific agents with business context and decision rules, built as Claude skills with prompt and context design: financial controller, codebase assistant, creative assistant.
+
+### Music analytics automation
+- facets: `music`, `data`, `projects`
+- visibility: web, print · status: verified (Luis, 2026-10-06)
+- dates: 2024
+- Context: built during the A&R / Admin internship at Peermusic Spain. Not a separate role.
+- Systems on the Chartmetric API that monitor artist analytics for label rosters and catalogues.
+- Automated streaming reports and airplay tracking from real radio stations in different parts of the world.
+- Wording rule: describe the capability shown; avoid absolute claims such as "any label roster".
 
 ### Music projects and aliases
 - facets: `music`, `creative`, `projects`
@@ -329,9 +369,11 @@ Ordered newest first. `dates` use the format shown on the site.
 |---|---|---|---|
 | MA, Global Entertainment and Music Business | Berklee College of Music, Valencia | Jun 2023 – Jul 2024 | web, print |
 | Bachelor's Degree, Music Production | REC Música, Music Studies Center | Aug 2017 – Jun 2021 | web, print |
-| Bachelor's Degree, Communication and Digital Media | Tec de Monterrey | Aug 2011 – Aug 2015 | web, print |
+| Communication and Digital Media (studies, degree not completed) | Tec de Monterrey | 2011 – 2014 | web, print |
 
 Also: pianist since age four (web, profile detail).
+
+Tec de Monterrey: Luis studied Communication and Digital Media from 2011 to 2014 and did not complete the degree (confirmed 2026-10-06). Never present it as a Bachelor's Degree, BA or licenciatura.
 
 ---
 
@@ -340,13 +382,14 @@ Also: pianist since age four (web, profile detail).
 Plain grouped lists. No bars, percentages or logos (BRAND.md section 30).
 
 - **Research & writing:** long-form and data journalism in English and Spanish, case studies, source and timeline verification.
-- **Data & technology:** Python, SQL, Chartmetric (including API), AWS (EC2), ETL and data pipelines, automation, Power BI, Tableau, Excel, Google Analytics, Next.js, Supabase, MCP servers.
+- **Data & technology:** Python, SQL, REST APIs (Last.app, Chartmetric), Chartmetric (including API), AWS (EC2), ETL and data pipelines, automation, Power BI, Tableau, Excel (advanced), Google Analytics, dashboards, forecasting, financial analysis, Next.js, Supabase, HTML/CSS/JS, GitHub Pages.
+- **AI & automation:** multi-agent orchestration across Claude, Codex (OpenAI) and Gemini; custom agents and Claude skills; MCP servers; prompt and context design; AI image generation from brand and visual manuals.
 - **Music:** production, composition, arrangement, music direction.
 - **Instruments (multi-instrumentalist):** piano, keyboards and synthesizers; drums and percussion; guitar and bass; flute, accordion and trumpet. Confirmed by Luis on 2026-10-06.
 - **Music software:** Pro Tools, Logic Pro X, Ableton Live, Sibelius. Sibelius and the full instrument list confirmed by Luis on 2026-10-06.
 - **Industry:** A&R, artist development, release planning, catalogue and licensing (DISCO), royalties, copyright registration, sync.
 - **Business:** brand strategy, digital marketing (Meta Ads, organic social), CRM, sales and team leadership, project and budget management, contracts.
-- **Visual:** Final Cut Pro, Photoshop, Illustrator.
+- **Visual:** Final Cut Pro, Photoshop, Illustrator, AI image generation, brand and visual manuals.
 - **Languages:** Spanish (native), English (fluent), French (B2).
 
 Excluded on purpose (outdated or off-brand): blockchain and NFTs, Decentraland / OnCyber, generic soft skills.
@@ -366,14 +409,24 @@ This canonical file incorporates the validated content from `CV_MASTER_UPDATED.m
 - LedgerApp authorship/context and the new Digital Signage project, both with case-study details still marked `TODO`;
 - the resulting, shorter open-items list.
 
+On 2026-10-06 `CV_LuisCarlos_AI_Specialist.pdf`, with Luis's written confirmations, added the AI & automation profile: Argos, LedgerApp's MCP integration and dates, Dispra (the former "Digital Signage" entry), AI creative direction for El Remedio and Santo Chilaquil, the Grupo Botanas real-time pipeline, custom agents and the 2024 Peermusic music analytics automation; it also corrected the Santo Chilaquil role and the Tec de Monterrey record. Claims in that PDF that Luis rejected or that are subjective were not imported.
+
 No information exclusive to the previous `CV_MASTER.md` was removed; unresolved claims remain marked `TODO` or `VERIFY` and therefore are not publishable as facts.
 
 ## 10. Open items for Luis
 
-1. Hospitality venture metrics: confirm 30%+ growth, 100+ weekly customers, and what "positive ROI" measured.
+1. Santo Chilaquil metrics: confirm 30%+ growth and what "positive ROI" measured.
 2. Film titles, sync brand, venues and voice work clients.
 3. LinkedIn URL and Spotify links.
-4. LedgerApp and Digital Signage case study content, results, metrics and demo screenshots.
+4. LedgerApp and Dispra case study content, results, metrics and demo screenshots.
 5. Whether "Ya estoy aquí" pieces appear on the site.
+
+Resolved on 2026-10-06 (Luis, with `CV_LuisCarlos_AI_Specialist.pdf` as source):
+- Santo Chilaquil role is co-founder; a weekly customer retention figure from older CVs is false and was removed.
+- Tec de Monterrey was studies (2011–2014), not a completed degree.
+- The digital signage system is Dispra.
+- El Remedio (three venues, Grupo Botanas) may be linked publicly; the real-time pipeline belongs to Grupo Botanas.
+- Music analytics automation was built in 2024 during the Peermusic internship. Peermusic stays an internship.
+- The Grupo Botanas role and its January 2024 start stay as recorded.
 
 Resolved on 2026-10-05: the start date of the current Grupo Botanas role is January 2024, confirmed by Luis (former open item 6).

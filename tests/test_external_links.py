@@ -44,7 +44,7 @@ ENTITIES = {
 }
 LINKED = {
     "index.html": {"Jazztone Studios", "Santo Chilaquil", "Berklee College of Music", "REC Música", "Tec de Monterrey"},
-    "cv.html": {"Jazztone Studios", "Moctezuma Music Group", "Berklee College of Music", "REC Música", "Tec de Monterrey"},
+    "cv.html": {"Jazztone Studios", "Santo Chilaquil", "Moctezuma Music Group", "Berklee College of Music", "REC Música", "Tec de Monterrey"},
 }
 NEVER_LINKED = ("Grupo Botanas", "Tipazo Music Group", "Peermusic Spain")
 
