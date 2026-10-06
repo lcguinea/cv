@@ -34,11 +34,42 @@ class PublicMusicDataTests(unittest.TestCase):
             repo=REPO,
         )
 
+    def project_all(self):
+        """Whole selection before the preview requirement (credit checks of excluded works)."""
+        return generator.project_all(self.master, self.selection, self.decisions, repo=REPO)
+
+    PUBLISHED = [
+        "Hasta Que Lleguemos Al Mar",
+        "Hace Tanto Tiempo",
+        "Volver a Verte",
+        "Cómo Decirte",
+        "Nuestro Hogar",
+        "12 Meses",
+        "La Bamba",
+        "Abrazo Imaginario",
+        "Allá",
+        "Anoche Me Enamoré",
+        "Eres Veneno",
+        "Imagina",
+        "Invencible",
+        "Si Antes Te Hubiera Conocido - Cover Acústico",
+        "Vida Tras Vida",
+        "Volver a Verte",
+    ]
+    EXCLUDED = {
+        "33": "adios-amor-version-bolero--luis-guinea--2020",
+        "34": "blue-moon--luis-guinea--2015",
+        "36": "a-escondidas--isabella-macias--2018",
+        "37": "lo-que-queda-de-mi--escala-de-grises--2016",
+        "38": "shape-of-you-acoustic--segundo-piso--2017",
+    }
+
     def test_projection_uses_only_the_explicit_public_schema(self):
         rows = self.project()
 
-        # Historical projection had 7 works; the six newly confirmed works make 13.
-        self.assertEqual(len(rows), 13)
+        # The selection has 21 works; only the 16 with a valid preview are published.
+        self.assertEqual(len(rows), 16)
+        self.assertEqual(len(self.project_all()), 21)
         self.assertEqual(
             set(rows[0]),
             {"title", "artist", "role", "artwork", "releaseType", "year", "roles", "preview"},
@@ -57,33 +88,18 @@ class PublicMusicDataTests(unittest.TestCase):
                 "preview": "hasta-que-lleguemos-al-mar--luis-guinea--2024.mp3",
             },
         )
-        self.assertEqual({row["role"] for row in rows}, {"Artist", "Producer", "Composer"})
+        # Blue Moon (the only Composer facet) has no authorized preview, so it is excluded.
+        self.assertEqual({row["role"] for row in rows}, {"Artist", "Producer"})
         self.assertTrue(all(
             row["role"] in row["roles"]
             or (row["role"] == "Composer" and "Songwriter" in row["roles"])
             for row in rows
         ))
-        self.assertEqual(
-            [row["title"] for row in rows],
-            [
-                "Adiós Amor (Versión Bolero)",
-                "Hasta Que Lleguemos Al Mar",
-                "Hace Tanto Tiempo",
-                "Blue Moon",
-                "Volver a Verte",
-                "Cómo Decirte",
-                "Nuestro Hogar",
-                "12 Meses",
-                "La Bamba",
-                "A Escondidas",
-                "Lo Que Queda de Mí",
-                "Abrazo Imaginario",
-                "Shape of You - Acoustic",
-            ],
-        )
+        self.assertEqual([row["title"] for row in rows], self.PUBLISHED)
 
     def test_new_human_credit_decisions_project_exact_facets_and_roles(self):
-        rows = {row["title"]: row for row in self.project()}
+        # Credits are validated for the whole selection, even for works excluded for lack of preview.
+        rows = {row["title"]: row for row in self.project_all()}
 
         self.assertEqual(rows["Adiós Amor (Versión Bolero)"]["role"], "Artist")
         self.assertEqual(rows["Adiós Amor (Versión Bolero)"]["roles"], ["Artist", "Producer"])
@@ -192,27 +208,63 @@ class PublicMusicDataTests(unittest.TestCase):
         )
         self.assertEqual(len(role_pattern.findall(javascript)), len(rows))
 
-    def test_preview_is_published_only_for_verified_manifest_entries(self):
-        rows = {row["title"]: row["preview"] for row in self.project()}
+    def test_only_songs_with_a_valid_preview_are_published_and_the_rest_are_logged(self):
+        rows, exclusions = generator.project_with_exclusions(
+            self.master, self.selection, self.decisions, repo=REPO)
 
+        # Two published works share the title "Volver a Verte" (Luis Guinea / Ana Guinea).
         self.assertEqual(
-            rows,
-            {
-                "Adiós Amor (Versión Bolero)": None,
-                "Hasta Que Lleguemos Al Mar": "hasta-que-lleguemos-al-mar--luis-guinea--2024.mp3",
-                "Hace Tanto Tiempo": "hace-tanto-tiempo--luis-guinea--2021.mp3",
-                "Blue Moon": None,
-                "Volver a Verte": "volver-a-verte--luis-guinea--2020.mp3",
-                "Cómo Decirte": "como-decirte--luis-guinea--2022.mp3",
-                "Nuestro Hogar": "nuestro-hogar--luis-guinea--2022.mp3",
-                "12 Meses": "12-meses--rogelio-edel--2022.mp3",
-                "La Bamba": "la-bamba--rogelio-edel--2022.mp3",
-                "A Escondidas": None,
-                "Lo Que Queda de Mí": None,
-                "Abrazo Imaginario": "abrazo-imaginario--ricardo-bojalil--2022.mp3",
-                "Shape of You - Acoustic": None,
-            },
+            [(row["title"], row["preview"]) for row in rows],
+            [
+                ("Hasta Que Lleguemos Al Mar", "hasta-que-lleguemos-al-mar--luis-guinea--2024.mp3"),
+                ("Hace Tanto Tiempo", "hace-tanto-tiempo--luis-guinea--2021.mp3"),
+                ("Volver a Verte", "volver-a-verte--luis-guinea--2020.mp3"),
+                ("Cómo Decirte", "como-decirte--luis-guinea--2022.mp3"),
+                ("Nuestro Hogar", "nuestro-hogar--luis-guinea--2022.mp3"),
+                ("12 Meses", "12-meses--rogelio-edel--2022.mp3"),
+                ("La Bamba", "la-bamba--rogelio-edel--2022.mp3"),
+                ("Abrazo Imaginario", "abrazo-imaginario--ricardo-bojalil--2022.mp3"),
+                ("Allá", "alla--rogelio-edel--2022.mp3"),
+                ("Anoche Me Enamoré", "anoche-me-enamore--rogelio-edel--2021.mp3"),
+                ("Eres Veneno", "eres-veneno--rogelio-edel--2024.mp3"),
+                ("Imagina", "imagina--rogelio-edel--2024.mp3"),
+                ("Invencible", "invencible--ana-guinea--2021.mp3"),
+                ("Si Antes Te Hubiera Conocido - Cover Acústico",
+                 "si-antes-te-hubiera-conocido-cover-acustico--ana-guinea--2024.mp3"),
+                ("Vida Tras Vida", "vida-tras-vida--ana-guinea--2024.mp3"),
+                ("Volver a Verte", "volver-a-verte--ana-guinea--2022.mp3"),
+            ],
         )
+        self.assertEqual({item["review_id"]: item["work_id"] for item in exclusions}, self.EXCLUDED)
+        self.assertEqual({item["reason"] for item in exclusions}, {"no_authorized_preview"})
+        self.assertTrue(all(item["detail"].strip() for item in exclusions))
+
+        log = generator.exclusions_log(rows, exclusions, self.selection)
+        self.assertEqual(sorted(log["published"] + [e["review_id"] for e in log["excluded"]]),
+                         sorted(e["review_id"] for e in self.selection["entries"]))
+        self.assertEqual(log, json.loads(generator.EXCLUSIONS_LOG.read_text(encoding="utf-8")))
+
+    def test_invalid_preview_files_are_excluded_not_published(self):
+        with tempfile.TemporaryDirectory() as directory:
+            fake_repo = Path(directory)
+            real = REPO / "assets" / "audio" / "previews" / "12-meses--rogelio-edel--2022.mp3"
+            target = fake_repo / "assets" / "audio" / "previews"
+            target.mkdir(parents=True)
+            (target / real.name).write_bytes(real.read_bytes() * 3)  # ~133 s: too long
+            (target / "la-bamba--rogelio-edel--2022.mp3").write_bytes(b"not an mp3")
+            self.assertEqual(generator.preview_problem(
+                "assets/audio/previews/12-meses--rogelio-edel--2022.mp3", repo=fake_repo)[0],
+                "preview_too_long")
+            self.assertEqual(generator.preview_problem(
+                "assets/audio/previews/la-bamba--rogelio-edel--2022.mp3", repo=fake_repo)[0],
+                "preview_unplayable")
+            self.assertEqual(generator.preview_problem(
+                "assets/audio/previews/nuestro-hogar--luis-guinea--2022.mp3", repo=fake_repo)[0],
+                "preview_missing")
+            self.assertEqual(generator.preview_problem(
+                "One Page Luis Guinea/audios/x.mp3", repo=fake_repo)[0], "preview_outside_public_dir")
+        self.assertIsNone(generator.preview_problem(
+            "assets/audio/previews/12-meses--rogelio-edel--2022.mp3", repo=REPO))
 
     def test_evidence_role_comes_from_the_authorized_audio_folder(self):
         # #05 has no credits decision: Producer comes from the manifest source folder.
@@ -228,7 +280,7 @@ class PublicMusicDataTests(unittest.TestCase):
             generator.project(self.master, self.selection, self.decisions,
                               repo=REPO, manifest=manifest)
 
-    def test_projection_rejects_a_declared_preview_that_was_not_generated(self):
+    def test_a_declared_preview_that_was_not_generated_is_excluded(self):
         manifest = json.loads(generator.PREVIEW_MANIFEST.read_text(encoding="utf-8"))
         with tempfile.TemporaryDirectory() as directory:
             fake_repo = Path(directory)
@@ -238,22 +290,27 @@ class PublicMusicDataTests(unittest.TestCase):
                     target = fake_repo / artwork
                     target.parent.mkdir(parents=True, exist_ok=True)
                     target.touch()
-            with self.assertRaisesRegex(ValueError, "preview .* does not exist"):
-                generator.project(
-                    self.master, self.selection, self.decisions,
-                    repo=fake_repo, manifest=manifest,
-                )
+            rows, exclusions = generator.project_with_exclusions(
+                self.master, self.selection, self.decisions,
+                repo=fake_repo, manifest=manifest,
+            )
+            self.assertEqual(rows, [])
+            reasons = {item["review_id"]: item["reason"] for item in exclusions}
+            self.assertEqual(len(reasons), 21)
+            self.assertEqual({r for i, r in reasons.items() if i not in self.EXCLUDED}, {"preview_missing"})
 
     def test_serialized_preview_never_exposes_private_audio_details(self):
         javascript = generator.serialize(self.project())
 
-        self.assertEqual(javascript.count("preview:null"), 5)
-        self.assertEqual(len(re.findall(r"preview:'[a-z0-9-]+\.mp3'", javascript)), 8)
+        self.assertEqual(javascript.count("preview:null"), 0)
+        self.assertEqual(len(re.findall(r"preview:'[a-z0-9-]+\.mp3'", javascript)), 16)
         for forbidden in ("source", "sha256", "Productor", "Cantautor", "MixV1", "evidence"):
             self.assertNotIn(forbidden, javascript)
         row = dict(self.project()[0], preview="../secret/master.mp3")
         with self.assertRaisesRegex(ValueError, "public schema"):
             generator.serialize([row])
+        with self.assertRaisesRegex(ValueError, "preview is required"):
+            generator.serialize([dict(self.project()[0], preview=None)])
 
     def test_checked_in_output_is_current_and_generation_is_deterministic(self):
         expected = generator.serialize(self.project())
@@ -262,9 +319,11 @@ class PublicMusicDataTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             first = Path(directory) / "first.js"
             second = Path(directory) / "second.js"
-            generator.generate(output=first)
-            generator.generate(output=second)
+            generator.generate(output=first, log_path=Path(directory) / "first.json")
+            generator.generate(output=second, log_path=Path(directory) / "second.json")
             self.assertEqual(first.read_bytes(), second.read_bytes())
+            self.assertEqual((Path(directory) / "first.json").read_bytes(),
+                             generator.EXCLUSIONS_LOG.read_bytes())
 
 
 if __name__ == "__main__":

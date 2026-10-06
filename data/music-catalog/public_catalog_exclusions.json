@@ -1,0 +1,126 @@
+{
+  "schema": "public-catalog-exclusions-v1",
+  "generated_by": "data/music-catalog/generate_public_music_data.py",
+  "rule": "Toda canción publicada necesita un preview válido: entrada verified en music_preview_manifest.json, fichero existente en assets/audio/previews/, MP3 legible y duración <= 45 s. Las canciones de la selección sin preview reproducible se excluyen de js/music-data.js y se registran aquí.",
+  "published": [
+    "25",
+    "02",
+    "04",
+    "35",
+    "03",
+    "05",
+    "11",
+    "01",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "13",
+    "14",
+    "15"
+  ],
+  "published_previews": [
+    {
+      "review_id": "25",
+      "preview": "hasta-que-lleguemos-al-mar--luis-guinea--2024.mp3"
+    },
+    {
+      "review_id": "02",
+      "preview": "hace-tanto-tiempo--luis-guinea--2021.mp3"
+    },
+    {
+      "review_id": "04",
+      "preview": "volver-a-verte--luis-guinea--2020.mp3"
+    },
+    {
+      "review_id": "35",
+      "preview": "como-decirte--luis-guinea--2022.mp3"
+    },
+    {
+      "review_id": "03",
+      "preview": "nuestro-hogar--luis-guinea--2022.mp3"
+    },
+    {
+      "review_id": "05",
+      "preview": "12-meses--rogelio-edel--2022.mp3"
+    },
+    {
+      "review_id": "11",
+      "preview": "la-bamba--rogelio-edel--2022.mp3"
+    },
+    {
+      "review_id": "01",
+      "preview": "abrazo-imaginario--ricardo-bojalil--2022.mp3"
+    },
+    {
+      "review_id": "06",
+      "preview": "alla--rogelio-edel--2022.mp3"
+    },
+    {
+      "review_id": "07",
+      "preview": "anoche-me-enamore--rogelio-edel--2021.mp3"
+    },
+    {
+      "review_id": "08",
+      "preview": "eres-veneno--rogelio-edel--2024.mp3"
+    },
+    {
+      "review_id": "09",
+      "preview": "imagina--rogelio-edel--2024.mp3"
+    },
+    {
+      "review_id": "10",
+      "preview": "invencible--ana-guinea--2021.mp3"
+    },
+    {
+      "review_id": "13",
+      "preview": "si-antes-te-hubiera-conocido-cover-acustico--ana-guinea--2024.mp3"
+    },
+    {
+      "review_id": "14",
+      "preview": "vida-tras-vida--ana-guinea--2024.mp3"
+    },
+    {
+      "review_id": "15",
+      "preview": "volver-a-verte--ana-guinea--2022.mp3"
+    }
+  ],
+  "excluded": [
+    {
+      "review_id": "33",
+      "work_id": "adios-amor-version-bolero--luis-guinea--2020",
+      "title": "Adiós Amor (Versión Bolero)",
+      "reason": "no_authorized_preview",
+      "detail": "Ningún archivo de One Page Luis Guinea/audios concuerda a la vez en título, artista y duración con la obra (catálogo 164,210 s; audio_ref null). La única coincidencia de duración la contradicen nombre, artista, año y un vínculo previo con otra obra."
+    },
+    {
+      "review_id": "34",
+      "work_id": "blue-moon--luis-guinea--2015",
+      "title": "Blue Moon",
+      "reason": "no_authorized_preview",
+      "detail": "Ningún archivo de One Page Luis Guinea/audios coincide por nombre, etiquetas ni duración (catálogo 288,000 s; audio_ref null; ningún asset en lista_archivos_audio_*.xlsx)."
+    },
+    {
+      "review_id": "36",
+      "work_id": "a-escondidas--isabella-macias--2018",
+      "title": "A Escondidas",
+      "reason": "no_authorized_preview",
+      "detail": "El audio_ref «A ESCONDIDAS MSTR 1.5.m4a» (vinculado en Drive Producciones/Bela/ con Δ 0,056 s, RETIRED_WORKS_INVENTORY.md §4) no está en One Page Luis Guinea/audios, y ningún archivo local coincide por nombre ni etiquetas (catálogo 173,072 s)."
+    },
+    {
+      "review_id": "37",
+      "work_id": "lo-que-queda-de-mi--escala-de-grises--2016",
+      "title": "Lo Que Queda de Mí",
+      "reason": "no_authorized_preview",
+      "detail": "El audio_ref «Lo Que Queda De Mí.mp3» solo consta como demo en Drive (lista_archivos_audio_Songwriting.xlsx fila 151, Songwriting/Demo Editoras/) y no está en One Page Luis Guinea/audios. Ningún archivo local coincide por nombre ni etiquetas (catálogo 210,000 s). Las coincidencias de duración son pistas de otras obras."
+    },
+    {
+      "review_id": "38",
+      "work_id": "shape-of-you-acoustic--segundo-piso--2017",
+      "title": "Shape of You - Acoustic",
+      "reason": "no_authorized_preview",
+      "detail": "El audio_ref «Shape of you.mp3» no está en One Page Luis Guinea/audios y, según la relación R11, dura 365,4 s frente a los 184,000 s publicados (discrepancia abierta). Ningún archivo local coincide por nombre ni etiquetas."
+    }
+  ]
+}

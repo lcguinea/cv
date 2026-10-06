@@ -175,7 +175,16 @@
         "evidence": "human_review"
       },
       "notes": [],
-      "negative_decisions": []
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer"]}
+      ],
+      "credits_decision": {
+        "source": "clasificación documental existente",
+        "date": "2026-10-06",
+        "statement": "Solo Producer: el audio vinculado sin ambigüedad está en One Page Luis Guinea/audios/Productor/ (catalog_category producer según spikes/essentia/CATALOG_CATEGORY.md y audio_links_onepage.json). Es la atribución ya publicada; el propietario ordenó consolidarla aquí sin añadir otros créditos.",
+        "public_facet": "Producer"
+      }
     },
     {
       "review_id": "07",
@@ -199,7 +208,16 @@
         "evidence": "human_review"
       },
       "notes": [],
-      "negative_decisions": []
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer"]}
+      ],
+      "credits_decision": {
+        "source": "clasificación documental existente",
+        "date": "2026-10-06",
+        "statement": "Solo Producer: el audio vinculado sin ambigüedad está en One Page Luis Guinea/audios/Productor/ (catalog_category producer según spikes/essentia/CATALOG_CATEGORY.md y audio_links_onepage.json). Es la atribución ya publicada; el propietario ordenó consolidarla aquí sin añadir otros créditos.",
+        "public_facet": "Producer"
+      }
     },
     {
       "review_id": "08",
@@ -223,7 +241,16 @@
         "evidence": "human_review"
       },
       "notes": ["Nota: 155 BPM fue resolución humana; 103 BPM se consideró outlier."],
-      "negative_decisions": []
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer"]}
+      ],
+      "credits_decision": {
+        "source": "clasificación documental existente",
+        "date": "2026-10-06",
+        "statement": "Solo Producer: el audio vinculado sin ambigüedad está en One Page Luis Guinea/audios/Productor/ (catalog_category producer según spikes/essentia/CATALOG_CATEGORY.md y audio_links_onepage.json). Es la atribución ya publicada; el propietario ordenó consolidarla aquí sin añadir otros créditos.",
+        "public_facet": "Producer"
+      }
     },
     {
       "review_id": "09",
@@ -247,7 +274,16 @@
         "evidence": "human_review"
       },
       "notes": [],
-      "negative_decisions": ["no `reggaeton`"]
+      "negative_decisions": ["no `reggaeton`"],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer"]}
+      ],
+      "credits_decision": {
+        "source": "clasificación documental existente",
+        "date": "2026-10-06",
+        "statement": "Solo Producer: el audio vinculado sin ambigüedad está en One Page Luis Guinea/audios/Productor/ (catalog_category producer según spikes/essentia/CATALOG_CATEGORY.md y audio_links_onepage.json). Es la atribución ya publicada; el propietario ordenó consolidarla aquí sin añadir otros créditos.",
+        "public_facet": "Producer"
+      }
     },
     {
       "review_id": "10",
@@ -271,7 +307,16 @@
         "evidence": "human_review"
       },
       "notes": ["Nota: 80 BPM fue resolución humana frente a detección automática double-time de 162."],
-      "negative_decisions": []
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer"]}
+      ],
+      "credits_decision": {
+        "source": "clasificación documental existente",
+        "date": "2026-10-06",
+        "statement": "Solo Producer: el audio vinculado sin ambigüedad está en One Page Luis Guinea/audios/Productor/ (catalog_category producer según spikes/essentia/CATALOG_CATEGORY.md y audio_links_onepage.json). Es la atribución ya publicada; el propietario ordenó consolidarla aquí sin añadir otros créditos.",
+        "public_facet": "Producer"
+      }
     },
     {
       "review_id": "11",
@@ -349,7 +394,16 @@
         "evidence": "human_review"
       },
       "notes": [],
-      "negative_decisions": []
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer"]}
+      ],
+      "credits_decision": {
+        "source": "clasificación documental existente",
+        "date": "2026-10-06",
+        "statement": "Solo Producer: el audio vinculado sin ambigüedad está en One Page Luis Guinea/audios/Productor/ (catalog_category producer según spikes/essentia/CATALOG_CATEGORY.md y audio_links_onepage.json). Es la atribución ya publicada; el propietario ordenó consolidarla aquí sin añadir otros créditos.",
+        "public_facet": "Producer"
+      }
     },
     {
       "review_id": "14",
@@ -373,7 +427,16 @@
         "evidence": "human_review"
       },
       "notes": [],
-      "negative_decisions": []
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer"]}
+      ],
+      "credits_decision": {
+        "source": "clasificación documental existente",
+        "date": "2026-10-06",
+        "statement": "Solo Producer: el audio vinculado sin ambigüedad está en One Page Luis Guinea/audios/Productor/ (catalog_category producer según spikes/essentia/CATALOG_CATEGORY.md y audio_links_onepage.json). Es la atribución ya publicada; el propietario ordenó consolidarla aquí sin añadir otros créditos.",
+        "public_facet": "Producer"
+      }
     },
     {
       "review_id": "15",
@@ -397,7 +460,16 @@
         "evidence": "human_review"
       },
       "notes": ["Registro distinto de “Volver a Verte — Luis Guinea (2020)”."],
-      "negative_decisions": ["no fado"]
+      "negative_decisions": ["no fado"],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer"]}
+      ],
+      "credits_decision": {
+        "source": "clasificación documental existente",
+        "date": "2026-10-06",
+        "statement": "Solo Producer: el audio vinculado sin ambigüedad está en One Page Luis Guinea/audios/Productor/ (catalog_category producer según spikes/essentia/CATALOG_CATEGORY.md y audio_links_onepage.json). Es la atribución ya publicada; el propietario ordenó consolidarla aquí sin añadir otros créditos.",
+        "public_facet": "Producer"
+      }
     },
     {
       "review_id": "16",

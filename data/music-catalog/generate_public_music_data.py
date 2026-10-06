@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
 """Generate the browser-safe data consumed by /music/.
 
-Only eight explicitly allowed display fields are emitted. `preview` is the file name of a
-verified derivative in assets/audio/previews/ (music_preview_manifest.json) or null; the
-private source, its hash and the evidence never leave the manifest. The canonical catalogue is
+Only eight explicitly allowed display fields are emitted. Every published song has a valid
+`preview`: the file name of a verified derivative (music_preview_manifest.json) that exists in
+assets/audio/previews/, is a readable MP3 and lasts 45 s or less (measured with the standard
+library). Songs of the selection without such a preview are left out of the public output and
+recorded in public_catalog_exclusions.json. The private source, its hash and the evidence never
+leave the manifest. The canonical catalogue is
 never copied wholesale to the web bundle because it also contains internal-use file
 references and metadata that the current UI does not need.
 """
 
 import argparse
 import json
+import struct
 from pathlib import Path, PurePosixPath
 
+import audio_stdlib
 import generate_music_previews as previews
 
 
@@ -23,6 +28,14 @@ OUTPUT = REPO / "js" / "music-data.js"
 EVIDENCE_DIR = HERE / "spikes" / "essentia"
 DECISIONS = EVIDENCE_DIR / "human_review_decisions.json"
 PREVIEW_MANIFEST = previews.MANIFEST
+EXCLUSIONS_LOG = HERE / "public_catalog_exclusions.json"
+EXCLUSIONS_SCHEMA = "public-catalog-exclusions-v1"
+PUBLICATION_RULE = (
+    "Toda canción publicada necesita un preview válido: entrada verified en "
+    "music_preview_manifest.json, fichero existente en assets/audio/previews/, MP3 legible y "
+    "duración <= 45 s. Las canciones de la selección sin preview reproducible se excluyen de "
+    "js/music-data.js y se registran aquí."
+)
 
 SELECTION_SCHEMA = "public-music-selection-v2"
 ALLOWED_ROLES = {"Artist", "Producer", "Composer"}
@@ -37,7 +50,7 @@ CREDIT_ROLES = {
 LUIS = "Luis Guinea"
 # `role` is the primary Artist/Producer/Composer facet (filter); `roles` lists
 # every public credit of Luis Guinea in that work.
-# `preview` is a verified preview file name in assets/audio/previews/, or None.
+# `preview` is a validated preview file name in assets/audio/previews/ (never None).
 PUBLIC_FIELDS = ("title", "artist", "role", "artwork", "releaseType", "year", "roles", "preview")
 
 
@@ -133,8 +146,59 @@ def _primary_role(decision, roles, work_id):
     return role
 
 
+def preview_problem(preview, *, repo=REPO):
+    """None when `preview` is a playable public MP3 of at most 45 s, else (reason, detail)."""
+    path = PurePosixPath(preview)
+    if "/".join(path.parts[:-1]) != previews.OUTPUT_DIR or not previews.PREVIEW_NAME_RE.match(path.name):
+        return "preview_outside_public_dir", f"{preview} is not a file name directly under {previews.OUTPUT_DIR}"
+    file = Path(repo) / Path(*path.parts)
+    if not file.is_file():
+        return "preview_missing", f"{preview} does not exist; run generate_music_previews.py"
+    try:
+        duration, _ = audio_stdlib.mp3_duration(file, strict=True)
+    except (ValueError, IndexError, struct.error) as exc:
+        return "preview_unplayable", f"{preview} is not a readable MP3: {exc}"
+    if not 0 < duration <= previews.MAX_PREVIEW_S:
+        return "preview_too_long", f"{preview} lasts {duration:.3f} s (maximum {previews.MAX_PREVIEW_S:.0f} s)"
+    return None
+
+
 def project(master, selection, decisions, *, repo=REPO, manifest=None):
-    """Return the strict public projection in curated display order.
+    """Return the public rows: songs with a valid preview, in curated display order."""
+    return project_with_exclusions(master, selection, decisions, repo=repo, manifest=manifest)[0]
+
+
+def project_with_exclusions(master, selection, decisions, *, repo=REPO, manifest=None):
+    """Return (published rows, exclusions); every published row has a valid preview."""
+    rows, exclusions = [], []
+    for review_id, work_id, row, entry in _candidates(master, selection, decisions, repo=repo,
+                                                      manifest=manifest):
+        if entry["status"] != "verified":
+            exclusions.append({"review_id": review_id, "work_id": work_id, "title": row["title"],
+                               "reason": "no_authorized_preview", "detail": entry["blocked_reason"]})
+            continue
+        problem = preview_problem(entry["preview"], repo=repo)
+        if problem:
+            exclusions.append({"review_id": review_id, "work_id": work_id, "title": row["title"],
+                               "reason": problem[0], "detail": problem[1]})
+            continue
+        row["preview"] = PurePosixPath(entry["preview"]).name
+        rows.append(row)
+    return rows, exclusions
+
+
+def project_all(master, selection, decisions, *, repo=REPO, manifest=None):
+    """Every selected work with validated credits and role, before the preview requirement.
+
+    Internal: `preview` is None here. Used to check credit decisions of works that are
+    currently excluded for lack of a preview; never serialized.
+    """
+    return [row for _, _, row, _ in _candidates(master, selection, decisions, repo=repo,
+                                                manifest=manifest)]
+
+
+def _candidates(master, selection, decisions, *, repo=REPO, manifest=None):
+    """Validate the whole selection; yield (review_id, work_id, row, manifest entry).
 
     `manifest` defaults to the canonical music_preview_manifest.json.
     """
@@ -161,7 +225,7 @@ def project(master, selection, decisions, *, repo=REPO, manifest=None):
         raise ValueError("human mapping artifacts contain duplicate review_id values")
 
     seen = set()
-    rows, pending = [], []
+    pending = []
     for position, entry in enumerate(entries, start=1):
         if not isinstance(entry, dict) or set(entry) != {"review_id"}:
             raise ValueError(f"selection entry {position} must contain only review_id")
@@ -224,7 +288,6 @@ def project(master, selection, decisions, *, repo=REPO, manifest=None):
         }
         if tuple(row) != PUBLIC_FIELDS:
             raise AssertionError("public field order changed")
-        rows.append(row)
         pending.append((review_id, work_id, decision, row))
 
     # Previews last, so selection and credit errors keep precedence.
@@ -241,15 +304,8 @@ def project(master, selection, decisions, *, repo=REPO, manifest=None):
         if row["roles"] is None:
             row["roles"] = [_role_from_evidence(decision, entry)]
             row["role"] = _primary_role(decision, row["roles"], work_id)
-        if entry["status"] == "verified":
-            preview_path = PurePosixPath(entry["preview"])
-            if not (repo / Path(*preview_path.parts)).is_file():
-                raise ValueError(
-                    f"{work_id}: preview {entry['preview']} does not exist; "
-                    "run generate_music_previews.py"
-                )
-            row["preview"] = preview_path.name
-    return rows
+    return [(review_id, work_id, row, preview_entries[review_id])
+            for review_id, work_id, _, row in pending]
 
 
 def serialize(rows):
@@ -276,14 +332,13 @@ def serialize(rows):
             isinstance(row["roles"], list) and row["roles"]
             and all(isinstance(role, str) for role in row["roles"])
         ) or not (
-            row["preview"] is None
-            or (isinstance(row["preview"], str) and previews.PREVIEW_NAME_RE.match(row["preview"]))
+            isinstance(row["preview"], str) and previews.PREVIEW_NAME_RE.match(row["preview"])
         ):
-            raise ValueError("rows must match the eight-field public schema")
+            raise ValueError("rows must match the eight-field public schema (preview is required)")
         values = [quote(row[key]) for key in PUBLIC_FIELDS[:5]]
         values.append(str(row["year"]))
         values.append("[" + ", ".join(quote(role) for role in row["roles"]) + "]")
-        values.append("null" if row["preview"] is None else quote(row["preview"]))
+        values.append(quote(row["preview"]))
         fields = ", ".join(f"{key}:{value}" for key, value in zip(PUBLIC_FIELDS, values))
         lines.append(f"  {{ {fields} }}")
     payload = "[\n" + ",\n".join(lines) + "\n]"
@@ -293,24 +348,53 @@ def serialize(rows):
     )
 
 
+def exclusions_log(rows, exclusions, selection):
+    """Deterministic record of what was published and what was left out (no timestamps)."""
+    published_ids = [entry["review_id"] for entry in selection["entries"]
+                     if entry["review_id"] not in {item["review_id"] for item in exclusions}]
+    if len(published_ids) != len(rows):
+        raise AssertionError("published rows and selection disagree")
+    return {
+        "schema": EXCLUSIONS_SCHEMA,
+        "generated_by": "data/music-catalog/generate_public_music_data.py",
+        "rule": PUBLICATION_RULE,
+        "published": published_ids,
+        "published_previews": [{"review_id": review_id, "preview": row["preview"]}
+                               for review_id, row in zip(published_ids, rows)],
+        "excluded": exclusions,
+    }
+
+
 def generate(
     *, master_path=MASTER, selection_path=SELECTION, decisions_path=DECISIONS,
-    manifest_path=PREVIEW_MANIFEST, output=OUTPUT
+    manifest_path=PREVIEW_MANIFEST, output=OUTPUT, log_path=EXCLUSIONS_LOG
 ):
+    """Write js/music-data.js and the exclusion log; return (rows, exclusions)."""
     master = json.loads(Path(master_path).read_text(encoding="utf-8"))
     selection = json.loads(Path(selection_path).read_text(encoding="utf-8"))
     decisions = json.loads(Path(decisions_path).read_text(encoding="utf-8"))
     manifest = json.loads(Path(manifest_path).read_text(encoding="utf-8"))
-    javascript = serialize(project(master, selection, decisions, repo=REPO, manifest=manifest))
+    rows, exclusions = project_with_exclusions(master, selection, decisions, repo=REPO,
+                                               manifest=manifest)
+    if not rows:
+        raise ValueError("no song of the selection has a valid preview: refusing an empty catalogue")
+    javascript = serialize(rows)
+    log = json.dumps(exclusions_log(rows, exclusions, selection), ensure_ascii=False, indent=2) + "\n"
     Path(output).write_text(javascript, encoding="utf-8")
+    Path(log_path).write_text(log, encoding="utf-8")
+    return rows, exclusions
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=OUTPUT)
+    parser.add_argument("--log", type=Path, default=EXCLUSIONS_LOG)
     args = parser.parse_args()
-    generate(output=args.output)
-    print(f"PUBLIC MUSIC DATA OK: {len(json.loads(SELECTION.read_text(encoding='utf-8'))['entries'])} works -> {args.output}")
+    rows, exclusions = generate(output=args.output, log_path=args.log)
+    for item in exclusions:
+        print(f"EXCLUDED #{item['review_id']} {item['work_id']}: {item['reason']}")
+    print(f"PUBLIC MUSIC DATA OK: {len(rows)} published with preview, {len(exclusions)} excluded "
+          f"without a reproducible preview -> {args.output} (log: {args.log.name})")
 
 
 if __name__ == "__main__":

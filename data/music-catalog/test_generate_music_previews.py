@@ -16,8 +16,17 @@ sys.path.insert(0, str(HERE))
 
 import generate_music_previews as previews  # noqa: E402
 
-VERIFIED = {"25", "02", "04", "35", "03", "05", "11", "01"}
+VERIFIED = {"25", "02", "04", "35", "03", "05", "11", "01", "06", "07", "08", "09", "10", "13", "14", "15"}
 BLOCKED = {"33", "34", "36", "37", "38"}
+# Owner-approved chorus intervals (s) and the encoded end where an edge was adjusted.
+APPROVED = {
+    "25": (106.5, 145.0, 145.0), "02": (57.5, 91.0, 91.0), "04": (67.0, 107.5, 107.5),
+    "35": (98.0, 141.0, 141.0), "03": (69.5, 114.5, 114.4), "05": (86.0, 129.5, 129.5),
+    "11": (130.5, 170.5, 170.5), "01": (168.0, 205.0, 205.0), "06": (170.0, 213.5, 213.5),
+    "07": (75.0, 115.0, 115.0), "08": (126.5, 164.0, 164.0), "09": (72.0, 106.0, 106.0),
+    "10": (120.0, 165.0, 164.9), "13": (47.0, 83.0, 83.0), "14": (44.0, 83.0, 83.0),
+    "15": (70.3, 111.0, 111.0),
+}
 HAVE_FFMPEG = bool(shutil.which("ffmpeg") and shutil.which("ffprobe"))
 
 
@@ -51,8 +60,9 @@ class PreviewManifestTests(unittest.TestCase):
         for entry in entries:
             if entry["status"] == "verified":
                 self.assertEqual(entry["preview"], f"assets/audio/previews/{entry['work_id']}.mp3")
+                self.assertRegex(entry["preview_sha256"], r"^[0-9a-f]{64}$")
+                self.assertLessEqual(entry["window"]["duration_s"], previews.MAX_PREVIEW_S)
             else:
-                self.assertIsNone(entry["source"])
                 self.assertIsNone(entry["preview"])
                 self.assertTrue(entry["evidence_needed"])
 
@@ -130,12 +140,38 @@ class PreviewManifestTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "blocked"):
             self.validate(manifest)
 
-    def test_policy_stays_under_the_45_second_limit(self):
-        policy = self.manifest["policy"]
+    def test_manifest_rejects_a_window_over_45_seconds(self):
+        manifest = copy.deepcopy(self.manifest)
+        self.entry(manifest, "04")["window"]["duration_s"] = 45.1
 
-        self.assertEqual(policy, previews.POLICY)
-        self.assertLess(policy["duration_s"], previews.MAX_PREVIEW_S)
-        self.assertEqual(policy["start_s"], 30.0)
+        with self.assertRaisesRegex(ValueError, "45"):
+            self.validate(manifest)
+
+    def test_manifest_uses_the_approved_chorus_windows(self):
+        self.assertEqual(self.manifest["schema"], "music-preview-manifest-v2")
+        self.assertEqual(self.manifest["policies"], previews.POLICIES)
+        self.assertEqual(self.manifest["encoding"], previews.ENCODING)
+        for review_id, (start, end, encoded_end) in APPROVED.items():
+            with self.subTest(review_id=review_id):
+                entry = self.entry(self.manifest, review_id)
+                window = entry["window"]
+                self.assertEqual(entry["trim_policy"], "approved-chorus-window-v1")
+                self.assertEqual(window["approved_s"], [start, end])
+                self.assertEqual(window["start_s"], start)
+                self.assertAlmostEqual(window["start_s"] + window["duration_s"], encoded_end, places=3)
+                self.assertLessEqual(window["duration_s"], previews.MAX_PREVIEW_S)
+                self.assertEqual(window["edge_adjustment"] is not None, encoded_end != end)
+
+    def test_manifest_rejects_undocumented_or_excessive_edge_adjustments(self):
+        manifest = copy.deepcopy(self.manifest)
+        self.entry(manifest, "03")["window"]["edge_adjustment"] = None
+        with self.assertRaisesRegex(ValueError, "edge_adjustment"):
+            self.validate(manifest)
+
+        manifest = copy.deepcopy(self.manifest)
+        self.entry(manifest, "04")["window"]["start_s"] = 65.9
+        with self.assertRaisesRegex(ValueError, "approved edge"):
+            self.validate(manifest)
 
     def test_manifest_publishes_no_absolute_path(self):
         text = previews.MANIFEST.read_text(encoding="utf-8")
@@ -160,26 +196,41 @@ class PreviewEncodingTests(unittest.TestCase):
         )
         self.source = source
         self.work_id = "tono-publico--luis-guinea--2020"
+        self.entry = {
+            "review_id": "99",
+            "work_id": self.work_id,
+            "status": "verified",
+            "source": "One Page Luis Guinea/audios/Cantautor/Tono Público.mp3",
+            "source_sha256": previews.sha256_file(source),
+            "preview": f"assets/audio/previews/{self.work_id}.mp3",
+            "preview_sha256": "0" * 64,
+            "trim_policy": "approved-chorus-window-v1",
+            "window": {
+                "approved_s": [10.0, 54.5],
+                "start_s": 10.0,
+                "duration_s": 44.5,
+                "edge_adjustment": None,
+                "method": "synthetic-test",
+                "justification": "Synthetic approved window.",
+            },
+            "association": {"basis": "objective_evidence", "evidence": ["synthetic"]},
+        }
         self.manifest = {
             "schema": previews.MANIFEST_SCHEMA,
             "output_dir": "assets/audio/previews",
-            "policy": copy.deepcopy(previews.POLICY),
-            "entries": [{
-                "review_id": "99",
-                "work_id": self.work_id,
-                "status": "verified",
-                "source": "One Page Luis Guinea/audios/Cantautor/Tono Público.mp3",
-                "source_sha256": previews.sha256_file(source),
-                "preview": f"assets/audio/previews/{self.work_id}.mp3",
-                "trim_policy": previews.POLICY["id"],
-                "association": {"basis": "objective_evidence", "evidence": ["synthetic"]},
-            }],
+            "encoding": copy.deepcopy(previews.ENCODING),
+            "policies": copy.deepcopy(previews.POLICIES),
+            "entries": [self.entry],
         }
         self.selection = {"entries": [{"review_id": "99"}]}
         self.decisions = {"classifications": [{
             "review_id": "99",
             "catalog_link": {"status": "mapped", "work_id": self.work_id},
         }]}
+        reference = self.repo / "reference.mp3"
+        previews.encode(self.source, reference, self.entry)
+        self.entry["preview_sha256"] = previews.sha256_file(reference)
+        reference.unlink()
 
     def tearDown(self):
         self.tmp.cleanup()
@@ -208,6 +259,20 @@ class PreviewEncodingTests(unittest.TestCase):
         self.assertNotIn(b"Secret Master", first)
         self.assertEqual([p.name for p in out.parent.iterdir()], [out.name])
 
+    def test_rejects_a_preview_whose_hash_differs_from_the_manifest(self):
+        manifest = copy.deepcopy(self.manifest)
+        manifest["entries"][0]["preview_sha256"] = "0" * 64
+
+        with self.assertRaisesRegex(ValueError, "preview sha256"):
+            self.generate(manifest)
+
+    def test_a_full_45_second_window_is_rejected_by_the_frame_walk(self):
+        manifest = copy.deepcopy(self.manifest)
+        manifest["entries"][0]["window"].update(approved_s=[10.0, 55.0], duration_s=45.0)
+
+        with self.assertRaisesRegex(ValueError, "frame-walk duration"):
+            self.generate(manifest)
+
     def test_rejects_a_source_whose_hash_changed(self):
         manifest = copy.deepcopy(self.manifest)
         manifest["entries"][0]["source_sha256"] = "0" * 64
@@ -224,7 +289,7 @@ class PreviewEncodingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unexpected"):
             self.generate()
 
-    def test_rejects_a_source_shorter_than_the_uniform_window(self):
+    def test_rejects_a_source_shorter_than_the_selected_window(self):
         subprocess.run(
             ["ffmpeg", "-nostdin", "-loglevel", "error", "-y", "-f", "lavfi", "-i",
              "sine=frequency=440:duration=50", "-c:a", "libmp3lame", str(self.source)],
@@ -233,7 +298,7 @@ class PreviewEncodingTests(unittest.TestCase):
         manifest = copy.deepcopy(self.manifest)
         manifest["entries"][0]["source_sha256"] = previews.sha256_file(self.source)
 
-        with self.assertRaisesRegex(ValueError, "shorter"):
+        with self.assertRaisesRegex(ValueError, "shorter|exceeds source duration"):
             self.generate(manifest)
 
 
@@ -252,6 +317,10 @@ class CatalogAudioRefCorrectionTests(unittest.TestCase):
             [(self.WORK, "Llegue Muy Tarde.wav", "Hace Tanto Tiempo.mp3")],
         )
 
+    # internal/ holds private provenance (absolute paths of the owner's machine) and is never
+    # versioned, so this check only runs where build_catalog.py has produced it locally.
+    @unittest.skipUnless((HERE / "internal" / "provenance.json").is_file(),
+                         "internal/ is private local build output and is not versioned")
     def test_provenance_and_conflict_keep_the_original_value(self):
         prov = load(HERE / "internal" / "provenance.json")["works"][self.WORK]["fields"]["audio_ref"]
         conflicts = [

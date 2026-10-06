@@ -1,19 +1,20 @@
 {
-  "schema": "music-preview-manifest-v1",
-  "description": "Autoridad declarativa de los previews de /music/: una entrada por obra de public_music_selection.json. generate_music_previews.py genera los derivados de las entradas verified; generate_public_music_data.py publica solo su nombre de fichero. Las fuentes son masters privados (One Page Luis Guinea/audios/, ignorado por Git) y nunca se publican.",
+  "schema": "music-preview-manifest-v2",
+  "description": "Autoridad declarativa de los previews de /music/: una entrada por obra de public_music_selection.json, cada preview con su ventana de coro aprobada y su sha256. generate_music_previews.py genera los derivados de las entradas verified; generate_public_music_data.py publica solo su nombre de fichero. Las fuentes son masters privados (One Page Luis Guinea/audios/, ignorado por Git) y nunca se publican.",
   "output_dir": "assets/audio/previews",
-  "policy": {
-    "id": "uniform-start30-v1",
-    "start_s": 30.0,
-    "duration_s": 44.5,
+  "encoding": {
     "fade_in_s": 0.5,
     "fade_out_s": 2.0,
     "format": "mp3",
     "codec": "libmp3lame",
     "bitrate": "128k",
     "sample_rate": 44100,
-    "channels": 2,
-    "rationale": "No existía criterio previo de recorte. Política uniforme y determinista, sin análisis musical: empieza en el segundo 30 de la fuente y codifica 44,5 s (ffprobe informa < 45,000 s), con fundidos cortos para evitar cortes bruscos. Sin metadatos embebidos y con flags bitexact: la misma fuente produce los mismos bytes."
+    "channels": 2
+  },
+  "policies": {
+    "approved-chorus-window-v1": {
+      "rationale": "Ventana de coro por entrada, aprobada por el propietario a partir del análisis local del 2026-10-05 (repetición de letra transcrita, segmentación estructural y energía RMS). Cada borde puede apartarse como máximo 1 s del intervalo aprobado y solo para evitar un corte técnicamente defectuoso; el ajuste queda documentado en la entrada."
+    }
   },
   "entries": [
     {
@@ -23,7 +24,10 @@
       "source": null,
       "source_sha256": null,
       "preview": null,
+      "preview_sha256": null,
       "trim_policy": null,
+      "window": null,
+      "association": null,
       "blocked_reason": "Ningún archivo de One Page Luis Guinea/audios concuerda a la vez en título, artista y duración con la obra (catálogo 164,210 s; audio_ref null). La única coincidencia de duración la contradicen nombre, artista, año y un vínculo previo con otra obra.",
       "candidates": [
         {
@@ -48,7 +52,19 @@
       "source": "One Page Luis Guinea/audios/Cantautor/Hasta Que Lleguemos Al Mar - Luis Guinea.mp3",
       "source_sha256": "2344a7f8c84ca64c903b9698008ea3039383d4361a3fd960d62554f4265be94f",
       "preview": "assets/audio/previews/hasta-que-lleguemos-al-mar--luis-guinea--2024.mp3",
-      "trim_policy": "uniform-start30-v1",
+      "preview_sha256": "21d4c6682eea4548697fd9e2f768dfc49a5300bf2537eddd152c8047e9f60674",
+      "trim_policy": "approved-chorus-window-v1",
+      "window": {
+        "approved_s": [
+          106.5,
+          145.0
+        ],
+        "start_s": 106.5,
+        "duration_s": 38.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-05 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), segmentación estructural laplaciana (croma/MFCC) y energía RMS; intervalo aprobado por el propietario.",
+        "justification": "Segunda vuelta del coro «Fui con la corriente… que siempre llegan al mar» (letra repetida 2 veces), con la frase previa «No era mi papel…»; arreglo más lleno que la primera."
+      },
       "association": {
         "basis": "objective_evidence",
         "evidence": [
@@ -65,7 +81,19 @@
       "source": "One Page Luis Guinea/audios/Cantautor/Hace Tanto Tiempo.mp3",
       "source_sha256": "2f7d30560f48b03e369045a55be5f76e01abd07814b9238cb055ae10a40b40d5",
       "preview": "assets/audio/previews/hace-tanto-tiempo--luis-guinea--2021.mp3",
-      "trim_policy": "uniform-start30-v1",
+      "preview_sha256": "8b042d8d16ac6e58c169295ae30385249872c381fc4d910475ec5513578496c8",
+      "trim_policy": "approved-chorus-window-v1",
+      "window": {
+        "approved_s": [
+          57.5,
+          91.0
+        ],
+        "start_s": 57.5,
+        "duration_s": 33.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-05 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), segmentación estructural laplaciana (croma/MFCC) y energía RMS; intervalo aprobado por el propietario.",
+        "justification": "Sección «Hace tanto tiempo… me hace tanta falta… para recordar», única parte contrastante y repetida al final."
+      },
       "association": {
         "basis": "human_authorization",
         "authority": "decisión humana explícita de Luis Guinea (2026-10-01): Hace Tanto Tiempo.mp3 es la fuente correcta; el audio_ref se corrige en audio_ref_corrections.json.",
@@ -83,7 +111,10 @@
       "source": null,
       "source_sha256": null,
       "preview": null,
+      "preview_sha256": null,
       "trim_policy": null,
+      "window": null,
+      "association": null,
       "blocked_reason": "Ningún archivo de One Page Luis Guinea/audios coincide por nombre, etiquetas ni duración (catálogo 288,000 s; audio_ref null; ningún asset en lista_archivos_audio_*.xlsx).",
       "candidates": [
         {
@@ -102,7 +133,19 @@
       "source": "One Page Luis Guinea/audios/Cantautor/Volver A Verte_Final.m4a",
       "source_sha256": "a1bbb816cd752e3d4d6aed34c658c1e9525bd6dd5a0b960ba478e019de3d6577",
       "preview": "assets/audio/previews/volver-a-verte--luis-guinea--2020.mp3",
-      "trim_policy": "uniform-start30-v1",
+      "preview_sha256": "e6a06a8868d1fb4a3a42e05c55c9e1ef409ebf4b9fba1e3a7151bb74217af1c7",
+      "trim_policy": "approved-chorus-window-v1",
+      "window": {
+        "approved_s": [
+          67.0,
+          107.5
+        ],
+        "start_s": 67.0,
+        "duration_s": 40.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-05 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), segmentación estructural laplaciana (croma/MFCC) y energía RMS; intervalo aprobado por el propietario.",
+        "justification": "Coro «Volver a verte otra vez… aquellos días» (repetido 2 veces); primera aparición completa."
+      },
       "association": {
         "basis": "human_authorization",
         "authority": "fuente identificada previamente y autorizada expresamente por el usuario para #04, aunque no se haya demostrado la equivalencia exacta con el WAV.",
@@ -119,7 +162,19 @@
       "source": "One Page Luis Guinea/audios/Productor/Pablo Delgado/PDelgado_Cómo Decirte_MixV1_.mp3",
       "source_sha256": "0d04d6ea68884a921f19876afe56e7b169ae354b64c8025260a1137ddfe43291",
       "preview": "assets/audio/previews/como-decirte--luis-guinea--2022.mp3",
-      "trim_policy": "uniform-start30-v1",
+      "preview_sha256": "754173e5f17fc09824adad5f009a7c69d2c51fabab3abfb2bc24e7fed96246b1",
+      "trim_policy": "approved-chorus-window-v1",
+      "window": {
+        "approved_s": [
+          98.0,
+          141.0
+        ],
+        "start_s": 98.0,
+        "duration_s": 43.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-05 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), segmentación estructural laplaciana (croma/MFCC) y energía RMS; intervalo aprobado por el propietario.",
+        "justification": "Segunda vuelta del coro «Te diría que me encanta… cómo decirte que te quiero junto a mí» (3 apariciones) con su frase previa."
+      },
       "association": {
         "basis": "human_authorization",
         "authority": "decisión humana explícita del usuario: Mix V1 es la fuente correcta de #35 pese a la diferencia aproximada de 3,5 s.",
@@ -137,7 +192,19 @@
       "source": "One Page Luis Guinea/audios/Cantautor/Nuestro Hogar - Master 1.0.mp3",
       "source_sha256": "7352c870c5db83aa18ba3c751ce4e0283f47839c7113cbff661aa6cfc6be4480",
       "preview": "assets/audio/previews/nuestro-hogar--luis-guinea--2022.mp3",
-      "trim_policy": "uniform-start30-v1",
+      "preview_sha256": "33db18d60b5b75b342591f251a25c95b128c3db59f7562b901b01cfdb7b21b06",
+      "trim_policy": "approved-chorus-window-v1",
+      "window": {
+        "approved_s": [
+          69.5,
+          114.5
+        ],
+        "start_s": 69.5,
+        "duration_s": 44.9,
+        "edge_adjustment": "Final adelantado 0,1 s: con 45,0 s exactos el MP3 mide 45,06 s en el recorrido de frames (cabecera Info y relleno de LAME) y la validación pública (<= 45 s) lo rechazaría.",
+        "method": "Análisis local del 2026-10-05 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), segmentación estructural laplaciana (croma/MFCC) y energía RMS; intervalo aprobado por el propietario.",
+        "justification": "Coro «Seamos los autores… sin reglas nuestro hogar» (2 apariciones); el coro completo dura ~53 s, se recorta desde «Seamos los autores» para cerrar con el título (decisión del propietario)."
+      },
       "association": {
         "basis": "human_authorization",
         "authority": "fuente identificada previamente y autorizada expresamente por el usuario para #03, aunque no se haya demostrado la equivalencia exacta con el WAV.",
@@ -153,7 +220,19 @@
       "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/Rogelio Edel - 12 meses - Master 2.0.mp3",
       "source_sha256": "dc6ffe013bc6d6141e1bcca8e18b9617b73db8be9e9acd005b9552f1701d3272",
       "preview": "assets/audio/previews/12-meses--rogelio-edel--2022.mp3",
-      "trim_policy": "uniform-start30-v1",
+      "preview_sha256": "33da8c86e49b30690c56f58d347053b859632cff6e9fa14c1d1e1f7aa74059cd",
+      "trim_policy": "approved-chorus-window-v1",
+      "window": {
+        "approved_s": [
+          86.0,
+          129.5
+        ],
+        "start_s": 86.0,
+        "duration_s": 43.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-05 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), segmentación estructural laplaciana (croma/MFCC) y energía RMS; intervalo aprobado por el propietario.",
+        "justification": "Final del pre-coro y coro «Me voy a perder una vida contigo… tú eres mi mujer» (2 apariciones)."
+      },
       "association": {
         "basis": "human_authorization",
         "authority": "fuente identificada previamente y autorizada expresamente por el usuario para #05, aunque no se haya demostrado la equivalencia exacta con el WAV.",
@@ -169,7 +248,19 @@
       "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/Rogelio_Bamba_JCMxMster.mp3",
       "source_sha256": "ba456152768c8e213aeb180524732636400df3f6db94d50f4f9db9e7d87ca568",
       "preview": "assets/audio/previews/la-bamba--rogelio-edel--2022.mp3",
-      "trim_policy": "uniform-start30-v1",
+      "preview_sha256": "6372a31fa7baf4e3f7b8fe08699281dcffc0886052b1503f8111192f2c6a90fa",
+      "trim_policy": "approved-chorus-window-v1",
+      "window": {
+        "approved_s": [
+          130.5,
+          170.5
+        ],
+        "start_s": 130.5,
+        "duration_s": 40.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-05 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), segmentación estructural laplaciana (croma/MFCC) y energía RMS; intervalo aprobado por el propietario.",
+        "justification": "Estribillo «Bamba, bamba» y gancho «No me quiero ir ahorita…» cantado dos veces; zona de mayor energía. Elegido por el propietario entre 3 candidatos."
+      },
       "association": {
         "basis": "human_authorization",
         "authority": "fuente identificada previamente y autorizada expresamente por el usuario para #11, aunque no se haya demostrado la equivalencia exacta con el WAV.",
@@ -185,7 +276,10 @@
       "source": null,
       "source_sha256": null,
       "preview": null,
+      "preview_sha256": null,
       "trim_policy": null,
+      "window": null,
+      "association": null,
       "blocked_reason": "El audio_ref «A ESCONDIDAS MSTR 1.5.m4a» (vinculado en Drive Producciones/Bela/ con Δ 0,056 s, RETIRED_WORKS_INVENTORY.md §4) no está en One Page Luis Guinea/audios, y ningún archivo local coincide por nombre ni etiquetas (catálogo 173,072 s).",
       "candidates": [
         {
@@ -204,7 +298,10 @@
       "source": null,
       "source_sha256": null,
       "preview": null,
+      "preview_sha256": null,
       "trim_policy": null,
+      "window": null,
+      "association": null,
       "blocked_reason": "El audio_ref «Lo Que Queda De Mí.mp3» solo consta como demo en Drive (lista_archivos_audio_Songwriting.xlsx fila 151, Songwriting/Demo Editoras/) y no está en One Page Luis Guinea/audios. Ningún archivo local coincide por nombre ni etiquetas (catálogo 210,000 s). Las coincidencias de duración son pistas de otras obras.",
       "candidates": [
         {
@@ -229,7 +326,19 @@
       "source": "One Page Luis Guinea/audios/Cantautor/Abrazo Imaginario - Master 1.1.mp3",
       "source_sha256": "915f7795fc49ad2e986219e781456292b7baf4bbf1f79d40e2f4f7840fa164e2",
       "preview": "assets/audio/previews/abrazo-imaginario--ricardo-bojalil--2022.mp3",
-      "trim_policy": "uniform-start30-v1",
+      "preview_sha256": "ca101877e9139a424fb1d51f7919f56a4885c7e6da7d0e75417b2efb84b982ea",
+      "trim_policy": "approved-chorus-window-v1",
+      "window": {
+        "approved_s": [
+          168.0,
+          205.0
+        ],
+        "start_s": 168.0,
+        "duration_s": 37.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-05 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), segmentación estructural laplaciana (croma/MFCC) y energía RMS; intervalo aprobado por el propietario.",
+        "justification": "Segunda vuelta del coro «No lo sé… aunque sea imaginario» (3 apariciones), más energía que la primera."
+      },
       "association": {
         "basis": "human_authorization",
         "authority": "fuente identificada previamente y autorizada expresamente por el usuario para #01, aunque no se haya demostrado la equivalencia exacta con el WAV.",
@@ -245,7 +354,10 @@
       "source": null,
       "source_sha256": null,
       "preview": null,
+      "preview_sha256": null,
       "trim_policy": null,
+      "window": null,
+      "association": null,
       "blocked_reason": "El audio_ref «Shape of you.mp3» no está en One Page Luis Guinea/audios y, según la relación R11, dura 365,4 s frente a los 184,000 s publicados (discrepancia abierta). Ningún archivo local coincide por nombre ni etiquetas.",
       "candidates": [
         {
@@ -256,6 +368,238 @@
         }
       ],
       "evidence_needed": "Un audio de la versión publicada de Segundo Piso (duración dentro de ±1,0 s de 184,000 s) en One Page Luis Guinea/audios. Recortar el MP3 de 365,4 s no resolvería la discrepancia de versión (R11)."
+    },
+    {
+      "review_id": "06",
+      "work_id": "alla--rogelio-edel--2022",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/Allá_LGMix.mp3",
+      "source_sha256": "c3b9d891f79ee31170bcfb114c460102a003d8e64a01438e733446c47f0b5c01",
+      "preview": "assets/audio/previews/alla--rogelio-edel--2022.mp3",
+      "preview_sha256": "0e19aee98064c3b9805d325b984b9d24d3370c096594a41ba74298754fa90cb1",
+      "trim_policy": "approved-chorus-window-v1",
+      "window": {
+        "approved_s": [
+          170.0,
+          213.5
+        ],
+        "start_s": 170.0,
+        "duration_s": 43.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-05 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), segmentación estructural laplaciana (croma/MFCC) y energía RMS; intervalo aprobado por el propietario.",
+        "justification": "Repetición con arreglo completo de «Como luces de ciudad… eres luz en mi camino» y cierre «¿Dónde está el amor?». Elegido por el propietario entre 3 candidatos."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "audio_links_onepage.json: vínculo inequívoco por audio_ref con alla--rogelio-edel--2022 (ffprobe 226.519 s frente a duration_ms 226519, Δ 0.000 s; catalog_category producer).",
+          "human_review_decisions.json #06: catalog_link mapped a alla--rogelio-edel--2022.",
+          "Publicación del preview autorizada expresamente por el propietario (2026-10-05)."
+        ]
+      }
+    },
+    {
+      "review_id": "07",
+      "work_id": "anoche-me-enamore--rogelio-edel--2021",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/Anoche (Master)_1.mp3",
+      "source_sha256": "34717ab09af9c632524fdfb97549d81fa7e14f0c72ef10d7d258beed065587e0",
+      "preview": "assets/audio/previews/anoche-me-enamore--rogelio-edel--2021.mp3",
+      "preview_sha256": "ab81bdaff63ecaed7a345585a4bccabb8169236aeb6f60463e27efc20e8fa793",
+      "trim_policy": "approved-chorus-window-v1",
+      "window": {
+        "approved_s": [
+          75.0,
+          115.0
+        ],
+        "start_s": 75.0,
+        "duration_s": 40.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-05 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), segmentación estructural laplaciana (croma/MFCC) y energía RMS; intervalo aprobado por el propietario.",
+        "justification": "Segunda vuelta del coro «Anoche yo me enamoré… lo mágico que es el amor» (2 apariciones), más energía."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "audio_links_onepage.json: vínculo inequívoco por audio_ref con anoche-me-enamore--rogelio-edel--2021 (ffprobe 161.400 s frente a duration_ms 161347, Δ 0.053 s; catalog_category producer).",
+          "human_review_decisions.json #07: catalog_link mapped a anoche-me-enamore--rogelio-edel--2021.",
+          "Publicación del preview autorizada expresamente por el propietario (2026-10-05)."
+        ]
+      }
+    },
+    {
+      "review_id": "08",
+      "work_id": "eres-veneno--rogelio-edel--2024",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/Eres Veneno_LGMaster3.0.mp3",
+      "source_sha256": "c927f4a52e3675876a18d855425794761e534db8f526417c537bd5beb6f918b8",
+      "preview": "assets/audio/previews/eres-veneno--rogelio-edel--2024.mp3",
+      "preview_sha256": "71edb46319759d17bdc622b5a37000bc2affb8460b5ef8dd5890d9024cb5aeb1",
+      "trim_policy": "approved-chorus-window-v1",
+      "window": {
+        "approved_s": [
+          126.5,
+          164.0
+        ],
+        "start_s": 126.5,
+        "duration_s": 37.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-05 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), segmentación estructural laplaciana (croma/MFCC) y energía RMS; intervalo aprobado por el propietario.",
+        "justification": "Segunda vuelta del coro «Mi cuerpo… entraste en mí como si nada… sal de mi mente, que voy a perderme» (3 apariciones)."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "audio_links_onepage.json: vínculo inequívoco por audio_ref con eres-veneno--rogelio-edel--2024 (ffprobe 264.341 s frente a duration_ms 264266, Δ 0.075 s; catalog_category producer).",
+          "human_review_decisions.json #08: catalog_link mapped a eres-veneno--rogelio-edel--2024.",
+          "Publicación del preview autorizada expresamente por el propietario (2026-10-05)."
+        ]
+      }
+    },
+    {
+      "review_id": "09",
+      "work_id": "imagina--rogelio-edel--2024",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/Imagina_Master3.0.mp3",
+      "source_sha256": "c31b5d33e6974b73b46902cd830c90ce1d35444dea9c73543465470ca23fac2d",
+      "preview": "assets/audio/previews/imagina--rogelio-edel--2024.mp3",
+      "preview_sha256": "e0705070ee9890f79c584023a08484771f1886dc5408e47329f39ff2580f20ea",
+      "trim_policy": "approved-chorus-window-v1",
+      "window": {
+        "approved_s": [
+          72.0,
+          106.0
+        ],
+        "start_s": 72.0,
+        "duration_s": 34.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-05 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), segmentación estructural laplaciana (croma/MFCC) y energía RMS; intervalo aprobado por el propietario.",
+        "justification": "Clímax «Quiero vivir a tu lado… para ti, para ti», sección de mayor energía. Elegido por el propietario entre 3 candidatos."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "audio_links_onepage.json: vínculo inequívoco por audio_ref con imagina--rogelio-edel--2024 (ffprobe 139.251 s frente a duration_ms 139186, Δ 0.065 s; catalog_category producer).",
+          "human_review_decisions.json #09: catalog_link mapped a imagina--rogelio-edel--2024.",
+          "Publicación del preview autorizada expresamente por el propietario (2026-10-05)."
+        ]
+      }
+    },
+    {
+      "review_id": "10",
+      "work_id": "invencible--ana-guinea--2021",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Ana Guinea/Invencible.mp3",
+      "source_sha256": "861f39b937d699b9d2f3e93d399deef9172265e8399338c4512df991e966988b",
+      "preview": "assets/audio/previews/invencible--ana-guinea--2021.mp3",
+      "preview_sha256": "f93e4a6f6bdefd6da1aa2a02a6c74326430bd5b9bdbc796ea19516409d5e31c5",
+      "trim_policy": "approved-chorus-window-v1",
+      "window": {
+        "approved_s": [
+          120.0,
+          165.0
+        ],
+        "start_s": 120.0,
+        "duration_s": 44.9,
+        "edge_adjustment": "Final adelantado 0,1 s: con 45,0 s exactos el MP3 mide 45,06 s en el recorrido de frames (cabecera Info y relleno de LAME) y la validación pública (<= 45 s) lo rechazaría.",
+        "method": "Análisis local del 2026-10-05 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), segmentación estructural laplaciana (croma/MFCC) y energía RMS; intervalo aprobado por el propietario.",
+        "justification": "Segunda vuelta de «Llegaste tú» y coro «…contigo soy invencible» (2 apariciones más final)."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "audio_links_onepage.json: vínculo inequívoco por titulo con invencible--ana-guinea--2021 (ffprobe 234.000 s frente a duration_ms 234000, Δ 0.000 s; catalog_category producer).",
+          "human_review_decisions.json #10: catalog_link mapped a invencible--ana-guinea--2021.",
+          "Publicación del preview autorizada expresamente por el propietario (2026-10-05)."
+        ]
+      }
+    },
+    {
+      "review_id": "13",
+      "work_id": "si-antes-te-hubiera-conocido-cover-acustico--ana-guinea--2024",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Ana Guinea/Si Antes Te Hubiera Conocido (Version Acustica).mp3",
+      "source_sha256": "3eee11008c550e7bfa08ad7e9da5655c7da1601f31fe7dff95003d1f462f1d69",
+      "preview": "assets/audio/previews/si-antes-te-hubiera-conocido-cover-acustico--ana-guinea--2024.mp3",
+      "preview_sha256": "89e4a19c6dafbd697304d5748f7178b398f62ae0cdff4df528376d82e5f58e01",
+      "trim_policy": "approved-chorus-window-v1",
+      "window": {
+        "approved_s": [
+          47.0,
+          83.0
+        ],
+        "start_s": 47.0,
+        "duration_s": 36.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-05 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), segmentación estructural laplaciana (croma/MFCC) y energía RMS; intervalo aprobado por el propietario.",
+        "justification": "Coro «¿Qué hubiera sido si antes te hubiera conocido? Seguramente estarías bailando conmigo…» (3 apariciones)."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "audio_links_onepage.json: vínculo inequívoco por audio_ref con si-antes-te-hubiera-conocido-cover-acustico--ana-guinea--2024 (ffprobe 164.211 s frente a duration_ms 164149, Δ 0.062 s; catalog_category producer).",
+          "human_review_decisions.json #13: catalog_link mapped a si-antes-te-hubiera-conocido-cover-acustico--ana-guinea--2024.",
+          "Publicación del preview autorizada expresamente por el propietario (2026-10-05)."
+        ]
+      }
+    },
+    {
+      "review_id": "14",
+      "work_id": "vida-tras-vida--ana-guinea--2024",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Ana Guinea/Vida Tras Vida (FINALMIX).mp3",
+      "source_sha256": "4ae867e7e317d8a0add4b37f9ebfbd112c9826d87012006667082259f53b17bc",
+      "preview": "assets/audio/previews/vida-tras-vida--ana-guinea--2024.mp3",
+      "preview_sha256": "8f70c7ead807edd88b13253c948c2c1bd5f20e2f9b093ebfa8144ee1057bff9c",
+      "trim_policy": "approved-chorus-window-v1",
+      "window": {
+        "approved_s": [
+          44.0,
+          83.0
+        ],
+        "start_s": 44.0,
+        "duration_s": 39.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-05 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), segmentación estructural laplaciana (croma/MFCC) y energía RMS; intervalo aprobado por el propietario.",
+        "justification": "Coro «Ay, es un milagro… vida tras vida mi vida me vas a encontrar» (3 apariciones)."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "audio_links_onepage.json: vínculo inequívoco por audio_ref con vida-tras-vida--ana-guinea--2024 (ffprobe 196.068 s frente a duration_ms 196067, Δ 0.001 s; catalog_category producer).",
+          "human_review_decisions.json #14: catalog_link mapped a vida-tras-vida--ana-guinea--2024.",
+          "Publicación del preview autorizada expresamente por el propietario (2026-10-05)."
+        ]
+      }
+    },
+    {
+      "review_id": "15",
+      "work_id": "volver-a-verte--ana-guinea--2022",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Ana Guinea/Ana Guinea - Volver a verte - Master 1.1.mp3",
+      "source_sha256": "31c30b02def9ec6169b0e1797edd8ea3c0a765d32b7bdf89d8771a317f1fa01c",
+      "preview": "assets/audio/previews/volver-a-verte--ana-guinea--2022.mp3",
+      "preview_sha256": "0fa3c13fbbcf698e8e1e2fa97e4e97a70ae84d51e1eafff6c86553ad627ee2a8",
+      "trim_policy": "approved-chorus-window-v1",
+      "window": {
+        "approved_s": [
+          70.3,
+          111.0
+        ],
+        "start_s": 70.3,
+        "duration_s": 40.7,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-05 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), segmentación estructural laplaciana (croma/MFCC) y energía RMS; intervalo aprobado por el propietario.",
+        "justification": "Coro «Volver a verte otra vez… aquellos días» (2 apariciones); primera aparición completa."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "audio_links_onepage.json: vínculo inequívoco por audio_ref con volver-a-verte--ana-guinea--2022 (ffprobe 216.405 s frente a duration_ms 216405, Δ 0.000 s; catalog_category producer).",
+          "human_review_decisions.json #15: catalog_link mapped a volver-a-verte--ana-guinea--2022.",
+          "Publicación del preview autorizada expresamente por el propietario (2026-10-05)."
+        ]
+      }
     }
   ]
 }
