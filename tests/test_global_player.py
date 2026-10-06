@@ -98,6 +98,44 @@ class GlobalPlayerTests(unittest.TestCase):
             self.assertTrue(0 <= after < 16)
             self.assertTrue(playing, "the next preview keeps playing after `ended`")
 
+    def test_automatic_playback_plays_every_preview_once_before_repeating(self):
+        out = self.run_scenario(
+            "const page = browser.tab().open('index.html'); await settle();"
+            "page.click('#mp-toggle'); await settle(); out.order = [state(page).index];"
+            "for (let n = 0; n < 17; n++) { browser.randomQueue.push([0, 0.99, 0.5, 0.3][n % 4]);"
+            "  page.audio().loadMetadata(40); page.audio().finish(); await settle(); out.order.push(state(page).index); }"
+            "out.playing = state(page).playing;"
+        )
+        order = out["order"]
+        self.assertEqual(sorted(order[:16]), list(range(16)), "the first sixteen previews are all different")
+        # A new round starts after all sixteen, never with the preview that just ended.
+        self.assertNotEqual(order[16], order[15])
+        self.assertEqual(len(set(order[16:18])), 2)
+        self.assertTrue(out["playing"])
+
+    def test_no_repeat_survives_page_changes_and_applies_to_next(self):
+        out = self.run_scenario(
+            "const tab = browser.tab(); const home = tab.open('index.html'); await settle();"
+            "home.click('#mp-toggle'); await settle(); out.order = [state(home).index];"
+            "for (let n = 0; n < 5; n++) { browser.randomQueue.push(0); home.audio().loadMetadata(40); home.audio().finish(); await settle(); out.order.push(state(home).index); }"
+            "const cv = tab.open('cv.html', {autoplayBlocked: false}); await settle(); out.session = state(cv).session.played.length;"
+            "for (let n = 0; n < 5; n++) { browser.randomQueue.push(0); cv.click('#mp-next'); await settle(); out.order.push(state(cv).index); }"
+            "for (let n = 0; n < 5; n++) { browser.randomQueue.push(0); cv.audio().loadMetadata(40); cv.audio().finish(); await settle(); out.order.push(state(cv).index); }"
+        )
+        self.assertEqual(len(out["order"]), 16)
+        self.assertEqual(len(set(out["order"])), 16)
+        self.assertEqual(out["session"], 6)
+
+    def test_a_song_chosen_by_hand_can_repeat(self):
+        out = self.run_scenario(
+            "const page = browser.tab().open('music/index.html'); await settle();"
+            "page.click('#toggle'); await settle(); const first = state(page).index; out.first = first;"
+            "browser.randomQueue.push(0); page.audio().loadMetadata(40); page.audio().finish(); await settle();"
+            "page.click(page.$$('.pl-row')[first]); await settle(); out.again = state(page);"
+        )
+        self.assertEqual(out["again"]["index"], out["first"])
+        self.assertTrue(out["again"]["playing"])
+
     def test_next_picks_another_track_and_keeps_the_play_state(self):
         out = self.run_scenario(
             "const page = browser.tab().open('cv.html'); await settle(); out.a = state(page);"

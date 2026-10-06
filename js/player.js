@@ -22,21 +22,24 @@
   const audio=document.createElement('audio');
   audio.preload='none';
   const listeners=[];
-  let index=-1,failed=false,pendingTime=0,knownDuration=0,lastSave=0,autostart=false;
+  let index=-1,failed=false,pendingTime=0,knownDuration=0,lastSave=0,autostart=false,played=new Set();
   function emit(type){listeners.forEach(fn=>fn(type))}
   function isPlaying(){return !audio.paused&&!audio.ended}
   function time(){return audio.readyState>0?audio.currentTime:pendingTime}
   function duration(){return Number.isFinite(audio.duration)&&audio.duration>0?audio.duration:knownDuration}
-  // A random index, never `exclude` when there is an alternative.
+  // Random picks (start, end of a preview, next) work like a shuffle: a preview that already played in this round is
+  // not picked again until every other one has played; then a new round starts. `exclude` is never picked when there
+  // is an alternative. Choosing a song by hand can always repeat it.
   function randomIndex(exclude){
-    if(exclude<0||tracks.length<2)return Math.floor(Math.random()*tracks.length);
-    const i=Math.floor(Math.random()*(tracks.length-1));
-    return i>=exclude?i+1:i;
+    let pool=tracks.map((x,i)=>i).filter(i=>i!==exclude&&!played.has(i));
+    if(!pool.length){played.clear();pool=tracks.map((x,i)=>i).filter(i=>i!==exclude)}
+    if(!pool.length)pool=[0];
+    return pool[Math.floor(Math.random()*pool.length)];
   }
   function save(){
     if(index<0)return;
     lastSave=Date.now();
-    session.set(SESSION_KEY,JSON.stringify({preview:tracks[index].preview,time:time(),duration:duration(),playing:isPlaying(),auto:autostart,tab}));
+    session.set(SESSION_KEY,JSON.stringify({preview:tracks[index].preview,time:time(),duration:duration(),playing:isPlaying(),auto:autostart,played:[...played].map(i=>tracks[i].preview),tab}));
   }
   function load(i,at,length){
     audio.pause();
@@ -98,7 +101,7 @@
     audio.preload='auto';start();
   }
   function disarmAutostart(){if(autostart){autostart=false;GESTURES.forEach(type=>document.removeEventListener(type,onGesture,true))}}
-  ['play','pause'].forEach(type=>audio.addEventListener(type,()=>{if(type==='play')disarmAutostart();save();emit('state')}));
+  ['play','pause'].forEach(type=>audio.addEventListener(type,()=>{if(type==='play'){disarmAutostart();played.add(index)}save();emit('state')}));
   // A finished preview moves on to another random one; the element already holds the user's permission to play.
   audio.addEventListener('ended',()=>{select(randomIndex(index),true)});
   ['timeupdate','durationchange','loadedmetadata','emptied'].forEach(type=>audio.addEventListener(type,()=>{if(type==='timeupdate'&&Date.now()-lastSave>1000)save();emit('time')}));
@@ -118,20 +121,22 @@
     let saved=null;
     try{saved=JSON.parse(session.get(SESSION_KEY)||'null')}catch(e){saved=null}
     const i=saved?tracks.findIndex(x=>x.preview===saved.preview):-1;
-    return i>=0?{index:i,time:Math.max(0,Number(saved.time)||0),duration:Math.max(0,Number(saved.duration)||0),playing:saved.playing===true&&saved.tab===tab,auto:saved.auto===true}:null;
+    const done=i>=0&&Array.isArray(saved.played)?saved.played.map(name=>tracks.findIndex(x=>x.preview===name)).filter(j=>j>=0):[];
+    return i>=0?{index:i,played:done,time:Math.max(0,Number(saved.time)||0),duration:Math.max(0,Number(saved.duration)||0),playing:saved.playing===true&&saved.tab===tab,auto:saved.auto===true}:null;
   }
   function resume(saved){
     const policy=navigator.getAutoplayPolicy?navigator.getAutoplayPolicy('mediaelement'):'';
     if(saved.playing&&policy!=='disallowed'){audio.preload='auto';start()}else save();
   }
   const saved=readSaved();
-  if(saved){load(saved.index,saved.time,saved.duration);if(saved.auto&&!saved.playing)armAutostart();else resume(saved)}
+  if(saved){played=new Set(saved.played);load(saved.index,saved.time,saved.duration);if(saved.auto&&!saved.playing)armAutostart();else resume(saved)}
   else{load(randomIndex(-1),0,0);armAutostart()}
   // Back/forward cache: this page comes back as it was left, so it catches up with what later pages saved.
   window.addEventListener('pageshow',event=>{
     if(!event.persisted)return;
     const latest=readSaved();
     if(!latest)return;
+    played=new Set(latest.played);
     if(latest.index!==index)load(latest.index,latest.time,latest.duration);
     else if(Math.abs(time()-latest.time)>.5)seek(latest.time);
     if(!latest.playing)audio.pause();
