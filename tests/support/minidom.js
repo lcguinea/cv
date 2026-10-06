@@ -307,8 +307,10 @@ class Page {
       vm.runInContext(fs.readFileSync(path.join(browser.root, file), 'utf8'), win, {filename: file});
       doc.currentScript = null;
     }
-    doc._dispatch(doc, {type: 'DOMContentLoaded'});
+    // deferReady leaves the page between its last script and DOMContentLoaded until ready() is called.
+    if (!options.deferReady) this.ready();
   }
+  ready() { this.document._dispatch(this.document, {type: 'DOMContentLoaded'}); }
   $(selector) { return this.document.querySelector(selector); }
   $$(selector) { return this.document.querySelectorAll(selector); }
   click(target) { const el = typeof target === 'string' ? this.$(target) : target; if (!el) throw new Error('no element ' + target); el.click(); }
