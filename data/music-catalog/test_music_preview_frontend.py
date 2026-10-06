@@ -93,7 +93,7 @@ class Media extends El {
   pause() { if (!this.paused) { this.paused = true; log.push('pause:' + this.attrs.id); this.fire('pause'); } }
 }
 
-const body = html.slice(html.indexOf('<body'), html.indexOf('<script'));
+const body = html.slice(html.indexOf('<body'), html.indexOf('<script', html.indexOf('<body')));
 for (const m of body.matchAll(/<(\w+)\b([^>]*)>/g)) {
   const attrs = {};
   for (const a of m[2].matchAll(/([\w-]+)(?:="([^"]*)")?/g)) attrs[a[1]] = a[2] === undefined ? '' : a[2];
@@ -115,9 +115,11 @@ const document = {
     return everything().filter(el => tags.includes(el.tagName));
   },
   addEventListener: (type, fn) => { (docListeners[type] = docListeners[type] || []).push(fn); },
+  dispatchEvent: () => true,
 };
 const store = {};
-const ctx = {document, console, localStorage: {getItem: k => store[k] || null, setItem: (k, v) => { store[k] = v; }}};
+const ctx = {document, console, CustomEvent: class { constructor(type) { this.type = type; } }, addEventListener: () => {},
+  localStorage: {getItem: k => store[k] || null, setItem: (k, v) => { store[k] = v; }}};
 ctx.window = ctx;
 vm.createContext(ctx);
 for (const file of ['js/strings.js', 'js/i18n.js', 'js/music-data.js', 'js/site.js']) vm.runInContext(read(file), ctx);
@@ -192,8 +194,9 @@ class MusicPlayerStaticTests(unittest.TestCase):
         self.assertNotRegex(self.html, r'<svg (?![^>]*aria-hidden="true")')
 
     def test_visible_text_is_bound_to_i18n(self):
-        body = self.html[self.html.index("<body"):self.html.index("<script")]
-        texts = {text.strip() for text in re.findall(r">([^<]+)<", body) if text.strip()}
+        body = self.html[self.html.index("<body"):self.html.index("<script src=")]
+        bound = r'<(\w+)\b[^>]*\bdata-i18n="[^"]+"[^>]*>[^<]*</\1>'
+        texts = {text.strip() for text in re.findall(r">([^<]+)<", re.sub(bound, "", body)) if text.strip()}
         # Brand mark, language codes, separators and the initial counters are not translatable.
         self.assertLessEqual(texts, {"LUIS GUINEA", "/ MUSIC", "EN", "ES", "·", "/", "0", "0:00"})
 
@@ -347,7 +350,7 @@ class MusicPlayerBehaviourTests(unittest.TestCase):
         en, es = out["en"], out["es"]
         x = es["data"][4]
         self.assertEqual(en["toggleLabel"], "Pause preview: " + x["title"])
-        self.assertEqual(es["toggleLabel"], "Pausar preview: " + x["title"])
+        self.assertEqual(es["toggleLabel"], "Pausar fragmento: " + x["title"])
         self.assertEqual((es["prevLabel"], es["nextLabel"]), ("Canción anterior", "Canción siguiente"))
         self.assertEqual(es["alt"], "Portada: " + x["title"])
         self.assertEqual(es["type"], "Sencillo")

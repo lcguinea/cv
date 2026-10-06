@@ -1,0 +1,243 @@
+#!/usr/bin/env python3
+"""Focused tests for the shared header, mobile menu, theme switch, active navigation and i18n of Home,
+CV and Music, plus the editorial copy rules (no em dashes, no unused strings).
+
+Static checks always run. Behaviour checks run the real pages in tests/support/minidom.js and need
+Node.js. Standard library only.
+
+Run: python3 -m unittest tests/test_site_navigation_i18n.py
+"""
+
+import json
+import re
+import shutil
+import subprocess
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+RUNNER = ROOT / "tests" / "support" / "run_scenario.js"
+STRINGS_JS = ROOT / "js" / "strings.js"
+NODE = shutil.which("node")
+PAGES = {"index.html": "home", "cv.html": "cv", "music/index.html": "music"}
+NAV_KEYS = ["nav.research", "nav.experience", "nav.music", "nav.cv", "nav.contact"]
+NAV_HREFS = {
+    "home": ["#writing", "#experience", "music/index.html", "cv.html", "#contact"],
+    "cv": ["index.html#writing", "index.html#experience", "music/index.html", "cv.html", "index.html#contact"],
+    "music": ["../index.html#writing", "../index.html#experience", "index.html", "../cv.html", "../index.html#contact"],
+}
+CURRENT = {"home": None, "cv": "nav.cv", "music": "nav.music"}
+PUBLISHED_JS = ("strings.js", "i18n.js", "site.js", "player.js", "music-page.js", "theme-init.js")
+# Keys built at runtime from data: 'music.role'+credit and 'music.type'+release type.
+DYNAMIC_PREFIXES = ("music.role", "music.type")
+
+
+def read(rel):
+    return (ROOT / rel).read_text(encoding="utf-8")
+
+
+def strings():
+    result = subprocess.run(
+        [NODE, "-e", "global.window={};eval(require('fs').readFileSync(process.argv[1],'utf8'));"
+                     "process.stdout.write(JSON.stringify(window.STRINGS))", str(STRINGS_JS)],
+        capture_output=True, text=True, check=True)
+    return json.loads(result.stdout)
+
+
+def flatten(tree, prefix=""):
+    out = {}
+    for key, value in tree.items():
+        path = prefix + key
+        if isinstance(value, dict):
+            out.update(flatten(value, path + "."))
+        else:
+            out[path] = value
+    return out
+
+
+def header(html):
+    return re.search(r'<header class="site-header[^"]*">.*?</header>', html, re.S).group(0)
+
+
+class HeaderStaticTests(unittest.TestCase):
+    def test_every_page_shares_the_same_header_and_primary_navigation(self):
+        shapes = set()
+        for rel, page in PAGES.items():
+            block = header(read(rel))
+            with self.subTest(page=page):
+                nav = re.search(r'<nav class="nav" aria-label="Primary" data-i18n-label="ui.primaryNav">(.*?)</nav>', block).group(1)
+                links = re.findall(r'<a href="([^"]+)"( aria-current="page")? data-i18n="([^"]+)">', nav)
+                self.assertEqual([k for _, _, k in links], NAV_KEYS)
+                self.assertEqual([h for h, _, _ in links], NAV_HREFS[page])
+                current = [k for _, cur, k in links if cur]
+                self.assertEqual(current, [CURRENT[page]] if CURRENT[page] else [])
+                self.assertIn('<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" data-i18n="ui.menu">', block)
+                self.assertIn('<div class="site-menu" id="site-menu">', block)
+                self.assertIn('data-theme-choice="light" aria-pressed="true" data-i18n="ui.light"', block)
+                self.assertIn('data-theme-choice="dark" aria-pressed="false" data-i18n="ui.dark"', block)
+                self.assertNotRegex(block, r"<button(?![^>]*type=\"button\")")
+            # Same structure everywhere once page-specific paths, brand suffix and CV print button are removed.
+            shape = re.sub(r'href="[^"]*"| aria-current="page"|<span> / \w+</span>|<button type="button" class="print-button".*?</button>| no-print', "", block)
+            shapes.add(shape)
+        self.assertEqual(len(shapes), 1)
+
+    def test_theme_is_restored_in_head_before_the_stylesheet(self):
+        for rel in PAGES:
+            html = read(rel)
+            head = html[:html.index("</head>")]
+            with self.subTest(page=rel):
+                init = re.search(r'<script src="(?:\.\./)?js/theme-init\.js"></script>', head)
+                css = re.search(r'<link rel="stylesheet" href="(?:\.\./)?css/styles\.css">', head)
+                self.assertTrue(init and css and init.start() < css.start())
+        init = read("js/theme-init.js")
+        self.assertIn("localStorage.getItem('lg-theme')==='dark'", init)
+        self.assertIn("classList.add('js')", init)
+
+    def test_sticky_header_scroll_margin_and_touch_targets(self):
+        css = read("css/styles.css")
+        self.assertIn(".site-header{position:sticky;top:0;", css)
+        self.assertIn("main [id]{scroll-margin-top:5rem}", css)
+        self.assertIn(".tools button{border:0;min-width:44px;min-height:44px;", css)
+        self.assertIn(".nav a{display:inline-flex;align-items:center;min-height:44px;", css)
+        self.assertIn("html.js .menu-toggle{display:inline-flex;align-items:center;margin-left:auto;min-height:44px;min-width:44px;", css)
+        self.assertIn(".nav a[aria-current]{border-bottom-color:var(--accent)}", css)
+
+
+@unittest.skipUnless(NODE, "node not installed")
+class StringsTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        data = strings()
+        cls.en, cls.es = flatten(data["en"]), flatten(data["es"])
+
+    def used_keys(self):
+        used = set()
+        code = [read("js/" + name) for name in PUBLISHED_JS if (ROOT / "js" / name).is_file()]
+        for rel in PAGES:
+            html = read(rel)
+            used |= set(re.findall(r'data-i18n(?:-label|-placeholder)?="([\w.]+)"', html))
+            code += re.findall(r"<script>(.*?)</script>", html, re.S)
+        for source in code:
+            used |= {m for m in re.findall(r"'([a-z]+\.[A-Za-z]+)'", source) if m in self.en}
+        return used
+
+    def test_both_languages_have_the_same_non_empty_keys(self):
+        self.assertEqual(set(self.en), set(self.es))
+        for key in self.en:
+            self.assertTrue(self.en[key].strip() and self.es[key].strip(), key)
+
+    def test_every_used_key_exists_and_every_key_is_used(self):
+        used = self.used_keys()
+        self.assertLessEqual(used, set(self.en))
+        unused = {k for k in set(self.en) - used if not k.startswith(DYNAMIC_PREFIXES)}
+        self.assertEqual(unused, set())
+
+    def test_editorial_decisions(self):
+        self.assertEqual((self.en["facets.title"], self.es["facets.title"]), ("What I do", "Lo que hago"))
+        for gone in ("facets.intro", "hero.imageNote", "hero.selected", "music.topNote", "experience.independent"):
+            self.assertNotIn(gone, self.en)
+        self.assertEqual(self.en["writing.title"], "What streaming data says about how artists grow.")
+        self.assertEqual(self.es["music.title"], "Lanzamientos como artista y productor, 2020–2024.")
+        self.assertEqual(self.es["skills.music"], "producción, composición, arreglos, dirección musical, piano y teclados.")
+        self.assertNotIn("pool de", self.es["writing.a1"])
+        self.assertFalse([k for k, v in self.es.items() if k.startswith("music.") and "preview" in v.lower()])
+        # The long CV profile stays as it is in CV_MASTER.md.
+        self.assertTrue(self.en["cv.profileText"].startswith("I work where creative and analytical thinking meet."))
+
+    def test_no_em_dash_in_published_copy(self):
+        for rel in list(PAGES) + ["js/" + n for n in PUBLISHED_JS if (ROOT / "js" / n).is_file()]:
+            with self.subTest(file=rel):
+                self.assertNotIn("—", read(rel))
+
+
+class HomeContentTests(unittest.TestCase):
+    def test_the_fifth_medium_article_from_cv_master_is_on_the_home_page(self):
+        master = read("CV_MASTER.md")
+        section = master[master.index("### 4.5"):master.index("### Also on Medium")]
+        title = re.search(r"### 4\.5 (.+)", section).group(1).strip()
+        url = re.search(r"- URL: (\S+)", section).group(1)
+        html = read("index.html")
+        self.assertIn(f'<h3 lang="es">{title}</h3>', html)
+        self.assertIn(f'href="{url}"', html)
+        self.assertEqual(len(re.findall(r'href="https://medium\.com/@soyluisguinea/[^"]+"', html)), 5)
+
+    def test_removed_hero_note_and_facets_intro(self):
+        html = read("index.html")
+        for gone in ("hero.imageNote", "hero.selected", "facets.intro", "image-note"):
+            self.assertNotIn(gone, html)
+
+
+@unittest.skipUnless(NODE, "node not installed")
+class NavigationBehaviourTests(unittest.TestCase):
+    def run_scenario(self, scenario):
+        result = subprocess.run([NODE, str(RUNNER), str(ROOT), scenario], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return json.loads(result.stdout)
+
+    def test_mobile_menu_opens_closes_with_escape_and_returns_focus(self):
+        out = self.run_scenario(
+            "const page = browser.tab().open('cv.html'); await settle();"
+            "const button = page.$('.menu-toggle'), root = page.document.documentElement;"
+            "const view = () => ({expanded: button.getAttribute('aria-expanded'), open: root.classList.contains('menu-open'),"
+            "  focus: page.document.activeElement && (page.document.activeElement.getAttribute('data-i18n') || page.document.activeElement.className)});"
+            "out.start = view(); page.click(button); out.open = view();"
+            "page.key('Escape'); out.closed = view();"
+            "page.click(button); page.click(page.$('.nav a[data-i18n=\"nav.music\"]')); out.link = view();"
+            "out.js = root.classList.contains('js');"
+        )
+        self.assertEqual(out["start"], {"expanded": "false", "open": False, "focus": None})
+        self.assertEqual(out["open"], {"expanded": "true", "open": True, "focus": "nav.research"})
+        self.assertEqual(out["closed"], {"expanded": "false", "open": False, "focus": "ui.menu"})
+        self.assertEqual((out["link"]["expanded"], out["link"]["open"]), ("false", False))
+        self.assertTrue(out["js"])
+
+    def test_theme_buttons_show_state_persist_and_restore_before_scripts(self):
+        out = self.run_scenario(
+            "const page = browser.tab().open('index.html'); await settle();"
+            "const pressed = p => p.$$('[data-theme-choice]').map(b => b.dataset.themeChoice + ':' + b.getAttribute('aria-pressed'));"
+            "out.a = pressed(page); page.click('[data-theme-choice=\"dark\"]');"
+            "out.b = [pressed(page), page.document.documentElement.dataset.theme, browser.local['lg-theme']];"
+            "const next = browser.tab().open('music/index.html'); await settle();"
+            "out.c = [pressed(next), next.document.documentElement.dataset.theme];"
+            "next.click('[data-lang=\"es\"]'); out.labels = next.$$('[data-theme-choice]').map(b => b.textContent);"
+            "next.click('[data-theme-choice=\"light\"]'); out.d = [pressed(next), next.document.documentElement.dataset.theme || '', browser.local['lg-theme']];"
+        )
+        self.assertEqual(out["a"], ["light:true", "dark:false"])
+        self.assertEqual(out["b"], [["light:false", "dark:true"], "dark", "dark"])
+        self.assertEqual(out["c"], [["light:false", "dark:true"], "dark"])
+        self.assertEqual(out["labels"], ["Claro", "Oscuro"])
+        self.assertEqual(out["d"], [["light:true", "dark:false"], "", "light"])
+
+    def test_language_switch_translates_navigation_and_labels(self):
+        out = self.run_scenario(
+            "const page = browser.tab().open('music/index.html'); await settle(); page.click('[data-lang=\"es\"]'); await settle();"
+            "out.nav = page.$$('.nav a').map(a => a.textContent);"
+            "out.label = page.$('.nav').getAttribute('aria-label'); out.menu = page.$('.menu-toggle').textContent;"
+            "out.groups = page.$$('.tool-group').map(g => g.getAttribute('aria-label'));"
+            "out.lang = page.document.documentElement.lang; out.stored = browser.local['lg-language'];"
+            "const cv = browser.tab().open('cv.html'); await settle(); out.cv = cv.$$('.nav a').map(a => a.textContent);"
+        )
+        self.assertEqual(out["nav"], ["Investigación", "Experiencia", "Música", "CV", "Contacto"])
+        self.assertEqual((out["label"], out["menu"]), ("Principal", "Menú"))
+        self.assertEqual(out["groups"], ["Idioma", "Tema"])
+        self.assertEqual((out["lang"], out["stored"]), ("es", "es"))
+        self.assertEqual(out["cv"], out["nav"])
+
+    def test_home_marks_the_section_under_the_header_as_current(self):
+        out = self.run_scenario(
+            "const page = browser.tab().open('index.html'); await settle();"
+            "const sections = page.$$('main > section'); const header = page.$('.site-header'); header.rect.height = 60;"
+            "const scrollTo = id => { let top = -5000; sections.forEach(s => { s.rect.top = top; top += 1000; });"
+            "  const target = sections.find(s => s.id === id); const shift = target.rect.top - 100;"
+            "  sections.forEach(s => { s.rect.top -= shift; }); page.window._fire('scroll'); };"
+            "const current = () => page.$$('.nav a[aria-current]').map(a => a.getAttribute('href') + ':' + a.getAttribute('aria-current'));"
+            "for (const id of ['writing', 'facets', 'experience', 'contact']) { scrollTo(id); await settle(); out[id] = current(); }"
+        )
+        self.assertEqual(out["writing"], ["#writing:true"])
+        self.assertEqual(out["facets"], [])
+        self.assertEqual(out["experience"], ["#experience:true"])
+        self.assertEqual(out["contact"], ["#contact:true"])
+
+
+if __name__ == "__main__":
+    unittest.main()

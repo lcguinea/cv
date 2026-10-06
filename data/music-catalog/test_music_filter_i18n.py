@@ -13,7 +13,7 @@ STRINGS_JS = ROOT / "js" / "strings.js"
 
 FACETS = ("Artist", "Producer", "Composer")
 EXPECTED = {
-    "en": {"Artist": "Artist", "Producer": "Producer", "Composer": "Composer"},
+    "en": {"Artist": "Artist", "Producer": "Producer", "Composer": "Songwriter"},
     "es": {"Artist": "Artista", "Producer": "Productor", "Composer": "Compositor"},
 }
 
