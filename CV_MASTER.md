@@ -47,7 +47,7 @@ Rules for any agent using this file:
 
 ### Long (web, EN)
 
-I work where creative and analytical thinking meet. For 10+ years I have been inside the music business as a label founder, A&R and producer; in parallel I build data systems and automations that turn messy information into decisions. Today that work centres on AI systems: multi-agent workflows across Claude, Codex and Gemini, custom agents and MCP integrations built for real business operations. Lately I write about how artists actually grow, using data to test the stories the music industry tells itself. I work in English and Spanish, from Valencia.
+I work where creative and analytical thinking meet. For 10+ years I have been inside the music business as a label founder, A&R and producer; in parallel I build data systems and automations that turn messy information into decisions. I also manage and produce cultural projects and events, coordinating budgets, suppliers, contracts and logistics. Today that work centres on AI systems: multi-agent workflows across Claude, Codex and Gemini, custom agents and MCP integrations built for real business operations. Lately I write about how artists actually grow, using data to test the stories the music industry tells itself. I work in English and Spanish, from Valencia.
 
 ### Short (print, EN)
 
@@ -59,6 +59,7 @@ Music producer, A&R and technology and automation developer with 10+ years in th
 - **A&R:** I hear songs as a producer and read the numbers as an analyst.
 - **Data:** I turn operational and streaming data into automated reporting and clear decisions.
 - **AI systems:** I design and build AI and automation systems for real business operations, from multi-agent orchestration to MCP integrations with business data.
+- **Cultural management:** Mexican cultural manager and producer with Spanish nationality and 8+ years coordinating musical, audiovisual and event projects across artists, production companies, brands and legal and administrative teams, including budgets, suppliers, contracts and logistics.
 - **Teaching:** Berklee graduate, pianist since childhood, with classroom experience in piano and music production.
 
 Spanish versions: translate naturally when building the ES site. Do not translate literally.
@@ -179,7 +180,7 @@ Ordered newest first. `dates` use the format shown on the site.
 - dates: Feb 2025 – Present
 - facets: `business`, `creative`, `data`, `ai`
 - visibility: web, print · status: verified for role, venture name and responsibilities; metrics below remain VERIFY
-- Role: co-founder (confirmed by Luis on 2026-10-06). Brand & Digital Growth are the functions he performs, not a separate role.
+- Approved role: Co-founder / Cofundador. This is a single professional experience; Brand & Digital Growth, cultural production and event organisation are functions of the role, not separate positions.
 - Santo Chilaquil is Luis's own venture and is NOT part of Grupo Botanas. Keep the two separate everywhere.
 - Public naming authorised by Luis: use Santo Chilaquil.
 - Developed the branding and launch strategy.
@@ -187,12 +188,15 @@ Ordered newest first. `dates` use the format shown on the site.
 - Social content and Meta Ads campaigns. Claimed 30%+ monthly growth (VERIFY period and base).
 - CRM and automated promotional workflows.
 - Local activations: flyers, collaborations, giveaways.
+- Produced Mexican tradition events for more than 150 people, including Mexican Independence, Day of the Dead and Christmas posadas.
+- Coordinated suppliers, setup, logistics and the budget for each event.
 - VERIFY note: an older CV claims "positive ROI in under three months". Keep it only if it refers to marketing spend, not to business profitability, and say so explicitly.
 
 ### A&R / Admin Intern · Peermusic Spain
 - dates: Jul 2024 – Dec 2025
 - facets: `music`, `data`
 - visibility: web, print · status: verified
+- Approved Spanish role: Becario de A&R y administración.
 - Managed approvals for derivative work licensing with administration and legal teams.
 - Organised and maintained the catalogue in DISCO.
 - Optimised databases and ran data analysis in Python and SQL.
@@ -212,6 +216,20 @@ Ordered newest first. `dates` use the format shown on the site.
 - Implemented social-media workflows and NFC-based review systems.
 - Additional systems and results must only be added when documented and verified.
 
+### Piano Teacher · MAP College of Music, Audio and Production
+- dates: Mar 2023 – Jun 2023
+- facets: `music`
+- visibility: web, print · status: verified
+- Designed tailored lessons developing performance skills and integrating piano with music production.
+
+### A&R Manager · Tipazo Music Group
+- dates: Oct 2022 – May 2023
+- facets: `music`, `business`
+- visibility: web, print · status: verified
+- Oversaw 20 song releases, coordinating promotion and distribution with Sony Music's A&R team.
+- Built artist relationships and targeted marketing campaigns per release.
+- Handled royalty processing, copyright registration and label operations.
+
 ### Singer-Songwriter & Producer · Independent
 - dates: Jan 2022 – Present
 - facets: `music`, `creative`
@@ -223,47 +241,34 @@ Ordered newest first. `dates` use the format shown on the site.
 - Released 12 original songs as an independent artist.
 - Produced 23 singles for other artists. These are production credits, not Luis's own artist releases.
 
-### A&R Manager · Tipazo Music Group
-- dates: Oct 2022 – May 2023
-- facets: `music`, `business`
-- visibility: web, print · status: verified
-- Oversaw 20 song releases, coordinating promotion and distribution with Sony Music's A&R team.
-- Built artist relationships and targeted marketing campaigns per release.
-- Handled royalty processing, copyright registration and label operations.
-
-### Piano Teacher · MAP College of Music, Audio and Production
-- dates: Mar 2023 – Jun 2023
-- facets: `music`
-- visibility: web, print · status: verified
-- Designed tailored lessons developing performance skills and integrating piano with music production.
-
-### Music Director & Keyboardist · Mandala Love Music
+### Music Director & Keyboardist · Mandala Love Music, Puebla
 - dates: Jul 2021 – Jun 2023
 - facets: `music`, `creative`
 - visibility: web, print · status: verified
-- Transcription, arrangement, demo production and live performance with an 11-piece ensemble.
-- Live-recorded medleys.
-
-### Founder & Label Director · Moctezuma Music Group
-- dates: Oct 2015 – Aug 2023
-- facets: `music`, `business`, `creative`
-- visibility: web, print · status: verified
-- Launched and marketed more than 50 artists in the Mexican market, reaching over 10 million streams.
-- Ran release campaigns and tours end to end.
-- Sync placements in film and advertising. TODO: examples.
-- After Aug 2023, Moctezuma Music ceased operating as an active record label but remains active as a consultancy for independent artists and as a production company.
-
-### Key Account Brand Manager · Parvin Music
-- dates: Jun 2021 – Jul 2022
-- facets: `business`, `creative`
-- visibility: web, print · status: verified
-- Lead contact with production agency Landia for the "La Villita" TV commercial: pre-production, contracts, recording sessions and contract compliance.
+- Directed an 11-piece ensemble, including arrangements, scores, show assembly and live performances.
+- Transcribed music, produced demos and created live-recorded medleys.
 
 ### Academic Assistant · VoxGarten + MusicLab
 - dates: Jul 2021 – Jul 2022
 - facets: `music`
 - visibility: print (optional) · status: verified
 - Music education, recording studio activity and rehearsal room management.
+
+### Key Account Brand Manager · Parvin Music, Mexico
+- dates: Jun 2021 – Jul 2022
+- facets: `business`, `creative`
+- visibility: web, print · status: verified
+- Served as liaison with production company LANDIA for the "La Villita" television advertisement, in direct contact with Cinta Negra Music, the music producer and the marketing team.
+- Coordinated pre-production and recording sessions, managed contracts and ensured delivery deadlines were met.
+
+### Founder & Label Director · Moctezuma Music Group
+- dates: Oct 2015 – Aug 2023
+- facets: `music`, `business`, `creative`
+- visibility: web, print · status: verified
+- Launched and marketed more than 50 artists in the Mexican market, reaching over 10 million streams.
+- Planned campaigns, concerts and tours, including budgets, suppliers, contracting and logistics.
+- Sync placements in film and advertising. TODO: examples.
+- After Aug 2023, Moctezuma Music ceased operating as an active record label but remains active as a consultancy for independent artists and as a production company.
 
 ### Marketing Director · Sell It
 - dates: Dec 2016 – Aug 2017
@@ -370,6 +375,16 @@ Ordered newest first. `dates` use the format shown on the site.
 | Bachelor's Degree, Music Production | REC Música, Music Studies Center | Aug 2017 – Jun 2021 | web, print |
 | Communication and Digital Media (studies, degree not completed) | Tec de Monterrey | 2011 – 2014 | web, print |
 
+The Berklee MA final project was the design and business plan for a music festival.
+
+### Additional training
+
+- Taller de la Sociedad de Autores y Compositores de México (TCSACM), scholarship recipient, 6th generation. No dates are stated in the source PDF.
+
+### Associations
+
+- Member of the Sociedad de Autores y Compositores de México (SACM).
+
 Also: pianist since age four (web, profile detail).
 
 Tec de Monterrey: Luis studied Communication and Digital Media from 2011 to 2014 and did not complete the degree (confirmed 2026-10-06). Never present it as a Bachelor's Degree, BA or licenciatura.
@@ -381,13 +396,14 @@ Tec de Monterrey: Luis studied Communication and Digital Media from 2011 to 2014
 Plain grouped lists. No bars, percentages or logos (BRAND.md section 30).
 
 - **Research & writing:** long-form and data journalism in English and Spanish, case studies, source and timeline verification.
-- **Data & technology:** Python, SQL, REST APIs (Last.app, Chartmetric), Chartmetric (including API), AWS (EC2), ETL and data pipelines, automation, Power BI, Tableau, Excel (advanced), Google Analytics, dashboards, forecasting, financial analysis, Next.js, Supabase, HTML/CSS/JS, GitHub Pages.
+- **Data & technology:** Python, SQL, REST APIs (Last.app, Chartmetric), Chartmetric (including API), AWS (EC2), ETL and data pipelines, automation, Power BI, Tableau, Excel (advanced), Microsoft Office, Google Analytics, dashboards, forecasting, financial analysis, Next.js, Supabase, HTML/CSS/JS, GitHub Pages.
 - **AI & automation:** multi-agent orchestration across Claude, Codex (OpenAI) and Gemini; custom agents and Claude skills; MCP servers; prompt and context design; AI image generation from brand and visual manuals.
 - **Music:** production, composition, arrangement, music direction.
 - **Instruments (multi-instrumentalist):** piano, keyboards and synthesizers; drums and percussion; guitar and bass; flute, accordion and trumpet. Confirmed by Luis on 2026-10-06.
 - **Music software:** Pro Tools, Logic Pro X, Ableton Live, Sibelius. Sibelius and the full instrument list confirmed by Luis on 2026-10-06.
 - **Industry:** A&R, artist development, release planning, catalogue and licensing (DISCO), royalties, copyright registration, sync.
-- **Business:** brand strategy, digital marketing (Meta Ads, organic social), CRM, sales and team leadership, project and budget management, contracts.
+- **Project & event production:** project budgets, production schedules, venue sourcing, setup and event logistics, supplier management, contracts, quotations, purchase orders, invoicing and payments, FACe electronic invoicing, expense reports and financial close-outs.
+- **Business:** brand strategy, digital marketing (Meta Ads, organic social), CRM, BTL activations, sales and team leadership.
 - **Visual:** Final Cut Pro, Photoshop, Illustrator, AI image generation, brand and visual manuals.
 - **Languages:** Spanish (native), English (fluent), French (B2).
 
@@ -410,6 +426,8 @@ This canonical file incorporates the validated content from `CV_MASTER_UPDATED.m
 
 On 2026-10-06 `CV_LuisCarlos_AI_Specialist.pdf`, with Luis's written confirmations, added the AI & automation profile: Argos, LedgerApp's MCP integration and dates, Dispra (the former "Digital Signage" entry), AI creative direction for El Remedio and Santo Chilaquil, the Grupo Botanas real-time pipeline, custom agents and the 2024 Peermusic music analytics automation; it also corrected the Santo Chilaquil role and the Tec de Monterrey record. Claims in that PDF that Luis rejected or that are subjective were not imported.
 
+On 2026-10-09 `CV Luis Carlos Guinea Moctezuma_GestionCultural.pdf` was merged into the existing profile, experience, education, associations and skills records; duplicated Santo Chilaquil, Parvin Music and Mandala Love Music entries were consolidated rather than retained as separate roles. Santo Chilaquil's cultural production and event organisation remain functions within the single Co-founder / Cofundador experience.
+
 No information exclusive to the previous `CV_MASTER.md` was removed; unresolved claims remain marked `TODO` or `VERIFY` and therefore are not publishable as facts.
 
 ## 10. Open items for Luis
@@ -419,6 +437,11 @@ No information exclusive to the previous `CV_MASTER.md` was removed; unresolved 
 3. LinkedIn URL and Spotify links.
 4. LedgerApp and Dispra case study content, results, metrics and demo screenshots.
 5. Whether "Ya estoy aquí" pieces appear on the site.
+6. Peermusic location and date precision: the cultural-management PDF says Madrid, 2024–2025, while the canonical record says Jul 2024 – Dec 2025. Preserve the canonical dates unless Luis confirms a change.
+
+Resolved on 2026-10-09:
+- Peermusic's approved role is A&R / Admin Intern in English and Becario de A&R y administración in Spanish. The location and date discrepancy remains open in item 6.
+- Santo Chilaquil's approved role is Co-founder / Cofundador. Cultural production and event organisation are functions within this single experience, not a separate role (former open item 7).
 
 Resolved on 2026-10-06 (Luis, with `CV_LuisCarlos_AI_Specialist.pdf` as source):
 - Santo Chilaquil role is co-founder; a weekly customer retention figure from older CVs is false and was removed.

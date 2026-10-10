@@ -192,7 +192,7 @@ class BehaviourTests(unittest.TestCase):
         self.assertEqual((en["practice"], es["practice"]), ("Music · Data · AI · Writing", "Música · Datos · IA · Escritura"))
         self.assertIn("AI and automation systems", en["intro"])
         self.assertIn("sistemas de IA y automatización", es["intro"])
-        self.assertEqual((en["santo"], es["santo"]), ("Co-founder, Brand & Digital Growth", "Cofundador, marca y crecimiento digital"))
+        self.assertEqual((en["santo"], es["santo"]), ("Co-founder", "Cofundador"))
         self.assertEqual((en["skillsAiLabel"], es["skillsAiLabel"]), ("AI & automation:", "IA y automatización:"))
         self.assertEqual((en["tec"], es["tec"]), ("Communication and Digital Media studies", "Estudios de Comunicación y Medios Digitales"))
         self.assertEqual(en["eduTitle"], "Academic background")
