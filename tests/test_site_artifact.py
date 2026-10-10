@@ -210,18 +210,23 @@ class PublicationFilesTest(unittest.TestCase):
         self.assertRegex(wf, r"(?m)^\s+path: _site$")
         self.assertIn("_site/", read(".gitignore"))
 
-    def test_workflow_is_manual_only(self):
-        # Publication is not approved yet: the workflow may only run by hand (workflow_dispatch).
+    def test_workflow_triggers_and_validates_before_deploy(self):
         wf = read(".github/workflows/pages.yml")
         on = re.search(r"(?ms)^on:\n(.*?)^\S", wf).group(1)
         triggers = re.findall(r"(?m)^  ([a-z_]+):", on)
-        self.assertEqual(triggers, ["workflow_dispatch"])
-        for event in ("push", "pull_request", "pull_request_target", "schedule", "workflow_run",
+        self.assertEqual(triggers, ["push", "workflow_dispatch"])
+        self.assertRegex(on, r"(?ms)^  push:\n    branches:\n      - main\n")
+        for event in ("pull_request", "pull_request_target", "schedule", "workflow_run",
                       "repository_dispatch", "release", "create"):
             self.assertNotRegex(wf, rf"(?m)^\s*{event}:", event)
         self.assertRegex(wf, r"(?m)^on:[ \t]*$")  # block form only, no inline "on: push" or "on: [push]"
         self.assertIn("actions/deploy-pages@", wf)
         self.assertIn("needs: build", wf)
+        build = wf.index("  build:")
+        upload = wf.index("actions/upload-pages-artifact@")
+        checks = wf.index("python3 -m unittest tests/test_site_artifact.py")
+        self.assertLess(build, checks)
+        self.assertLess(checks, upload)
 
 
 if __name__ == "__main__":
