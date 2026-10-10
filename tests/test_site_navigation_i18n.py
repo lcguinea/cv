@@ -173,6 +173,25 @@ class HomeContentTests(unittest.TestCase):
         for gone in ("hero.imageNote", "hero.selected", "facets.intro", "image-note"):
             self.assertNotIn(gone, html)
 
+    def test_sacm_workshop_is_listed_in_education_apart_from_the_membership(self):
+        html = read("index.html")
+        name = "Taller de la Sociedad de Autores y Compositores de México (TCSACM)"
+        self.assertIn(f'<span lang="es">{name}</span>', html)
+        section = re.search(r'data-i18n="education\.title".*?<ol>(.*?)</ol>', html, re.S).group(1)
+        items = re.findall(r"<li>(.*?)</li>", section, re.S)
+        order = ["Berklee College of Music", "REC Música", name, "Tec de Monterrey"]
+        self.assertEqual(len(items), len(order))
+        for item, expected in zip(items, order):
+            self.assertIn(expected, item)
+        workshop = items[2]
+        self.assertIn('data-i18n="education.sacm">Scholarship recipient, 6th generation</span>', workshop)
+        for word in ("Member", "Miembro"):
+            self.assertNotIn(word, workshop)
+        self.assertIsNone(re.search(r"\b\d{4}\b", workshop))
+        source = read("js/strings.js")
+        self.assertIn("sacm:'Scholarship recipient, 6th generation'", source)
+        self.assertIn("sacm:'Becado, 6.ª generación'", source)
+
 
 @unittest.skipUnless(NODE, "node not installed")
 class NavigationBehaviourTests(unittest.TestCase):
