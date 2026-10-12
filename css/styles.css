@@ -102,6 +102,13 @@ html.js body{padding-bottom:4.5rem}
 @media(max-width:700px){.mp-inner{gap:.6rem;min-height:60px}.mp-art{width:40px;height:40px}.mp-controls{gap:0}.mp-volume{display:none}.mp-link{padding:0 .25rem}}
 @media print{.mini-player{display:none}html.js body{padding-bottom:0}}
 
+/* About page: a quiet editorial rhythm around the approved first-person narrative. */
+.about-hero{display:grid;grid-template-columns:minmax(0,7fr) minmax(220px,5fr);gap:clamp(2rem,7vw,8rem);align-items:end;padding:clamp(5rem,12vw,11rem) 0 clamp(4rem,9vw,8rem)}
+.about-hero h1{font:normal clamp(4.5rem,12vw,11rem)/.82 var(--display);letter-spacing:-.05em;margin:.4rem 0 1.5rem}.about-lede{font:var(--display) clamp(1.8rem,3.4vw,3.4rem)/1.05;max-width:14ch}.about-portrait{margin:0;justify-self:end;max-width:420px}.about-portrait img{display:block;width:100%;height:auto;filter:grayscale(100%)}
+.about-story{padding-bottom:clamp(5rem,12vw,11rem)}.about-story>.kicker{border-top:1px solid var(--rule);padding-top:1rem}.about-chapter{max-width:68ch;margin:clamp(5rem,11vw,10rem) auto 0}.about-chapter h2{font:normal clamp(2.6rem,6vw,5.6rem)/.92 var(--display);margin:1rem 0 2.5rem;letter-spacing:-.035em}.about-chapter p{font-size:clamp(1rem,.35vw + .94rem,1.1875rem);line-height:1.62}.about-split{max-width:none;display:grid;grid-template-columns:minmax(180px,3fr) minmax(0,7fr);gap:clamp(2rem,8vw,9rem)}.about-split>div:last-child{max-width:68ch}.about-final{font:normal clamp(2rem,4vw,4rem)/1.02 var(--display)!important;color:var(--accent);margin-top:3rem}.about-closing{border-top:2px solid var(--text);padding-top:2rem}
+@media(max-width:700px){.about-hero{grid-template-columns:1fr;gap:2.5rem;padding-top:4rem}.about-portrait{justify-self:start;max-width:75%;margin-left:12%}.about-split{grid-template-columns:1fr;gap:1rem}.about-chapter{margin-top:5rem}.about-chapter h2{font-size:clamp(2.5rem,13vw,4.5rem)}}
+@media(prefers-reduced-motion:reduce){.about-page *{scroll-behavior:auto}}
+
 /* External links: certified entities and streaming platforms open in a new tab */
 .entity-link{text-decoration-thickness:1px;text-decoration-color:color-mix(in srgb,currentColor 45%,transparent)}
 .entity-link:hover,.platform-link:hover{color:var(--accent);text-decoration-color:var(--accent)}

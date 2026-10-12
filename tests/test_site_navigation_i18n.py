@@ -60,6 +60,12 @@ def header(html):
 
 
 class HeaderStaticTests(unittest.TestCase):
+    def test_about_link_is_added_to_the_shared_navigation(self):
+        site = read("js/site.js")
+        self.assertIn("link.dataset.i18n='nav.about'", site)
+        self.assertIn("sobre-mi.html", site)
+        self.assertIn("setAttribute('aria-current','page')", site)
+
     def test_every_page_shares_the_same_header_and_primary_navigation(self):
         shapes = set()
         for rel, page in PAGES.items():
@@ -124,6 +130,7 @@ class StringsTests(unittest.TestCase):
             html = read(rel)
             used |= set(re.findall(r'data-i18n(?:-label|-placeholder)?="([\w.]+)"', html))
             code += re.findall(r"<script>(.*?)</script>", html, re.S)
+        used |= set(re.findall(r'data-i18n(?:-label|-placeholder)?="([\w.]+)"', read("sobre-mi.html")))
         for source in code:
             used |= {m for m in re.findall(r"'([a-z]+\.[A-Za-z]+)'", source) if m in self.en}
         return used
@@ -243,7 +250,7 @@ class NavigationBehaviourTests(unittest.TestCase):
             "out.lang = page.document.documentElement.lang; out.stored = browser.local['lg-language'];"
             "const cv = browser.tab().open('cv.html'); await settle(); out.cv = cv.$$('.nav a').map(a => a.textContent);"
         )
-        self.assertEqual(out["nav"], ["Investigación", "Experiencia", "Música", "CV", "Contacto"])
+        self.assertEqual(out["nav"], ["Investigación", "Experiencia", "Música", "CV", "Contacto", "Sobre mí"])
         self.assertEqual((out["label"], out["menu"]), ("Principal", "Menú"))
         self.assertEqual(out["groups"], ["Idioma", "Tema"])
         self.assertEqual((out["lang"], out["stored"]), ("es", "es"))

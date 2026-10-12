@@ -31,7 +31,7 @@ PREVIEW_DIR = "assets/audio/previews"
 ARTWORK_DIR = "assets/images"
 EXPECTED_PREVIEWS = 16
 
-PAGES = ("index.html", "cv.html", "music/index.html", "404.html")
+PAGES = ("index.html", "cv.html", "music/index.html", "sobre-mi.html", "404.html")
 STATIC_FILES = PAGES + (
     "robots.txt",
     "sitemap.xml",

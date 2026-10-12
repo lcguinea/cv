@@ -23,7 +23,7 @@ build_site = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(build_site)
 
 SITE = "https://luisguinea.com/"
-CANONICAL = {"index.html": SITE, "cv.html": SITE + "cv.html", "music/index.html": SITE + "music/"}
+CANONICAL = {"index.html": SITE, "cv.html": SITE + "cv.html", "music/index.html": SITE + "music/", "sobre-mi.html": SITE + "sobre-mi.html"}
 FONTS = {
     "instrument-serif-latin-400-normal.woff2": ("Instrument Serif", "normal"),
     "instrument-serif-latin-400-italic.woff2": ("Instrument Serif", "italic"),
@@ -66,14 +66,14 @@ class ArtifactTest(unittest.TestCase):
         self.assertEqual(self.present, sorted(self.files))
         top = {p.split("/")[0] for p in self.present}
         self.assertEqual(top, {"404.html", "assets", "css", "cv.html", "fonts", "index.html", "js", "music",
-                               "robots.txt", "sitemap.xml"})
+                               "robots.txt", "sitemap.xml", "sobre-mi.html"})
         previews = [p for p in self.present if p.startswith("assets/audio/previews/")]
         images = [p for p in self.present if p.startswith("assets/images/")]
         self.assertEqual(len(previews), 16)
         self.assertTrue(all(p.endswith(".mp3") for p in previews))
         self.assertEqual(len(images), 17)  # 16 artworks + the profile portrait
         self.assertNotIn("assets/images/cover.webp", self.present)
-        self.assertEqual(len(self.present), 54)
+        self.assertEqual(len(self.present), 55)
 
     def test_no_private_or_development_content(self):
         for rel in self.present:

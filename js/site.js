@@ -1,5 +1,15 @@
 // Shared behaviour for every page: translated aria-labels, theme switch, mobile menu, active navigation and the experience filter.
 (function(){
+  const nav=document.querySelector('.nav');
+  if(nav&&!nav.querySelector('[data-i18n="nav.about"]')){
+    const link=document.createElement('a');
+    link.href=location.pathname.includes('/music/')?'../sobre-mi.html':'sobre-mi.html';
+    link.dataset.i18n='nav.about'; link.textContent='About me';
+    if(location.pathname.endsWith('/sobre-mi.html'))link.setAttribute('aria-current','page');
+    if(nav.insertBefore)nav.insertBefore(link,nav.lastElementChild);else nav.appendChild(link);
+  }
+})();
+(function(){
   const base=window.setLanguage;
   if(base)window.setLanguage=function(next){
     base(next);
