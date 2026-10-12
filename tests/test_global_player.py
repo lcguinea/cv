@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Focused tests for the global music engine (js/player.js) and its bottom bar on Home, CV and Music.
+"""Focused tests for the global music engine (js/player.js) and its bottom bar on Home, CV, About and Music.
 
 The real pages run with their real scripts in tests/support/minidom.js. Media elements there refuse
 playback without a user gesture unless a page is opened with `autoplayBlocked: false`, and an element
@@ -10,16 +10,18 @@ when refused, starts on the first click outside the player. Math.random is fed f
 Run: python3 -m unittest tests/test_global_player.py
 """
 
+import importlib.util
 import json
 import re
 import shutil
 import subprocess
+import sys
 import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 RUNNER = ROOT / "tests" / "support" / "run_scenario.js"
-PAGES = ("index.html", "cv.html", "music/index.html")
+PAGES = ("index.html", "cv.html", "sobre-mi.html", "music/index.html")
 NODE = shutil.which("node")
 
 PRELUDE = r"""
@@ -62,9 +64,10 @@ class GlobalPlayerTests(unittest.TestCase):
                 self.assertEqual(s["bar"]["title"], s["title"])
                 self.assertEqual(s["bar"]["toggleState"], "paused")
                 self.assertEqual(s["bar"]["toggle"], "Play preview: " + s["title"])
-        # Bar link goes to Music from Home and CV; on Music it points to the large player.
+        # Bar link goes to Music from content pages; on Music it points to the large player.
         self.assertEqual(out["index.html"]["bar"]["link"], "music/")
         self.assertEqual(out["cv.html"]["bar"]["link"], "music/")
+        self.assertEqual(out["sobre-mi.html"]["bar"]["link"], "music/")
         self.assertEqual(out["music/index.html"]["bar"]["link"], "#player")
         self.assertFalse(out["index.html"]["bar"]["hidden"])
         self.assertFalse(out["cv.html"]["bar"]["hidden"])
@@ -167,6 +170,22 @@ class GlobalPlayerTests(unittest.TestCase):
         self.assertTrue(cv["playing"])
         self.assertEqual(out["cvTime"], 12.5)
         self.assertEqual(cv["bar"]["toggleState"], "playing")
+
+    def test_track_position_and_play_state_continue_from_home_to_about(self):
+        out = self.run_scenario(
+            "const tab = browser.tab(); const home = tab.open('index.html'); await settle();"
+            "home.click('#mp-toggle'); await settle(); home.audio().loadMetadata(40); home.audio().advance(11.75); await settle();"
+            "out.home = state(home);"
+            "const about = tab.open('sobre-mi.html', {autoplayBlocked: false}); await settle(); out.before = state(about);"
+            "about.audio().loadMetadata(40); await settle(); out.about = state(about); out.time = about.audio().currentTime;"
+        )
+        self.assertEqual(out["about"]["src"], out["home"]["src"])
+        self.assertEqual(out["about"]["title"], out["home"]["title"])
+        self.assertTrue(out["home"]["playing"])
+        self.assertTrue(out["about"]["playing"])
+        self.assertIn("play:engine", out["before"]["log"])
+        self.assertEqual(out["time"], 11.75)
+        self.assertEqual(out["about"]["bar"]["toggleState"], "playing")
 
     def test_a_refused_resume_keeps_the_position_and_shows_paused(self):
         out = self.run_scenario(
@@ -291,7 +310,7 @@ class GlobalPlayerTests(unittest.TestCase):
 
     def test_bar_labels_follow_the_language(self):
         out = self.run_scenario(
-            "const page = browser.tab().open('index.html'); await settle(); page.click('[data-lang=\"es\"]'); await settle();"
+            "const page = browser.tab().open('sobre-mi.html'); await settle(); page.click('[data-lang=\"es\"]'); await settle();"
             "out.idle = state(page); page.click('#mp-toggle'); await settle();"
             "out.es = state(page); out.region = page.$('#mini-player').getAttribute('aria-label');"
             "out.next = page.$('#mp-next').getAttribute('aria-label'); out.mute = page.$('#mp-mute').getAttribute('aria-label');"
@@ -356,14 +375,14 @@ class GlobalPlayerTests(unittest.TestCase):
         utility = ['.skip-link', '.skip-player', '[data-lang="es"]', '[data-lang="en"]',
                    '[data-theme-choice="dark"]', '[data-theme-choice="light"]', '.menu-toggle']
         out = self.run_scenario(
-            "for (const rel of ['index.html', 'cv.html']) { const page = browser.tab().open(rel); await settle();"
+            "for (const rel of ['index.html', 'cv.html', 'sobre-mi.html']) { const page = browser.tab().open(rel); await settle();"
             "  for (const sel of %s) { page.click(sel); await settle(); }"
             "  const idle = state(page); page.click('h1'); await settle(); const go = state(page);"
             "  page.click('h1'); await settle();"
             "  out[rel] = {idle, go, plays: state(page).log.filter(e => e.startsWith('play:')).length}; }"
             % json.dumps(utility)
         )
-        for rel in ("index.html", "cv.html"):
+        for rel in ("index.html", "cv.html", "sobre-mi.html"):
             with self.subTest(page=rel):
                 self.assertFalse(out[rel]["idle"]["playing"])
                 self.assertEqual([e for e in out[rel]["idle"]["log"] if e.startswith("play:")], [])
@@ -372,9 +391,9 @@ class GlobalPlayerTests(unittest.TestCase):
                 self.assertTrue(out[rel]["go"]["playing"])
                 self.assertEqual(out[rel]["plays"], 1)
 
-    def test_skip_to_player_focuses_the_play_button_on_home_and_cv(self):
+    def test_skip_to_player_focuses_the_play_button_on_every_content_page(self):
         out = self.run_scenario(
-            "for (const rel of ['index.html', 'cv.html']) { const page = browser.tab().open(rel, {autoplayBlocked: false}); await settle();"
+            "for (const rel of ['index.html', 'cv.html', 'sobre-mi.html']) { const page = browser.tab().open(rel, {autoplayBlocked: false}); await settle();"
             "  const links = page.$$('.skip-link'); page.click('.skip-player'); await settle();"
             "  const s = state(page); page.click(page.document.activeElement); await settle();"
             "  out[rel] = {hrefs: links.map(a => a.getAttribute('href')), focused: page.document.activeElement.id,"
@@ -382,7 +401,8 @@ class GlobalPlayerTests(unittest.TestCase):
         )
         self.assertEqual(out["index.html"]["hrefs"], ["#content", "#mini-player"])
         self.assertEqual(out["cv.html"]["hrefs"], ["#cv-content", "#mini-player"])
-        for rel in ("index.html", "cv.html"):
+        self.assertEqual(out["sobre-mi.html"]["hrefs"], ["#content", "#mini-player"])
+        for rel in ("index.html", "cv.html", "sobre-mi.html"):
             with self.subTest(page=rel):
                 self.assertEqual(out[rel]["focused"], "mp-toggle")
                 self.assertEqual(out[rel]["label"], "Skip to music player")
@@ -407,9 +427,21 @@ class GlobalPlayerStaticTests(unittest.TestCase):
         for rel in PAGES:
             html = (ROOT / rel).read_text(encoding="utf-8")
             with self.subTest(page=rel):
+                self.assertEqual(len(re.findall(r'id="mini-player"', html)), 1)
+                if rel != "music/index.html":
+                    self.assertEqual(
+                        html.count('<a class="skip-link skip-player" href="#mini-player" '
+                                   'data-i18n="ui.skipPlayer">Skip to music player</a>'),
+                        1,
+                    )
                 self.assertEqual(re.findall(r"<audio\b", html), [])
                 self.assertNotRegex(html, r"(?i)\bautoplay\b")
                 scripts = re.findall(r'<script src="([^"]+)"', html)
+                shared = [s.rsplit("/", 1)[1] for s in scripts
+                          if s.rsplit("/", 1)[1] in
+                          ("strings.js", "i18n.js", "site.js", "music-data.js", "player.js")]
+                self.assertEqual(shared, ["strings.js", "i18n.js", "site.js", "music-data.js", "player.js"])
+                self.assertEqual(shared.count("music-data.js"), 1)
                 self.assertEqual([s.rsplit("/", 1)[1] for s in scripts].count("player.js"), 1)
                 self.assertLess(scripts.index(next(s for s in scripts if s.endswith("music-data.js"))),
                                 scripts.index(next(s for s in scripts if s.endswith("player.js"))))
@@ -424,13 +456,85 @@ class GlobalPlayerStaticTests(unittest.TestCase):
         # A focused skip link sits above the sticky header (z-index 30) and the bottom bar (25), so it is not hidden.
         self.assertIn(".skip-link:focus{left:1rem;top:1rem;background:var(--bg);padding:.6rem;z-index:40}", css)
         self.assertIn("html:not(.js) .skip-player{display:none}", css)
-        for rel, first in (("index.html", "#content"), ("cv.html", "#cv-content")):
+        for rel, first in (("index.html", "#content"), ("cv.html", "#cv-content"),
+                           ("sobre-mi.html", "#content")):
             html = (ROOT / rel).read_text(encoding="utf-8")
             with self.subTest(page=rel):
                 links = re.findall(r'<a class="skip-link[^"]*" href="([^"]+)" data-i18n="([^"]+)"', html)
                 self.assertEqual(links, [(first, "ui.skip"), ("#mini-player", "ui.skipPlayer")])
                 self.assertLess(html.index('skip-player'), html.index("<header"))
 
+    def test_about_player_translation_keys_exist_in_english_and_spanish(self):
+        about = (ROOT / "sobre-mi.html").read_text(encoding="utf-8")
+        match = re.search(r'<div id="mini-player".*?</div><script', about, re.S)
+        self.assertIsNotNone(match)
+        keys = set(re.findall(r'data-i18n(?:-label)?="([\w.]+)"', match.group(0)))
+        keys.update(re.findall(r'<a class="skip-link skip-player"[^>]*data-i18n="([\w.]+)"', about))
+        strings = (ROOT / "js" / "strings.js").read_text(encoding="utf-8")
+        for language in ("en", "es"):
+            language_body = _object_body(strings, language)
+            for key in keys:
+                namespace, leaf = key.split(".", 1)
+                with self.subTest(language=language, key=key):
+                    self.assertRegex(_object_body(language_body, namespace), rf"\b{re.escape(leaf)}\s*:")
+
+    def test_player_persists_and_restores_track_position_and_play_state_with_one_audio(self):
+        player = (ROOT / "js" / "player.js").read_text(encoding="utf-8")
+        self.assertEqual(player.count("document.createElement('audio')"), 1)
+        self.assertIn("const SESSION_KEY='lg-player'", player)
+        self.assertIn("const session=storage('sessionStorage')", player)
+        for function in ("save", "readSaved", "load", "resume"):
+            self.assertRegex(player, rf"function {function}\(")
+        self.assertRegex(
+            player,
+            r"session\.set\(SESSION_KEY,JSON\.stringify\(\{preview:.*time:time\(\).*playing:isPlaying\(\)",
+        )
+        self.assertIn("saved=JSON.parse(session.get(SESSION_KEY)||'null')", player)
+        self.assertIn("load(saved.index,saved.time,saved.duration)", player)
+        self.assertIn("resume(saved)", player)
+
+
+def _object_body(source, key):
+    match = re.search(rf"\b{re.escape(key)}\s*:\s*\{{", source)
+    if not match:
+        raise AssertionError(f"JavaScript object {key!r} not found")
+    start = match.end() - 1
+    depth = 0
+    quote = None
+    escaped = False
+    for index in range(start, len(source)):
+        char = source[index]
+        if quote:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == quote:
+                quote = None
+            continue
+        if char in "'\"`":
+            quote = char
+        elif char == "{":
+            depth += 1
+        elif char == "}":
+            depth -= 1
+            if depth == 0:
+                return source[start + 1:index]
+    raise AssertionError(f"JavaScript object {key!r} is not closed")
+
 
 if __name__ == "__main__":
-    unittest.main()
+    loader = unittest.defaultTestLoader
+    suite = loader.loadTestsFromModule(sys.modules[__name__])
+    for name in ("test_site_navigation_i18n",):
+        path = ROOT / "tests" / f"{name}.py"
+        spec = importlib.util.spec_from_file_location(name, path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        suite.addTests(loader.loadTestsFromModule(module))
+    result = unittest.TextTestRunner(verbosity=1).run(suite)
+    if result.wasSuccessful():
+        if not NODE:
+            print("NODE_SCENARIOS_SKIPPED")
+        print("GLOBAL_PLAYER_OK")
+    raise SystemExit(0 if result.wasSuccessful() else 1)
