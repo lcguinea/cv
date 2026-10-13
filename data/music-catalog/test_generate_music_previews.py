@@ -24,7 +24,9 @@ VERIFIED = {"25", "02", "04", "35", "03", "05", "11", "01", "06", "07", "08", "0
             # master that differs from the commercial release, authorized by the owner).
             "32", "36", "58", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70",
             # Owner-designated masters with their windows approved on 2026-10-13.
-            "59", "71"}
+            "59", "71",
+            # Unreleased co-writes from Coautorías, main windows approved on 2026-10-13.
+            "73", "74", "75"}
 # Selected works whose audio is not in One Page Luis Guinea/audios (no source to cut).
 BLOCKED_WITHOUT_AUDIO = {"33", "34", "37", "38"}
 # No associated source waits for a window approval.
@@ -48,6 +50,7 @@ APPROVED_V2 = {
     "61": (108.0, 142.0, 142.0), "62": (114.0, 153.0, 153.0),
     # Si Estás De Paso: section equivalent to the window approved on the wrong file; Te Esperé: alternative.
     "59": (75.0, 116.6, 116.6), "71": (97.0, 132.0, 132.0),
+    "73": (46.0, 90.0, 90.0), "74": (76.5, 116.0, 116.0), "75": (78.0, 117.5, 117.5),
 }
 HAVE_FFMPEG = bool(shutil.which("ffmpeg") and shutil.which("ffprobe"))
 

@@ -1567,6 +1567,67 @@
         "statement": "No publicar «El Ganador»: excluida de la selección pública. Permanece en el inventario privado; no se eliminan sus archivos."
       },
       "public_exclusion": true
+    },
+    {
+      "review_id": "73",
+      "heading": "Hagamos Un Trío — Luis Guinea, Mirley Cauich Navarro",
+      "reviewed_asset": "Hagamos Un Trío.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "hagamos-un-trio--luis-guinea", "candidates": [], "detail": "Grabación inédita sin entrada en catalog_master.json: alta en catalog_recordings.json como hagamos-un-trio--luis-guinea, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["songwriter", "co_writer"]},
+        {"name": "Mirley Cauich Navarro", "roles": ["co_writer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Declaración de primera mano del propietario del 2026-10-13: compositor y coautor, con Mirley Cauich Navarro. Sin otros roles confirmados.",
+        "public_facet": "Composer"
+      }
+    },
+    {
+      "review_id": "74",
+      "heading": "Dime Señorita — Carla Calderón, Luis Guinea, Efraín Ardila, Brandon Orr",
+      "reviewed_asset": "DimeSeñorita_Latin_4.26.21_LuisGuinea.CarlaCalderon.EfrainArdila.BradonOrr.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "dime-senorita--carla-calderon", "candidates": [], "detail": "Grabación inédita sin entrada en catalog_master.json: alta en catalog_recordings.json como dime-senorita--carla-calderon, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["songwriter", "co_writer", "co_producer"]},
+        {"name": "Carla Calderón", "roles": ["co_writer"]},
+        {"name": "Efraín Ardila", "roles": ["co_writer"]},
+        {"name": "Brandon Orr", "roles": ["co_writer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Declaración de primera mano del propietario del 2026-10-13: compositor y coautor, con Carla Calderón, Efraín Ardila y Brandon Orr; coproductor (etiqueta del archivo: «Produced and mixed by Luis Guinea and Victor Ortiz»), confirmado por el propietario el 2026-10-13.",
+        "public_facet": "Composer"
+      }
+    },
+    {
+      "review_id": "75",
+      "heading": "Vuelta Completa — Luis Guinea, Carla Merchant, Angel Elizalde, Paola Zozaya",
+      "reviewed_asset": "VueltaCompleta_Latin_4.26.21_LuisGuinea.CarlaMerchant.AngelElizalde.PaolaZozaya.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "vuelta-completa--luis-guinea", "candidates": [], "detail": "Grabación inédita sin entrada en catalog_master.json: alta en catalog_recordings.json como vuelta-completa--luis-guinea, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["songwriter", "co_writer", "producer"]},
+        {"name": "Paola Zozaya", "roles": ["co_writer"]},
+        {"name": "Carla Merchant", "roles": ["co_writer"]},
+        {"name": "Angel Elizalde", "roles": ["co_writer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Declaración de primera mano del propietario del 2026-10-13: compositor y coautor, con Paola Zozaya, Carla Merchant y Angel Elizalde; productor (etiqueta del archivo: «Produced and mixed by Luis Guinea»), confirmado por el propietario el 2026-10-13.",
+        "public_facet": "Composer"
+      }
     }
   ],
   "relations": [

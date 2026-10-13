@@ -1183,6 +1183,184 @@
         "Inédita: no figura en la discografía de Rogelio Edel en Apple Music ni Spotify; la fecha 2021 de la etiqueta no se muestra."
       ],
       "provisional": []
+    },
+    {
+      "id": "hagamos-un-trio--luis-guinea",
+      "title": "Hagamos Un Trío",
+      "artists": [
+        "Luis Guinea",
+        "Mirley Cauich Navarro"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "Hagamos Un Trío.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Título y artistas: hoja Local fila 9 («Hagamos Un Trío» — Luis Guinea, Mirley Cauich Navarro).",
+        "La etiqueta title del MP3 dice «PAGAME LA RENTA, MIRLEY PRE», pero la letra transcrita empieza «Hagamos un trío…» y el inventario de Drive lista «Hagamos Un Trío.mp3» y «Págame la renta.mp3» como archivos distintos en Songwriting/Letras/Mirley Cauich Navarro; «págame la renta» es un verso de esta canción.",
+        "Decisión explícita del propietario del 2026-10-13: Luis Guinea compositor y coautor con Mirley Cauich Navarro.",
+        "Inédita: sin resultados en Apple Music ni Deezer."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "dime-senorita--carla-calderon",
+      "title": "Dime Señorita",
+      "artists": [
+        "Carla Calderón",
+        "Luis Guinea",
+        "Efraín Ardila",
+        "Brandon Orr"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "DimeSeñorita_Latin_4.26.21_LuisGuinea.CarlaCalderon.EfrainArdila.BradonOrr.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Título y artistas: hoja Local fila 56 («Dime Señorita» — Carla Calderon, Luis Guinea, Efrain Ardila, Brandon Orr); grafía de los nombres según el propietario.",
+        "Etiquetas del MP3: title «Dime Señorita», compositores (TCM) «Luis Guinea, Carla Calderon, Efra Ardila & Brandon Orr», fecha 2021-04-26; la letra transcrita confirma el título.",
+        "Decisión explícita del propietario del 2026-10-13: Luis Guinea compositor y coautor con Carla Calderón, Efraín Ardila y Brandon Orr.",
+        "Inédita: sin resultados en Apple Music ni Deezer."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "vuelta-completa--luis-guinea",
+      "title": "Vuelta Completa",
+      "artists": [
+        "Luis Guinea",
+        "Carla Merchant",
+        "Angel Elizalde",
+        "Paola Zozaya"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "VueltaCompleta_Latin_4.26.21_LuisGuinea.CarlaMerchant.AngelElizalde.PaolaZozaya.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Título y artistas: hoja Local fila 52 («Vuelta Completa» — Luis Guinea, Carla Merchant, Angel Elizalde y Paola Zozaya).",
+        "Etiquetas del MP3: title «Vuelta Completa», compositores (TCM) «Luis Guinea, Carla Merchant, Angel Elizalde & Paola Zozaya», fecha 2021-04-26; la letra transcrita confirma el título.",
+        "Decisión explícita del propietario del 2026-10-13: Luis Guinea compositor y coautor con Paola Zozaya, Carla Merchant y Angel Elizalde.",
+        "Inédita: sin resultados en Apple Music ni Deezer."
+      ],
+      "provisional": []
     }
   ]
 }

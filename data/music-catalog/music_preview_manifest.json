@@ -1620,6 +1620,96 @@
       }
     },
     {
+      "review_id": "73",
+      "work_id": "hagamos-un-trio--luis-guinea",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Coautorías/Hagamos Un Trío.mp3",
+      "source_sha256": "8926bdd4476dcc9eba1ce33936660c3856615a2fb3fe984ea80f2d828b774b98",
+      "preview": "assets/audio/previews/hagamos-un-trio--luis-guinea.mp3",
+      "preview_sha256": "7ede6aff7ad048e33d378ae8ba1e79621d0b8bdf26a1bda25ea3a3519b94d3df",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          46.0,
+          90.0
+        ],
+        "start_s": 46.0,
+        "duration_s": 44.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el archivo privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo completo: «eres como el WhatsApp… págame la renta… dormir y no dormir»."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13: este archivo de la carpeta Coautorías es la grabación de «Hagamos Un Trío».",
+        "evidence": [
+          "Título y artistas: hoja Local fila 9 («Hagamos Un Trío» — Luis Guinea, Mirley Cauich Navarro).",
+          "La etiqueta title del MP3 dice «PAGAME LA RENTA, MIRLEY PRE», pero la letra transcrita empieza «Hagamos un trío…» y el inventario de Drive lista «Hagamos Un Trío.mp3» y «Págame la renta.mp3» como archivos distintos en Songwriting/Letras/Mirley Cauich Navarro; «págame la renta» es un verso de esta canción.",
+          "ffprobe 178.512 s; inédita, sin duración de catálogo."
+        ]
+      }
+    },
+    {
+      "review_id": "74",
+      "work_id": "dime-senorita--carla-calderon",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Coautorías/DimeSeñorita_Latin_4.26.21_LuisGuinea.CarlaCalderon.EfrainArdila.BradonOrr.mp3",
+      "source_sha256": "7ed3a74ac8c0950973df9a1aa635e5003b7b25d1f4fb8e95803b4c37fe10e29d",
+      "preview": "assets/audio/previews/dime-senorita--carla-calderon.mp3",
+      "preview_sha256": "1b6156788da552b80f4995fe2cba8cd8cbbf8aa9b0a0757c559c22e56fa9d9f2",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          76.5,
+          116.0
+        ],
+        "start_s": 76.5,
+        "duration_s": 39.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el archivo privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Final del segundo verso y estribillo «Dime señorita… yo me dejo llevar»."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13: este archivo de la carpeta Coautorías es la grabación de «Dime Señorita».",
+        "evidence": [
+          "Título y artistas: hoja Local fila 56 («Dime Señorita» — Carla Calderon, Luis Guinea, Efrain Ardila, Brandon Orr); grafía de los nombres según el propietario.",
+          "Etiquetas del MP3: title «Dime Señorita», compositores (TCM) «Luis Guinea, Carla Calderon, Efra Ardila & Brandon Orr», fecha 2021-04-26; la letra transcrita confirma el título.",
+          "ffprobe 150.073 s; inédita, sin duración de catálogo."
+        ]
+      }
+    },
+    {
+      "review_id": "75",
+      "work_id": "vuelta-completa--luis-guinea",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Coautorías/VueltaCompleta_Latin_4.26.21_LuisGuinea.CarlaMerchant.AngelElizalde.PaolaZozaya.mp3",
+      "source_sha256": "2d3e85814fb3af0efbb3633b83af48ba6de50ee0ad6ea8f9bc5ae59881136991",
+      "preview": "assets/audio/previews/vuelta-completa--luis-guinea.mp3",
+      "preview_sha256": "2856e83e37366f50a607d24d652289c19f314806ed3023cc5140234706b5efd2",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          78.0,
+          117.5
+        ],
+        "start_s": 78.0,
+        "duration_s": 39.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el archivo privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Verso y estribillo final «quiero llevarte a descubrir el planeta… una vuelta completa»."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13: este archivo de la carpeta Coautorías es la grabación de «Vuelta Completa».",
+        "evidence": [
+          "Título y artistas: hoja Local fila 52 («Vuelta Completa» — Luis Guinea, Carla Merchant, Angel Elizalde y Paola Zozaya).",
+          "Etiquetas del MP3: title «Vuelta Completa», compositores (TCM) «Luis Guinea, Carla Merchant, Angel Elizalde & Paola Zozaya», fecha 2021-04-26; la letra transcrita confirma el título.",
+          "ffprobe 144.065 s; inédita, sin duración de catálogo."
+        ]
+      }
+    },
+    {
       "review_id": "46",
       "work_id": "diamonds-cover-instrumental--luis-guinea",
       "status": "verified",

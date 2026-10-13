@@ -55,6 +55,9 @@
     "31",
     "44",
     "45",
+    "73",
+    "74",
+    "75",
     "46",
     "47",
     "48",
@@ -273,6 +276,18 @@
     {
       "review_id": "45",
       "preview": "peligro--nina-jori.mp3"
+    },
+    {
+      "review_id": "73",
+      "preview": "hagamos-un-trio--luis-guinea.mp3"
+    },
+    {
+      "review_id": "74",
+      "preview": "dime-senorita--carla-calderon.mp3"
+    },
+    {
+      "review_id": "75",
+      "preview": "vuelta-completa--luis-guinea.mp3"
     },
     {
       "review_id": "46",

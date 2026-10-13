@@ -519,6 +519,9 @@ class PublicMusicDataTests(unittest.TestCase):
             ("How Deep Is Your Love", "Luis Guinea"): (["Artist", "Producer"], "Artist"),
             ("Imagina", "Rogelio Edel"): (["Producer"], "Producer"),
             ("Te Esperé - Cover", "Ana Guinea"): (["Producer", "Arranger"], "Producer"),
+            ("Hagamos Un Trío", "Luis Guinea, Mirley Cauich Navarro"): (["Songwriter", "Co-writer"], "Composer"),
+            ("Dime Señorita", "Carla Calderón, Luis Guinea, Efraín Ardila, Brandon Orr"): (["Songwriter", "Co-writer", "Co-producer"], "Composer"),
+            ("Vuelta Completa", "Luis Guinea, Carla Merchant, Angel Elizalde, Paola Zozaya"): (["Songwriter", "Co-writer", "Producer"], "Composer"),
         }
         for key, (roles, role) in expected.items():
             with self.subTest(work=key):
