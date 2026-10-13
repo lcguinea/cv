@@ -3,8 +3,8 @@
 
 Copies an explicit allowlist of tracked files into _site/ (or --out DIR) and then checks the result:
 only authorised files, no repository Markdown, tests, catalogue data, scripts or masters, exactly the
-16 verified previews (sha256 from music_preview_manifest.json) and no broken local reference in the
-pages or the stylesheet. Artwork and previews are the ones js/music-data.js publishes, so the
+verified previews of music_preview_manifest.json (one per published work, each with its sha256) and
+no broken local reference in the pages or the stylesheet. Artwork and previews are the ones js/music-data.js publishes, so the
 artifact carries only the images and audio the site actually uses.
 
 The artifact is served as is: at https://luisguinea.com/ in production and at a temporary
@@ -29,7 +29,6 @@ MUSIC_DATA = "js/music-data.js"
 MANIFEST = ROOT / "data" / "music-catalog" / "music_preview_manifest.json"
 PREVIEW_DIR = "assets/audio/previews"
 ARTWORK_DIR = "assets/images"
-EXPECTED_PREVIEWS = 16
 
 PAGES = ("index.html", "cv.html", "music/index.html", "sobre-mi.html", "404.html")
 STATIC_FILES = PAGES + (
@@ -175,8 +174,10 @@ def validate(out=DEFAULT_OUT, root=ROOT):
                 errors.append(f"audio that is not a verified preview: {rel}")
             elif hashlib.sha256((out / rel).read_bytes()).hexdigest() != previews[p.name]:
                 errors.append(f"preview differs from its manifest sha256: {rel}")
-    if len(audio) != EXPECTED_PREVIEWS:
-        errors.append(f"expected {EXPECTED_PREVIEWS} previews, found {len(audio)}")
+    # Every verified preview is published exactly once and nothing else: the count comes from the
+    # manifest, never from a hard-coded number.
+    if sorted(PurePosixPath(rel).name for rel in audio) != sorted(previews):
+        errors.append(f"expected the {len(previews)} verified previews, found {len(audio)} audio files")
     for rel in present:
         kind = {".html": "html", ".css": "css"}.get(PurePosixPath(rel).suffix)
         if not kind:

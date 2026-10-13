@@ -91,15 +91,22 @@ class MusicPlayerStaticTests(unittest.TestCase):
         self.assertEqual(player.count("createElement('audio')"), 1)
 
     def test_controls_and_states_are_exposed_to_assistive_technology(self):
+        # Icon-only buttons: an accessible name in the markup (before any script runs) that the
+        # i18n engine keeps translated through data-i18n-label.
+        for control, key in (("prev", "music.previous"), ("next", "music.next")):
+            self.assertRegex(
+                self.html,
+                rf'<button id="{control}" class="ctl" type="button" aria-label="[^"]+" data-i18n-label="{key}">',
+            )
         for fragment in ('id="toggle" class="ctl ctl-play" type="button"',
-                         'id="prev" class="ctl" type="button" data-i18n-label="music.previous"',
-                         'id="next" class="ctl" type="button" data-i18n-label="music.next"',
-                         'role="group" data-i18n-label="music.controls"',
-                         '<label class="sr-only" for="seek" data-i18n="music.seek"></label>',
                          '<label for="np-volume" data-i18n="player.volume">',
-                         'role="status" aria-live="polite"',
-                         '<label class="sr-only" for="role" data-i18n="music.roleFilter"></label>'):
+                         'role="status" aria-live="polite"'):
             self.assertIn(fragment, self.html)
+        # Grouping and form labels carry an English fallback in the markup and an i18n key.
+        for pattern in (r'role="group" aria-label="[^"]+" data-i18n-label="music\.controls"',
+                        r'<label class="sr-only" for="seek" data-i18n="music\.seek">[^<]+</label>',
+                        r'<label class="sr-only" for="role" data-i18n="music\.roleFilter">[^<]+</label>'):
+            self.assertRegex(self.html, pattern)
         self.assertIn("row.setAttribute('aria-current',String(current))", MUSIC_PAGE.read_text(encoding="utf-8"))
         self.assertNotRegex(self.html, r'<svg (?![^>]*aria-hidden="true")')
 
@@ -133,6 +140,11 @@ class MusicStringsTests(unittest.TestCase):
             self.assertTrue(english[key].strip() and spanish[key].strip(), key)
 
 
+def year(x):
+    """Text the player shows for a row's year: unreleased recordings may have none."""
+    return "" if x["year"] is None else str(x["year"])
+
+
 @unittest.skipUnless(NODE, "node not installed")
 class MusicPlayerBehaviourTests(unittest.TestCase):
     def run_scenario(self, scenario):
@@ -146,10 +158,11 @@ class MusicPlayerBehaviourTests(unittest.TestCase):
         active = state["active"]
         x = state["data"][active]
 
-        self.assertEqual(len(state["rows"]), 16)
-        self.assertEqual((state["count"], state["total"]), ("16", "16"))
-        self.assertEqual((state["title"], state["artist"], state["year"]), (x["title"], x["artist"], str(x["year"])))
-        self.assertEqual(state["index"], f"{active + 1:02d} / 16")
+        n = len(state["data"])
+        self.assertEqual(len(state["rows"]), n)
+        self.assertEqual((state["count"], state["total"]), (str(n), str(n)))
+        self.assertEqual((state["title"], state["artist"], state["year"]), (x["title"], x["artist"], year(x)))
+        self.assertEqual(state["index"], f"{active + 1:02d} / {n:02d}")
         self.assertTrue(state["audioSrc"].endswith("/assets/audio/previews/" + x["preview"]))
         self.assertEqual(state["audioCount"], 1)
         self.assertFalse(state["playing"])
@@ -163,8 +176,8 @@ class MusicPlayerBehaviourTests(unittest.TestCase):
         state = self.run_scenario("await click(12); out.s = snapshot();")["s"]
         x = state["data"][12]
 
-        self.assertEqual((state["title"], state["artist"], state["year"]), (x["title"], x["artist"], str(x["year"])))
-        self.assertEqual(state["index"], "13 / 16")
+        self.assertEqual((state["title"], state["artist"], state["year"]), (x["title"], x["artist"], year(x)))
+        self.assertEqual(state["index"], f"13 / {len(state['data']):02d}")
         self.assertEqual(state["art"], "http://test.local/assets/images/" + quote(x["artwork"], safe="-_.!~*'()"))
         self.assertEqual(state["alt"], "Artwork: " + x["title"])
         self.assertEqual(state["type"], "Single")
@@ -224,11 +237,12 @@ class MusicPlayerBehaviourTests(unittest.TestCase):
         self.assertEqual((out["c"]["title"], out["c"]["artist"]), (last["title"], last["artist"]))
         self.assertFalse(out["c"]["playing"])
         # Next while playing moves on in list order and keeps playing.
-        self.assertEqual(out["d"]["index"], "01 / 16")
+        total = len(out["a"]["data"])
+        self.assertEqual(out["d"]["index"], f"01 / {total:02d}")
         self.assertTrue(out["d"]["playing"])
         # Clicking the song that is playing pauses it.
         self.assertFalse(out["e"]["playing"])
-        self.assertEqual(out["e"]["index"], "01 / 16")
+        self.assertEqual(out["e"]["index"], f"01 / {total:02d}")
 
     def test_role_filters_and_search(self):
         out = self.run_scenario(
@@ -240,9 +254,9 @@ class MusicPlayerBehaviourTests(unittest.TestCase):
             "await filter(''); out.reset = snapshot();"
         )
         data = out["reset"]["data"]
-        credit = {"Artist": "Artist", "Producer": "Producer", "Composer": "Songwriter"}
+        credit = {"Artist": {"Artist"}, "Producer": {"Producer", "Co-producer"}, "Composer": {"Songwriter", "Co-writer"}}
         for role, needed in credit.items():
-            expected = [i for i, x in enumerate(data) if x["role"] == role or needed in x["roles"]]
+            expected = [i for i, x in enumerate(data) if x["role"] == role or needed & set(x["roles"])]
             with self.subTest(role=role):
                 self.assertTrue(expected)
                 self.assertEqual([r["index"] for r in out[role]["rows"]], expected)
@@ -253,10 +267,49 @@ class MusicPlayerBehaviourTests(unittest.TestCase):
         self.assertFalse(out["none"]["emptyHidden"])
         # The active song stays on stage while filtered out; next jumps to the first visible one.
         self.assertEqual(out["none"]["title"], data[0]["title"])
-        composer = [i for i, x in enumerate(data) if "Songwriter" in x["roles"]]
+        composer = [i for i, x in enumerate(data) if {"Songwriter", "Co-writer"} & set(x["roles"])]
         self.assertEqual(out["step"]["title"], data[composer[0]]["title"])
-        self.assertEqual(len(out["reset"]["rows"]), 16)
+        self.assertEqual(len(out["reset"]["rows"]), len(data))
         self.assertTrue(out["reset"]["emptyHidden"])
+
+    def test_unreleased_recording_shows_type_version_and_no_year(self):
+        # A synthetic unreleased row appended to a temporary copy of the front end: the page must
+        # render it without a year, with its type and version, and the Composer filter must find
+        # a co-writing credit.
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            for top in ("music", "js", "css"):
+                shutil.copytree(ROOT / top, Path(tmp) / top)
+            data = Path(tmp) / "js" / "music-data.js"
+            text = data.read_text(encoding="utf-8")
+            row = ("  { title:'Synthetic', artist:'Luis Guinea', role:'Composer', artwork:'generic-cover.webp', "
+                   "releaseType:'Unreleased', year:null, roles:['Co-writer'], "
+                   "preview:'hace-tanto-tiempo--luis-guinea--2021.mp3', spotify:null, appleMusic:null, "
+                   "version:'RoughMix' }")
+            data.write_text(text.replace("\n];", ",\n" + row + "\n];"), encoding="utf-8")
+            scenario = (
+                "const last = rows().length - 1; await click(last); out.s = snapshot();"
+                "out.meta = page.document.querySelector('.np-meta').textContent;"
+                "out.yearHidden = $('np-year-field').hidden; out.versionHidden = $('np-version-field').hidden;"
+                "out.line = rows()[last].querySelector('.pl-artist').textContent;"
+                "out.cell = rows()[last].querySelector('.pl-year').textContent;"
+                "out.links = $('np-links-field').hidden;"
+                "await filter('Composer'); out.composer = snapshot();"
+                "page.click('[data-lang=es]'); await settle(); out.es = page.document.querySelector('.np-meta').textContent;"
+            )
+            result = subprocess.run([NODE, str(RUNNER), tmp, PRELUDE + scenario], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        out = json.loads(result.stdout)
+        self.assertEqual(out["s"]["title"], "Synthetic")
+        self.assertEqual((out["s"]["year"], out["yearHidden"], out["versionHidden"]), ("", True, False))
+        self.assertEqual(out["s"]["type"], "Unreleased")
+        self.assertIn("Rough mix", out["meta"])
+        self.assertEqual(out["line"], "Luis Guinea · Unreleased · Rough mix")
+        self.assertEqual(out["cell"], "")
+        self.assertTrue(out["links"])
+        self.assertIn(len(out["composer"]["data"]) - 1, [r["index"] for r in out["composer"]["rows"]])
+        self.assertIn("Inédita", out["es"])
+        self.assertIn("Mezcla preliminar", out["es"])
 
     def test_language_switch_translates_player_labels_and_credits(self):
         out = self.run_scenario(
@@ -275,8 +328,8 @@ class MusicPlayerBehaviourTests(unittest.TestCase):
         self.assertTrue(es["status"].startswith("Sonando: "))
         # The song, audio and playback state survive the language switch untouched.
         self.assertEqual((es["title"], es["audioSrc"], es["playing"]), (en["title"], en["audioSrc"], True))
-        # Search also matches translated credit labels.
-        producers = [i for i, x in enumerate(es["data"]) if "Producer" in x["roles"]]
+        # Search also matches translated credit labels («productor» is also inside «Coproductor»).
+        producers = [i for i, x in enumerate(es["data"]) if {"Producer", "Co-producer"} & set(x["roles"])]
         self.assertEqual([r["index"] for r in out["search"]["rows"]], producers)
 
 

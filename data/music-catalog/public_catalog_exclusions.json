@@ -18,7 +18,36 @@
     "10",
     "13",
     "14",
-    "15"
+    "15",
+    "12",
+    "18",
+    "20",
+    "21",
+    "16",
+    "41",
+    "42",
+    "43",
+    "23",
+    "28",
+    "54",
+    "55",
+    "56",
+    "19",
+    "22",
+    "26",
+    "30",
+    "31",
+    "44",
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
+    "50",
+    "51",
+    "52",
+    "53",
+    "57"
   ],
   "published_previews": [
     {
@@ -84,6 +113,122 @@
     {
       "review_id": "15",
       "preview": "volver-a-verte--ana-guinea--2022.mp3"
+    },
+    {
+      "review_id": "12",
+      "preview": "me-voy--rogelio-edel--2025.mp3"
+    },
+    {
+      "review_id": "18",
+      "preview": "antes-de-irme--luis-guinea--2023.mp3"
+    },
+    {
+      "review_id": "20",
+      "preview": "bendito-cacao--karla-bravo--2022.mp3"
+    },
+    {
+      "review_id": "21",
+      "preview": "de-cabeza--luis-guinea--2020.mp3"
+    },
+    {
+      "review_id": "16",
+      "preview": "agua-de-mar--luis-guinea--2021.mp3"
+    },
+    {
+      "review_id": "41",
+      "preview": "sunday-morning--rogelio-edel--2021.mp3"
+    },
+    {
+      "review_id": "42",
+      "preview": "in-my-life-cover--rogelio-edel--2021.mp3"
+    },
+    {
+      "review_id": "43",
+      "preview": "contigo-aprendi-cover--ana-guinea--2020.mp3"
+    },
+    {
+      "review_id": "23",
+      "preview": "el-beso--tufic.mp3"
+    },
+    {
+      "review_id": "28",
+      "preview": "la-martiniana--luis-guinea--2025.mp3"
+    },
+    {
+      "review_id": "54",
+      "preview": "i-want-u--rogelio-edel--2025.mp3"
+    },
+    {
+      "review_id": "55",
+      "preview": "mejor-version--rogelio-edel--2025.mp3"
+    },
+    {
+      "review_id": "56",
+      "preview": "te-extrano--rogelio-edel--2025.mp3"
+    },
+    {
+      "review_id": "19",
+      "preview": "asi-habla-el-amor--luis-guinea.mp3"
+    },
+    {
+      "review_id": "22",
+      "preview": "el-feo--luis-guinea.mp3"
+    },
+    {
+      "review_id": "26",
+      "preview": "inenarrable-que-suerte-piano-voz--luis-guinea.mp3"
+    },
+    {
+      "review_id": "30",
+      "preview": "ojos-marrones-cover--luis-guinea.mp3"
+    },
+    {
+      "review_id": "31",
+      "preview": "promesas-decepciones-cover--luis-guinea.mp3"
+    },
+    {
+      "review_id": "44",
+      "preview": "it-feels-like-falling-in-love--anne-noor.mp3"
+    },
+    {
+      "review_id": "45",
+      "preview": "peligro--nina-jori.mp3"
+    },
+    {
+      "review_id": "46",
+      "preview": "diamonds-cover-instrumental--luis-guinea.mp3"
+    },
+    {
+      "review_id": "47",
+      "preview": "one-last-time-vs-rather-be-vs-outside-vs-summer--luis-guinea.mp3"
+    },
+    {
+      "review_id": "48",
+      "preview": "prometheus--luis-guinea.mp3"
+    },
+    {
+      "review_id": "49",
+      "preview": "she-wolf-cover-instrumental--luis-guinea.mp3"
+    },
+    {
+      "review_id": "50",
+      "preview": "singularidad-del-genio--luis-guinea.mp3"
+    },
+    {
+      "review_id": "51",
+      "preview": "alacran--daniela-gomez.mp3"
+    },
+    {
+      "review_id": "52",
+      "preview": "jinne-jinne--canciones-de-puno-y-letra.mp3"
+    },
+    {
+      "review_id": "53",
+      "preview": "dame-mas-de-ti-rough-mix--rogelio-edel.mp3"
+    },
+    {
+      "review_id": "57",
+      "preview": "te-vi-we-belong-together-rough-mix--rogelio-edel.mp3"
     }
   ],
   "excluded": [

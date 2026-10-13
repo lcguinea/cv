@@ -33,7 +33,10 @@ MAX_PREVIEW_S = 45.0
 PREVIEW_NAME = re.compile(r"^[a-z0-9][a-z0-9-]*\.mp3$")
 FORBIDDEN = re.compile(r"one page luis guinea|one%20page|audios/|master|\.\./|^/|\\", re.I)
 FIELDS = ("title", "artist", "role", "artwork", "releaseType", "year", "roles", "preview",
-          "spotify", "appleMusic")
+          "spotify", "appleMusic", "version")
+RELEASED_TYPES = {"Single", "Album", "EP"}
+UNRELEASED_TYPES = {"Unreleased"}
+VERSIONS = {"Instrumental", "PianoVocal", "RoughMix", "RegionalMexican", "Mashup"}
 PLATFORM_URLS = {
     "spotify": re.compile(r"^https://open\.spotify\.com/track/[A-Za-z0-9]{22}$"),
     "appleMusic": re.compile(r"^https://music\.apple\.com/[a-z]{2}/(?:album|song)/[A-Za-z0-9%._~/?=&-]+$"),
@@ -220,6 +223,17 @@ def check_rows(text, rows):
         extra = sorted(set(row) - set(FIELDS))
         if extra:
             fail(f"{label}: unexpected public fields {extra}")
+        release_type, year = row.get("releaseType"), row.get("year")
+        if release_type not in RELEASED_TYPES | UNRELEASED_TYPES:
+            fail(f"{label}: unsupported releaseType {release_type!r}")
+        if year is None and release_type not in UNRELEASED_TYPES:
+            fail(f"{label}: only an unreleased recording may omit its year")
+        if year is not None and not (isinstance(year, int) and not isinstance(year, bool)):
+            fail(f"{label}: year must be an integer or null")
+        if release_type in UNRELEASED_TYPES and (row.get("spotify") or row.get("appleMusic")):
+            fail(f"{label}: an unreleased recording cannot link to a streaming release")
+        if row.get("version") is not None and row.get("version") not in VERSIONS:
+            fail(f"{label}: unsupported version {row.get('version')!r}")
         for field, pattern in PLATFORM_URLS.items():
             url = row.get(field)
             if url is not None and not (isinstance(url, str) and pattern.match(url)):

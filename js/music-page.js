@@ -10,11 +10,15 @@
   function esc(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
   function roleKey(name){return 'music.role'+String(name).replace(/[^A-Za-z]/g,'')}
   function typeKey(name){return 'music.type'+String(name).replace(/[^A-Za-z]/g,'')}
+  function versionKey(name){return 'music.version'+String(name).replace(/[^A-Za-z]/g,'')}
+  // The playlist line flags unreleased recordings and versions; released ones show their year instead.
+  function tags(x){return [x.releaseType==='Unreleased'?t(typeKey(x.releaseType)):'',x.version?t(versionKey(x.version)):''].filter(Boolean)}
   function pad(n){return String(n).padStart(2,'0')}
   function clock(seconds){const s=Math.max(0,Math.floor(Number.isFinite(seconds)?seconds:0));return Math.floor(s/60)+':'+pad(s%60)}
-  // Composer is the public facet of a songwriting credit; the other facets match credits directly.
-  function matchesRole(x,value){if(!value)return true;const credit=value==='Composer'?'Songwriter':value;return x.role===value||x.roles.includes(credit)}
-  function matches(x,q){return !q||norm([x.title,x.artist,x.year,x.releaseType,x.role,x.roles.join(' '),x.roles.map(r=>t(roleKey(r))).join(' ')].join(' ')).includes(q)}
+  // Composer gathers songwriting and co-writing credits, Producer production and co-production; Artist matches directly.
+  const FACET_CREDITS={Composer:['Songwriter','Co-writer'],Producer:['Producer','Co-producer']};
+  function matchesRole(x,value){if(!value)return true;const credits=FACET_CREDITS[value]||[value];return x.role===value||credits.some(c=>x.roles.includes(c))}
+  function matches(x,q){return !q||norm([x.title,x.artist,x.year??'',x.releaseType,t(typeKey(x.releaseType)),x.version||'',x.version?t(versionKey(x.version)):'',x.role,x.roles.join(' '),x.roles.map(r=>t(roleKey(r))).join(' ')].join(' ')).includes(q)}
   // Streaming destinations certified in the public data; a platform without a URL gets no link.
   const PLATFORMS=[['spotify','Spotify'],['appleMusic','Apple Music']];
   function platformLinks(x){
@@ -30,7 +34,7 @@
     visible=tracks.map((x,i)=>i).filter(i=>matchesRole(tracks[i],role.value)&&matches(tracks[i],q));
     count.textContent=visible.length;
     empty.hidden=visible.length>0;
-    catalog.innerHTML=visible.map(i=>{const x=tracks[i];return `<li><button type="button" class="pl-row" data-index="${i}" aria-current="false"><span class="pl-num">${pad(i+1)}</span><img class="pl-thumb" src="${P.artworkUrl(x.artwork)}" alt="" loading="lazy" width="56" height="56"><span class="pl-main"><span class="pl-title">${esc(x.title)}</span><span class="pl-artist">${esc(x.artist)}</span></span><span class="pl-roles">${x.roles.map(r=>`<span data-i18n="${roleKey(r)}">${esc(t(roleKey(r)))}</span>`).join(' · ')}</span><span class="pl-year">${x.year}</span><span class="pl-state"></span></button>${(x.spotify||x.appleMusic)?`<ul class="pl-links">${platformLinks(x)}</ul>`:''}</li>`}).join('');
+    catalog.innerHTML=visible.map(i=>{const x=tracks[i];return `<li><button type="button" class="pl-row" data-index="${i}" aria-current="false"><span class="pl-num">${pad(i+1)}</span><img class="pl-thumb" src="${P.artworkUrl(x.artwork)}" alt="" loading="lazy" width="56" height="56"><span class="pl-main"><span class="pl-title">${esc(x.title)}</span><span class="pl-artist">${[x.artist].concat(tags(x)).map(esc).join(' · ')}</span></span><span class="pl-roles">${x.roles.map(r=>`<span data-i18n="${roleKey(r)}">${esc(t(roleKey(r)))}</span>`).join(' · ')}</span><span class="pl-year">${x.year??''}</span><span class="pl-state"></span></button>${(x.spotify||x.appleMusic)?`<ul class="pl-links">${platformLinks(x)}</ul>`:''}</li>`}).join('');
     updateRows();
   }
   function updateRows(){
@@ -49,7 +53,8 @@
     $('np-index').textContent=pad(P.index()+1)+' / '+pad(tracks.length);
     $('np-title').textContent=x.title;
     $('np-artist').textContent=x.artist;
-    $('np-year').textContent=x.year;
+    $('np-year').textContent=x.year??'';
+    $('np-year-field').hidden=x.year==null;
     updatePlayer();updateTime();
   }
   function updateLabels(){
@@ -57,6 +62,8 @@
     toggle.setAttribute('aria-label',t(P.isPlaying()?'music.pause':'music.play')+': '+x.title);
     $('np-art').alt=t('music.artworkAlt')+': '+x.title;
     $('np-type').textContent=t(typeKey(x.releaseType));
+    $('np-version').textContent=x.version?t(versionKey(x.version)):'';
+    $('np-version-field').hidden=!x.version;
     seek.setAttribute('aria-valuetext',clock(P.time())+' '+t('music.of')+' '+clock(P.duration()));
     $('np-roles').innerHTML=x.roles.map(r=>`<li data-i18n="${roleKey(r)}">${esc(t(roleKey(r)))}</li>`).join('');
     $('np-links').innerHTML=platformLinks(x);

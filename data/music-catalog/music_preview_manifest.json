@@ -14,6 +14,9 @@
   "policies": {
     "approved-chorus-window-v1": {
       "rationale": "Ventana de coro por entrada, aprobada por el propietario a partir del análisis local del 2026-10-05 (repetición de letra transcrita, segmentación estructural y energía RMS). Cada borde puede apartarse como máximo 1 s del intervalo aprobado y solo para evitar un corte técnicamente defectuoso; el ajuste queda documentado en la entrada."
+    },
+    "approved-preview-window-v2": {
+      "rationale": "Ventana aprobada explícitamente por el propietario el 2026-10-13 tras escuchar la propuesta y una alternativa codificadas como el preview final. Ambas salen del análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección (en los instrumentales, solo las tres últimas). Mismas reglas de borde que v1: como máximo 1 s y solo para evitar un corte técnicamente defectuoso, documentado en la entrada."
     }
   },
   "entries": [
@@ -599,6 +602,819 @@
           "human_review_decisions.json #15: catalog_link mapped a volver-a-verte--ana-guinea--2022.",
           "Publicación del preview autorizada expresamente por el propietario (2026-10-05)."
         ]
+      }
+    },
+    {
+      "review_id": "12",
+      "work_id": "me-voy--rogelio-edel--2025",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/No Vuelvas_Master_4.0.mp3",
+      "source_sha256": "eb069e5efd0ff912970ec7bedab27c6d6e09703ed193c9efa146de81615ab820",
+      "preview": "assets/audio/previews/me-voy--rogelio-edel--2025.mp3",
+      "preview_sha256": "a77b3d831096699c533f7d4a27127a93490589010755f8074fabeced18a861af",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          85.5,
+          127.5
+        ],
+        "start_s": 85.5,
+        "duration_s": 42.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «Por eso me voy lejos de…», que aparece 3 veces en la canción."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "human_review_decisions.json #12 (mapped): asset histórico «No Vuelvas_Master_4.0.mp3», título canónico «Me Voy» (R10).",
+          "ffprobe 180,009 s frente a duration_ms 179956 (Δ 0,053 s); audio_ref del catálogo «No Vuelvas_Master_4.0.wav» con el mismo nombre base."
+        ]
+      }
+    },
+    {
+      "review_id": "18",
+      "work_id": "antes-de-irme--luis-guinea--2023",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Cantautor/Antes de Irme_Master.mp3",
+      "source_sha256": "0081dcec63caf86f16f0c2ba7a961472046f20ea542f27a49df856048bd72bdb",
+      "preview": "assets/audio/previews/antes-de-irme--luis-guinea--2023.mp3",
+      "preview_sha256": "b72539b4b1663efa1188180c52c00f8030e4c73655fdad1f3acadfbfeb461f91",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          69.0,
+          108.0
+        ],
+        "start_s": 69.0,
+        "duration_s": 39.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (alternativa). Estribillo «Antes de irme quiero que sepas…», que aparece 7 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "Decisión del propietario del 2026-10-13: el audio correcto de «Antes de Irme» es «Antes de Irme_Master.mp3»; ni «Antes de irme (final).m4a» ni la versión mariachi (#17) se publican.",
+          "Mismo nombre base que el audio_ref del catálogo «Antes de Irme_Master.wav»; ffprobe 294,922 s frente a duration_ms 294867 (Δ 0,055 s)."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "20",
+      "work_id": "bendito-cacao--karla-bravo--2022",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Cantautor/Bendito Cacao - Luis Guinea - Master 1.1.mp3",
+      "source_sha256": "3544ad9c63b7969cf6218b8d05525b3f770117a772139438c8ddc5b9f5968c44",
+      "preview": "assets/audio/previews/bendito-cacao--karla-bravo--2022.mp3",
+      "preview_sha256": "d59b86ea278407dab834ea9c1fba3e1c5854cd793ff7f77644ac1c1cf390f442",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          74.0,
+          111.5
+        ],
+        "start_s": 74.0,
+        "duration_s": 37.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «Bendito cacá, bendito cacá Bendito cacá,…», que aparece 8 veces en la canción."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "human_review_decisions.json #20 (mapped): ffprobe 284,183 s frente a duration_ms 284177 (Δ 0,006 s); audio_ref «Bendito Cacao - Luis Guinea - Master 1.2.wav»."
+        ]
+      }
+    },
+    {
+      "review_id": "21",
+      "work_id": "de-cabeza--luis-guinea--2020",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Cantautor/De Cabeza - Luis Guinea.mp3",
+      "source_sha256": "3b43a163ff505ea5cc2419b2bfa12ece5ddf9cd1f78cf55e62d3b6eac9a11aba",
+      "preview": "assets/audio/previews/de-cabeza--luis-guinea--2020.mp3",
+      "preview_sha256": "583bcf5984c2ba50764983cc1d065aff3d281a7d3ad3a44440983513e3c221eb",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          76.0,
+          118.0
+        ],
+        "start_s": 76.0,
+        "duration_s": 42.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «abraza que me ciñe, que me…», que aparece 3 veces en la canción."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "human_review_decisions.json #21 (mapped): ffprobe 233,163 s frente a duration_ms 233107 (Δ 0,056 s), misma carpeta de origen que el audio_ref."
+        ]
+      }
+    },
+    {
+      "review_id": "16",
+      "work_id": "agua-de-mar--luis-guinea--2021",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Cantautor/Agua de Mar (Master).mp3",
+      "source_sha256": "d36bdbdbf163dd036d28593fa2663dbe927f7c4cad31fe136a8ae18329544529",
+      "preview": "assets/audio/previews/agua-de-mar--luis-guinea--2021.mp3",
+      "preview_sha256": "11eb5e8bedf42c50bd5e7845ea5a6360af3d99c7d2cdd4ac9a3701bf0518bcc8",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          106.5,
+          150.0
+        ],
+        "start_s": 106.5,
+        "duration_s": 43.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «no vas a poder mentirme en…», que aparece 5 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "Decisión del propietario del 2026-10-13: título definitivo «Agua de Mar», año 2021 (agua-de-mar--luis-guinea--2021).",
+          "ffprobe 193,778 s frente a duration_ms 190936 (Δ 2,842 s): la identidad descansa en la decisión humana, no en la duración."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "41",
+      "work_id": "sunday-morning--rogelio-edel--2021",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/SundayMorning_V10_LaBuenaAhoraSíMasterFinalALV.mp3",
+      "source_sha256": "4a3b18612a8048066fed3c3d298b96273e44927e8dcf4768cc79eb753a33dfdb",
+      "preview": "assets/audio/previews/sunday-morning--rogelio-edel--2021.mp3",
+      "preview_sha256": "9ec0a91cc8bf295c51cf96320af9514a57694d520027de2103fc5abdb3066570",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          101.5,
+          146.0
+        ],
+        "start_s": 101.5,
+        "duration_s": 44.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «In darkness is all I see…», que aparece 3 veces en la canción."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "ffprobe 219,000 s frente a duration_ms 219000 (Δ 0,000 s); carpeta Productor/Rogelio Edel y título «Sunday Morning» en el nombre del archivo.",
+          "Único candidato de catalog_master.json con ese título y artista."
+        ]
+      }
+    },
+    {
+      "review_id": "42",
+      "work_id": "in-my-life-cover--rogelio-edel--2021",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/In my life_master1_1.mp3",
+      "source_sha256": "46de9bc64772147e328284b4c255b272bc0330837b6ec1fbb155a8f536fd8e0e",
+      "preview": "assets/audio/previews/in-my-life-cover--rogelio-edel--2021.mp3",
+      "preview_sha256": "390897f039699da922cb39724c787b514fcb6bd8c3b2971d28c0c608fcbf29c9",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          73.5,
+          115.5
+        ],
+        "start_s": 73.5,
+        "duration_s": 42.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «In my life I love you…», que aparece 3 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "ffprobe 155,044 s frente a duration_ms 155044 (Δ 0,000 s) en las dos entradas in-my-life--rogelio-edel--2021 e in-my-life-cover--rogelio-edel--2021; ambas comparten audio_ref «In my life_master1_1.wav» (mismo nombre base que el audio local).",
+          "Las dos entradas son pistas distintas y vivas en Spotify (10Hi3n9Rmq1PEt0OeNWh9t «In My Life» y 7fxYNb7nWn9uiH51kcubNt «In My Life - Cover», ambas del 2021-09-24): no son redundantes y no se eliminan.",
+          "Encargo del propietario del 2026-10-13 de evitar duplicados: se publica una sola fila, la entrada «- Cover», coherente con la convención del catálogo para versiones de obras ajenas."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "43",
+      "work_id": "contigo-aprendi-cover--ana-guinea--2020",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Ana Guinea/Contigo Aprendi_Master.mp3",
+      "source_sha256": "2008a1cda5a9995eb57629652066aa674c4e6e8868815cf5108d06933015022a",
+      "preview": "assets/audio/previews/contigo-aprendi-cover--ana-guinea--2020.mp3",
+      "preview_sha256": "8178d856964d9611243ea3f250af534d5bca400d1c188fd5588da94d35d84df8",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          49.5,
+          92.5
+        ],
+        "start_s": 49.5,
+        "duration_s": 43.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Sección de mayor repetición armónica (0.72) y energía (0.64) entre dos límites de sección."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "Decisión del propietario del 2026-10-13: «Contigo Aprendí» es un cover; se conserva esa clasificación (contigo-aprendi-cover--ana-guinea--2020).",
+          "audio_ref del catálogo «Contigo Aprendi_Master.wav» con el mismo nombre base; ffprobe 120,053 s frente a duration_ms 117000 (Δ 3,053 s)."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "19",
+      "work_id": "asi-habla-el-amor--luis-guinea",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Cantautor/Así habla el amor.m4a",
+      "source_sha256": "5d37b63d86f55a225db4d7168ea3b4836b2b278027136bd93fad0e6fc7c65b7c",
+      "preview": "assets/audio/previews/asi-habla-el-amor--luis-guinea.mp3",
+      "preview_sha256": "5496f8498c90c7001ee12aa0e25fee0c26b6b3ac9c33babea3650dd9bebd5900",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          107.5,
+          148.5
+        ],
+        "start_s": 107.5,
+        "duration_s": 41.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «quiero Que seas la mujer que…», que aparece 3 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json asi-habla-el-amor--luis-guinea: Título y artista: catalogo_sin_duplicados_con_isrc_prioridad.xlsx › Local fila 41. Inédita: sin lanzamiento en Apple Music, Spotify ni Deezer (consulta del 2026-10-13); publicación del preview autorizada por el propietario."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "22",
+      "work_id": "el-feo--luis-guinea",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Cantautor/El Feo (Master).mp3",
+      "source_sha256": "f38cf67ffbda478e4e46ef34c7b783b732b39d3f981f93e6115eb0097d55628b",
+      "preview": "assets/audio/previews/el-feo--luis-guinea.mp3",
+      "preview_sha256": "4d853770fa8622e10fbca629258fdda456ed0c4ff3fd451e09dbe426829ac652",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          89.0,
+          133.0
+        ],
+        "start_s": 89.0,
+        "duration_s": 44.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «Yo soy un feo, un feo…», que aparece 2 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json el-feo--luis-guinea: Etiquetas del archivo: title «El Feo», artist «Luis Guinea». Inédita: sin lanzamiento en la discografía de Luis Guinea en Apple Music (consulta del 2026-10-13). La fecha 2020 de la etiqueta no es una fecha de publicación y no se muestra."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "23",
+      "work_id": "el-beso--tufic",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Cantautor/ElBeso_Tufic_LuisGuinea_Master.mp3",
+      "source_sha256": "b4ae6683b1ccf53a965772ffbd7ae6455aad390a7eb462ac37b99c4231889e34",
+      "preview": "assets/audio/previews/el-beso--tufic.mp3",
+      "preview_sha256": "7060f194e2c9d5798a46bcffcc7e825b25914bd641536aa331c597a23130b029",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          173.5,
+          211.5
+        ],
+        "start_s": 173.5,
+        "duration_s": 38.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «acabo Tú quieres tenerme cerca Y…», que aparece 2 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json el-beso--tufic: Publicada: Apple Music «\"el beso\"» de Tufic & Luis Guinea, sencillo 6775376256 (2026-06-19, 307,710 s); Spotify 4XUUtkTby59nhAjIZ6A0uI «\"el beso\"» de Tufic, Luis Guinea (307 710 ms), verificado con el oEmbed de Spotify. Master local 307,776 s (Δ 0,066 s). Decisión explícita del propietario del 2026-10-13: título público «El Beso», sin comillas (las plataformas lo escriben «\"el beso\"»). Portada: imagen oficial del sencillo en la CDN de Spotify (640 px) convertida a WebP. Spotify fecha la pista el 2026-07-24 y Apple Music el 2026-06-19: se publica solo el año, 2026."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "26",
+      "work_id": "inenarrable-que-suerte-piano-voz--luis-guinea",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Cantautor/Inenarrable (Qué Suerte) - PianoVoz.mp3",
+      "source_sha256": "896d4327b7aaec885f4c4da53d1344e5322078ac0c39d3066148fbb5b083ad0d",
+      "preview": "assets/audio/previews/inenarrable-que-suerte-piano-voz--luis-guinea.mp3",
+      "preview_sha256": "0227f10d8b06b2617c4851af43758f36508bd029a2da757317ef6f0ed4c404c7",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          137.0,
+          176.0
+        ],
+        "start_s": 137.0,
+        "duration_s": 39.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «el hombre que te entiende El…», que aparece 3 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json inenarrable-que-suerte-piano-voz--luis-guinea: Título y versión: nombre del archivo «Inenarrable (Qué Suerte) - PianoVoz». Artista: carpeta Cantautor. Inédita (el mismo nombre de archivo figura en Songwriting/Demo Editoras); sin lanzamiento en Apple Music."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "28",
+      "work_id": "la-martiniana--luis-guinea--2025",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Cantautor/La Martiniana_Master_V1.mp3",
+      "source_sha256": "41f73f51240faf20ca4d141a144c05b828097a88d7a290b3561681ba80de40bb",
+      "preview": "assets/audio/previews/la-martiniana--luis-guinea--2025.mp3",
+      "preview_sha256": "649f0f2a56f328ebe16f095bdb62ca6ff4d437d8bbe8bdc344c6fe5b3a0ab423",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          130.5,
+          169.0
+        ],
+        "start_s": 130.5,
+        "duration_s": 38.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «En cambio si tu me cantas…», que aparece 5 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json la-martiniana--luis-guinea--2025: Publicada: Apple Music «La Martiniana» de Luis Guinea, sencillo 1846076710 (2025-10-17, 221,600 s); Spotify 7reI5kxLXemFShvfa2GwtK (221 596 ms), verificado con el oEmbed de Spotify. Master local 221,664 s (Δ 0,064 s). Decisión explícita del propietario del 2026-10-13: cover; créditos de arreglista, intérprete y productor. Portada: imagen oficial del sencillo en la CDN de Spotify (640 px) convertida a WebP."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "30",
+      "work_id": "ojos-marrones-cover--luis-guinea",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Cantautor/Ojos Marrones_MocteMaster 1.0.mp3",
+      "source_sha256": "87922c5f20cacddbc43d20e9ae63116041a09e8a2c26977adfe2ceeb28b8e3de",
+      "preview": "assets/audio/previews/ojos-marrones-cover--luis-guinea.mp3",
+      "preview_sha256": "c091242dcb821c594ff2542c5e21cb6afe344e5543dffcd8ad2f3ee30d412c90",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          151.0,
+          191.5
+        ],
+        "start_s": 151.0,
+        "duration_s": 40.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «Nada es igual, nada es igual,…», que aparece 16 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json ojos-marrones-cover--luis-guinea: Título: nombre del archivo. Decisión explícita del propietario del 2026-10-13: cover; créditos de arreglista, intérprete y productor. Sufijo «- Cover»: convención de catalog_master.json para versiones de obras ajenas. Inédita: sin lanzamiento en Apple Music."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "31",
+      "work_id": "promesas-decepciones-cover--luis-guinea",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Cantautor/Promesas Decepciones (Master).mp3",
+      "source_sha256": "a22265ae804ca55fb0db9d95e19c87d20aaccd2dd8902328f51fc204a3c413b4",
+      "preview": "assets/audio/previews/promesas-decepciones-cover--luis-guinea.mp3",
+      "preview_sha256": "732e82887346a189a1d7a42d95ab42840cbdd6c2f349e92c66f439f5ccdd5c6d",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          40.5,
+          85.0
+        ],
+        "start_s": 40.5,
+        "duration_s": 44.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Sección de mayor repetición armónica (0.50) y energía (0.73) entre dos límites de sección."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json promesas-decepciones-cover--luis-guinea: Etiquetas del archivo: title «Promesas Decepciones», artist «PXNDX (Cover Luis Guinea)»: cover declarado en el propio archivo. Inédita: sin lanzamiento en Apple Music; la fecha 2020 de la etiqueta no se muestra."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "44",
+      "work_id": "it-feels-like-falling-in-love--anne-noor",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Coautorías/It Feels Like Falling In Love_1.mp3",
+      "source_sha256": "63269435b5ea28db6689f2971e1a41ad0c361d975ac6e798cbc59c8c599a51e0",
+      "preview": "assets/audio/previews/it-feels-like-falling-in-love--anne-noor.mp3",
+      "preview_sha256": "bd20ef1e6003ac2076ffca805b512ed375fec4108a3fe039f1c9f8693670ade6",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          89.0,
+          130.5
+        ],
+        "start_s": 89.0,
+        "duration_s": 41.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «Yeah, it feels like falling in…», que aparece 5 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json it-feels-like-falling-in-love--anne-noor: Título: nombre del archivo. Decisión explícita del propietario del 2026-10-13: intérprete Anne Noor; Luis Guinea coautor, coarreglista y coproductor. Inédita: sin lanzamiento en Apple Music ni Deezer."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "45",
+      "work_id": "peligro--nina-jori",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Coautorías/Peligro_LUIS_CARLA_NINA_SALVADOR.mp3",
+      "source_sha256": "5acecdb2b70a6619dcd1661421fc25ee456c3fbe0e7c67216fc68784399bcb6b",
+      "preview": "assets/audio/previews/peligro--nina-jori.mp3",
+      "preview_sha256": "46910d78f83ec5ff83d5f34693e772ad0717f967c98a12ccbdba7896d475aeeb",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          103.5,
+          142.0
+        ],
+        "start_s": 103.5,
+        "duration_s": 38.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «Ay, ay, ay, ay, ay, ay…», que aparece 38 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json peligro--nina-jori: Título y artistas: hoja Local fila 32. Rol: carpeta Coautorías. Inédita: sin lanzamiento en Apple Music ni Deezer. Coincidencia de duración con bajo-la-mesa--mireles--2021 (Δ 0,017 s) sin coincidencia de título ni artistas: no se vincula."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "46",
+      "work_id": "diamonds-cover-instrumental--luis-guinea",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Instrumentales/Diamonds (Mastered).m4a",
+      "source_sha256": "694d31e28f1cb81eb848b68d778653940ce16f23d6eb7dfa2562dca9469ffdf6",
+      "preview": "assets/audio/previews/diamonds-cover-instrumental--luis-guinea.mp3",
+      "preview_sha256": "71778fc28cc96d75f3a27aee40408e1f1fabd23707c9a8c82f7160b7261d7364",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          227.0,
+          269.5
+        ],
+        "start_s": 227.0,
+        "duration_s": 42.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Sección de mayor repetición armónica (0.94) y energía (0.80) entre dos límites de sección."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json diamonds-cover-instrumental--luis-guinea: Etiquetas del archivo: title «Diamonds», artist «Rihanna - Luis Guinea». Decisión explícita del propietario del 2026-10-13: cover o arreglo de obra ajena; créditos exclusivamente de arreglista y productor (sin composición). Inédita: sin lanzamiento en Apple Music."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "47",
+      "work_id": "one-last-time-vs-rather-be-vs-outside-vs-summer--luis-guinea",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Instrumentales/One Last Time vs Rather Be vs Outside vs Summer.m4a",
+      "source_sha256": "3064e91322d019fb63a79406f9e4b696258ea3f72ba70ac2a46978fe7bf71f29",
+      "preview": "assets/audio/previews/one-last-time-vs-rather-be-vs-outside-vs-summer--luis-guinea.mp3",
+      "preview_sha256": "eb6abc0531d6d3da9429e812a6cfc1e633b0a3a6af5a37672df782ca3efe02cb",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          211.0,
+          254.5
+        ],
+        "start_s": 211.0,
+        "duration_s": 43.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Sección de mayor repetición armónica (0.86) y energía (0.78) entre dos límites de sección."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json one-last-time-vs-rather-be-vs-outside-vs-summer--luis-guinea: Título: nombre del archivo. Decisión explícita del propietario del 2026-10-13: mashup de obras ajenas; créditos exclusivamente de arreglista y productor (sin composición). Inédita: sin lanzamiento en Apple Music."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "48",
+      "work_id": "prometheus--luis-guinea",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Instrumentales/Prometheus.mp3",
+      "source_sha256": "ab3d9841ee81b4b51cae2abc78866749700b79c2c8b2c2805fa78563f0a2d2bb",
+      "preview": "assets/audio/previews/prometheus--luis-guinea.mp3",
+      "preview_sha256": "097a47418ea80e131ed81b17e764624deb82029ef74d5ccc41102c9d6b9c6b10",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          80.0,
+          122.0
+        ],
+        "start_s": 80.0,
+        "duration_s": 42.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Sección de mayor repetición armónica (0.95) y energía (0.82) entre dos límites de sección."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json prometheus--luis-guinea: Título: nombre del archivo. Decisión explícita del propietario del 2026-10-13: composición original; créditos de compositor, arreglista y productor. Inédita: sin lanzamiento en Apple Music."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "49",
+      "work_id": "she-wolf-cover-instrumental--luis-guinea",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Instrumentales/She Wolf (Mastered).m4a",
+      "source_sha256": "5f24c06755c29c669cf58701f327713de6c4c57ad5e708c883be1298b6c45637",
+      "preview": "assets/audio/previews/she-wolf-cover-instrumental--luis-guinea.mp3",
+      "preview_sha256": "5a517b6d2c9c06dcbf94db089ec55c3a3179e3a77d124f2e037fe6c0c951877e",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          192.5,
+          236.0
+        ],
+        "start_s": 192.5,
+        "duration_s": 43.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Sección de mayor repetición armónica (0.94) y energía (0.70) entre dos límites de sección."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json she-wolf-cover-instrumental--luis-guinea: Etiquetas del archivo: title «She Wolf», artist «David Guetta - Luis Guinea». Decisión explícita del propietario del 2026-10-13: cover o arreglo de obra ajena; créditos exclusivamente de arreglista y productor (sin composición). Inédita: sin lanzamiento en Apple Music."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "50",
+      "work_id": "singularidad-del-genio--luis-guinea",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Instrumentales/Singularidad del Genio_Master.mp3",
+      "source_sha256": "62d6d890332a3900750864192c9ddd00dd94152f11a15aba32e711f3dcf0e7dc",
+      "preview": "assets/audio/previews/singularidad-del-genio--luis-guinea.mp3",
+      "preview_sha256": "db4b6262faf65a8cb3aa4bc15fbc514e212fba35ccb37e74db1589871d52628c",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          146.5,
+          188.0
+        ],
+        "start_s": 146.5,
+        "duration_s": 41.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Sección de mayor repetición armónica (0.83) y energía (0.80) entre dos límites de sección."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json singularidad-del-genio--luis-guinea: Título: nombre del archivo. Decisión explícita del propietario del 2026-10-13: composición original; créditos de compositor, arreglista y productor. Inédita: sin lanzamiento en Apple Music."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "51",
+      "work_id": "alacran--daniela-gomez",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Daniela Gomez/Alacran (Master).mp3",
+      "source_sha256": "f7f8ef21771babbcebb9afbc41e912e57604a14d8ee0e2eed1523e1befea85c9",
+      "preview": "assets/audio/previews/alacran--daniela-gomez.mp3",
+      "preview_sha256": "5bbc526d625a63067d24a0996c59da055fbc7df23657b4ede7c04e803edd2306",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          129.5,
+          170.5
+        ],
+        "start_s": 129.5,
+        "duration_s": 41.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «Y yo quiero ser libre Y…», que aparece 3 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json alacran--daniela-gomez: Etiquetas del archivo: title «Alacran», artist «Daniela Gomez»; grafía con tildes de la hoja Songwriting (carpeta «Daniela Gómez/Alacrán»). Rol: carpeta Productor. Inédita: sin lanzamiento en Apple Music ni Deezer; la fecha 2020 de la etiqueta no se muestra."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "52",
+      "work_id": "jinne-jinne--canciones-de-puno-y-letra",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Pablo Delgado/Jinee Jinee (Jinee and Friends).mp3",
+      "source_sha256": "f2bf920183bc80a3ea538d3d4d725503131510a3e812994d283190fe2eec5ce1",
+      "preview": "assets/audio/previews/jinne-jinne--canciones-de-puno-y-letra.mp3",
+      "preview_sha256": "0bfbcf38ccefd8c9c86b965df56ef2cd5d4dac48c8860be85b4a1c77844b7bcf",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          136.5,
+          177.5
+        ],
+        "start_s": 136.5,
+        "duration_s": 41.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «with you is a surprise Genie…», que aparece 3 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json jinne-jinne--canciones-de-puno-y-letra: Decisión explícita del propietario del 2026-10-13: título «Jinne, Jinne», artista Canciones de Puño y Letra; Luis Guinea coautor, coarreglista y coproductor junto con Pablo Delgado. Inédita: sin lanzamiento en Apple Music ni Deezer."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "53",
+      "work_id": "dame-mas-de-ti-rough-mix--rogelio-edel",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/Dame Más De Ti_roughmix.mp3",
+      "source_sha256": "07272144f0bad2e6a3689a8cbbba9d6ee873f992f2c0b65736b946681d723484",
+      "preview": "assets/audio/previews/dame-mas-de-ti-rough-mix--rogelio-edel.mp3",
+      "preview_sha256": "9a896957b620054804b46bd2f4bc70127bc04160f15cb1d6d3ca4a4cd70857e2",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          124.0,
+          163.0
+        ],
+        "start_s": 124.0,
+        "duration_s": 39.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (alternativa). Estribillo «Dame más de ti En cualquier…», que aparece 3 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json dame-mas-de-ti-rough-mix--rogelio-edel: Título con la grafía oficial de Mil Versiones - EP. Versión: nombre del archivo «_roughmix». La pista publicada (Apple 1844217385, Spotify 0u7hpykPEmVgSRPIkBSPr6) dura 181,016 s; esta mezcla preliminar dura 207,528 s (Δ 26,5 s): es otra grabación sin lanzamiento propio, así que no lleva enlaces ni la portada del EP."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "54",
+      "work_id": "i-want-u--rogelio-edel--2025",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/I want u - ROGELIO EDEL.mp3",
+      "source_sha256": "f643a133421d4060e29cc86d25ece849185095dd7d0a547f5106ded612ff842d",
+      "preview": "assets/audio/previews/i-want-u--rogelio-edel--2025.mp3",
+      "preview_sha256": "f5d3a9085922aeb482d64535e822170264d2784517c6a0021d98f1c10df65bb0",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          111.0,
+          152.0
+        ],
+        "start_s": 111.0,
+        "duration_s": 41.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «I want you baby I want…», que aparece 9 veces en la canción."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "catalog_recordings.json i-want-u--rogelio-edel--2025: Publicada en Mil Versiones - EP: Apple Music 1844217382 (190,250 s), Spotify 1hylR6ZXcZQpCCbDaxR4dG (190 250 ms). Master local 190,250 s (Δ 0,000 s). Mil Versiones - EP (Rogelio Edel, 2025-10-10): Apple Music colección 1844217381 y álbum de Spotify 6TMJisdDlRcKBBWaNVvHLd, consultados el 2026-10-13. Portada: One Page Luis Guinea/artworks/Mil Versiones.png, indicada por el propietario."
+        ]
+      }
+    },
+    {
+      "review_id": "55",
+      "work_id": "mejor-version--rogelio-edel--2025",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/Mejor Versión_Master.mp3",
+      "source_sha256": "45c9ce6b59e1599b829f167d3739a6d6db880b3a8643090764efe19f29fb596c",
+      "preview": "assets/audio/previews/mejor-version--rogelio-edel--2025.mp3",
+      "preview_sha256": "901c68b202396c2d23d5d25af74830f996f59c6eb9a07aa6e4441de937e460f2",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          77.0,
+          120.0
+        ],
+        "start_s": 77.0,
+        "duration_s": 43.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «informal Nada que se sentimenta pa…», que aparece 4 veces en la canción."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "catalog_recordings.json mejor-version--rogelio-edel--2025: Publicada en Mil Versiones - EP: Apple Music 1844217384 (136,347 s), Spotify 1BT7VRzdKjkTHDviLTxtlj (136 346 ms). Master local 136,416 s (Δ 0,069 s). Mil Versiones - EP (Rogelio Edel, 2025-10-10): Apple Music colección 1844217381 y álbum de Spotify 6TMJisdDlRcKBBWaNVvHLd, consultados el 2026-10-13. Portada: One Page Luis Guinea/artworks/Mil Versiones.png, indicada por el propietario."
+        ]
+      }
+    },
+    {
+      "review_id": "56",
+      "work_id": "te-extrano--rogelio-edel--2025",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/Te Extraño_Master.mp3",
+      "source_sha256": "68377e18555019086ba81bda28be55fc04f67136ae9ff1e62b08cf2ecaca28a6",
+      "preview": "assets/audio/previews/te-extrano--rogelio-edel--2025.mp3",
+      "preview_sha256": "a0a020fc4836f053edd3dca1c15c3b72ef045941bb8e808737fa28c1832968eb",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          94.0,
+          136.5
+        ],
+        "start_s": 94.0,
+        "duration_s": 42.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «Siento que desapareció el color y…», que aparece 2 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json te-extrano--rogelio-edel--2025: Decisión explícita del propietario del 2026-10-13: «Te Extraño» de Rogelio Edel, publicada; no es «Ya No Sigo Esperando». Publicada en Mil Versiones - EP: Apple Music 1844217383 (165,330 s), Spotify 7s3UWyjkf2qe5enTSFQbZS (165 329 ms). Master local 165,384 s (Δ 0,054 s). Mil Versiones - EP (Rogelio Edel, 2025-10-10): Apple Music colección 1844217381 y álbum de Spotify 6TMJisdDlRcKBBWaNVvHLd, consultados el 2026-10-13. Portada: One Page Luis Guinea/artworks/Mil Versiones.png, indicada por el propietario."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "57",
+      "work_id": "te-vi-we-belong-together-rough-mix--rogelio-edel",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/Te Vi (We Belong Together)_roughmix.mp3",
+      "source_sha256": "bcac225b470e2097b296b7c5d8c9e7c06323c7b474d20a70cc21f51933ffd668",
+      "preview": "assets/audio/previews/te-vi-we-belong-together-rough-mix--rogelio-edel.mp3",
+      "preview_sha256": "38b5c5a9f7f2dfd0e7b36486c0dba5bd11f6a4ade295f3202558a7a884d851d6",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          54.0,
+          98.0
+        ],
+        "start_s": 54.0,
+        "duration_s": 44.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «quiero besar tus labios Si quiero…», que aparece 2 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json te-vi-we-belong-together-rough-mix--rogelio-edel: Etiquetas del archivo: title «Te Vi (We Belong Together)_rou», artist «Rogelio Edel & Luis Guinea». Versión: nombre del archivo «_roughmix». Inédita: no figura en la discografía de Rogelio Edel en Apple Music ni Spotify; la fecha 2021 de la etiqueta no se muestra."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
       }
     }
   ]

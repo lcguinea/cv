@@ -16,8 +16,15 @@ sys.path.insert(0, str(HERE))
 
 import generate_music_previews as previews  # noqa: E402
 
-VERIFIED = {"25", "02", "04", "35", "03", "05", "11", "01", "06", "07", "08", "09", "10", "13", "14", "15"}
-BLOCKED = {"33", "34", "36", "37", "38"}
+# The sixteen original previews (2026-10-05) and the 29 windows the owner approved on 2026-10-13.
+VERIFIED = {"25", "02", "04", "35", "03", "05", "11", "01", "06", "07", "08", "09", "10", "13", "14", "15",
+            "12", "18", "20", "21", "16", "41", "42", "43", "19", "22", "23", "26", "28", "30",
+            "31", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57"}
+# Selected works whose audio is not in One Page Luis Guinea/audios (no source to cut).
+BLOCKED_WITHOUT_AUDIO = {"33", "34", "36", "37", "38"}
+# Associated sources still waiting for an approved window (none since 2026-10-13).
+PENDING_WINDOW_APPROVAL = set()
+BLOCKED = BLOCKED_WITHOUT_AUDIO | PENDING_WINDOW_APPROVAL
 # Owner-approved chorus intervals (s) and the encoded end where an edge was adjusted.
 APPROVED = {
     "25": (106.5, 145.0, 145.0), "02": (57.5, 91.0, 91.0), "04": (67.0, 107.5, 107.5),
@@ -64,7 +71,10 @@ class PreviewManifestTests(unittest.TestCase):
                 self.assertLessEqual(entry["window"]["duration_s"], previews.MAX_PREVIEW_S)
             else:
                 self.assertIsNone(entry["preview"])
+                self.assertIsNone(entry["window"])
                 self.assertTrue(entry["evidence_needed"])
+                # A source awaiting its window is already associated and pinned by sha256.
+                self.assertEqual(entry["source"] is not None, entry["review_id"] in PENDING_WINDOW_APPROVAL)
 
     def test_authorized_sources_are_the_human_decisions(self):
         entries = {e["review_id"]: e for e in self.validate()}

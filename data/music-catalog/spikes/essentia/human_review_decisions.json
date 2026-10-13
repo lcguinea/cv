@@ -475,7 +475,7 @@
       "review_id": "16",
       "heading": "Agua de Mar",
       "reviewed_asset": "Agua de Mar (Master).mp3",
-      "catalog_link": {"status": "unmapped", "work_id": null, "candidates": ["agua-de-mar--luis-guinea--2021"], "detail": "Sin mapear: el documento humano no confirma la identidad de obra y el audio no quedó vinculado en audio_links_onepage.json; la coincidencia de título no basta (TAXONOMY.md §0.5 y §12). Requiere confirmación humana. El asset revisado «Agua de Mar (Master).mp3» no figura en audio_links_onepage.json, que solo registra «Aguita de Mar (Master).mp3» (discrepancia sin resolver, R08). Reinvestigado: el MP3 local mide 193.778 s (ffprobe) frente a 190936 ms del audio_ref del catálogo (delta 2.842 s, fuera de ±1.0 s); «Aguita de Mar (Master).mp3» ya no existe en audios/ y no hay evidencia de que sea el mismo asset que «Agua de Mar (Master).mp3». Sigue abierto.", "findings": [{"source": "One Page Luis Guinea/audios/Cantautor/Agua de Mar (Master).mp3", "citation": "ffprobe = 193.778417 s; catalog agua-de-mar--luis-guinea--2021 duration_ms = 190936 (delta 2.842 s > 1.0 s)"}, {"source": "One Page Luis Guinea/lista_archivos_audio_LuisGuinea.xlsx", "citation": "sin filas «Agua de Mar» ni «Aguita de Mar»: la organización declarada de los audios no aporta el vínculo"}]},
+      "catalog_link": {"status": "mapped", "work_id": "agua-de-mar--luis-guinea--2021", "candidates": [], "detail": "Decisión explícita del propietario del 2026-10-13: título definitivo «Agua de Mar», año 2021; el audio «Agua de Mar (Master).mp3» corresponde a agua-de-mar--luis-guinea--2021. La diferencia de duración (Δ 2,842 s) y la discrepancia de nombre «Aguita de Mar» (R08) quedan registradas, pero la identidad la fija la decisión humana."},
       "values": {
         "genre": ["pop", "folk_singer_songwriter"],
         "subgenre": ["acoustic_pop"],
@@ -520,7 +520,13 @@
         "Asset: `Antes de Irme (Mariachi).mp3`.",
         "No existe BPM humano fijo aprobado."
       ],
-      "negative_decisions": []
+      "negative_decisions": [],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "No publicar «Antes de Irme (Mariachi).mp3»: se publica exclusivamente «Antes de irme (final).m4a»."
+      },
+      "public_exclusion": true
     },
     {
       "review_id": "18",
@@ -551,7 +557,7 @@
       "review_id": "19",
       "heading": "Así habla el amor",
       "reviewed_asset": null,
-      "catalog_link": {"status": "unmapped", "work_id": null, "candidates": [], "detail": "Sin mapear: catalog_master.json (91 obras) no tiene ninguna entrada con este título. Requiere decisión humana; no se inventa la relación. Reinvestigado: existe un registro fuente en la hoja Local (inédito) pero no en catalog_master.json; darlo de alta exige decisión de modelado (catálogo de inéditos), no tomada.", "findings": [{"source": "One Page Luis Guinea/catalogo_sin_duplicados_con_isrc_prioridad.xlsx (hoja Local)", "citation": "fila con Track Name «Así Habla El Amor», Artists «Luis Guinea»; solo título y artista, sin ISRC ni duración; hoja de inéditos fuera de catalog_master.json (SCHEMA.md: «La hoja Local (55 inéditos) queda fuera»)"}]},
+      "catalog_link": {"status": "mapped", "work_id": "asi-habla-el-amor--luis-guinea", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json (no figura en la hoja Released): alta en catalog_recordings.json como asi-habla-el-amor--luis-guinea, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
       "values": {
         "genre": ["pop", "folk_singer_songwriter"],
         "subgenre": ["acoustic_pop"],
@@ -620,7 +626,7 @@
       "review_id": "22",
       "heading": "El Feo",
       "reviewed_asset": null,
-      "catalog_link": {"status": "unmapped", "work_id": null, "candidates": [], "detail": "Sin mapear: catalog_master.json (91 obras) no tiene ninguna entrada con este título. Requiere decisión humana; no se inventa la relación."},
+      "catalog_link": {"status": "mapped", "work_id": "el-feo--luis-guinea", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json (no figura en la hoja Released): alta en catalog_recordings.json como el-feo--luis-guinea, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
       "values": {
         "genre": ["regional_mexican"],
         "subgenre": ["mariachi_ranchera"],
@@ -643,7 +649,7 @@
       "review_id": "23",
       "heading": "El Beso — Tufic / Luis Guinea",
       "reviewed_asset": null,
-      "catalog_link": {"status": "unmapped", "work_id": null, "candidates": [], "detail": "Sin mapear: catalog_master.json (91 obras) no tiene ninguna entrada con este título. Requiere decisión humana; no se inventa la relación. Reinvestigado: CV_MASTER.md (l. 213) cita «El Beso» como último sencillo publicado, pero no figura en la hoja Released ni en catalog_master.json: discrepancia entre fuentes sin resolver.", "findings": [{"source": "CV_MASTER.md", "citation": "l. 213: «Released original singles with editorial playlist placements on Spotify and Deezer, most recently \"El Beso\".»"}]},
+      "catalog_link": {"status": "mapped", "work_id": "el-beso--tufic", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json (no figura en la hoja Released): alta en catalog_recordings.json como el-beso--tufic, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
       "values": {
         "genre": ["pop", "latin_traditional"],
         "subgenre": ["bolero"],
@@ -683,7 +689,13 @@
         "evidence": "human_review"
       },
       "notes": ["No se aprobó `theme: commitment`."],
-      "negative_decisions": []
+      "negative_decisions": [],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "No publicar «Hasta El Altar»: excluida de la selección pública."
+      },
+      "public_exclusion": true
     },
     {
       "review_id": "25",
@@ -712,7 +724,7 @@
       "review_id": "26",
       "heading": "Inenarrable (Qué Suerte) — PianoVoz",
       "reviewed_asset": null,
-      "catalog_link": {"status": "unmapped", "work_id": null, "candidates": [], "detail": "Sin mapear: catalog_master.json (91 obras) no tiene ninguna entrada con este título. Requiere decisión humana; no se inventa la relación. Reinvestigado: la hoja Local tiene «Inenarrable» (Luis Guinea, Mario Molina Moro), no en catalog_master.json; que sea la misma obra que «Inenarrable (Qué Suerte) — PianoVoz» no está demostrado y darlo de alta exige decisión de modelado no tomada.", "findings": [{"source": "One Page Luis Guinea/catalogo_sin_duplicados_con_isrc_prioridad.xlsx (hoja Local)", "citation": "fila con Track Name «Inenarrable», Artists «Luis Guinea, Mario Molina Moro»; solo título y artista, sin ISRC ni duración; hoja de inéditos fuera de catalog_master.json (SCHEMA.md: «La hoja Local (55 inéditos) queda fuera»)"}]},
+      "catalog_link": {"status": "mapped", "work_id": "inenarrable-que-suerte-piano-voz--luis-guinea", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json (no figura en la hoja Released): alta en catalog_recordings.json como inenarrable-que-suerte-piano-voz--luis-guinea, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
       "values": {
         "genre": ["pop", "folk_singer_songwriter"],
         "subgenre": ["acoustic_pop"],
@@ -752,13 +764,19 @@
         "evidence": "human_review"
       },
       "notes": ["Nota: también se detectó half-time ~76; mantener 152 técnico y no inferir `perceived_tempo`."],
-      "negative_decisions": []
+      "negative_decisions": [],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Eliminar «Junto A Mí» del catálogo público."
+      },
+      "public_exclusion": true
     },
     {
       "review_id": "28",
       "heading": "La Martiniana",
       "reviewed_asset": null,
-      "catalog_link": {"status": "unmapped", "work_id": null, "candidates": [], "detail": "Sin mapear: catalog_master.json (91 obras) no tiene ninguna entrada con este título. Requiere decisión humana; no se inventa la relación."},
+      "catalog_link": {"status": "mapped", "work_id": "la-martiniana--luis-guinea--2025", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json (no figura en la hoja Released): alta en catalog_recordings.json como la-martiniana--luis-guinea--2025, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
       "values": {
         "genre": ["regional_mexican"],
         "subgenre": ["mariachi_ranchera"],
@@ -775,7 +793,15 @@
         "evidence": "human_review"
       },
       "notes": ["`mariachi_ranchera` es aproximación amplia; no crear extensión sin decisión humana."],
-      "negative_decisions": []
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["artist", "arranger", "producer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Decisión explícita del propietario del 2026-10-13: cover; créditos de arreglista, intérprete y productor."
+      }
     },
     {
       "review_id": "29",
@@ -798,13 +824,19 @@
         "evidence": "human_review"
       },
       "notes": [],
-      "negative_decisions": ["no `romantic_love`"]
+      "negative_decisions": ["no `romantic_love`"],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Eliminar «Me Equivoqué» del catálogo público."
+      },
+      "public_exclusion": true
     },
     {
       "review_id": "30",
       "heading": "Ojos Marrones",
       "reviewed_asset": null,
-      "catalog_link": {"status": "unmapped", "work_id": null, "candidates": [], "detail": "Sin mapear: catalog_master.json (91 obras) no tiene ninguna entrada con este título. Requiere decisión humana; no se inventa la relación. Reinvestigado: la única coincidencia es de duración (208.515 s ≈ Cómo Decirte 208500 ms, delta 0.015 s) sin coincidencia de título ni fuente que las relacione; una coincidencia de duración por sí sola no prueba identidad.", "findings": [{"source": "One Page Luis Guinea/audios/Cantautor/Ojos Marrones_MocteMaster 1.0.mp3", "citation": "ffprobe = 208.515146 s; candidato descartado como prueba: como-decirte--luis-guinea--2022"}]},
+      "catalog_link": {"status": "mapped", "work_id": "ojos-marrones-cover--luis-guinea", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json (no figura en la hoja Released): alta en catalog_recordings.json como ojos-marrones-cover--luis-guinea, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
       "values": {
         "genre": ["pop", "folk_singer_songwriter"],
         "subgenre": ["acoustic_pop"],
@@ -821,13 +853,21 @@
         "evidence": "human_review"
       },
       "notes": [],
-      "negative_decisions": []
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["artist", "arranger", "producer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Decisión explícita del propietario del 2026-10-13: cover; créditos de arreglista, intérprete y productor."
+      }
     },
     {
       "review_id": "31",
       "heading": "Promesas Decepciones",
       "reviewed_asset": "Promesas Decepciones (Master).mp3",
-      "catalog_link": {"status": "unmapped", "work_id": null, "candidates": [], "detail": "Sin mapear: catalog_master.json (91 obras) no tiene ninguna entrada con este título. Requiere decisión humana; no se inventa la relación."},
+      "catalog_link": {"status": "mapped", "work_id": "promesas-decepciones-cover--luis-guinea", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json (no figura en la hoja Released): alta en catalog_recordings.json como promesas-decepciones-cover--luis-guinea, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
       "values": {
         "genre": ["pop", "folk_singer_songwriter"],
         "subgenre": ["acoustic_pop"],
@@ -1022,6 +1062,217 @@
         "statement": "Luis no participó; debe permanecer fuera del catálogo público."
       },
       "public_exclusion": true
+    },
+    {
+      "review_id": "41",
+      "heading": "Sunday Morning — Rogelio Edel (2021)",
+      "reviewed_asset": "SundayMorning_V10_LaBuenaAhoraSíMasterFinalALV.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "sunday-morning--rogelio-edel--2021", "candidates": [], "detail": "ffprobe 219,000 s frente a duration_ms 219000 (Δ 0,000 s); carpeta Productor/Rogelio Edel y título «Sunday Morning» en el nombre del archivo. Único candidato de catalog_master.json con ese título y artista."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "42",
+      "heading": "In My Life - Cover — Rogelio Edel (2021)",
+      "reviewed_asset": "In my life_master1_1.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "in-my-life-cover--rogelio-edel--2021", "candidates": [], "detail": "ffprobe 155,044 s frente a duration_ms 155044 (Δ 0,000 s) en las dos entradas in-my-life--rogelio-edel--2021 e in-my-life-cover--rogelio-edel--2021; ambas comparten audio_ref «In my life_master1_1.wav» (mismo nombre base que el audio local). Las dos entradas son pistas distintas y vivas en Spotify (10Hi3n9Rmq1PEt0OeNWh9t «In My Life» y 7fxYNb7nWn9uiH51kcubNt «In My Life - Cover», ambas del 2021-09-24): no son redundantes y no se eliminan. Encargo del propietario del 2026-10-13 de evitar duplicados: se publica una sola fila, la entrada «- Cover», coherente con la convención del catálogo para versiones de obras ajenas."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "43",
+      "heading": "Contigo Aprendí - Cover — Ana Guinea (2020)",
+      "reviewed_asset": "Contigo Aprendi_Master.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "contigo-aprendi-cover--ana-guinea--2020", "candidates": [], "detail": "Decisión del propietario del 2026-10-13: «Contigo Aprendí» es un cover; se conserva esa clasificación (contigo-aprendi-cover--ana-guinea--2020). audio_ref del catálogo «Contigo Aprendi_Master.wav» con el mismo nombre base; ffprobe 120,053 s frente a duration_ms 117000 (Δ 3,053 s)."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "44",
+      "heading": "It Feels Like Falling In Love — Anne Noor",
+      "reviewed_asset": "It Feels Like Falling In Love_1.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "it-feels-like-falling-in-love--anne-noor", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como it-feels-like-falling-in-love--anne-noor, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["co_writer", "co_arranger", "co_producer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Decisión explícita del propietario del 2026-10-13: intérprete Anne Noor; Luis Guinea coautor, coarreglista y coproductor.",
+        "public_facet": "Composer"
+      }
+    },
+    {
+      "review_id": "45",
+      "heading": "Peligro — Nina Jori, Carla Calderon, Luis Guinea, Salvador Álvarez",
+      "reviewed_asset": "Peligro_LUIS_CARLA_NINA_SALVADOR.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "peligro--nina-jori", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como peligro--nina-jori, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "46",
+      "heading": "Diamonds - Cover — Luis Guinea",
+      "reviewed_asset": "Diamonds (Mastered).m4a",
+      "catalog_link": {"status": "mapped", "work_id": "diamonds-cover-instrumental--luis-guinea", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como diamonds-cover-instrumental--luis-guinea, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["arranger", "producer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Decisión explícita del propietario del 2026-10-13: cover o arreglo de obra ajena; créditos exclusivamente de arreglista y productor (sin composición)."
+      }
+    },
+    {
+      "review_id": "47",
+      "heading": "One Last Time vs Rather Be vs Outside vs Summer — Luis Guinea",
+      "reviewed_asset": "One Last Time vs Rather Be vs Outside vs Summer.m4a",
+      "catalog_link": {"status": "mapped", "work_id": "one-last-time-vs-rather-be-vs-outside-vs-summer--luis-guinea", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como one-last-time-vs-rather-be-vs-outside-vs-summer--luis-guinea, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["arranger", "producer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Decisión explícita del propietario del 2026-10-13: mashup de obras ajenas; créditos exclusivamente de arreglista y productor (sin composición)."
+      }
+    },
+    {
+      "review_id": "48",
+      "heading": "Prometheus — Luis Guinea",
+      "reviewed_asset": "Prometheus.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "prometheus--luis-guinea", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como prometheus--luis-guinea, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["songwriter", "arranger", "producer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Decisión explícita del propietario del 2026-10-13: composición original; créditos de compositor, arreglista y productor."
+      }
+    },
+    {
+      "review_id": "49",
+      "heading": "She Wolf - Cover — Luis Guinea",
+      "reviewed_asset": "She Wolf (Mastered).m4a",
+      "catalog_link": {"status": "mapped", "work_id": "she-wolf-cover-instrumental--luis-guinea", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como she-wolf-cover-instrumental--luis-guinea, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["arranger", "producer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Decisión explícita del propietario del 2026-10-13: cover o arreglo de obra ajena; créditos exclusivamente de arreglista y productor (sin composición)."
+      }
+    },
+    {
+      "review_id": "50",
+      "heading": "Singularidad del Genio — Luis Guinea",
+      "reviewed_asset": "Singularidad del Genio_Master.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "singularidad-del-genio--luis-guinea", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como singularidad-del-genio--luis-guinea, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["songwriter", "arranger", "producer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Decisión explícita del propietario del 2026-10-13: composición original; créditos de compositor, arreglista y productor."
+      }
+    },
+    {
+      "review_id": "51",
+      "heading": "Alacrán — Daniela Gómez",
+      "reviewed_asset": "Alacran (Master).mp3",
+      "catalog_link": {"status": "mapped", "work_id": "alacran--daniela-gomez", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como alacran--daniela-gomez, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "52",
+      "heading": "Jinne, Jinne — Canciones de Puño y Letra",
+      "reviewed_asset": "Jinee Jinee (Jinee and Friends).mp3",
+      "catalog_link": {"status": "mapped", "work_id": "jinne-jinne--canciones-de-puno-y-letra", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como jinne-jinne--canciones-de-puno-y-letra, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["co_writer", "co_arranger", "co_producer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Decisión explícita del propietario del 2026-10-13: título «Jinne, Jinne», artista Canciones de Puño y Letra; Luis Guinea coautor, coarreglista y coproductor junto con Pablo Delgado.",
+        "public_facet": "Producer"
+      }
+    },
+    {
+      "review_id": "53",
+      "heading": "Dame Más de Ti — Rogelio Edel",
+      "reviewed_asset": "Dame Más De Ti_roughmix.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "dame-mas-de-ti-rough-mix--rogelio-edel", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como dame-mas-de-ti-rough-mix--rogelio-edel, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "54",
+      "heading": "I Want U — Rogelio Edel",
+      "reviewed_asset": "I want u - ROGELIO EDEL.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "i-want-u--rogelio-edel--2025", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como i-want-u--rogelio-edel--2025, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "55",
+      "heading": "Mejor Versión — Rogelio Edel",
+      "reviewed_asset": "Mejor Versión_Master.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "mejor-version--rogelio-edel--2025", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como mejor-version--rogelio-edel--2025, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "56",
+      "heading": "Te Extraño — Rogelio Edel",
+      "reviewed_asset": "Te Extraño_Master.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "te-extrano--rogelio-edel--2025", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como te-extrano--rogelio-edel--2025, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": []
+    },
+    {
+      "review_id": "57",
+      "heading": "Te Vi (We Belong Together) — Rogelio Edel, Luis Guinea",
+      "reviewed_asset": "Te Vi (We Belong Together)_roughmix.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "te-vi-we-belong-together-rough-mix--rogelio-edel", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como te-vi-we-belong-together-rough-mix--rogelio-edel, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": []
     }
   ],
   "relations": [
@@ -1035,6 +1286,8 @@
     {"relation_id": "R08", "type": "name_discrepancy", "review_ids": ["16"], "work_id": null, "version_type": null, "asset": "Cantautor/Aguita de Mar (Master).mp3", "duration_s": null, "link_status": "unresolved_discrepancy", "statement": "Referencia histórica de un manifiesto previo (audio_links_onepage.json). Sin evidencia de identidad técnica con «Agua de Mar (Master).mp3»: no se fusionan ni se vinculan."},
     {"relation_id": "R09", "type": "distinct_records", "review_ids": ["04", "15"], "work_id": null, "version_type": null, "asset": null, "duration_s": null, "link_status": "distinct", "statement": "«Volver a Verte» de Luis Guinea (2020, volver-a-verte--luis-guinea--2020) y de Ana Guinea (2022, volver-a-verte--ana-guinea--2022) son registros distintos."},
     {"relation_id": "R10", "type": "historical_asset_name", "review_ids": ["12"], "work_id": "me-voy--rogelio-edel--2025", "version_type": null, "asset": "No Vuelvas_Master_4.0.mp3", "duration_s": null, "link_status": "historical_asset", "statement": "Asset/master histórico con nombre «No Vuelvas»; el título canónico de la obra es «Me Voy»."},
-    {"relation_id": "R11", "type": "technical_discrepancy", "review_ids": ["38"], "work_id": "shape-of-you-acoustic--segundo-piso--2017", "version_type": null, "asset": "Shape of you.mp3", "duration_s": "365.4", "link_status": "unresolved_discrepancy", "statement": "El MP3 dura 365,4 s frente a 184 s de la pista publicada. La decisión humana confirma únicamente el crédito de producción y que la obra es un cover; no resuelve la identidad de versión ni de máster."}
+    {"relation_id": "R11", "type": "technical_discrepancy", "review_ids": ["38"], "work_id": "shape-of-you-acoustic--segundo-piso--2017", "version_type": null, "asset": "Shape of you.mp3", "duration_s": "365.4", "link_status": "unresolved_discrepancy", "statement": "El MP3 dura 365,4 s frente a 184 s de la pista publicada. La decisión humana confirma únicamente el crédito de producción y que la obra es un cover; no resuelve la identidad de versión ni de máster."},
+    {"relation_id": "R12", "type": "duplicate_release_records", "review_ids": ["42"], "work_id": "in-my-life-cover--rogelio-edel--2021", "version_type": null, "asset": "In my life_master1_1.mp3", "duration_s": "155.044", "link_status": "single_public_row", "statement": "in-my-life--rogelio-edel--2021 e in-my-life-cover--rogelio-edel--2021 son dos pistas vivas en Spotify con el mismo audio_ref, fecha y duración. No se eliminan; se publica una sola fila (la entrada «- Cover») para no duplicar la grabación."},
+    {"relation_id": "R13", "type": "public_source", "review_ids": ["18"], "work_id": "antes-de-irme--luis-guinea--2023", "version_type": null, "asset": "Antes de Irme_Master.mp3", "duration_s": "294.922", "link_status": "owner_designated_source", "statement": "Decisión del propietario del 2026-10-13: el preview público sale de «Antes de Irme_Master.mp3» (mismo nombre base que el audio_ref del catálogo). La clasificación de #18 describe «Antes de irme (final).m4a», que no se publica."}
   ]
 }

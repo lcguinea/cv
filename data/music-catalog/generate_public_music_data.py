@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 """Generate the browser-safe data consumed by /music/.
 
-Only ten explicitly allowed display fields are emitted. Every published song has a valid
+Only eleven explicitly allowed display fields are emitted. Every published song has a valid
 `preview`: the file name of a verified derivative (music_preview_manifest.json) that exists in
 assets/audio/previews/, is a readable MP3 and lasts 45 s or less (measured with the standard
 library). Songs of the selection without such a preview are left out of the public output and
 recorded in public_catalog_exclusions.json. The private source, its hash and the evidence never
 leave the manifest. `spotify` and `appleMusic` are optional streaming destinations (a validated
 URL or null): Spotify comes from the catalogue entry; Apple Music comes from the catalogue entry or,
-when it has none, from the owner-certified public_platform_links.json. No URL is ever deduced. The
-canonical catalogue is
+when it has none, from the owner-certified public_platform_links.json. No URL is ever deduced.
+Recordings that are not in the «Released» sheet (unreleased songs and instrumentals, and releases
+newer than that sheet, with links verified against the platforms) come from the hand-curated
+catalog_recordings.json, never from catalog_master.json, which is generated and hash-pinned; a
+recording with provisional fields cannot be published. The canonical catalogue is
 never copied wholesale to the web bundle because it also contains internal-use file
 references and metadata that the current UI does not need.
 """
@@ -27,6 +30,8 @@ import generate_music_previews as previews
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parent.parent
 MASTER = HERE / "catalog_master.json"
+RECORDINGS = HERE / "catalog_recordings.json"
+RECORDINGS_SCHEMA = "catalog-recordings-v1"
 SELECTION = HERE / "public_music_selection.json"
 OUTPUT = REPO / "js" / "music-data.js"
 EVIDENCE_DIR = HERE / "spikes" / "essentia"
@@ -45,21 +50,36 @@ PUBLICATION_RULE = (
 
 SELECTION_SCHEMA = "public-music-selection-v2"
 ALLOWED_ROLES = {"Artist", "Producer", "Composer"}
-EVIDENCE_FOLDER_ROLES = {"Cantautor": "Artist", "Productor": "Producer"}
-RELEASE_TYPES = {"single": "Single", "album": "Album"}
+# CATALOG_CATEGORY.md: the first-level folder under audios/ is the user's declared facet.
+# Instrumentales declares a category, not a credit, so its works need an explicit credits decision.
+EVIDENCE_FOLDER_ROLES = {"Cantautor": "Artist", "Productor": "Producer", "Coautorías": "Co-writer"}
+RELEASE_TYPES = {"single": "Single", "album": "Album", "ep": "EP"}
+# A recording without verifiable commercial release: release.status -> public releaseType (no links).
+UNRELEASED_TYPES = {"unreleased": "Unreleased"}
+# Closed vocabulary of the public `version` label (translated by js/strings.js music.version*).
+VERSIONS = {"Instrumental", "PianoVocal", "RoughMix", "RegionalMexican", "Mashup"}
 CREDIT_ROLES = {
     "artist": "Artist",
     "songwriter": "Songwriter",
+    "co_writer": "Co-writer",
+    "arranger": "Arranger",
+    "co_arranger": "Co-arranger",
     "producer": "Producer",
+    "co_producer": "Co-producer",
     "recording_engineer": "Recording Engineer",
 }
+# Songwriting credits surface under the Composer facet, production credits under Producer.
+COMPOSER_CREDITS = {"Songwriter", "Co-writer"}
+PRODUCER_CREDITS = {"Producer", "Co-producer"}
 LUIS = "Luis Guinea"
 # `role` is the primary Artist/Producer/Composer facet (filter); `roles` lists
 # every public credit of Luis Guinea in that work.
 # `preview` is a validated preview file name in assets/audio/previews/ (never None).
 # `spotify` and `appleMusic` are a validated streaming URL or None when the platform is uncertified.
+# `releaseType` is Single/Album for released works and Unreleased/Demo otherwise; `year` is None
+# only for an unreleased recording whose year no source states. `version` is None or one of VERSIONS.
 PUBLIC_FIELDS = ("title", "artist", "role", "artwork", "releaseType", "year", "roles", "preview",
-                 "spotify", "appleMusic")
+                 "spotify", "appleMusic", "version")
 SPOTIFY_URL_RE = re.compile(r"^https://open\.spotify\.com/track/[A-Za-z0-9]{22}$")
 APPLE_MUSIC_URL_RE = re.compile(r"^https://music\.apple\.com/[a-z]{2}/(?:album|song)/[A-Za-z0-9%._~/?=&-]+$")
 
@@ -109,8 +129,9 @@ def _role_from_evidence(decision, preview_entry):
         for folder, role in EVIDENCE_FOLDER_ROLES.items():
             if "audios" in parts and folder in parts:
                 evidence_roles.add(role)
-    if preview_entry.get("status") == "verified":
-        # validate_manifest() guarantees One Page Luis Guinea/audios/<folder>/...
+    if preview_entry.get("source"):
+        # A verified entry, or a blocked one whose source is already associated (awaiting its
+        # window): validate_manifest() guarantees One Page Luis Guinea/audios/<folder>/...
         folder = PurePosixPath(preview_entry["source"]).parts[2]
         role = EVIDENCE_FOLDER_ROLES.get(folder)
         if role is None:
@@ -149,8 +170,8 @@ def _credit_roles(decision, work):
         raise ValueError(f"{label}: unsupported credit roles {unknown}")
     public = [CREDIT_ROLES[role] for role in luis]
     explicit_facet = (decision.get("credits_decision") or {}).get("public_facet")
-    if not any(role in {"Artist", "Producer"} for role in public) and not (
-        explicit_facet == "Composer" and "Songwriter" in public
+    if not ({"Artist"} | PRODUCER_CREDITS) & set(public) and not (
+        explicit_facet == "Composer" and COMPOSER_CREDITS & set(public)
     ):
         raise ValueError(f"{label}: no supported public role in credits")
     return public
@@ -163,18 +184,24 @@ def _public_facet(decision, roles):
     label = f"#{decision['review_id']}"
     if facet not in ALLOWED_ROLES:
         raise ValueError(f"{label}: unsupported explicit public facet {facet!r}")
-    required_role = {"Artist": "Artist", "Producer": "Producer", "Composer": "Songwriter"}[facet]
-    if required_role not in roles:
-        if facet == "Composer":
+    if facet == "Composer":
+        if not COMPOSER_CREDITS & set(roles):
             raise ValueError(f"{label}: Composer facet requires songwriter credit for Luis Guinea")
-        raise ValueError(f"{label}: {facet} facet requires {required_role.lower()} credit for Luis Guinea")
+    elif facet == "Producer":
+        if not PRODUCER_CREDITS & set(roles):
+            raise ValueError(f"{label}: Producer facet requires producer credit for Luis Guinea")
+    elif facet not in roles:
+        raise ValueError(f"{label}: {facet} facet requires {facet.lower()} credit for Luis Guinea")
     return facet
 
 
 def _primary_role(decision, roles, work_id):
     role = _public_facet(decision, roles)
     if role is None:
-        role = next((item for item in roles if item in ALLOWED_ROLES), roles[0])
+        role = next(("Producer" if item in PRODUCER_CREDITS else item for item in roles
+                     if item in ALLOWED_ROLES or item in PRODUCER_CREDITS), None)
+    if role is None:
+        role = "Composer" if COMPOSER_CREDITS & set(roles) else roles[0]
     if role not in ALLOWED_ROLES:
         raise ValueError(f"{work_id}: unsupported public role {role!r}")
     return role
@@ -197,17 +224,19 @@ def preview_problem(preview, *, repo=REPO):
     return None
 
 
-def project(master, selection, decisions, *, repo=REPO, manifest=None, links=None):
+def project(master, selection, decisions, *, repo=REPO, manifest=None, links=None, recordings=None):
     """Return the public rows: songs with a valid preview, in curated display order."""
     return project_with_exclusions(master, selection, decisions, repo=repo, manifest=manifest,
-                                   links=links)[0]
+                                   links=links, recordings=recordings)[0]
 
 
-def project_with_exclusions(master, selection, decisions, *, repo=REPO, manifest=None, links=None):
+def project_with_exclusions(master, selection, decisions, *, repo=REPO, manifest=None, links=None,
+                            recordings=None):
     """Return (published rows, exclusions); every published row has a valid preview."""
     rows, exclusions = [], []
     for review_id, work_id, row, entry in _candidates(master, selection, decisions, repo=repo,
-                                                      manifest=manifest, links=links):
+                                                      manifest=manifest, links=links,
+                                                      recordings=recordings):
         if entry["status"] != "verified":
             exclusions.append({"review_id": review_id, "work_id": work_id, "title": row["title"],
                                "reason": "no_authorized_preview", "detail": entry["blocked_reason"]})
@@ -222,27 +251,67 @@ def project_with_exclusions(master, selection, decisions, *, repo=REPO, manifest
     return rows, exclusions
 
 
-def project_all(master, selection, decisions, *, repo=REPO, manifest=None, links=None):
+def project_all(master, selection, decisions, *, repo=REPO, manifest=None, links=None,
+                recordings=None):
     """Every selected work with validated credits and role, before the preview requirement.
 
     Internal: `preview` is None here. Used to check credit decisions of works that are
     currently excluded for lack of a preview; never serialized.
     """
     return [row for _, _, row, _ in _candidates(master, selection, decisions, repo=repo,
-                                                manifest=manifest, links=links)]
+                                                manifest=manifest, links=links,
+                                                recordings=recordings)]
 
 
-def _candidates(master, selection, decisions, *, repo=REPO, manifest=None, links=None):
+RECORDING_KEYS = {"id", "title", "artists", "credits", "release", "duration_ms", "explicit",
+                  "is_collaboration", "isrc", "spotify", "apple_music", "artwork", "audio_ref",
+                  "editorial", "version", "basis", "provisional"}
+
+
+def recording_works(recordings):
+    """Validated works of catalog_recordings.json (recordings outside the «Released» sheet)."""
+    if not isinstance(recordings, dict) or recordings.get("schema") != RECORDINGS_SCHEMA:
+        raise ValueError(f"recordings schema must be {RECORDINGS_SCHEMA}")
+    works = recordings.get("recordings")
+    if not isinstance(works, list):
+        raise ValueError("recordings must be a list")
+    for position, work in enumerate(works, start=1):
+        if not isinstance(work, dict) or set(work) != RECORDING_KEYS:
+            raise ValueError(f"recording {position} keys must be {sorted(RECORDING_KEYS)}")
+        label = _required_text(work["id"], f"recording {position} id")
+        status = (work.get("release") or {}).get("status")
+        if status == "released":
+            # Released after the «Released» sheet was compiled: needs a verified streaming link.
+            if not (work["spotify"].get("url") or work["apple_music"].get("url")):
+                raise ValueError(f"{label}: a released recording needs a verified streaming link")
+        elif status not in UNRELEASED_TYPES:
+            raise ValueError(f"{label}: unsupported release status {status!r}")
+        elif work["spotify"].get("url") or work["apple_music"].get("url") or work["isrc"]:
+            raise ValueError(f"{label}: an unreleased recording cannot carry release identifiers")
+        if work["version"] is not None and work["version"] not in VERSIONS:
+            raise ValueError(f"{label}: unsupported version {work['version']!r}")
+        if not isinstance(work["provisional"], list) or not all(isinstance(f, str) for f in work["provisional"]):
+            raise ValueError(f"{label}: provisional must list field names")
+        if not isinstance(work["basis"], list) or not work["basis"] \
+                or not all(isinstance(b, str) and b.strip() for b in work["basis"]):
+            raise ValueError(f"{label}: basis must cite the evidence of every public field")
+    return works
+
+
+def _candidates(master, selection, decisions, *, repo=REPO, manifest=None, links=None, recordings=None):
     """Validate the whole selection; yield (review_id, work_id, row, manifest entry).
 
-    `manifest` defaults to the canonical music_preview_manifest.json and `links` to
-    public_platform_links.json.
+    `manifest` defaults to the canonical music_preview_manifest.json, `links` to
+    public_platform_links.json and `recordings` to catalog_recordings.json.
     """
     if links is None:
         links = json.loads(PLATFORM_LINKS.read_text(encoding="utf-8"))
     certified_apple = certified_apple_music(links)
+    if recordings is None:
+        recordings = json.loads(RECORDINGS.read_text(encoding="utf-8"))
     if not isinstance(master, list):
         raise ValueError("catalog_master.json must contain a list")
+    master = list(master) + recording_works(recordings)
     if selection.get("schema") != SELECTION_SCHEMA:
         raise ValueError(f"selection schema must be {SELECTION_SCHEMA}")
     entries = selection.get("entries")
@@ -292,13 +361,19 @@ def _candidates(master, selection, decisions, *, repo=REPO, manifest=None, links
         # Without a credits decision the role comes from the audio evidence, resolved below.
         role = None if roles is None else _primary_role(decision, roles, work_id)
         release = work.get("release") or {}
-        if release.get("status") != "released":
+        status = release.get("status")
+        if status == "released":
+            release_type = RELEASE_TYPES.get(release.get("type"))
+            if release_type is None:
+                raise ValueError(f"{work_id}: unsupported release type {release.get('type')!r}")
+        elif status in UNRELEASED_TYPES and "provisional" in work:
+            release_type = UNRELEASED_TYPES[status]
+        else:
             raise ValueError(f"{work_id} is not a released work")
-        release_type = RELEASE_TYPES.get(release.get("type"))
-        if release_type is None:
-            raise ValueError(f"{work_id}: unsupported release type {release.get('type')!r}")
         year = release.get("year")
-        if not isinstance(year, int):
+        if not (isinstance(year, int) and not isinstance(year, bool)) and not (
+            year is None and status != "released"
+        ):
             raise ValueError(f"{work_id}: release year must be an integer")
 
         artists = work.get("artists")
@@ -330,10 +405,11 @@ def _candidates(master, selection, decisions, *, repo=REPO, manifest=None, links
             "spotify": _platform_url((work.get("spotify") or {}).get("url"), SPOTIFY_URL_RE,
                                      f"{work_id} Spotify"),
             "appleMusic": _apple_music(work, work_id, certified_apple),
+            "version": work.get("version"),
         }
         if tuple(row) != PUBLIC_FIELDS:
             raise AssertionError("public field order changed")
-        pending.append((review_id, work_id, decision, row))
+        pending.append((review_id, work_id, decision, row, work.get("provisional") or []))
 
     # Previews last, so selection and credit errors keep precedence.
     if manifest is None:
@@ -342,15 +418,18 @@ def _candidates(master, selection, decisions, *, repo=REPO, manifest=None, links
         entry["review_id"]: entry
         for entry in previews.validate_manifest(manifest, selection, decisions)
     }
-    for review_id, work_id, decision, row in pending:
+    for review_id, work_id, decision, row, provisional in pending:
         entry = preview_entries[review_id]
         if entry["work_id"] != work_id:
             raise ValueError(f"#{review_id}: preview manifest work_id differs from the mapping")
+        if provisional and entry["status"] == "verified":
+            raise ValueError(f"{work_id}: provisional fields {provisional} need the owner's approval "
+                             "before publication")
         if row["roles"] is None:
             row["roles"] = [_role_from_evidence(decision, entry)]
             row["role"] = _primary_role(decision, row["roles"], work_id)
     return [(review_id, work_id, row, preview_entries[review_id])
-            for review_id, work_id, _, row in pending]
+            for review_id, work_id, _, row, _ in pending]
 
 
 def _apple_music(work, work_id, certified):
@@ -378,28 +457,32 @@ def serialize(rows):
     lines = []
     for row in rows:
         if tuple(row) != PUBLIC_FIELDS:
-            raise ValueError("rows must match the ten-field public schema")
+            raise ValueError("rows must match the eleven-field public schema")
+        unreleased = row["releaseType"] in UNRELEASED_TYPES.values()
         if not all(isinstance(row[key], str) for key in PUBLIC_FIELDS[:5]) or not (
-            isinstance(row["year"], int)
-            and not isinstance(row["year"], bool)
-            and 1000 <= row["year"] <= 9999
+            (isinstance(row["year"], int) and not isinstance(row["year"], bool)
+             and 1000 <= row["year"] <= 9999)
+            or (row["year"] is None and unreleased)
+        ) or not (row["version"] is None or row["version"] in VERSIONS) or (
+            unreleased and (row["spotify"] or row["appleMusic"])
         ) or not (
             isinstance(row["roles"], list) and row["roles"]
             and all(isinstance(role, str) for role in row["roles"])
         ) or not (
             isinstance(row["preview"], str) and previews.PREVIEW_NAME_RE.match(row["preview"])
         ):
-            raise ValueError("rows must match the ten-field public schema (preview is required)")
+            raise ValueError("rows must match the eleven-field public schema (preview is required)")
         try:
             _platform_url(row["spotify"], SPOTIFY_URL_RE, "spotify")
             _platform_url(row["appleMusic"], APPLE_MUSIC_URL_RE, "appleMusic")
         except ValueError as exc:
-            raise ValueError(f"rows must match the ten-field public schema: {exc}") from None
+            raise ValueError(f"rows must match the eleven-field public schema: {exc}") from None
         values = [quote(row[key]) for key in PUBLIC_FIELDS[:5]]
-        values.append(str(row["year"]))
+        values.append("null" if row["year"] is None else str(row["year"]))
         values.append("[" + ", ".join(quote(role) for role in row["roles"]) + "]")
         values.append(quote(row["preview"]))
-        values.extend("null" if row[key] is None else quote(row[key]) for key in ("spotify", "appleMusic"))
+        values.extend("null" if row[key] is None else quote(row[key])
+                      for key in ("spotify", "appleMusic", "version"))
         fields = ", ".join(f"{key}:{value}" for key, value in zip(PUBLIC_FIELDS, values))
         lines.append(f"  {{ {fields} }}")
     payload = "[\n" + ",\n".join(lines) + "\n]"
@@ -427,16 +510,17 @@ def exclusions_log(rows, exclusions, selection):
 
 
 def generate(
-    *, master_path=MASTER, selection_path=SELECTION, decisions_path=DECISIONS,
+    *, master_path=MASTER, recordings_path=RECORDINGS, selection_path=SELECTION, decisions_path=DECISIONS,
     manifest_path=PREVIEW_MANIFEST, output=OUTPUT, log_path=EXCLUSIONS_LOG
 ):
     """Write js/music-data.js and the exclusion log; return (rows, exclusions)."""
     master = json.loads(Path(master_path).read_text(encoding="utf-8"))
+    recordings = json.loads(Path(recordings_path).read_text(encoding="utf-8"))
     selection = json.loads(Path(selection_path).read_text(encoding="utf-8"))
     decisions = json.loads(Path(decisions_path).read_text(encoding="utf-8"))
     manifest = json.loads(Path(manifest_path).read_text(encoding="utf-8"))
     rows, exclusions = project_with_exclusions(master, selection, decisions, repo=REPO,
-                                               manifest=manifest)
+                                               manifest=manifest, recordings=recordings)
     if not rows:
         raise ValueError("no song of the selection has a valid preview: refusing an empty catalogue")
     javascript = serialize(rows)

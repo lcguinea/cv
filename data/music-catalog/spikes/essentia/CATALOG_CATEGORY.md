@@ -1,9 +1,13 @@
 # `catalog_category` — dimensión editorial experimental
 
-Estado: **experimental**, vive solo en `data/music-catalog/spikes/essentia/`.
-No se ha escrito en `catalog_master.json`, en `TAXONOMY.md`, en
-`vocabularies.json` ni en `/music/`. No es parte de los 11 campos del
-esquema v1.
+Estado: vive en `data/music-catalog/spikes/essentia/`. No se ha escrito en
+`catalog_master.json`, en `TAXONOMY.md` ni en `vocabularies.json`. Desde el
+2026-10-13 `generate_public_music_data.py` la usa como regla de rol público
+cuando una obra no tiene decisión de créditos: `Cantautor` → Artist,
+`Productor` → Producer, `Coautorías` → Co-writer (faceta Composer).
+`Instrumentales` es una categoría, no un crédito: sus obras necesitan una
+decisión explícita de créditos y se marcan con `version: Instrumental` o
+`Mashup` en `catalog_recordings.json`.
 
 ## Qué es
 

@@ -25,6 +25,13 @@ class PublicMusicDataTests(unittest.TestCase):
         self.decisions = json.loads(
             (evidence_dir / "human_review_decisions.json").read_text(encoding="utf-8")
         )
+        self.recordings = json.loads(generator.RECORDINGS.read_text(encoding="utf-8"))
+        self.manifest = json.loads(generator.PREVIEW_MANIFEST.read_text(encoding="utf-8"))
+        # Counts come from the manifest: one published row per verified entry, one selected
+        # work per manifest entry.
+        self.verified = [e for e in self.manifest["entries"] if e["status"] == "verified"]
+        self.blocked = {e["review_id"]: e["work_id"] for e in self.manifest["entries"]
+                        if e["status"] == "blocked"}
 
     def project(self, master=None, selection=None, decisions=None):
         return generator.project(
@@ -56,6 +63,7 @@ class PublicMusicDataTests(unittest.TestCase):
         "Vida Tras Vida",
         "Volver a Verte",
     ]
+    # Selected works whose audio is not available locally: always excluded, never fabricated.
     EXCLUDED = {
         "33": "adios-amor-version-bolero--luis-guinea--2020",
         "34": "blue-moon--luis-guinea--2015",
@@ -67,13 +75,14 @@ class PublicMusicDataTests(unittest.TestCase):
     def test_projection_uses_only_the_explicit_public_schema(self):
         rows = self.project()
 
-        # The selection has 21 works; only the 16 with a valid preview are published.
-        self.assertEqual(len(rows), 16)
-        self.assertEqual(len(self.project_all()), 21)
+        # Every selected work is validated; only those with a verified preview are published.
+        self.assertEqual(len(rows), len(self.verified))
+        self.assertEqual(len(self.project_all()), len(self.selection["entries"]))
+        self.assertEqual(len(self.selection["entries"]), len(self.manifest["entries"]))
         self.assertEqual(
             set(rows[0]),
             {"title", "artist", "role", "artwork", "releaseType", "year", "roles", "preview",
-             "spotify", "appleMusic"},
+             "spotify", "appleMusic", "version"},
         )
         hasta = next(row for row in rows if row["title"] == "Hasta Que Lleguemos Al Mar")
         self.assertEqual(
@@ -90,16 +99,18 @@ class PublicMusicDataTests(unittest.TestCase):
                 "spotify": "https://open.spotify.com/track/0kfbpBjVoJ9hrNbS8S4CzM",
                 "appleMusic": "https://music.apple.com/mx/album/hasta-que-lleguemos-al-mar-feat-"
                               "tony-barhoum/1753986775?i=1753986777&uo=4",
+                "version": None,
             },
         )
-        # Blue Moon (the only Composer facet) has no authorized preview, so it is excluded.
-        self.assertEqual({row["role"] for row in rows}, {"Artist", "Producer"})
+        self.assertLessEqual({row["role"] for row in rows}, generator.ALLOWED_ROLES)
         self.assertTrue(all(
             row["role"] in row["roles"]
-            or (row["role"] == "Composer" and "Songwriter" in row["roles"])
+            or (row["role"] == "Composer" and generator.COMPOSER_CREDITS & set(row["roles"]))
+            or (row["role"] == "Producer" and generator.PRODUCER_CREDITS & set(row["roles"]))
             for row in rows
         ))
-        self.assertEqual([row["title"] for row in rows], self.PUBLISHED)
+        # The original sixteen previews keep their place at the head of the curated order.
+        self.assertEqual([row["title"] for row in rows][:len(self.PUBLISHED)], self.PUBLISHED)
 
     def test_new_human_credit_decisions_project_exact_facets_and_roles(self):
         # Credits are validated for the whole selection, even for works excluded for lack of preview.
@@ -178,11 +189,119 @@ class PublicMusicDataTests(unittest.TestCase):
             self.project(master=master)
 
     def test_projection_rejects_an_open_human_case(self):
-        selection = json.loads(json.dumps(self.selection))
-        selection["entries"][0] = {"review_id": "16"}
+        decisions = json.loads(json.dumps(self.decisions))
+        case = next(c for c in decisions["classifications"] if c["review_id"] == "19")
+        case["catalog_link"]["status"] = "unmapped"
 
         with self.assertRaisesRegex(ValueError, "is not mapped"):
-            self.project(selection=selection)
+            self.project(decisions=decisions)
+
+    def test_owner_exclusions_stay_out_of_the_selection(self):
+        # 2026-10-13: Antes de Irme (Mariachi), Hasta El Altar, Junto A Mí and Me Equivoqué are
+        # not published.
+        selected = {e["review_id"] for e in self.selection["entries"]}
+        for review_id in ("17", "24", "27", "29"):
+            case = next(c for c in self.decisions["classifications"] if c["review_id"] == review_id)
+            self.assertIs(case["public_exclusion"], True)
+            self.assertNotIn(review_id, selected)
+        # One public row per work: no two selected cases point at the same work.
+        works = [next(c for c in self.decisions["classifications"] if c["review_id"] == r)
+                 ["catalog_link"]["work_id"] for r in selected]
+        self.assertEqual(len(works), len(set(works)))
+        self.assertIn("in-my-life-cover--rogelio-edel--2021", works)
+        self.assertNotIn("in-my-life--rogelio-edel--2021", works)
+
+    def test_unreleased_recordings_project_without_release_identifiers(self):
+        rows = {row["title"]: row for row in self.project_all()}
+
+        peligro = rows["Peligro"]
+        self.assertEqual((peligro["releaseType"], peligro["year"], peligro["version"]),
+                         ("Unreleased", None, None))
+        self.assertEqual((peligro["role"], peligro["roles"]), ("Composer", ["Co-writer"]))
+        self.assertEqual((peligro["spotify"], peligro["appleMusic"]), (None, None))
+        self.assertEqual(peligro["artwork"], "generic-cover.webp")
+        piano = rows["Inenarrable (Qué Suerte)"]
+        self.assertEqual((piano["releaseType"], piano["version"]), ("Unreleased", "PianoVocal"))
+        # Instrumentales is a category, not a credit: the roles come from explicit decisions, and
+        # covers of third-party works never carry a songwriting credit.
+        self.assertEqual((rows["Prometheus"]["version"], rows["Prometheus"]["roles"]),
+                         ("Instrumental", ["Songwriter", "Arranger", "Producer"]))
+        for cover in ("Diamonds - Cover", "She Wolf - Cover",
+                      "One Last Time vs Rather Be vs Outside vs Summer"):
+            self.assertEqual((rows[cover]["role"], rows[cover]["roles"]), ("Producer", ["Arranger", "Producer"]))
+        # Co-production surfaces under Producer, co-writing under Composer.
+        self.assertEqual((rows["Jinne, Jinne"]["role"], rows["Jinne, Jinne"]["artist"]),
+                         ("Producer", "Canciones de Puño y Letra"))
+        self.assertEqual((rows["It Feels Like Falling In Love"]["role"],
+                          rows["It Feels Like Falling In Love"]["roles"]),
+                         ("Composer", ["Co-writer", "Co-arranger", "Co-producer"]))
+
+    def test_releases_newer_than_the_sheet_carry_verified_links_and_official_artwork(self):
+        rows = {row["title"]: row for row in self.project_all()}
+        for title in ("I Want U", "Te Extraño", "Mejor Versión"):
+            row = rows[title]
+            self.assertEqual((row["releaseType"], row["year"], row["artwork"]),
+                             ("EP", 2025, "Mil-Versiones---Rogelio-Edel.webp"))
+            self.assertTrue(row["spotify"] and row["appleMusic"])
+        beso = rows["El Beso"]
+        self.assertEqual((beso["artist"], beso["releaseType"], beso["year"]), ("Tufic, Luis Guinea", "Single", 2026))
+        self.assertEqual(beso["spotify"], "https://open.spotify.com/track/4XUUtkTby59nhAjIZ6A0uI")
+        self.assertEqual(rows["La Martiniana"]["roles"], ["Artist", "Arranger", "Producer"])
+        # The rough mix of a released song is another recording: no links, no release artwork.
+        rough = rows["Dame Más de Ti"]
+        self.assertEqual((rough["releaseType"], rough["version"], rough["spotify"], rough["artwork"]),
+                         ("Unreleased", "RoughMix", None, "generic-cover.webp"))
+        recordings = json.loads(json.dumps(self.recordings))
+        released = next(w for w in recordings["recordings"] if w["release"]["status"] == "released")
+        released["spotify"]["url"] = released["apple_music"]["url"] = None
+        with self.assertRaisesRegex(ValueError, "needs a verified streaming link"):
+            generator.project(self.master, self.selection, self.decisions, repo=REPO,
+                              recordings=recordings)
+
+    def test_recordings_cannot_publish_provisional_fields_or_release_identifiers(self):
+        manifest = json.loads(json.dumps(self.manifest))
+        entry = next(e for e in manifest["entries"] if e["review_id"] == "22")  # El Feo, verified
+        self.assertEqual(entry["status"], "verified")
+        recordings = json.loads(json.dumps(self.recordings))
+        next(w for w in recordings["recordings"] if w["id"] == entry["work_id"])["provisional"] = ["artists"]
+        with self.assertRaisesRegex(ValueError, "provisional fields .* need the owner's approval"):
+            generator.project(self.master, self.selection, self.decisions, repo=REPO, manifest=manifest,
+                              recordings=recordings)
+
+        recordings = json.loads(json.dumps(self.recordings))
+        unreleased = next(w for w in recordings["recordings"] if w["release"]["status"] == "unreleased")
+        unreleased["spotify"]["url"] = "https://open.spotify.com/track/" + "a" * 22
+        with self.assertRaisesRegex(ValueError, "cannot carry release identifiers"):
+            generator.project(self.master, self.selection, self.decisions, repo=REPO,
+                              recordings=recordings)
+        recordings = json.loads(json.dumps(self.recordings))
+        recordings["recordings"][0]["version"] = "Remix"
+        with self.assertRaisesRegex(ValueError, "unsupported version"):
+            generator.project(self.master, self.selection, self.decisions, repo=REPO,
+                              recordings=recordings)
+        recordings = json.loads(json.dumps(self.recordings))
+        recordings["recordings"][0]["id"] = "hace-tanto-tiempo--luis-guinea--2021"
+        with self.assertRaisesRegex(ValueError, "duplicate id"):
+            generator.project(self.master, self.selection, self.decisions, repo=REPO,
+                              recordings=recordings)
+
+    def test_instrumental_folder_requires_an_explicit_credits_decision(self):
+        decisions = json.loads(json.dumps(self.decisions))
+        case = next(c for c in decisions["classifications"] if c["review_id"] == "48")
+        del case["credits"], case["credits_decision"]
+        with self.assertRaisesRegex(ValueError, "#48: audio folder 'Instrumentales' has no public role"):
+            self.project(decisions=decisions)
+
+    def test_unreleased_rows_serialize_a_null_year_and_their_version(self):
+        row = next(r for r in self.project_all() if r["title"] == "Peligro")
+        javascript = generator.serialize([dict(row, preview="peligro--nina-jori.mp3")])
+        self.assertIn("releaseType:'Unreleased', year:null", javascript)
+        self.assertIn("appleMusic:null, version:null }", javascript)
+        released = self.project()[0]
+        with self.assertRaisesRegex(ValueError, "eleven-field public schema"):
+            generator.serialize([dict(released, year=None)])
+        with self.assertRaisesRegex(ValueError, "eleven-field public schema"):
+            generator.serialize([dict(row, preview="x.mp3", spotify=released["spotify"])])
 
     def test_generated_javascript_contains_no_internal_catalog_fields(self):
         rows = self.project()
@@ -205,7 +324,7 @@ class PublicMusicDataTests(unittest.TestCase):
         ):
             self.assertNotIn(forbidden, javascript)
         # Spotify appears only as the public field and its track URLs.
-        self.assertEqual(javascript.count("spotify"), 2 * len(rows))
+        self.assertEqual(javascript.count("spotify"), len(rows) + sum(1 for r in rows if r["spotify"]))
         # `preview` contains the substring "review"; review ids/keys must still be absent.
         self.assertNotRegex(javascript, r"\breview")
 
@@ -220,9 +339,11 @@ class PublicMusicDataTests(unittest.TestCase):
         rows, exclusions = generator.project_with_exclusions(
             self.master, self.selection, self.decisions, repo=REPO)
 
-        # Two published works share the title "Volver a Verte" (Luis Guinea / Ana Guinea).
+        # Two published works share the title "Volver a Verte" (Luis Guinea / Ana Guinea). The
+        # sixteen original previews keep their order at the head of the list.
+        self.assertEqual(len(rows), len(self.verified))
         self.assertEqual(
-            [(row["title"], row["preview"]) for row in rows],
+            [(row["title"], row["preview"]) for row in rows][:len(self.PUBLISHED)],
             [
                 ("Hasta Que Lleguemos Al Mar", "hasta-que-lleguemos-al-mar--luis-guinea--2024.mp3"),
                 ("Hace Tanto Tiempo", "hace-tanto-tiempo--luis-guinea--2021.mp3"),
@@ -243,7 +364,8 @@ class PublicMusicDataTests(unittest.TestCase):
                 ("Volver a Verte", "volver-a-verte--ana-guinea--2022.mp3"),
             ],
         )
-        self.assertEqual({item["review_id"]: item["work_id"] for item in exclusions}, self.EXCLUDED)
+        self.assertEqual({item["review_id"]: item["work_id"] for item in exclusions}, self.blocked)
+        self.assertLessEqual(self.EXCLUDED.items(), self.blocked.items())
         self.assertEqual({item["reason"] for item in exclusions}, {"no_authorized_preview"})
         self.assertTrue(all(item["detail"].strip() for item in exclusions))
 
@@ -292,7 +414,7 @@ class PublicMusicDataTests(unittest.TestCase):
         manifest = json.loads(generator.PREVIEW_MANIFEST.read_text(encoding="utf-8"))
         with tempfile.TemporaryDirectory() as directory:
             fake_repo = Path(directory)
-            for row in self.master:
+            for row in self.master + self.recordings["recordings"]:
                 artwork = (row.get("artwork") or {}).get("web_file")
                 if artwork:
                     target = fake_repo / artwork
@@ -304,14 +426,14 @@ class PublicMusicDataTests(unittest.TestCase):
             )
             self.assertEqual(rows, [])
             reasons = {item["review_id"]: item["reason"] for item in exclusions}
-            self.assertEqual(len(reasons), 21)
-            self.assertEqual({r for i, r in reasons.items() if i not in self.EXCLUDED}, {"preview_missing"})
+            self.assertEqual(len(reasons), len(self.selection["entries"]))
+            self.assertEqual({r for i, r in reasons.items() if i not in self.blocked}, {"preview_missing"})
 
     def test_serialized_preview_never_exposes_private_audio_details(self):
         javascript = generator.serialize(self.project())
 
         self.assertEqual(javascript.count("preview:null"), 0)
-        self.assertEqual(len(re.findall(r"preview:'[a-z0-9-]+\.mp3'", javascript)), 16)
+        self.assertEqual(len(re.findall(r"preview:'[a-z0-9-]+\.mp3'", javascript)), len(self.verified))
         for forbidden in ("source", "sha256", "Productor", "Cantautor", "MixV1", "evidence"):
             self.assertNotIn(forbidden, javascript)
         row = dict(self.project()[0], preview="../secret/master.mp3")
@@ -331,19 +453,22 @@ class PublicMusicDataTests(unittest.TestCase):
     def test_streaming_links_come_from_the_catalogue_or_the_certified_additions_only(self):
         rows = self.project()
         works = {(row["title"], row["artist"]): row for row in rows}
-        for row in rows:
+        released = [row for row in rows if row["releaseType"] in generator.RELEASE_TYPES.values()]
+        for row in released:
             with self.subTest(title=row["title"], artist=row["artist"]):
-                work = next(w for w in self.master if w["title"] == row["title"]
-                            and ", ".join(w["artists"]) == row["artist"])
+                work = next(w for w in self.master + self.recordings["recordings"]
+                            if w["title"] == row["title"] and ", ".join(w["artists"]) == row["artist"])
                 self.assertEqual(row["spotify"], work["spotify"]["url"])
                 registered = work["apple_music"]["url"]
                 expected = registered or self.CERTIFIED_APPLE.get(row["title"])
                 self.assertEqual(row["appleMusic"], expected)
-        self.assertTrue(all(row["spotify"] for row in rows))
-        self.assertEqual(sum(1 for row in rows if row["appleMusic"]), 12)
-        missing = {(row["title"], row["artist"]) for row in rows if row["appleMusic"] is None}
-        self.assertEqual(missing, {(t, "Rogelio Edel") for t in self.WITHOUT_APPLE}
-                         | {("Volver a Verte", "Luis Guinea")})
+        self.assertTrue(all(row["spotify"] for row in released))
+        # Unreleased recordings never carry streaming links.
+        self.assertTrue(all(row["spotify"] is None and row["appleMusic"] is None
+                            for row in rows if row not in released))
+        missing = {(row["title"], row["artist"]) for row in released if row["appleMusic"] is None}
+        self.assertLessEqual({(t, "Rogelio Edel") for t in self.WITHOUT_APPLE}
+                             | {("Volver a Verte", "Luis Guinea")}, missing)
         # Cómo Decirte keeps its registered URL (track 1646476110, the certified one's track).
         self.assertIn("i=1646476110", works[("Cómo Decirte", "Luis Guinea, Pablo Delgado")]["appleMusic"])
 
@@ -372,13 +497,15 @@ class PublicMusicDataTests(unittest.TestCase):
     def test_absent_platforms_serialize_as_null_and_bad_urls_are_refused(self):
         rows = self.project()
         javascript = generator.serialize(rows)
-        self.assertEqual(javascript.count("appleMusic:null"), 4)
-        self.assertEqual(javascript.count("spotify:null"), 0)
+        self.assertEqual(javascript.count("appleMusic:null"),
+                         sum(1 for row in rows if row["appleMusic"] is None))
+        self.assertEqual(javascript.count("spotify:null"),
+                         sum(1 for row in rows if row["spotify"] is None))
         no_links = dict(rows[0], spotify=None, appleMusic=None)
         self.assertIn("spotify:null, appleMusic:null", generator.serialize([no_links]))
-        with self.assertRaisesRegex(ValueError, "ten-field public schema"):
+        with self.assertRaisesRegex(ValueError, "eleven-field public schema"):
             generator.serialize([dict(rows[0], spotify="https://open.spotify.com/track/short")])
-        with self.assertRaisesRegex(ValueError, "ten-field public schema"):
+        with self.assertRaisesRegex(ValueError, "eleven-field public schema"):
             generator.serialize([{k: v for k, v in rows[0].items() if k != "appleMusic"}])
 
     def test_checked_in_output_is_current_and_generation_is_deterministic(self):

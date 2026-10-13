@@ -52,6 +52,16 @@ POLICIES = {
             "evitar un corte técnicamente defectuoso; el ajuste queda documentado en la entrada."
         ),
     },
+    "approved-preview-window-v2": {
+        "rationale": (
+            "Ventana aprobada explícitamente por el propietario el 2026-10-13 tras escuchar la propuesta "
+            "y una alternativa codificadas como el preview final. Ambas salen del análisis local del "
+            "2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos "
+            "por palabra), repetición armónica de croma, energía RMS y límites de sección (en los "
+            "instrumentales, solo las tres últimas). Mismas reglas de borde que v1: como máximo 1 s y "
+            "solo para evitar un corte técnicamente defectuoso, documentado en la entrada."
+        ),
+    },
 }
 MAX_EDGE_ADJUSTMENT_S = 1.0
 ASSOCIATION_BASES = {"objective_evidence", "human_authorization"}

@@ -29,7 +29,7 @@ NAV_HREFS = {
 CURRENT = {"home": None, "cv": "nav.cv", "music": "nav.music"}
 PUBLISHED_JS = ("strings.js", "i18n.js", "site.js", "player.js", "music-page.js", "theme-init.js")
 # Keys built at runtime from data: 'music.role'+credit and 'music.type'+release type.
-DYNAMIC_PREFIXES = ("music.role", "music.type")
+DYNAMIC_PREFIXES = ("music.role", "music.type", "music.version")
 
 
 def read(rel):
@@ -151,7 +151,7 @@ class StringsTests(unittest.TestCase):
         for gone in ("facets.intro", "hero.imageNote", "hero.selected", "music.topNote", "experience.independent"):
             self.assertNotIn(gone, self.en)
         self.assertEqual(self.en["writing.title"], "What streaming data says about how artists grow.")
-        self.assertEqual(self.es["music.title"], "Lanzamientos como artista y productor, 2020–2024.")
+        self.assertEqual(self.es["music.title"], "Lanzamientos y grabaciones como artista, compositor y productor.")
         self.assertEqual(self.es["skills.music"], "producción, composición, arreglos, dirección musical.")
         self.assertNotIn("pool de", self.es["writing.a1"])
         self.assertFalse([k for k, v in self.es.items() if k.startswith("music.") and "preview" in v.lower()])

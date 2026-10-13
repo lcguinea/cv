@@ -1,0 +1,1188 @@
+{
+  "schema": "catalog-recordings-v1",
+  "description": "Grabaciones de One Page Luis Guinea/audios que no están en la hoja «Released» y por tanto no pueden estar en catalog_master.json (generado y con sha256 fijado). Mismo modelo de obra que catalog_master.json más version (vocabulario cerrado de generate_public_music_data.py), basis (evidencia de cada campo público) y provisional (campos pendientes de aprobación; una grabación con campos provisionales no puede publicarse). Las inéditas no llevan enlaces; las publicadas después de compilarse la hoja «Released» llevan enlaces verificados contra las plataformas.",
+  "recordings": [
+    {
+      "id": "asi-habla-el-amor--luis-guinea",
+      "title": "Así Habla El Amor",
+      "artists": [
+        "Luis Guinea"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "Así habla el amor.m4a",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Título y artista: catalogo_sin_duplicados_con_isrc_prioridad.xlsx › Local fila 41.",
+        "Inédita: sin lanzamiento en Apple Music, Spotify ni Deezer (consulta del 2026-10-13); publicación del preview autorizada por el propietario."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "el-feo--luis-guinea",
+      "title": "El Feo",
+      "artists": [
+        "Luis Guinea"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "El Feo (Master).mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Etiquetas del archivo: title «El Feo», artist «Luis Guinea».",
+        "Inédita: sin lanzamiento en la discografía de Luis Guinea en Apple Music (consulta del 2026-10-13). La fecha 2020 de la etiqueta no es una fecha de publicación y no se muestra."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "el-beso--tufic",
+      "title": "El Beso",
+      "artists": [
+        "Tufic",
+        "Luis Guinea"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": 2026,
+        "type": "single",
+        "track_number": null,
+        "disc_number": null,
+        "status": "released"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": true,
+      "isrc": null,
+      "spotify": {
+        "track_id": "4XUUtkTby59nhAjIZ6A0uI",
+        "url": "https://open.spotify.com/track/4XUUtkTby59nhAjIZ6A0uI"
+      },
+      "apple_music": {
+        "url": "https://music.apple.com/mx/album/el-beso/6775376256?i=6775376259&uo=4",
+        "track_id": null,
+        "collection_id": null,
+        "storefront": "mx"
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/el-beso---Tufic.webp"
+      },
+      "audio_ref": "ElBeso_Tufic_LuisGuinea_Master.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Publicada: Apple Music «\"el beso\"» de Tufic & Luis Guinea, sencillo 6775376256 (2026-06-19, 307,710 s); Spotify 4XUUtkTby59nhAjIZ6A0uI «\"el beso\"» de Tufic, Luis Guinea (307 710 ms), verificado con el oEmbed de Spotify.",
+        "Master local 307,776 s (Δ 0,066 s).",
+        "Decisión explícita del propietario del 2026-10-13: título público «El Beso», sin comillas (las plataformas lo escriben «\"el beso\"»).",
+        "Portada: imagen oficial del sencillo en la CDN de Spotify (640 px) convertida a WebP.",
+        "Spotify fecha la pista el 2026-07-24 y Apple Music el 2026-06-19: se publica solo el año, 2026."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "inenarrable-que-suerte-piano-voz--luis-guinea",
+      "title": "Inenarrable (Qué Suerte)",
+      "artists": [
+        "Luis Guinea"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "Inenarrable (Qué Suerte) - PianoVoz.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": "PianoVocal",
+      "basis": [
+        "Título y versión: nombre del archivo «Inenarrable (Qué Suerte) - PianoVoz».",
+        "Artista: carpeta Cantautor.",
+        "Inédita (el mismo nombre de archivo figura en Songwriting/Demo Editoras); sin lanzamiento en Apple Music."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "la-martiniana--luis-guinea--2025",
+      "title": "La Martiniana",
+      "artists": [
+        "Luis Guinea"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": 2025,
+        "type": "single",
+        "track_number": null,
+        "disc_number": null,
+        "status": "released"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": "7reI5kxLXemFShvfa2GwtK",
+        "url": "https://open.spotify.com/track/7reI5kxLXemFShvfa2GwtK"
+      },
+      "apple_music": {
+        "url": "https://music.apple.com/mx/album/la-martiniana/1846076710?i=1846076711&uo=4",
+        "track_id": null,
+        "collection_id": null,
+        "storefront": "mx"
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/La-Martiniana---Luis-Guinea.webp"
+      },
+      "audio_ref": "La Martiniana_Master_V1.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Publicada: Apple Music «La Martiniana» de Luis Guinea, sencillo 1846076710 (2025-10-17, 221,600 s); Spotify 7reI5kxLXemFShvfa2GwtK (221 596 ms), verificado con el oEmbed de Spotify.",
+        "Master local 221,664 s (Δ 0,064 s).",
+        "Decisión explícita del propietario del 2026-10-13: cover; créditos de arreglista, intérprete y productor.",
+        "Portada: imagen oficial del sencillo en la CDN de Spotify (640 px) convertida a WebP."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "ojos-marrones-cover--luis-guinea",
+      "title": "Ojos Marrones - Cover",
+      "artists": [
+        "Luis Guinea"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "Ojos Marrones_MocteMaster 1.0.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Título: nombre del archivo.",
+        "Decisión explícita del propietario del 2026-10-13: cover; créditos de arreglista, intérprete y productor.",
+        "Sufijo «- Cover»: convención de catalog_master.json para versiones de obras ajenas.",
+        "Inédita: sin lanzamiento en Apple Music."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "promesas-decepciones-cover--luis-guinea",
+      "title": "Promesas Decepciones - Cover",
+      "artists": [
+        "Luis Guinea"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "Promesas Decepciones (Master).mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Etiquetas del archivo: title «Promesas Decepciones», artist «PXNDX (Cover Luis Guinea)»: cover declarado en el propio archivo.",
+        "Inédita: sin lanzamiento en Apple Music; la fecha 2020 de la etiqueta no se muestra."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "it-feels-like-falling-in-love--anne-noor",
+      "title": "It Feels Like Falling In Love",
+      "artists": [
+        "Anne Noor"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "It Feels Like Falling In Love_1.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Título: nombre del archivo.",
+        "Decisión explícita del propietario del 2026-10-13: intérprete Anne Noor; Luis Guinea coautor, coarreglista y coproductor.",
+        "Inédita: sin lanzamiento en Apple Music ni Deezer."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "peligro--nina-jori",
+      "title": "Peligro",
+      "artists": [
+        "Nina Jori",
+        "Carla Calderon",
+        "Luis Guinea",
+        "Salvador Álvarez"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": true,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "Peligro_LUIS_CARLA_NINA_SALVADOR.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Título y artistas: hoja Local fila 32.",
+        "Rol: carpeta Coautorías.",
+        "Inédita: sin lanzamiento en Apple Music ni Deezer.",
+        "Coincidencia de duración con bajo-la-mesa--mireles--2021 (Δ 0,017 s) sin coincidencia de título ni artistas: no se vincula."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "diamonds-cover-instrumental--luis-guinea",
+      "title": "Diamonds - Cover",
+      "artists": [
+        "Luis Guinea"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "Diamonds (Mastered).m4a",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": "Instrumental",
+      "basis": [
+        "Etiquetas del archivo: title «Diamonds», artist «Rihanna - Luis Guinea».",
+        "Decisión explícita del propietario del 2026-10-13: cover o arreglo de obra ajena; créditos exclusivamente de arreglista y productor (sin composición).",
+        "Inédita: sin lanzamiento en Apple Music."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "one-last-time-vs-rather-be-vs-outside-vs-summer--luis-guinea",
+      "title": "One Last Time vs Rather Be vs Outside vs Summer",
+      "artists": [
+        "Luis Guinea"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "One Last Time vs Rather Be vs Outside vs Summer.m4a",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": "Mashup",
+      "basis": [
+        "Título: nombre del archivo.",
+        "Decisión explícita del propietario del 2026-10-13: mashup de obras ajenas; créditos exclusivamente de arreglista y productor (sin composición).",
+        "Inédita: sin lanzamiento en Apple Music."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "prometheus--luis-guinea",
+      "title": "Prometheus",
+      "artists": [
+        "Luis Guinea"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "Prometheus.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": "Instrumental",
+      "basis": [
+        "Título: nombre del archivo.",
+        "Decisión explícita del propietario del 2026-10-13: composición original; créditos de compositor, arreglista y productor.",
+        "Inédita: sin lanzamiento en Apple Music."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "she-wolf-cover-instrumental--luis-guinea",
+      "title": "She Wolf - Cover",
+      "artists": [
+        "Luis Guinea"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "She Wolf (Mastered).m4a",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": "Instrumental",
+      "basis": [
+        "Etiquetas del archivo: title «She Wolf», artist «David Guetta - Luis Guinea».",
+        "Decisión explícita del propietario del 2026-10-13: cover o arreglo de obra ajena; créditos exclusivamente de arreglista y productor (sin composición).",
+        "Inédita: sin lanzamiento en Apple Music."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "singularidad-del-genio--luis-guinea",
+      "title": "Singularidad del Genio",
+      "artists": [
+        "Luis Guinea"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "Singularidad del Genio_Master.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": "Instrumental",
+      "basis": [
+        "Título: nombre del archivo.",
+        "Decisión explícita del propietario del 2026-10-13: composición original; créditos de compositor, arreglista y productor.",
+        "Inédita: sin lanzamiento en Apple Music."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "alacran--daniela-gomez",
+      "title": "Alacrán",
+      "artists": [
+        "Daniela Gómez"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "Alacran (Master).mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Etiquetas del archivo: title «Alacran», artist «Daniela Gomez»; grafía con tildes de la hoja Songwriting (carpeta «Daniela Gómez/Alacrán»).",
+        "Rol: carpeta Productor.",
+        "Inédita: sin lanzamiento en Apple Music ni Deezer; la fecha 2020 de la etiqueta no se muestra."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "jinne-jinne--canciones-de-puno-y-letra",
+      "title": "Jinne, Jinne",
+      "artists": [
+        "Canciones de Puño y Letra"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "Jinee Jinee (Jinee and Friends).mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Decisión explícita del propietario del 2026-10-13: título «Jinne, Jinne», artista Canciones de Puño y Letra; Luis Guinea coautor, coarreglista y coproductor junto con Pablo Delgado.",
+        "Inédita: sin lanzamiento en Apple Music ni Deezer."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "dame-mas-de-ti-rough-mix--rogelio-edel",
+      "title": "Dame Más de Ti",
+      "artists": [
+        "Rogelio Edel"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "Dame Más De Ti_roughmix.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": "RoughMix",
+      "basis": [
+        "Título con la grafía oficial de Mil Versiones - EP. Versión: nombre del archivo «_roughmix».",
+        "La pista publicada (Apple 1844217385, Spotify 0u7hpykPEmVgSRPIkBSPr6) dura 181,016 s; esta mezcla preliminar dura 207,528 s (Δ 26,5 s): es otra grabación sin lanzamiento propio, así que no lleva enlaces ni la portada del EP."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "i-want-u--rogelio-edel--2025",
+      "title": "I Want U",
+      "artists": [
+        "Rogelio Edel"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": 2025,
+        "type": "ep",
+        "track_number": null,
+        "disc_number": null,
+        "status": "released"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": "1hylR6ZXcZQpCCbDaxR4dG",
+        "url": "https://open.spotify.com/track/1hylR6ZXcZQpCCbDaxR4dG"
+      },
+      "apple_music": {
+        "url": "https://music.apple.com/mx/album/i-want-u/1844217381?i=1844217382&uo=4",
+        "track_id": null,
+        "collection_id": null,
+        "storefront": "mx"
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/Mil-Versiones---Rogelio-Edel.webp"
+      },
+      "audio_ref": "I want u - ROGELIO EDEL.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Publicada en Mil Versiones - EP: Apple Music 1844217382 (190,250 s), Spotify 1hylR6ZXcZQpCCbDaxR4dG (190 250 ms). Master local 190,250 s (Δ 0,000 s).",
+        "Mil Versiones - EP (Rogelio Edel, 2025-10-10): Apple Music colección 1844217381 y álbum de Spotify 6TMJisdDlRcKBBWaNVvHLd, consultados el 2026-10-13.",
+        "Portada: One Page Luis Guinea/artworks/Mil Versiones.png, indicada por el propietario."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "mejor-version--rogelio-edel--2025",
+      "title": "Mejor Versión",
+      "artists": [
+        "Rogelio Edel"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": 2025,
+        "type": "ep",
+        "track_number": null,
+        "disc_number": null,
+        "status": "released"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": "1BT7VRzdKjkTHDviLTxtlj",
+        "url": "https://open.spotify.com/track/1BT7VRzdKjkTHDviLTxtlj"
+      },
+      "apple_music": {
+        "url": "https://music.apple.com/mx/album/mejor-versi%C3%B3n/1844217381?i=1844217384&uo=4",
+        "track_id": null,
+        "collection_id": null,
+        "storefront": "mx"
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/Mil-Versiones---Rogelio-Edel.webp"
+      },
+      "audio_ref": "Mejor Versión_Master.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Publicada en Mil Versiones - EP: Apple Music 1844217384 (136,347 s), Spotify 1BT7VRzdKjkTHDviLTxtlj (136 346 ms). Master local 136,416 s (Δ 0,069 s).",
+        "Mil Versiones - EP (Rogelio Edel, 2025-10-10): Apple Music colección 1844217381 y álbum de Spotify 6TMJisdDlRcKBBWaNVvHLd, consultados el 2026-10-13.",
+        "Portada: One Page Luis Guinea/artworks/Mil Versiones.png, indicada por el propietario."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "te-extrano--rogelio-edel--2025",
+      "title": "Te Extraño",
+      "artists": [
+        "Rogelio Edel"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": 2025,
+        "type": "ep",
+        "track_number": null,
+        "disc_number": null,
+        "status": "released"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": "7s3UWyjkf2qe5enTSFQbZS",
+        "url": "https://open.spotify.com/track/7s3UWyjkf2qe5enTSFQbZS"
+      },
+      "apple_music": {
+        "url": "https://music.apple.com/mx/album/te-extra%C3%B1o/1844217381?i=1844217383&uo=4",
+        "track_id": null,
+        "collection_id": null,
+        "storefront": "mx"
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/Mil-Versiones---Rogelio-Edel.webp"
+      },
+      "audio_ref": "Te Extraño_Master.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Decisión explícita del propietario del 2026-10-13: «Te Extraño» de Rogelio Edel, publicada; no es «Ya No Sigo Esperando».",
+        "Publicada en Mil Versiones - EP: Apple Music 1844217383 (165,330 s), Spotify 7s3UWyjkf2qe5enTSFQbZS (165 329 ms). Master local 165,384 s (Δ 0,054 s).",
+        "Mil Versiones - EP (Rogelio Edel, 2025-10-10): Apple Music colección 1844217381 y álbum de Spotify 6TMJisdDlRcKBBWaNVvHLd, consultados el 2026-10-13.",
+        "Portada: One Page Luis Guinea/artworks/Mil Versiones.png, indicada por el propietario."
+      ],
+      "provisional": []
+    },
+    {
+      "id": "te-vi-we-belong-together-rough-mix--rogelio-edel",
+      "title": "Te Vi (We Belong Together)",
+      "artists": [
+        "Rogelio Edel",
+        "Luis Guinea"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": true,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "Te Vi (We Belong Together)_roughmix.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": "RoughMix",
+      "basis": [
+        "Etiquetas del archivo: title «Te Vi (We Belong Together)_rou», artist «Rogelio Edel & Luis Guinea».",
+        "Versión: nombre del archivo «_roughmix».",
+        "Inédita: no figura en la discografía de Rogelio Edel en Apple Music ni Spotify; la fecha 2021 de la etiqueta no se muestra."
+      ],
+      "provisional": []
+    }
+  ]
+}

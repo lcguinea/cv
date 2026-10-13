@@ -69,11 +69,15 @@ class ArtifactTest(unittest.TestCase):
                                "robots.txt", "sitemap.xml", "sobre-mi.html"})
         previews = [p for p in self.present if p.startswith("assets/audio/previews/")]
         images = [p for p in self.present if p.startswith("assets/images/")]
-        self.assertEqual(len(previews), 16)
+        artworks, published = build_site.music_files()
+        # One preview per published work and one copy of each distinct artwork: both counts come
+        # from js/music-data.js and the manifest, not from a hard-coded number.
+        self.assertEqual(sorted(previews), sorted(published))
+        self.assertEqual({p.rsplit("/", 1)[1] for p in previews}, set(build_site.verified_previews()))
         self.assertTrue(all(p.endswith(".mp3") for p in previews))
-        self.assertEqual(len(images), 17)  # 16 artworks + the profile portrait
+        self.assertEqual(sorted(images), sorted(set(artworks) | {"assets/images/profile.webp"}))
         self.assertNotIn("assets/images/cover.webp", self.present)
-        self.assertEqual(len(self.present), 55)
+        self.assertEqual(len(self.present), len(build_site.STATIC_FILES) + len(set(artworks)) + len(published))
 
     def test_no_private_or_development_content(self):
         for rel in self.present:

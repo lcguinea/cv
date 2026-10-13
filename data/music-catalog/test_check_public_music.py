@@ -216,7 +216,9 @@ class CleanCheckoutReproducibilityTest(unittest.TestCase):
         self.assertNotIn(bank, versionable)
         master = json.loads((check.REPO / "data/music-catalog/catalog_master.json")
                             .read_text(encoding="utf-8"))
-        artworks = sorted({(w.get("artwork") or {}).get("web_file") for w in master} - {None})
+        recordings = json.loads((check.REPO / "data/music-catalog/catalog_recordings.json")
+                                .read_text(encoding="utf-8"))["recordings"]
+        artworks = sorted({(w.get("artwork") or {}).get("web_file") for w in master + recordings} - {None})
         self.assertEqual(check.ignored_paths(check.REPO, artworks), set())
 
         with tempfile.TemporaryDirectory() as tmp:
@@ -240,7 +242,8 @@ class CleanCheckoutReproducibilityTest(unittest.TestCase):
             "artwork:'Hace-Tanto-Tiempo---Luis-Guinea.webp', releaseType:'Single', year:2021, "
             "roles:['Artist'], preview:'hace-tanto-tiempo--luis-guinea--2021.mp3', "
             "spotify:'https://open.spotify.com/track/6skD4aWsvYoBoRpxmYkA4G', "
-            "appleMusic:'https://music.apple.com/mx/album/hace-tanto-tiempo/1590243054?i=1590243065&uo=4' }",
+            "appleMusic:'https://music.apple.com/mx/album/hace-tanto-tiempo/1590243054?i=1590243065&uo=4', "
+            "version:null }",
             generated,
         )
 

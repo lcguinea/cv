@@ -198,13 +198,13 @@ def _check():
     classifications = decisions.get("classifications", []) if isinstance(decisions, dict) else []
     mapped = [item for item in classifications if (item.get("catalog_link") or {}).get("status") == "mapped"]
     open_cases = [item for item in classifications if (item.get("catalog_link") or {}).get("status") == "unmapped"]
-    # Historical baseline was 32 classifications / 21 mapped / 11 open. Eight explicit
-    # mapped decisions extend the canonical layer to 40 / 29 / 11.
-    if (len(classifications), len(mapped), len(open_cases)) != (40, 29, 11):
-        errors.append(
-            "human decision counts changed: "
-            f"{len(classifications)} classifications, {len(mapped)} mappings, {len(open_cases)} open"
-        )
+    # Counts are derived, not pinned: review ids must run 01..NN without gaps or repeats (no
+    # human decision can silently disappear) and every case is either mapped or open.
+    review_ids = [item.get("review_id") for item in classifications]
+    if review_ids != [f"{n:02d}" for n in range(1, len(review_ids) + 1)]:
+        errors.append("human decision review ids are not a gapless 01..NN sequence")
+    if len(mapped) + len(open_cases) != len(classifications):
+        errors.append("every human decision must be either mapped or unmapped")
     by_review = {item.get("review_id"): item for item in classifications}
     excluded = {
         item.get("review_id") for item in classifications if item.get("public_exclusion") is True
@@ -242,8 +242,9 @@ def _check_previews(manifest, selection, decisions, errors, warnings):
     except (ValueError, TypeError, AttributeError) as exc:
         errors.append(f"invalid preview manifest: {exc}")
         return set()
-    if len(entries) != 21:
-        errors.append(f"preview manifest has {len(entries)} entries, expected 21")
+    selected = selection.get("entries", []) if isinstance(selection, dict) else []
+    if len(entries) != len(selected):
+        errors.append(f"preview manifest has {len(entries)} entries for {len(selected)} selected works")
     verified = [entry for entry in entries if entry["status"] == "verified"]
     expected = {PurePosixPath(entry["preview"]).name for entry in verified}
 

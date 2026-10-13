@@ -22,6 +22,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 RUNNER = ROOT / "tests" / "support" / "run_scenario.js"
 PAGES = ("index.html", "cv.html", "sobre-mi.html", "music/index.html")
+# Number of published previews, read from the generated public data instead of being hard-coded.
+TRACKS = (ROOT / "js" / "music-data.js").read_text(encoding="utf-8").count("{ title:")
 NODE = shutil.which("node")
 
 PRELUDE = r"""
@@ -77,7 +79,8 @@ class GlobalPlayerTests(unittest.TestCase):
             "for (const r of [0, 0.5, 0.99]) { browser.randomQueue.push(r);"
             "  const page = browser.tab().open('index.html'); await settle(); out[r] = state(page).index; }"
         )
-        self.assertEqual((out["0"], out["0.5"], out["0.99"]), (0, 8, 15))
+        # index = floor(random * tracks)
+        self.assertEqual((out["0"], out["0.5"], out["0.99"]), (0, int(0.5 * TRACKS), int(0.99 * TRACKS)))
 
     def test_the_session_track_is_kept_while_navigating_in_the_tab(self):
         out = self.run_scenario(
@@ -85,7 +88,7 @@ class GlobalPlayerTests(unittest.TestCase):
             "for (const rel of %s) { const page = tab.open(rel); await settle(); out[rel] = state(page).index; }"
             % json.dumps(PAGES)
         )
-        self.assertEqual(set(out.values()), {4})
+        self.assertEqual(set(out.values()), {int(0.25 * TRACKS)})
 
     def test_a_finished_preview_moves_to_another_random_track_without_repeating(self):
         out = self.run_scenario(
@@ -98,22 +101,22 @@ class GlobalPlayerTests(unittest.TestCase):
         )
         for before, after, playing in out["steps"]:
             self.assertNotEqual(before, after)
-            self.assertTrue(0 <= after < 16)
+            self.assertTrue(0 <= after < TRACKS)
             self.assertTrue(playing, "the next preview keeps playing after `ended`")
 
     def test_automatic_playback_plays_every_preview_once_before_repeating(self):
         out = self.run_scenario(
             "const page = browser.tab().open('index.html'); await settle();"
             "page.click('#mp-toggle'); await settle(); out.order = [state(page).index];"
-            "for (let n = 0; n < 17; n++) { browser.randomQueue.push([0, 0.99, 0.5, 0.3][n % 4]);"
+            "for (let n = 0; n < %d; n++) { browser.randomQueue.push([0, 0.99, 0.5, 0.3][n %% 4]);"
             "  page.audio().loadMetadata(40); page.audio().finish(); await settle(); out.order.push(state(page).index); }"
-            "out.playing = state(page).playing;"
+            "out.playing = state(page).playing;" % (TRACKS + 1)
         )
         order = out["order"]
-        self.assertEqual(sorted(order[:16]), list(range(16)), "the first sixteen previews are all different")
-        # A new round starts after all sixteen, never with the preview that just ended.
-        self.assertNotEqual(order[16], order[15])
-        self.assertEqual(len(set(order[16:18])), 2)
+        self.assertEqual(sorted(order[:TRACKS]), list(range(TRACKS)), "the first round plays every preview once")
+        # A new round starts after all of them, never with the preview that just ended.
+        self.assertNotEqual(order[TRACKS], order[TRACKS - 1])
+        self.assertEqual(len(set(order[TRACKS:TRACKS + 2])), 2)
         self.assertTrue(out["playing"])
 
     def test_no_repeat_survives_page_changes_and_applies_to_next(self):
@@ -333,7 +336,7 @@ class GlobalPlayerTests(unittest.TestCase):
             "const page = tab.open('index.html', {autoplayBlocked: false}); await settle(); out.s = state(page);"
         )
         # Treated as a new session: a random track, from the start, which starts on its own when allowed.
-        self.assertEqual(out["s"]["index"], 1)
+        self.assertEqual(out["s"]["index"], int(0.1 * TRACKS))
         self.assertTrue(out["s"]["playing"])
         self.assertEqual(out["s"]["time"], 0)
 
