@@ -67,7 +67,6 @@ class PublicMusicDataTests(unittest.TestCase):
     EXCLUDED = {
         "33": "adios-amor-version-bolero--luis-guinea--2020",
         "34": "blue-moon--luis-guinea--2015",
-        "36": "a-escondidas--isabella-macias--2018",
         "37": "lo-que-queda-de-mi--escala-de-grises--2016",
         "38": "shape-of-you-acoustic--segundo-piso--2017",
     }
@@ -82,7 +81,7 @@ class PublicMusicDataTests(unittest.TestCase):
         self.assertEqual(
             set(rows[0]),
             {"title", "artist", "role", "artwork", "releaseType", "year", "roles", "preview",
-             "spotify", "appleMusic", "version"},
+             "spotify", "appleMusic", "version", "youtube", "soundcloud"},
         )
         hasta = next(row for row in rows if row["title"] == "Hasta Que Lleguemos Al Mar")
         self.assertEqual(
@@ -100,6 +99,8 @@ class PublicMusicDataTests(unittest.TestCase):
                 "appleMusic": "https://music.apple.com/mx/album/hasta-que-lleguemos-al-mar-feat-"
                               "tony-barhoum/1753986775?i=1753986777&uo=4",
                 "version": None,
+                "youtube": None,
+                "soundcloud": None,
             },
         )
         self.assertLessEqual({row["role"] for row in rows}, generator.ALLOWED_ROLES)
@@ -110,7 +111,8 @@ class PublicMusicDataTests(unittest.TestCase):
             for row in rows
         ))
         # The original sixteen previews keep their place at the head of the curated order.
-        self.assertEqual([row["title"] for row in rows][:len(self.PUBLISHED)], self.PUBLISHED)
+        original = [row["title"] for row in rows if row["title"] in self.PUBLISHED]
+        self.assertEqual(original[:len(self.PUBLISHED)], self.PUBLISHED)
 
     def test_new_human_credit_decisions_project_exact_facets_and_roles(self):
         # Credits are validated for the whole selection, even for works excluded for lack of preview.
@@ -197,10 +199,10 @@ class PublicMusicDataTests(unittest.TestCase):
             self.project(decisions=decisions)
 
     def test_owner_exclusions_stay_out_of_the_selection(self):
-        # 2026-10-13: Antes de Irme (Mariachi), Hasta El Altar, Junto A Mí and Me Equivoqué are
-        # not published.
+        # 2026-10-13: Antes de Irme (Mariachi), Hasta El Altar, Junto A Mí, Me Equivoqué and
+        # El Ganador (#72, kept in the private inventory) are not published.
         selected = {e["review_id"] for e in self.selection["entries"]}
-        for review_id in ("17", "24", "27", "29"):
+        for review_id in ("17", "24", "27", "29", "72"):
             case = next(c for c in self.decisions["classifications"] if c["review_id"] == review_id)
             self.assertIs(case["public_exclusion"], True)
             self.assertNotIn(review_id, selected)
@@ -296,11 +298,11 @@ class PublicMusicDataTests(unittest.TestCase):
         row = next(r for r in self.project_all() if r["title"] == "Peligro")
         javascript = generator.serialize([dict(row, preview="peligro--nina-jori.mp3")])
         self.assertIn("releaseType:'Unreleased', year:null", javascript)
-        self.assertIn("appleMusic:null, version:null }", javascript)
+        self.assertIn("appleMusic:null, version:null, youtube:null, soundcloud:null }", javascript)
         released = self.project()[0]
-        with self.assertRaisesRegex(ValueError, "eleven-field public schema"):
+        with self.assertRaisesRegex(ValueError, "thirteen-field public schema"):
             generator.serialize([dict(released, year=None)])
-        with self.assertRaisesRegex(ValueError, "eleven-field public schema"):
+        with self.assertRaisesRegex(ValueError, "thirteen-field public schema"):
             generator.serialize([dict(row, preview="x.mp3", spotify=released["spotify"])])
 
     def test_generated_javascript_contains_no_internal_catalog_fields(self):
@@ -343,7 +345,7 @@ class PublicMusicDataTests(unittest.TestCase):
         # sixteen original previews keep their order at the head of the list.
         self.assertEqual(len(rows), len(self.verified))
         self.assertEqual(
-            [(row["title"], row["preview"]) for row in rows][:len(self.PUBLISHED)],
+            [(row["title"], row["preview"]) for row in rows if row["title"] in self.PUBLISHED][:len(self.PUBLISHED)],
             [
                 ("Hasta Que Lleguemos Al Mar", "hasta-que-lleguemos-al-mar--luis-guinea--2024.mp3"),
                 ("Hace Tanto Tiempo", "hace-tanto-tiempo--luis-guinea--2021.mp3"),
@@ -414,7 +416,8 @@ class PublicMusicDataTests(unittest.TestCase):
         manifest = json.loads(generator.PREVIEW_MANIFEST.read_text(encoding="utf-8"))
         with tempfile.TemporaryDirectory() as directory:
             fake_repo = Path(directory)
-            for row in self.master + self.recordings["recordings"]:
+            corrected = json.loads(generator.ARTWORK_CORRECTIONS.read_text(encoding="utf-8"))["corrections"]
+            for row in self.master + self.recordings["recordings"] + [{"artwork": c} for c in corrected]:
                 artwork = (row.get("artwork") or {}).get("web_file")
                 if artwork:
                     target = fake_repo / artwork
@@ -447,8 +450,18 @@ class PublicMusicDataTests(unittest.TestCase):
         "La Bamba": "https://music.apple.com/us/album/la-bamba/1754643674?i=1754643675",
         "Imagina": "https://music.apple.com/us/album/imagina/1778357807?i=1778357960",
         "Abrazo Imaginario": "https://music.apple.com/mx/album/abrazo-imaginario-single/1846996818",
+        "Anoche Me Enamoré": "https://music.apple.com/mx/album/anoche-me-enamor%C3%A9/1754644382?i=1754644383",
+        "In My Life - Cover": "https://music.apple.com/mx/album/in-my-life-cover/1754643926?i=1754643927",
+        "Sunday Morning": "https://music.apple.com/mx/album/sunday-morning/1754639153?i=1754639154",
+        "¿Por Qué Lloras?": "https://music.apple.com/mx/album/por-qu%C3%A9-lloras-feat-luis-guinea/1312566966?i=1312566970",
+        "Alguien Como Yo": "https://music.apple.com/mx/album/alguien-como-yo/879580207?i=879580219",
+        "Llegue Muy Tarde": "https://music.apple.com/mx/album/llegue-muy-tarde/1659031631?i=1659031632",
     }
-    WITHOUT_APPLE = {"Allá", "Anoche Me Enamoré", "Eres Veneno"}
+    # Catalogue Apple URLs that point to another recording, replaced by the certified one.
+    CORRECTED_APPLE = {
+        "How Deep Is Your Love": "https://music.apple.com/mx/album/how-deep-is-your-love/1613658995?i=1613659506&uo=4",
+    }
+    WITHOUT_APPLE = {"Allá", "Eres Veneno"}
 
     def test_streaming_links_come_from_the_catalogue_or_the_certified_additions_only(self):
         rows = self.project()
@@ -460,7 +473,7 @@ class PublicMusicDataTests(unittest.TestCase):
                             if w["title"] == row["title"] and ", ".join(w["artists"]) == row["artist"])
                 self.assertEqual(row["spotify"], work["spotify"]["url"])
                 registered = work["apple_music"]["url"]
-                expected = registered or self.CERTIFIED_APPLE.get(row["title"])
+                expected = self.CORRECTED_APPLE.get(row["title"]) or registered or self.CERTIFIED_APPLE.get(row["title"])
                 self.assertEqual(row["appleMusic"], expected)
         self.assertTrue(all(row["spotify"] for row in released))
         # Unreleased recordings never carry streaming links.
@@ -471,6 +484,78 @@ class PublicMusicDataTests(unittest.TestCase):
                              | {("Volver a Verte", "Luis Guinea")}, missing)
         # Cómo Decirte keeps its registered URL (track 1646476110, the certified one's track).
         self.assertIn("i=1646476110", works[("Cómo Decirte", "Luis Guinea, Pablo Delgado")]["appleMusic"])
+
+    def test_self_published_recordings_are_neither_unreleased_nor_commercial(self):
+        rows = {row["title"]: row for row in self.project()}
+        self_published = {t for t, r in rows.items() if r["releaseType"] == "SelfPublished"}
+        self.assertEqual(self_published, {"Prometheus", "Singularidad del Genio", "She Wolf - Cover",
+                                          "Diamonds - Cover", "One Last Time vs Rather Be vs Outside vs Summer"})
+        for title in self_published:
+            row = rows[title]
+            with self.subTest(title=title):
+                self.assertIsNone(row["year"])
+                self.assertIsNone(row["spotify"])
+                self.assertIsNone(row["appleMusic"])
+                self.assertTrue(row["youtube"] or row["soundcloud"])
+        links = json.loads(generator.PLATFORM_LINKS.read_text(encoding="utf-8"))
+        links["full_recordings"] = [x for x in links["full_recordings"] if x["work_id"] != "prometheus--luis-guinea"]
+        with self.assertRaisesRegex(ValueError, "self-published recording needs its YouTube or SoundCloud link"):
+            generator.project(self.master, self.selection, self.decisions, repo=REPO, links=links)
+
+    def test_owner_confirmed_credits_keep_arrangement_apart_from_authorship(self):
+        rows = {(r["title"], r["artist"]): r for r in generator.project_all(
+            self.master, self.selection, self.decisions, repo=REPO)}
+        expected = {
+            ("Tóxica", "Isabella Macías"): (["Producer", "Arranger"], "Producer"),
+            ("Toxic", "Isabella Macías"): (["Arranger", "Producer"], "Producer"),
+            ("Quién Soy - Acústica", "Louisiana"): (["Songwriter", "Co-writer", "Arranger", "Performer", "Producer"], "Composer"),
+            ("A Million Dreams - Acoustic Cover", "Isabella Macías"): (["Producer", "Arranger"], "Producer"),
+            ("Shallow - Cover", "Ana Guinea"): (["Arranger", "Producer"], "Producer"),
+            ("En Libertad - Cover", "Ana Guinea"): (["Arranger", "Producer"], "Producer"),
+            ("Súper Héroe", "Edson Corona, Charlie B"): (["Songwriter", "Co-writer", "Arranger", "Producer", "Performer"], "Composer"),
+            ("Volver a Verte", "Ana Guinea"): (["Songwriter", "Producer"], "Producer"),
+            ("Agua de Mar", "Luis Guinea, Salo, Efra Ardila"): (["Artist", "Co-writer", "Producer"], "Artist"),
+            ("El Beso", "Tufic, Luis Guinea"): (["Artist", "Co-writer", "Co-producer"], "Artist"),
+            ("How Deep Is Your Love", "Luis Guinea"): (["Artist", "Producer"], "Artist"),
+            ("Imagina", "Rogelio Edel"): (["Producer"], "Producer"),
+            ("Te Esperé - Cover", "Ana Guinea"): (["Producer", "Arranger"], "Producer"),
+        }
+        for key, (roles, role) in expected.items():
+            with self.subTest(work=key):
+                self.assertEqual((rows[key]["roles"], rows[key]["role"]), (roles, role))
+
+    def test_artwork_correction_gives_each_release_its_own_cover(self):
+        rows = {r["title"]: r for r in generator.project_all(self.master, self.selection, self.decisions, repo=REPO)}
+        self.assertEqual(rows["Anoche Me Enamoré"]["artwork"], "Anoche-Me-Enamoré-2021---Rogelio-Edel.webp")
+        live = next(w for w in self.master if w["id"] == "anoche-me-enamore--rogelio-edel--2024")
+        self.assertEqual(live["artwork"]["web_file"], "assets/images/Anoche-Me-Enamoré---Rogelio-Edel.webp")
+        self.assertTrue((REPO / live["artwork"]["web_file"]).is_file())
+        stale = json.loads(generator.ARTWORK_CORRECTIONS.read_text(encoding="utf-8"))
+        stale["corrections"][0]["wrong_web_file"] = "assets/images/other.webp"
+        with self.assertRaisesRegex(ValueError, "artwork correction expects"):
+            generator.project_all(self.master, self.selection, self.decisions, repo=REPO,
+                                  artwork_corrections=stale)
+
+    def test_full_recordings_and_apple_corrections_are_validated(self):
+        rows = {row["title"]: row for row in self.project()}
+        self.assertEqual(rows["Prometheus"]["youtube"], "https://www.youtube.com/watch?v=yHnT3_4kRRA")
+        self.assertEqual(rows["Diamonds - Cover"]["soundcloud"], "https://soundcloud.com/lcguinea/diamonds")
+        self.assertEqual(sum(1 for r in rows.values() if r["youtube"] or r["soundcloud"]), 5)
+        links = json.loads(generator.PLATFORM_LINKS.read_text(encoding="utf-8"))
+        for bad in ("https://youtu.be/yHnT3_4kRRA", "https://www.youtube.com/watch?v=x'><script>",
+                    "javascript:alert(1)"):
+            broken = json.loads(json.dumps(links))
+            broken["full_recordings"][0]["url"] = bad
+            with self.subTest(url=bad), self.assertRaisesRegex(ValueError, "not a valid public URL"):
+                generator.project(self.master, self.selection, self.decisions, repo=REPO, links=broken)
+        # A correction applies only while the catalogue still holds the exact wrong URL.
+        stale = json.loads(json.dumps(links))
+        stale["apple_music_corrections"][0]["wrong_url"] = "https://music.apple.com/mx/song/1"
+        with self.assertRaisesRegex(ValueError, "Apple Music correction expects"):
+            generator.project_all(self.master, self.selection, self.decisions, repo=REPO, links=stale)
+        hdiyl = next(r for r in generator.project_all(self.master, self.selection, self.decisions, repo=REPO)
+                     if r["title"] == "How Deep Is Your Love")
+        self.assertIn("i=1613659506", hdiyl["appleMusic"])
 
     def test_certified_links_never_replace_a_registered_url_and_are_validated(self):
         links = json.loads(generator.PLATFORM_LINKS.read_text(encoding="utf-8"))
@@ -503,9 +588,9 @@ class PublicMusicDataTests(unittest.TestCase):
                          sum(1 for row in rows if row["spotify"] is None))
         no_links = dict(rows[0], spotify=None, appleMusic=None)
         self.assertIn("spotify:null, appleMusic:null", generator.serialize([no_links]))
-        with self.assertRaisesRegex(ValueError, "eleven-field public schema"):
+        with self.assertRaisesRegex(ValueError, "thirteen-field public schema"):
             generator.serialize([dict(rows[0], spotify="https://open.spotify.com/track/short")])
-        with self.assertRaisesRegex(ValueError, "eleven-field public schema"):
+        with self.assertRaisesRegex(ValueError, "thirteen-field public schema"):
             generator.serialize([{k: v for k, v in rows[0].items() if k != "appleMusic"}])
 
     def test_checked_in_output_is_current_and_generation_is_deterministic(self):

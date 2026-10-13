@@ -19,10 +19,15 @@ import generate_music_previews as previews  # noqa: E402
 # The sixteen original previews (2026-10-05) and the 29 windows the owner approved on 2026-10-13.
 VERIFIED = {"25", "02", "04", "35", "03", "05", "11", "01", "06", "07", "08", "09", "10", "13", "14", "15",
             "12", "18", "20", "21", "16", "41", "42", "43", "19", "22", "23", "26", "28", "30",
-            "31", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57"}
+            "31", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57",
+            # Spotify-folder recordings, main windows approved on 2026-10-13 (#32, #61 and #62 with a
+            # master that differs from the commercial release, authorized by the owner).
+            "32", "36", "58", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70",
+            # Owner-designated masters with their windows approved on 2026-10-13.
+            "59", "71"}
 # Selected works whose audio is not in One Page Luis Guinea/audios (no source to cut).
-BLOCKED_WITHOUT_AUDIO = {"33", "34", "36", "37", "38"}
-# Associated sources still waiting for an approved window (none since 2026-10-13).
+BLOCKED_WITHOUT_AUDIO = {"33", "34", "37", "38"}
+# No associated source waits for a window approval.
 PENDING_WINDOW_APPROVAL = set()
 BLOCKED = BLOCKED_WITHOUT_AUDIO | PENDING_WINDOW_APPROVAL
 # Owner-approved chorus intervals (s) and the encoded end where an edge was adjusted.
@@ -33,6 +38,16 @@ APPROVED = {
     "07": (75.0, 115.0, 115.0), "08": (126.5, 164.0, 164.0), "09": (72.0, 106.0, 106.0),
     "10": (120.0, 165.0, 164.9), "13": (47.0, 83.0, 83.0), "14": (44.0, 83.0, 83.0),
     "15": (70.3, 111.0, 111.0),
+}
+# Main proposals approved on 2026-10-13 for the Spotify-folder recordings (approved-preview-window-v2).
+APPROVED_V2 = {
+    "36": (91.0, 132.0, 132.0), "58": (138.5, 178.5, 178.5), "60": (91.5, 129.0, 129.0),
+    "63": (156.5, 195.5, 195.5), "64": (98.0, 138.0, 138.0), "65": (116.5, 155.5, 155.5),
+    "66": (58.5, 95.5, 95.5), "67": (140.5, 185.0, 185.0), "68": (101.5, 144.5, 144.5),
+    "69": (116.0, 151.0, 151.0), "70": (151.5, 191.5, 191.5), "32": (148.5, 185.5, 185.5),
+    "61": (108.0, 142.0, 142.0), "62": (114.0, 153.0, 153.0),
+    # Si Estás De Paso: section equivalent to the window approved on the wrong file; Te Esperé: alternative.
+    "59": (75.0, 116.6, 116.6), "71": (97.0, 132.0, 132.0),
 }
 HAVE_FFMPEG = bool(shutil.which("ffmpeg") and shutil.which("ffprobe"))
 
@@ -89,6 +104,18 @@ class PreviewManifestTests(unittest.TestCase):
         self.assertEqual(entries["25"]["association"]["basis"], "objective_evidence")
         # A duration-only match contradicted by title/artist must never become #33's source.
         self.assertIsNone(entries["33"]["source"])
+        # Owner-designated masters (2026-10-13) replace the wrong Spotify-folder files.
+        self.assertEqual(entries["59"]["source"],
+                         "One Page Luis Guinea/audios/Productor/Si Estás de Paso (masterizada).mp3")
+        self.assertEqual(entries["71"]["source"],
+                         "One Page Luis Guinea/audios/Productor/Ana Guinea/Te Esperé (Master).mp3")
+        # Previews cut from a master other than the commercial one say so in their evidence.
+        for review_id in ("32", "59", "61", "62", "71"):
+            with self.subTest(review_id=review_id):
+                association = entries[review_id]["association"]
+                self.assertEqual(association["basis"], "human_authorization")
+                self.assertTrue(any(e.startswith("Master del preview:") and "Master comercial: ISRC" in e
+                                    for e in association["evidence"]))
 
     def test_manifest_rejects_a_work_id_that_differs_from_the_human_mapping(self):
         manifest = copy.deepcopy(self.manifest)
@@ -161,11 +188,13 @@ class PreviewManifestTests(unittest.TestCase):
         self.assertEqual(self.manifest["schema"], "music-preview-manifest-v2")
         self.assertEqual(self.manifest["policies"], previews.POLICIES)
         self.assertEqual(self.manifest["encoding"], previews.ENCODING)
-        for review_id, (start, end, encoded_end) in APPROVED.items():
+        approved = [(r, w, "approved-chorus-window-v1") for r, w in APPROVED.items()]
+        approved += [(r, w, "approved-preview-window-v2") for r, w in APPROVED_V2.items()]
+        for review_id, (start, end, encoded_end), policy in approved:
             with self.subTest(review_id=review_id):
                 entry = self.entry(self.manifest, review_id)
                 window = entry["window"]
-                self.assertEqual(entry["trim_policy"], "approved-chorus-window-v1")
+                self.assertEqual(entry["trim_policy"], policy)
                 self.assertEqual(window["approved_s"], [start, end])
                 self.assertEqual(window["start_s"], start)
                 self.assertAlmostEqual(window["start_s"] + window["duration_s"], encoded_end, places=3)

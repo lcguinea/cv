@@ -50,6 +50,8 @@ STATIC_FILES = PAGES + (
     "fonts/OFL-Inter.txt",
     "fonts/OFL-IBMPlexMono.txt",
     "assets/images/profile.webp",
+    "assets/images/cover.webp",
+    "assets/images/cover-960.webp",
 )
 
 ALLOWED_SUFFIXES = {".html", ".css", ".js", ".woff2", ".txt", ".xml", ".webp", ".mp3"}

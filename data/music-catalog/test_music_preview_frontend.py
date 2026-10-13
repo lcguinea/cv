@@ -285,7 +285,7 @@ class MusicPlayerBehaviourTests(unittest.TestCase):
             row = ("  { title:'Synthetic', artist:'Luis Guinea', role:'Composer', artwork:'generic-cover.webp', "
                    "releaseType:'Unreleased', year:null, roles:['Co-writer'], "
                    "preview:'hace-tanto-tiempo--luis-guinea--2021.mp3', spotify:null, appleMusic:null, "
-                   "version:'RoughMix' }")
+                   "version:'RoughMix', youtube:null, soundcloud:null }")
             data.write_text(text.replace("\n];", ",\n" + row + "\n];"), encoding="utf-8")
             scenario = (
                 "const last = rows().length - 1; await click(last); out.s = snapshot();"

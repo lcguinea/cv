@@ -1,0 +1,13 @@
+{
+  "schema": "public-artwork-corrections-v1",
+  "description": "Official covers for works that share an image in the hash-pinned catalog_master.json although they belong to different releases. Each correction names the exact shared file it replaces for that work only; the other release keeps the shared file.",
+  "corrections": [
+    {
+      "work_id": "anoche-me-enamore--rogelio-edel--2021",
+      "wrong_web_file": "assets/images/Anoche-Me-Enamoré---Rogelio-Edel.webp",
+      "web_file": "assets/images/Anoche-Me-Enamoré-2021---Rogelio-Edel.webp",
+      "file": "One Page Luis Guinea/artworks/Anoche Me Enamoré (2021) - Rogelio Edel.jpg",
+      "evidence": "Verificado el 2026-10-13. La imagen compartida («Live Session», dibujos de una papa y un brócoli) es la portada de la reedición de 2024 (Spotify 0LTXXWK0EaCDBKfDJdSi7F) y se conserva para anoche-me-enamore--rogelio-edel--2024. El sencillo de 2021 (Spotify 2HeSUoZcZqXR1h4SHeqPM0; Apple Music 1754644383, «Anoche Me Enamoré - Single», 2021-03-26) usa una fotografía en blanco y negro de Rogelio Edel con dibujo lineal: descargada de Apple Music a 600 × 600 y codificada con cwebp -q 75, la convención del sitio. El propietario ordenó separar ambas portadas el 2026-10-13."
+    }
+  ]
+}

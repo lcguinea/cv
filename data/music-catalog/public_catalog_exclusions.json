@@ -10,6 +10,7 @@
     "03",
     "05",
     "11",
+    "36",
     "01",
     "06",
     "07",
@@ -32,6 +33,21 @@
     "54",
     "55",
     "56",
+    "32",
+    "60",
+    "61",
+    "58",
+    "63",
+    "59",
+    "62",
+    "64",
+    "65",
+    "66",
+    "67",
+    "68",
+    "69",
+    "71",
+    "70",
     "19",
     "22",
     "26",
@@ -77,6 +93,10 @@
     {
       "review_id": "11",
       "preview": "la-bamba--rogelio-edel--2022.mp3"
+    },
+    {
+      "review_id": "36",
+      "preview": "a-escondidas--isabella-macias--2018.mp3"
     },
     {
       "review_id": "01",
@@ -167,6 +187,66 @@
       "preview": "te-extrano--rogelio-edel--2025.mp3"
     },
     {
+      "review_id": "32",
+      "preview": "how-deep-is-your-love--luis-guinea--2022.mp3"
+    },
+    {
+      "review_id": "60",
+      "preview": "jesus-set-me-free--luis-guinea--2021.mp3"
+    },
+    {
+      "review_id": "61",
+      "preview": "por-que-lloras--renata-isabel--2017.mp3"
+    },
+    {
+      "review_id": "58",
+      "preview": "sin-mirar-atras--alexander-acha--2024.mp3"
+    },
+    {
+      "review_id": "63",
+      "preview": "llegue-muy-tarde--valeria-ferro--2023.mp3"
+    },
+    {
+      "review_id": "59",
+      "preview": "si-estas-de-paso--allan-perz--2016.mp3"
+    },
+    {
+      "review_id": "62",
+      "preview": "alguien-como-yo--segundo-piso--2014.mp3"
+    },
+    {
+      "review_id": "64",
+      "preview": "toxica--isabella-macias--2018.mp3"
+    },
+    {
+      "review_id": "65",
+      "preview": "toxic--isabella-macias--2018.mp3"
+    },
+    {
+      "review_id": "66",
+      "preview": "quien-soy-acustica--louisiana--2017.mp3"
+    },
+    {
+      "review_id": "67",
+      "preview": "a-million-dreams-acoustic-cover--isabella-macias--2018.mp3"
+    },
+    {
+      "review_id": "68",
+      "preview": "shallow-cover--ana-guinea--2020.mp3"
+    },
+    {
+      "review_id": "69",
+      "preview": "en-libertad-cover--ana-guinea--2020.mp3"
+    },
+    {
+      "review_id": "71",
+      "preview": "te-espere-cover--ana-guinea--2020.mp3"
+    },
+    {
+      "review_id": "70",
+      "preview": "super-heroe--edson-corona--2017.mp3"
+    },
+    {
       "review_id": "19",
       "preview": "asi-habla-el-amor--luis-guinea.mp3"
     },
@@ -245,13 +325,6 @@
       "title": "Blue Moon",
       "reason": "no_authorized_preview",
       "detail": "Ningún archivo de One Page Luis Guinea/audios coincide por nombre, etiquetas ni duración (catálogo 288,000 s; audio_ref null; ningún asset en lista_archivos_audio_*.xlsx)."
-    },
-    {
-      "review_id": "36",
-      "work_id": "a-escondidas--isabella-macias--2018",
-      "title": "A Escondidas",
-      "reason": "no_authorized_preview",
-      "detail": "El audio_ref «A ESCONDIDAS MSTR 1.5.m4a» (vinculado en Drive Producciones/Bela/ con Δ 0,056 s, RETIRED_WORKS_INVENTORY.md §4) no está en One Page Luis Guinea/audios, y ningún archivo local coincide por nombre ni etiquetas (catálogo 173,072 s)."
     },
     {
       "review_id": "37",

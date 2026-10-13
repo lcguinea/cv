@@ -1,10 +1,81 @@
 {
   "schema": "public-platform-links-v1",
-  "description": "Apple Music destinations certified by Luis Guinea on 2026-10-06 for public works whose catalogue entry has no Apple Music URL. Each one was checked against the Apple Music page title and artist. The registered catalogue URLs take precedence and are never replaced; Cómo Decirte already has one registered (track 1646476110, the same track as the certified https://music.apple.com/es/song/1646476110), so it is not listed. Works without a certified URL publish no Apple Music link.",
+  "description": "Apple Music destinations certified by Luis Guinea on 2026-10-06 for public works whose catalogue entry has no Apple Music URL. Each one was checked against the Apple Music page title and artist. The registered catalogue URLs take precedence and are never replaced; Cómo Decirte already has one registered (track 1646476110, the same track as the certified https://music.apple.com/es/song/1646476110), so it is not listed. Works without a certified URL publish no Apple Music link. `full_recordings` lists owner-supplied links to complete recordings on YouTube or SoundCloud, each checked on 2026-10-13 against the platform's oEmbed title and author. `apple_music_corrections` replaces a registered catalogue URL that points to another artist's recording; each one names the exact wrong URL and its evidence. The Apple Music additions of 2026-10-13 (Anoche Me Enamoré 2021, In My Life - Cover, Sunday Morning, ¿Por Qué Lloras?, Alguien Como Yo, Llegue Muy Tarde) match the catalogue entry in title, artist, release date and duration (±1 ms) in the iTunes Lookup API and were accepted by the owner on 2026-10-13.",
   "apple_music": [
-    {"work_id": "12-meses--rogelio-edel--2022", "url": "https://music.apple.com/us/album/12-meses/1650041672?i=1650041673"},
-    {"work_id": "la-bamba--rogelio-edel--2022", "url": "https://music.apple.com/us/album/la-bamba/1754643674?i=1754643675"},
-    {"work_id": "imagina--rogelio-edel--2024", "url": "https://music.apple.com/us/album/imagina/1778357807?i=1778357960"},
-    {"work_id": "abrazo-imaginario--ricardo-bojalil--2022", "url": "https://music.apple.com/mx/album/abrazo-imaginario-single/1846996818"}
+    {
+      "work_id": "12-meses--rogelio-edel--2022",
+      "url": "https://music.apple.com/us/album/12-meses/1650041672?i=1650041673"
+    },
+    {
+      "work_id": "la-bamba--rogelio-edel--2022",
+      "url": "https://music.apple.com/us/album/la-bamba/1754643674?i=1754643675"
+    },
+    {
+      "work_id": "imagina--rogelio-edel--2024",
+      "url": "https://music.apple.com/us/album/imagina/1778357807?i=1778357960"
+    },
+    {
+      "work_id": "abrazo-imaginario--ricardo-bojalil--2022",
+      "url": "https://music.apple.com/mx/album/abrazo-imaginario-single/1846996818"
+    },
+    {
+      "work_id": "anoche-me-enamore--rogelio-edel--2021",
+      "url": "https://music.apple.com/mx/album/anoche-me-enamor%C3%A9/1754644382?i=1754644383"
+    },
+    {
+      "work_id": "in-my-life-cover--rogelio-edel--2021",
+      "url": "https://music.apple.com/mx/album/in-my-life-cover/1754643926?i=1754643927"
+    },
+    {
+      "work_id": "sunday-morning--rogelio-edel--2021",
+      "url": "https://music.apple.com/mx/album/sunday-morning/1754639153?i=1754639154"
+    },
+    {
+      "work_id": "por-que-lloras--renata-isabel--2017",
+      "url": "https://music.apple.com/mx/album/por-qu%C3%A9-lloras-feat-luis-guinea/1312566966?i=1312566970"
+    },
+    {
+      "work_id": "alguien-como-yo--segundo-piso--2014",
+      "url": "https://music.apple.com/mx/album/alguien-como-yo/879580207?i=879580219"
+    },
+    {
+      "work_id": "llegue-muy-tarde--valeria-ferro--2023",
+      "url": "https://music.apple.com/mx/album/llegue-muy-tarde/1659031631?i=1659031632"
+    }
+  ],
+  "full_recordings": [
+    {
+      "work_id": "prometheus--luis-guinea",
+      "platform": "youtube",
+      "url": "https://www.youtube.com/watch?v=yHnT3_4kRRA"
+    },
+    {
+      "work_id": "singularidad-del-genio--luis-guinea",
+      "platform": "youtube",
+      "url": "https://www.youtube.com/watch?v=3IOU81SGq9c"
+    },
+    {
+      "work_id": "she-wolf-cover-instrumental--luis-guinea",
+      "platform": "soundcloud",
+      "url": "https://soundcloud.com/lcguinea/shewolf"
+    },
+    {
+      "work_id": "one-last-time-vs-rather-be-vs-outside-vs-summer--luis-guinea",
+      "platform": "soundcloud",
+      "url": "https://soundcloud.com/lcguinea/2015mashup"
+    },
+    {
+      "work_id": "diamonds-cover-instrumental--luis-guinea",
+      "platform": "soundcloud",
+      "url": "https://soundcloud.com/lcguinea/diamonds"
+    }
+  ],
+  "apple_music_corrections": [
+    {
+      "work_id": "how-deep-is-your-love--luis-guinea--2022",
+      "wrong_url": "https://music.apple.com/mx/album/how-deep-is-your-love/318621285?i=318621495&uo=4",
+      "url": "https://music.apple.com/mx/album/how-deep-is-your-love/1613658995?i=1613659506&uo=4",
+      "evidence": "iTunes Lookup del 2026-10-13: la pista 318621495 es de Francisco Céspedes (álbum «Te Acuerdas»); la pista 1613659506 es de Luis Guinea (artista 869634170), «How Deep Is Your Love - Single», 2022-03-04, 244 000 ms, igual que el catálogo (244,000 s)."
+    }
   ]
 }

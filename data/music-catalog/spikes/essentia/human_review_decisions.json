@@ -281,7 +281,7 @@
       "credits_decision": {
         "source": "clasificación documental existente",
         "date": "2026-10-06",
-        "statement": "Solo Producer: el audio vinculado sin ambigüedad está en One Page Luis Guinea/audios/Productor/ (catalog_category producer según spikes/essentia/CATALOG_CATEGORY.md y audio_links_onepage.json). Es la atribución ya publicada; el propietario ordenó consolidarla aquí sin añadir otros créditos.",
+        "statement": "Solo Producer: el audio vinculado sin ambigüedad está en One Page Luis Guinea/audios/Productor/ (catalog_category producer según spikes/essentia/CATALOG_CATEGORY.md y audio_links_onepage.json). Es la atribución ya publicada; el propietario ordenó consolidarla aquí sin añadir otros créditos. El 2026-10-13 el propietario confirmó expresamente que no es coautor de «Imagina»: no se le acredita composición ni coautoría, aunque la ficha de créditos de Apple Music lo liste bajo «Autoría».",
         "public_facet": "Producer"
       }
     },
@@ -462,12 +462,12 @@
       "notes": ["Registro distinto de “Volver a Verte — Luis Guinea (2020)”."],
       "negative_decisions": ["no fado"],
       "credits": [
-        {"name": "Luis Guinea", "roles": ["producer"]}
+        {"name": "Luis Guinea", "roles": ["songwriter", "producer"]}
       ],
       "credits_decision": {
         "source": "clasificación documental existente",
         "date": "2026-10-06",
-        "statement": "Solo Producer: el audio vinculado sin ambigüedad está en One Page Luis Guinea/audios/Productor/ (catalog_category producer según spikes/essentia/CATALOG_CATEGORY.md y audio_links_onepage.json). Es la atribución ya publicada; el propietario ordenó consolidarla aquí sin añadir otros créditos.",
+        "statement": "Ampliado el 2026-10-13 por decisión del propietario: se añade compositor porque Apple Music (pista 1636517401: ISRC MXE772200003, 216,405 s, 2022-08-19, composerName «Luis Guinea») y Ditto («Provided to YouTube by Ditto Music», Composer: Luis Guinea, publicado el 2022-08-19) describen la misma grabación del catálogo (mismo ISRC, duración y fecha). No se altera ningún otro crédito. Antes: Solo Producer: el audio vinculado sin ambigüedad está en One Page Luis Guinea/audios/Productor/ (catalog_category producer según spikes/essentia/CATALOG_CATEGORY.md y audio_links_onepage.json). Es la atribución ya publicada; el propietario ordenó consolidarla aquí sin añadir otros créditos.",
         "public_facet": "Producer"
       }
     },
@@ -495,7 +495,16 @@
         "Asset revisado: `Agua de Mar (Master).mp3`.",
         "Ambigüedad: un manifiesto previo contiene `Aguita de Mar (Master).mp3`. NO afirmar que ambos nombres sean el mismo asset técnico sin evidencia adicional."
       ],
-      "negative_decisions": ["no `latin_traditional`", "no `dreamy`"]
+      "negative_decisions": ["no `latin_traditional`", "no `dreamy`"],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["artist", "co_writer", "producer"]}
+      ],
+      "credits_decision": {
+        "source": "créditos públicos verificados; confirmados por el propietario el 2026-10-13",
+        "date": "2026-10-13",
+        "statement": "Créditos públicos de Ditto en YouTube («Provided to YouTube by Ditto Music»): Luis Guinea, artista principal, productor y compositor junto a Camilo Salazar y Efraín Ardila.",
+        "public_facet": "Artist"
+      }
     },
     {
       "review_id": "17",
@@ -666,7 +675,16 @@
         "evidence": "human_review"
       },
       "notes": ["Producción contemporánea con lenguaje de bolero; no implica bolero tradicional ortodoxo."],
-      "negative_decisions": []
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["artist", "co_writer", "co_producer"]}
+      ],
+      "credits_decision": {
+        "source": "créditos públicos verificados; confirmados por el propietario el 2026-10-13",
+        "date": "2026-10-13",
+        "statement": "Créditos de Apple Music de «\"el beso\"» (6775376259) y descripción VEVO: Luis Guinea, artista principal, coproductor y coautor.",
+        "public_facet": "Artist"
+      }
     },
     {
       "review_id": "24",
@@ -920,7 +938,16 @@
         "- La confirmación humana establece identidad de obra del MP3, NO identidad binaria entre masters.",
         "- No afirmar que MP3 y MP4 sean el mismo máster técnico."
       ],
-      "negative_decisions": []
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["artist", "producer"]}
+      ],
+      "credits_decision": {
+        "source": "créditos públicos verificados; producción confirmada por el propietario el 2026-10-13",
+        "date": "2026-10-13",
+        "statement": "Apple Music (1613659506) y ONErpm: artista principal. Cover de los Bee Gees: no se acredita autoría. Productor: declaración de primera mano del propietario del 2026-10-13 (antes solo constaba en un video propio).",
+        "public_facet": "Artist"
+      }
     },
     {
       "review_id": "33",
@@ -1273,6 +1300,273 @@
       "values": {"evidence": "human_review"},
       "notes": [],
       "negative_decisions": []
+    },
+    {
+      "review_id": "58",
+      "heading": "Sin Mirar Atrás — Alexander Acha (2024)",
+      "reviewed_asset": "Alexander Acha - Sin Mirar Atrás.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "sin-mirar-atras--alexander-acha--2024", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas del archivo coinciden con la entrada única de catalog_master.json."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["co_writer"]}
+      ],
+      "credits_decision": {
+        "source": "créditos públicos verificados",
+        "date": "2026-10-13",
+        "statement": "Apple Music (créditos de la canción 1755456335): Luis Carlos Guinea Moctezuma, compositor junto a Alexander Acha; el productor es Aureo Baqueiro. La descripción del video oficial lo confirma.",
+        "public_facet": "Composer"
+      }
+    },
+    {
+      "review_id": "59",
+      "heading": "Si Estás De Paso — Allan Perz (2016)",
+      "reviewed_asset": "Allan Perz - Si Estás De Paso.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "si-estas-de-paso--allan-perz--2016", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas del archivo coinciden con la entrada única de catalog_master.json."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer"]}
+      ],
+      "credits_decision": {
+        "source": "créditos públicos verificados",
+        "date": "2026-10-13",
+        "statement": "Descripción «Provided to YouTube by state51» y créditos de Apple Music (1085877562): Luis Guinea, productor.",
+        "public_facet": "Producer"
+      }
+    },
+    {
+      "review_id": "60",
+      "heading": "Jesus, Set Me Free — Luis Guinea (2021)",
+      "reviewed_asset": "Luis Guinea - Jesus, Set Me Free.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "jesus-set-me-free--luis-guinea--2021", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas del archivo coinciden con la entrada única de catalog_master.json."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["artist", "songwriter"]}
+      ],
+      "credits_decision": {
+        "source": "créditos públicos verificados",
+        "date": "2026-10-13",
+        "statement": "Apple Music (1561677375, composerName Luis Carlos Guinea Moctezuma) y ONErpm en YouTube: artista principal y compositor.",
+        "public_facet": "Artist"
+      }
+    },
+    {
+      "review_id": "61",
+      "heading": "¿Por Qué Lloras? — Renata Isabel, Luis Guinea (2017)",
+      "reviewed_asset": "Renata Isabel, Luis Guinea - ¿Por Qué Lloras.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "por-que-lloras--renata-isabel--2017", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas del archivo coinciden con la entrada única de catalog_master.json."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["artist"]}
+      ],
+      "credits_decision": {
+        "source": "créditos públicos verificados",
+        "date": "2026-10-13",
+        "statement": "Apple Music («¿Por Qué Lloras? (feat. Luis Guinea)», 1312566970), ONErpm y Deezer: artista invitado. Es un cover de Madison (música y letra: Joe Demikeli, Daniel Dayz, Marc Monster); no se acredita autoría a Luis.",
+        "public_facet": "Artist"
+      }
+    },
+    {
+      "review_id": "62",
+      "heading": "Alguien Como Yo — Segundo Piso (2014)",
+      "reviewed_asset": "Segundo Piso - Alguien Como Yo.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "alguien-como-yo--segundo-piso--2014", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas del archivo coinciden con la entrada única de catalog_master.json."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer"]}
+      ],
+      "credits_decision": {
+        "source": "créditos públicos verificados",
+        "date": "2026-10-13",
+        "statement": "Descripción «Provided to YouTube by state51» y créditos de Apple Music (879580219): Luis Guinea, productor. El arreglo y la interpretación solo constan en un video propio de 2014, por eso no se publican.",
+        "public_facet": "Producer"
+      }
+    },
+    {
+      "review_id": "63",
+      "heading": "Llegue Muy Tarde — Valeria Ferro (2023)",
+      "reviewed_asset": "Valeria Ferro - Llegue Muy Tarde.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "llegue-muy-tarde--valeria-ferro--2023", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas del archivo coinciden con la entrada única de catalog_master.json."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["co_writer"]}
+      ],
+      "credits_decision": {
+        "source": "créditos públicos verificados",
+        "date": "2026-10-13",
+        "statement": "Apple Music (1659031632) y video oficial: Luis Carlos Guinea Moctezuma, compositor junto a Tamara Herrera.",
+        "public_facet": "Composer"
+      }
+    },
+    {
+      "review_id": "64",
+      "heading": "Tóxica — Isabella Macías (2018)",
+      "reviewed_asset": "Isabella Macías - Tóxica.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "toxica--isabella-macias--2018", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas coinciden con la entrada única de catalog_master.json, y el audio contiene la vista previa oficial: Deezer en 50.6 s (correlación 0.99); Apple Music en 47.6 s (correlación 0.96)."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer", "arranger"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Declaración de primera mano del propietario del 2026-10-13: productor y arreglista. Sin autoría de la composición. La descripción del video oficial lo acredita como productor.",
+        "public_facet": "Producer"
+      }
+    },
+    {
+      "review_id": "65",
+      "heading": "Toxic — Isabella Macías (2018)",
+      "reviewed_asset": "Isabella Macías - Toxic.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "toxic--isabella-macias--2018", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas coinciden con la entrada única de catalog_master.json, y el audio contiene la vista previa oficial: Apple Music en 48.5 s (correlación 0.94)."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["arranger", "producer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Declaración de primera mano del propietario del 2026-10-13: arreglista y productor. Sin autoría de la composición (el video oficial dice «Music: Luis Carlos Guinea Moctezuma»; ONErpm acredita la composición solo a Isabella Macías).",
+        "public_facet": "Producer"
+      }
+    },
+    {
+      "review_id": "66",
+      "heading": "Quién Soy - Acústica — Louisiana (2017)",
+      "reviewed_asset": "Louisiana - Quién Soy - Acústica.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "quien-soy-acustica--louisiana--2017", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas coinciden con la entrada única de catalog_master.json, y el audio contiene la vista previa oficial: Apple Music en 48.0 s (correlación 0.97)."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["songwriter", "co_writer", "arranger", "performer", "producer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Declaración de primera mano del propietario del 2026-10-13: compositor, coautor, arreglista, intérprete y productor. El lyric video de Moctezuma Music lo acredita como coautor junto a Ana Guinea.",
+        "public_facet": "Composer"
+      }
+    },
+    {
+      "review_id": "67",
+      "heading": "A Million Dreams - Acoustic Cover — Isabella Macías (2018)",
+      "reviewed_asset": "Isabella Macías - A Million Dreams - Acoustic Cover.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "a-million-dreams-acoustic-cover--isabella-macias--2018", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas coinciden con la entrada única de catalog_master.json, y el audio contiene la vista previa oficial: Deezer en 51.0 s (correlación 0.86); Apple Music en 48.0 s (correlación 0.97)."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer", "arranger"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Declaración de primera mano del propietario del 2026-10-13: productor y arreglista. Cover de una obra ajena: sin autoría de la composición.",
+        "public_facet": "Producer"
+      }
+    },
+    {
+      "review_id": "68",
+      "heading": "Shallow - Cover — Ana Guinea (2020)",
+      "reviewed_asset": "Ana Guinea - Shallow - Cover.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "shallow-cover--ana-guinea--2020", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas coinciden con la entrada única de catalog_master.json, y el audio contiene la vista previa oficial: Deezer en 52.6 s (correlación 0.92); Apple Music en 49.6 s (correlación 0.94)."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["arranger", "producer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Declaración de primera mano del propietario del 2026-10-13: arreglista y productor. Cover de una obra ajena: sin autoría de la composición.",
+        "public_facet": "Producer"
+      }
+    },
+    {
+      "review_id": "69",
+      "heading": "En Libertad - Cover — Ana Guinea (2020)",
+      "reviewed_asset": "Ana Guinea - En Libertad - Cover.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "en-libertad-cover--ana-guinea--2020", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas coinciden con la entrada única de catalog_master.json, y el audio contiene la vista previa oficial: Deezer en 52.1 s (correlación 0.97); Apple Music en 49.1 s (correlación 0.97)."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["arranger", "producer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Declaración de primera mano del propietario del 2026-10-13: arreglista y productor. Cover de una obra ajena: sin autoría de la composición.",
+        "public_facet": "Producer"
+      }
+    },
+    {
+      "review_id": "70",
+      "heading": "Súper Héroe — Edson Corona, Charlie B (2017)",
+      "reviewed_asset": "Edson Corona, Charlie B - Súper Héroe.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "super-heroe--edson-corona--2017", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas coinciden con la entrada única de catalog_master.json, y el audio contiene la vista previa oficial: Apple Music en 48.1 s (correlación 0.99)."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["songwriter", "co_writer", "arranger", "producer", "performer"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Declaración de primera mano del propietario del 2026-10-13: compositor, coautor, arreglista, productor e intérprete.",
+        "public_facet": "Composer"
+      }
+    },
+    {
+      "review_id": "71",
+      "heading": "Te Esperé - Cover — Ana Guinea (2020)",
+      "reviewed_asset": "Te Esperé (Master).mp3",
+      "catalog_link": {"status": "mapped", "work_id": "te-espere-cover--ana-guinea--2020", "candidates": [], "detail": "Archivo designado por el propietario el 2026-10-13 (audios/Productor/Ana Guinea/Te Esperé (Master).mp3). Única entrada «Te Esperé» de catalog_master.json (Covers, Vol. 1, 2020-05-08, ISRC MXE772000021). La letra transcrita es la de «Te Esperé» y el audio contiene las vistas previas oficiales de Apple Music y Deezer con otro master; no contiene las de «Shallow»."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer", "arranger"]}
+      ],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "Declaración de primera mano del propietario del 2026-10-13: productor y arreglista. Cover de una obra ajena (autores Jesse Huerta, Joy Huerta, Jordan Young y Tomas Torres): sin composición ni coautoría. Sustituye la atribución documental previa (solo Producer, por la carpeta Productor/Ana Guinea).",
+        "public_facet": "Producer"
+      }
+    },
+    {
+      "review_id": "72",
+      "heading": "El Ganador — Isabella Macías (2018)",
+      "reviewed_asset": null,
+      "catalog_link": {"status": "mapped", "work_id": "el-ganador--isabella-macias--2018", "candidates": [], "detail": "Única entrada «El Ganador» de catalog_master.json. El archivo local «Spotify/Isabella Macías - El Ganador.mp3» no contiene la grabación publicada (correlación 0,03–0,04 con sus vistas previas oficiales); se conserva en el inventario privado."},
+      "values": {"evidence": "human_review"},
+      "notes": [],
+      "negative_decisions": [],
+      "credits_decision": {
+        "source": "decisión humana explícita",
+        "date": "2026-10-13",
+        "statement": "No publicar «El Ganador»: excluida de la selección pública. Permanece en el inventario privado; no se eliminan sus archivos."
+      },
+      "public_exclusion": true
     }
   ],
   "relations": [

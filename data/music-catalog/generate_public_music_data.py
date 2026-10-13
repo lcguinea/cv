@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 """Generate the browser-safe data consumed by /music/.
 
-Only eleven explicitly allowed display fields are emitted. Every published song has a valid
+Only thirteen explicitly allowed display fields are emitted. Every published song has a valid
 `preview`: the file name of a verified derivative (music_preview_manifest.json) that exists in
 assets/audio/previews/, is a readable MP3 and lasts 45 s or less (measured with the standard
 library). Songs of the selection without such a preview are left out of the public output and
 recorded in public_catalog_exclusions.json. The private source, its hash and the evidence never
 leave the manifest. `spotify` and `appleMusic` are optional streaming destinations (a validated
 URL or null): Spotify comes from the catalogue entry; Apple Music comes from the catalogue entry or,
-when it has none, from the owner-certified public_platform_links.json. No URL is ever deduced.
+when it has none, from the owner-certified public_platform_links.json. `youtube` and `soundcloud`
+are optional links to the full recording (owner-supplied and verified, public_platform_links.json
+`full_recordings`). No URL is ever deduced.
 Recordings that are not in the «Released» sheet (unreleased songs and instrumentals, and releases
 newer than that sheet, with links verified against the platforms) come from the hand-curated
 catalog_recordings.json, never from catalog_master.json, which is generated and hash-pinned; a
@@ -40,6 +42,8 @@ PREVIEW_MANIFEST = previews.MANIFEST
 EXCLUSIONS_LOG = HERE / "public_catalog_exclusions.json"
 PLATFORM_LINKS = HERE / "public_platform_links.json"
 PLATFORM_LINKS_SCHEMA = "public-platform-links-v1"
+ARTWORK_CORRECTIONS = HERE / "public_artwork_corrections.json"
+ARTWORK_CORRECTIONS_SCHEMA = "public-artwork-corrections-v1"
 EXCLUSIONS_SCHEMA = "public-catalog-exclusions-v1"
 PUBLICATION_RULE = (
     "Toda canción publicada necesita un preview válido: entrada verified en "
@@ -54,8 +58,10 @@ ALLOWED_ROLES = {"Artist", "Producer", "Composer"}
 # Instrumentales declares a category, not a credit, so its works need an explicit credits decision.
 EVIDENCE_FOLDER_ROLES = {"Cantautor": "Artist", "Productor": "Producer", "Coautorías": "Co-writer"}
 RELEASE_TYPES = {"single": "Single", "album": "Album", "ep": "EP"}
-# A recording without verifiable commercial release: release.status -> public releaseType (no links).
-UNRELEASED_TYPES = {"unreleased": "Unreleased"}
+# Recordings without a commercial release (no distributor, ISRC or streaming link), by
+# release.status: `unreleased` was never made public; `self_published` is published in full by the
+# artist on YouTube or SoundCloud (a `full_recordings` link is required). Neither carries a date.
+NON_COMMERCIAL_TYPES = {"unreleased": "Unreleased", "self_published": "SelfPublished"}
 # Closed vocabulary of the public `version` label (translated by js/strings.js music.version*).
 VERSIONS = {"Instrumental", "PianoVocal", "RoughMix", "RegionalMexican", "Mashup"}
 CREDIT_ROLES = {
@@ -66,6 +72,7 @@ CREDIT_ROLES = {
     "co_arranger": "Co-arranger",
     "producer": "Producer",
     "co_producer": "Co-producer",
+    "performer": "Performer",
     "recording_engineer": "Recording Engineer",
 }
 # Songwriting credits surface under the Composer facet, production credits under Producer.
@@ -75,13 +82,18 @@ LUIS = "Luis Guinea"
 # `role` is the primary Artist/Producer/Composer facet (filter); `roles` lists
 # every public credit of Luis Guinea in that work.
 # `preview` is a validated preview file name in assets/audio/previews/ (never None).
-# `spotify` and `appleMusic` are a validated streaming URL or None when the platform is uncertified.
-# `releaseType` is Single/Album for released works and Unreleased/Demo otherwise; `year` is None
+# `spotify` and `appleMusic` are a validated streaming URL or None when the platform is uncertified;
+# `youtube` and `soundcloud` link the full recording, or are None.
+# `releaseType` is Single/Album/EP for released works, SelfPublished or Unreleased otherwise; `year` is None
 # only for an unreleased recording whose year no source states. `version` is None or one of VERSIONS.
 PUBLIC_FIELDS = ("title", "artist", "role", "artwork", "releaseType", "year", "roles", "preview",
-                 "spotify", "appleMusic", "version")
+                 "spotify", "appleMusic", "version", "youtube", "soundcloud")
 SPOTIFY_URL_RE = re.compile(r"^https://open\.spotify\.com/track/[A-Za-z0-9]{22}$")
 APPLE_MUSIC_URL_RE = re.compile(r"^https://music\.apple\.com/[a-z]{2}/(?:album|song)/[A-Za-z0-9%._~/?=&-]+$")
+FULL_RECORDING_URL_RES = {
+    "youtube": re.compile(r"^https://www\.youtube\.com/watch\?v=[A-Za-z0-9_-]{11}$"),
+    "soundcloud": re.compile(r"^https://soundcloud\.com/[a-z0-9_-]+/[a-z0-9_-]+$"),
+}
 
 
 def _platform_url(value, pattern, label):
@@ -105,6 +117,44 @@ def certified_apple_music(links):
         if work_id in out:
             raise ValueError(f"platform links repeat {work_id}")
         out[work_id] = _platform_url(item["url"], APPLE_MUSIC_URL_RE, f"{work_id} certified Apple Music")
+    return out
+
+
+def apple_music_corrections(links):
+    """work_id -> (wrong registered URL, verified URL) from `apple_music_corrections`.
+
+    catalog_master.json is generated and hash-pinned, so a registered Apple Music URL that points
+    to another artist's recording is replaced here, never edited there. Each correction names the
+    exact wrong URL, so it stops applying if the catalogue changes.
+    """
+    out = {}
+    for position, item in enumerate(links.get("apple_music_corrections") or [], start=1):
+        if not isinstance(item, dict) or set(item) != {"work_id", "wrong_url", "url", "evidence"}:
+            raise ValueError(f"Apple Music correction {position} must contain only work_id, "
+                             "wrong_url, url and evidence")
+        work_id = _required_text(item["work_id"], f"Apple Music correction {position} work_id")
+        _required_text(item["evidence"], f"{work_id} Apple Music correction evidence")
+        if work_id in out:
+            raise ValueError(f"Apple Music corrections repeat {work_id}")
+        out[work_id] = (item["wrong_url"],
+                        _platform_url(item["url"], APPLE_MUSIC_URL_RE, f"{work_id} corrected Apple Music"))
+    return out
+
+
+def certified_full_recordings(links):
+    """work_id -> {platform: URL} from the `full_recordings` of public_platform_links.json."""
+    out = {}
+    for position, item in enumerate(links.get("full_recordings") or [], start=1):
+        if not isinstance(item, dict) or set(item) != {"work_id", "platform", "url"}:
+            raise ValueError(f"full recording {position} must contain only work_id, platform and url")
+        work_id = _required_text(item["work_id"], f"full recording {position} work_id")
+        platform = item["platform"]
+        if platform not in FULL_RECORDING_URL_RES:
+            raise ValueError(f"full recording {position}: unsupported platform {platform!r}")
+        if platform in out.setdefault(work_id, {}):
+            raise ValueError(f"full recordings repeat {platform} for {work_id}")
+        out[work_id][platform] = _platform_url(item["url"], FULL_RECORDING_URL_RES[platform],
+                                               f"{work_id} {platform}")
     return out
 
 
@@ -252,7 +302,7 @@ def project_with_exclusions(master, selection, decisions, *, repo=REPO, manifest
 
 
 def project_all(master, selection, decisions, *, repo=REPO, manifest=None, links=None,
-                recordings=None):
+                recordings=None, artwork_corrections=None):
     """Every selected work with validated credits and role, before the preview requirement.
 
     Internal: `preview` is None here. Used to check credit decisions of works that are
@@ -260,7 +310,8 @@ def project_all(master, selection, decisions, *, repo=REPO, manifest=None, links
     """
     return [row for _, _, row, _ in _candidates(master, selection, decisions, repo=repo,
                                                 manifest=manifest, links=links,
-                                                recordings=recordings)]
+                                                recordings=recordings,
+                                                artwork_corrections=artwork_corrections)]
 
 
 RECORDING_KEYS = {"id", "title", "artists", "credits", "release", "duration_ms", "explicit",
@@ -284,7 +335,7 @@ def recording_works(recordings):
             # Released after the «Released» sheet was compiled: needs a verified streaming link.
             if not (work["spotify"].get("url") or work["apple_music"].get("url")):
                 raise ValueError(f"{label}: a released recording needs a verified streaming link")
-        elif status not in UNRELEASED_TYPES:
+        elif status not in NON_COMMERCIAL_TYPES:
             raise ValueError(f"{label}: unsupported release status {status!r}")
         elif work["spotify"].get("url") or work["apple_music"].get("url") or work["isrc"]:
             raise ValueError(f"{label}: an unreleased recording cannot carry release identifiers")
@@ -298,7 +349,30 @@ def recording_works(recordings):
     return works
 
 
-def _candidates(master, selection, decisions, *, repo=REPO, manifest=None, links=None, recordings=None):
+def corrected_artwork(corrections):
+    """work_id -> (wrong web_file, corrected web_file) from public_artwork_corrections.json.
+
+    Two releases of a song may share one image in the hash-pinned catalog_master.json; a correction
+    gives one of them its own official cover and applies only while the catalogue still holds the
+    exact wrong file.
+    """
+    if corrections.get("schema") != ARTWORK_CORRECTIONS_SCHEMA:
+        raise ValueError(f"artwork corrections schema must be {ARTWORK_CORRECTIONS_SCHEMA}")
+    out = {}
+    for position, item in enumerate(corrections.get("corrections") or [], start=1):
+        keys = {"work_id", "wrong_web_file", "web_file", "file", "evidence"}
+        if not isinstance(item, dict) or set(item) != keys:
+            raise ValueError(f"artwork correction {position} must contain only {sorted(keys)}")
+        work_id = _required_text(item["work_id"], f"artwork correction {position} work_id")
+        _required_text(item["evidence"], f"{work_id} artwork correction evidence")
+        if work_id in out:
+            raise ValueError(f"artwork corrections repeat {work_id}")
+        out[work_id] = (item["wrong_web_file"], _required_text(item["web_file"], f"{work_id} web_file"))
+    return out
+
+
+def _candidates(master, selection, decisions, *, repo=REPO, manifest=None, links=None, recordings=None,
+                artwork_corrections=None):
     """Validate the whole selection; yield (review_id, work_id, row, manifest entry).
 
     `manifest` defaults to the canonical music_preview_manifest.json, `links` to
@@ -307,6 +381,8 @@ def _candidates(master, selection, decisions, *, repo=REPO, manifest=None, links
     if links is None:
         links = json.loads(PLATFORM_LINKS.read_text(encoding="utf-8"))
     certified_apple = certified_apple_music(links)
+    full_recordings = certified_full_recordings(links)
+    corrections = apple_music_corrections(links)
     if recordings is None:
         recordings = json.loads(RECORDINGS.read_text(encoding="utf-8"))
     if not isinstance(master, list):
@@ -324,7 +400,11 @@ def _candidates(master, selection, decisions, *, repo=REPO, manifest=None, links
         if not work_id or work_id in by_id:
             raise ValueError(f"catalogue contains an empty or duplicate id: {work_id!r}")
         by_id[work_id] = work
-    unknown = sorted(set(certified_apple) - set(by_id))
+    if artwork_corrections is None:
+        artwork_corrections = json.loads(ARTWORK_CORRECTIONS.read_text(encoding="utf-8"))
+    artwork_fixes = corrected_artwork(artwork_corrections)
+    unknown = sorted((set(certified_apple) | set(full_recordings) | set(corrections)
+                      | set(artwork_fixes)) - set(by_id))
     if unknown:
         raise ValueError(f"platform links reference unknown works: {unknown}")
 
@@ -366,8 +446,8 @@ def _candidates(master, selection, decisions, *, repo=REPO, manifest=None, links
             release_type = RELEASE_TYPES.get(release.get("type"))
             if release_type is None:
                 raise ValueError(f"{work_id}: unsupported release type {release.get('type')!r}")
-        elif status in UNRELEASED_TYPES and "provisional" in work:
-            release_type = UNRELEASED_TYPES[status]
+        elif status in NON_COMMERCIAL_TYPES and "provisional" in work:
+            release_type = NON_COMMERCIAL_TYPES[status]
         else:
             raise ValueError(f"{work_id} is not a released work")
         year = release.get("year")
@@ -383,6 +463,10 @@ def _candidates(master, selection, decisions, *, repo=REPO, manifest=None, links
             raise ValueError(f"{work_id}: artists must be a non-empty string list")
 
         web_file = (work.get("artwork") or {}).get("web_file")
+        if work_id in artwork_fixes:
+            wrong, web_file = artwork_fixes[work_id]
+            if (work.get("artwork") or {}).get("web_file") != wrong:
+                raise ValueError(f"{work_id}: artwork correction expects {wrong!r}")
         web_file = _required_text(web_file, f"{work_id} artwork.web_file")
         web_path = PurePosixPath(web_file)
         if web_path.is_absolute() or ".." in web_path.parts or web_path.parts[:2] != (
@@ -404,11 +488,15 @@ def _candidates(master, selection, decisions, *, repo=REPO, manifest=None, links
             "preview": None,
             "spotify": _platform_url((work.get("spotify") or {}).get("url"), SPOTIFY_URL_RE,
                                      f"{work_id} Spotify"),
-            "appleMusic": _apple_music(work, work_id, certified_apple),
+            "appleMusic": _apple_music(work, work_id, certified_apple, corrections),
             "version": work.get("version"),
+            "youtube": full_recordings.get(work_id, {}).get("youtube"),
+            "soundcloud": full_recordings.get(work_id, {}).get("soundcloud"),
         }
         if tuple(row) != PUBLIC_FIELDS:
             raise AssertionError("public field order changed")
+        if release_type == "SelfPublished" and not (row["youtube"] or row["soundcloud"]):
+            raise ValueError(f"{work_id}: a self-published recording needs its YouTube or SoundCloud link")
         pending.append((review_id, work_id, decision, row, work.get("provisional") or []))
 
     # Previews last, so selection and credit errors keep precedence.
@@ -432,10 +520,16 @@ def _candidates(master, selection, decisions, *, repo=REPO, manifest=None, links
             for review_id, work_id, _, row, _ in pending]
 
 
-def _apple_music(work, work_id, certified):
-    """The registered catalogue URL, else the certified addition, else None. Never both."""
-    registered = _platform_url((work.get("apple_music") or {}).get("url"), APPLE_MUSIC_URL_RE,
-                               f"{work_id} Apple Music")
+def _apple_music(work, work_id, certified, corrections=None):
+    """The registered catalogue URL (or its correction), else the certified addition, else None."""
+    registered = (work.get("apple_music") or {}).get("url")
+    if corrections and work_id in corrections:
+        wrong, corrected = corrections[work_id]
+        if registered != wrong:
+            raise ValueError(f"{work_id}: Apple Music correction expects {wrong!r}, "
+                             f"catalogue has {registered!r}")
+        registered = corrected
+    registered = _platform_url(registered, APPLE_MUSIC_URL_RE, f"{work_id} Apple Music")
     if registered and work_id in certified:
         raise ValueError(f"{work_id} already has a registered Apple Music URL; "
                          "a certified addition must not replace it")
@@ -457,8 +551,8 @@ def serialize(rows):
     lines = []
     for row in rows:
         if tuple(row) != PUBLIC_FIELDS:
-            raise ValueError("rows must match the eleven-field public schema")
-        unreleased = row["releaseType"] in UNRELEASED_TYPES.values()
+            raise ValueError("rows must match the thirteen-field public schema")
+        unreleased = row["releaseType"] in NON_COMMERCIAL_TYPES.values()
         if not all(isinstance(row[key], str) for key in PUBLIC_FIELDS[:5]) or not (
             (isinstance(row["year"], int) and not isinstance(row["year"], bool)
              and 1000 <= row["year"] <= 9999)
@@ -471,18 +565,20 @@ def serialize(rows):
         ) or not (
             isinstance(row["preview"], str) and previews.PREVIEW_NAME_RE.match(row["preview"])
         ):
-            raise ValueError("rows must match the eleven-field public schema (preview is required)")
+            raise ValueError("rows must match the thirteen-field public schema (preview is required)")
         try:
             _platform_url(row["spotify"], SPOTIFY_URL_RE, "spotify")
             _platform_url(row["appleMusic"], APPLE_MUSIC_URL_RE, "appleMusic")
+            for platform, pattern in FULL_RECORDING_URL_RES.items():
+                _platform_url(row[platform], pattern, platform)
         except ValueError as exc:
-            raise ValueError(f"rows must match the eleven-field public schema: {exc}") from None
+            raise ValueError(f"rows must match the thirteen-field public schema: {exc}") from None
         values = [quote(row[key]) for key in PUBLIC_FIELDS[:5]]
         values.append("null" if row["year"] is None else str(row["year"]))
         values.append("[" + ", ".join(quote(role) for role in row["roles"]) + "]")
         values.append(quote(row["preview"]))
         values.extend("null" if row[key] is None else quote(row[key])
-                      for key in ("spotify", "appleMusic", "version"))
+                      for key in ("spotify", "appleMusic", "version", "youtube", "soundcloud"))
         fields = ", ".join(f"{key}:{value}" for key, value in zip(PUBLIC_FIELDS, values))
         lines.append(f"  {{ {fields} }}")
     payload = "[\n" + ",\n".join(lines) + "\n]"

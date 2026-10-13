@@ -221,9 +221,9 @@ class BehaviourTests(unittest.TestCase):
             "out.np = page.$$('#np-links a').map(a => a.dataset.platform); out.current = page.eval('LGPlayer.index()');"
             "page.click('[data-lang=\"es\"]'); await settle(); out.es = read();"
         )
-        names = {"spotify": "Spotify", "appleMusic": "Apple Music"}
+        names = {"spotify": "Spotify", "appleMusic": "Apple Music", "youtube": "YouTube", "soundcloud": "SoundCloud"}
         for row, links, links_es in zip(out["data"], out["en"], out["es"]):
-            expected = [k for k in ("spotify", "appleMusic") if row[k]]
+            expected = [k for k in names if row[k]]
             with self.subTest(title=row["title"], artist=row["artist"]):
                 self.assertEqual([l["platform"] for l in links], expected)
                 for link, link_es in zip(links, links_es):
@@ -233,9 +233,22 @@ class BehaviourTests(unittest.TestCase):
                     self.assertEqual(link["text"], platform + " ↗")
                     self.assertEqual(link["label"], f"Listen to {row['title']} by {row['artist']} on {platform} (opens in a new tab)")
                     self.assertEqual(link_es["label"], f"Escuchar {row['title']} de {row['artist']} en {platform} (se abre en una pestaña nueva)")
-        self.assertEqual(sum(len(l) for l in out["en"]), 28)
+        self.assertEqual(sum(len(l) for l in out["en"]), sum(1 for row in out["data"] for k in names if row[k]))
+        # The five full recordings supplied by the owner: YouTube for the scores, SoundCloud for the arrangements.
+        self.assertEqual(sum(1 for row in out["data"] if row["youtube"] or row["soundcloud"]), 5)
         current = out["data"][out["current"]]
-        self.assertEqual(out["np"], [k for k in ("spotify", "appleMusic") if current[k]])
+        self.assertEqual(out["np"], [k for k in names if current[k]])
+
+    def test_music_profiles_link_the_verified_artist_pages(self):
+        html = read("music/index.html")
+        profiles = {attr(a, "data-platform"): attr(a, "href") for a, _ in anchors(html)
+                    if 'class="profile-link"' in a}
+        self.assertEqual(profiles, {
+            "spotify": "https://open.spotify.com/artist/1WRKrGxFosVscUFGLRkW2L",
+            "appleMusic": "https://music.apple.com/mx/artist/luis-guinea/869634170",
+            "youtube": "https://www.youtube.com/@LuisGuinea",
+            "soundcloud": "https://soundcloud.com/lcguinea",
+        })
 
     def test_opening_a_platform_pauses_the_preview(self):
         out = self.run_scenario(

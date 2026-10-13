@@ -275,24 +275,31 @@
     {
       "review_id": "36",
       "work_id": "a-escondidas--isabella-macias--2018",
-      "status": "blocked",
-      "source": null,
-      "source_sha256": null,
-      "preview": null,
-      "preview_sha256": null,
-      "trim_policy": null,
-      "window": null,
-      "association": null,
-      "blocked_reason": "El audio_ref «A ESCONDIDAS MSTR 1.5.m4a» (vinculado en Drive Producciones/Bela/ con Δ 0,056 s, RETIRED_WORKS_INVENTORY.md §4) no está en One Page Luis Guinea/audios, y ningún archivo local coincide por nombre ni etiquetas (catálogo 173,072 s).",
-      "candidates": [
-        {
-          "source": "One Page Luis Guinea/audios/Cantautor/Me Equivoqué (Regional Mexicano).mp3",
-          "duration_s": 174.811,
-          "delta_s": 1.739,
-          "rejected_because": "Fuera de la tolerancia ±1,0 s; título distinto y carpeta Cantautor (Luis Guinea), no Isabella Macías."
-        }
-      ],
-      "evidence_needed": "Copiar «A ESCONDIDAS MSTR 1.5.m4a» a One Page Luis Guinea/audios (p. ej. Productor/Isabella Macías/) y comprobar con ffprobe una duración dentro de ±1,0 s de 173,072 s."
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Spotify/Isabella Macías - A Escondidas.mp3",
+      "source_sha256": "7fd987518b9c5fdf12d75ea4e0283a7d843eb9cbae7520b0492f62aecc5f97e5",
+      "preview": "assets/audio/previews/a-escondidas--isabella-macias--2018.mp3",
+      "preview_sha256": "b1d74be229aaffd59b2601139a4008697286d086fce04a0bcaa8ebfa68ce4336",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          91.0,
+          132.0
+        ],
+        "start_s": 91.0,
+        "duration_s": 41.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el archivo privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «No me digas que no Si…», que aparece 7 veces en la canción."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "Etiquetas del archivo: título «A Escondidas», artista «Isabella Macías», álbum «A Escondidas», año 2018; coinciden con a-escondidas--isabella-macias--2018.",
+          "Duración del archivo 175.102 s frente a 173.072 s en catálogo (Δ +2.030 s, silencio de relleno en los extremos).",
+          "El audio contiene la vista previa oficial de 30 s: Apple Music en 33.0 s (correlación 0.99) (correlación normalizada de forma de onda; 1 = idéntico)."
+        ]
+      }
     },
     {
       "review_id": "37",
@@ -832,6 +839,589 @@
       }
     },
     {
+      "review_id": "23",
+      "work_id": "el-beso--tufic",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Cantautor/ElBeso_Tufic_LuisGuinea_Master.mp3",
+      "source_sha256": "b4ae6683b1ccf53a965772ffbd7ae6455aad390a7eb462ac37b99c4231889e34",
+      "preview": "assets/audio/previews/el-beso--tufic.mp3",
+      "preview_sha256": "7060f194e2c9d5798a46bcffcc7e825b25914bd641536aa331c597a23130b029",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          173.5,
+          211.5
+        ],
+        "start_s": 173.5,
+        "duration_s": 38.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «acabo Tú quieres tenerme cerca Y…», que aparece 2 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json el-beso--tufic: Publicada: Apple Music «\"el beso\"» de Tufic & Luis Guinea, sencillo 6775376256 (2026-06-19, 307,710 s); Spotify 4XUUtkTby59nhAjIZ6A0uI «\"el beso\"» de Tufic, Luis Guinea (307 710 ms), verificado con el oEmbed de Spotify. Master local 307,776 s (Δ 0,066 s). Decisión explícita del propietario del 2026-10-13: título público «El Beso», sin comillas (las plataformas lo escriben «\"el beso\"»). Portada: imagen oficial del sencillo en la CDN de Spotify (640 px) convertida a WebP. Spotify fecha la pista el 2026-07-24 y Apple Music el 2026-06-19: se publica solo el año, 2026."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "28",
+      "work_id": "la-martiniana--luis-guinea--2025",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Cantautor/La Martiniana_Master_V1.mp3",
+      "source_sha256": "41f73f51240faf20ca4d141a144c05b828097a88d7a290b3561681ba80de40bb",
+      "preview": "assets/audio/previews/la-martiniana--luis-guinea--2025.mp3",
+      "preview_sha256": "649f0f2a56f328ebe16f095bdb62ca6ff4d437d8bbe8bdc344c6fe5b3a0ab423",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          130.5,
+          169.0
+        ],
+        "start_s": 130.5,
+        "duration_s": 38.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «En cambio si tu me cantas…», que aparece 5 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json la-martiniana--luis-guinea--2025: Publicada: Apple Music «La Martiniana» de Luis Guinea, sencillo 1846076710 (2025-10-17, 221,600 s); Spotify 7reI5kxLXemFShvfa2GwtK (221 596 ms), verificado con el oEmbed de Spotify. Master local 221,664 s (Δ 0,064 s). Decisión explícita del propietario del 2026-10-13: cover; créditos de arreglista, intérprete y productor. Portada: imagen oficial del sencillo en la CDN de Spotify (640 px) convertida a WebP."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "54",
+      "work_id": "i-want-u--rogelio-edel--2025",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/I want u - ROGELIO EDEL.mp3",
+      "source_sha256": "f643a133421d4060e29cc86d25ece849185095dd7d0a547f5106ded612ff842d",
+      "preview": "assets/audio/previews/i-want-u--rogelio-edel--2025.mp3",
+      "preview_sha256": "f5d3a9085922aeb482d64535e822170264d2784517c6a0021d98f1c10df65bb0",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          111.0,
+          152.0
+        ],
+        "start_s": 111.0,
+        "duration_s": 41.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «I want you baby I want…», que aparece 9 veces en la canción."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "catalog_recordings.json i-want-u--rogelio-edel--2025: Publicada en Mil Versiones - EP: Apple Music 1844217382 (190,250 s), Spotify 1hylR6ZXcZQpCCbDaxR4dG (190 250 ms). Master local 190,250 s (Δ 0,000 s). Mil Versiones - EP (Rogelio Edel, 2025-10-10): Apple Music colección 1844217381 y álbum de Spotify 6TMJisdDlRcKBBWaNVvHLd, consultados el 2026-10-13. Portada: One Page Luis Guinea/artworks/Mil Versiones.png, indicada por el propietario."
+        ]
+      }
+    },
+    {
+      "review_id": "55",
+      "work_id": "mejor-version--rogelio-edel--2025",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/Mejor Versión_Master.mp3",
+      "source_sha256": "45c9ce6b59e1599b829f167d3739a6d6db880b3a8643090764efe19f29fb596c",
+      "preview": "assets/audio/previews/mejor-version--rogelio-edel--2025.mp3",
+      "preview_sha256": "901c68b202396c2d23d5d25af74830f996f59c6eb9a07aa6e4441de937e460f2",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          77.0,
+          120.0
+        ],
+        "start_s": 77.0,
+        "duration_s": 43.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «informal Nada que se sentimenta pa…», que aparece 4 veces en la canción."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "catalog_recordings.json mejor-version--rogelio-edel--2025: Publicada en Mil Versiones - EP: Apple Music 1844217384 (136,347 s), Spotify 1BT7VRzdKjkTHDviLTxtlj (136 346 ms). Master local 136,416 s (Δ 0,069 s). Mil Versiones - EP (Rogelio Edel, 2025-10-10): Apple Music colección 1844217381 y álbum de Spotify 6TMJisdDlRcKBBWaNVvHLd, consultados el 2026-10-13. Portada: One Page Luis Guinea/artworks/Mil Versiones.png, indicada por el propietario."
+        ]
+      }
+    },
+    {
+      "review_id": "56",
+      "work_id": "te-extrano--rogelio-edel--2025",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/Te Extraño_Master.mp3",
+      "source_sha256": "68377e18555019086ba81bda28be55fc04f67136ae9ff1e62b08cf2ecaca28a6",
+      "preview": "assets/audio/previews/te-extrano--rogelio-edel--2025.mp3",
+      "preview_sha256": "a0a020fc4836f053edd3dca1c15c3b72ef045941bb8e808737fa28c1832968eb",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          94.0,
+          136.5
+        ],
+        "start_s": 94.0,
+        "duration_s": 42.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «Siento que desapareció el color y…», que aparece 2 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "evidence": [
+          "catalog_recordings.json te-extrano--rogelio-edel--2025: Decisión explícita del propietario del 2026-10-13: «Te Extraño» de Rogelio Edel, publicada; no es «Ya No Sigo Esperando». Publicada en Mil Versiones - EP: Apple Music 1844217383 (165,330 s), Spotify 7s3UWyjkf2qe5enTSFQbZS (165 329 ms). Master local 165,384 s (Δ 0,054 s). Mil Versiones - EP (Rogelio Edel, 2025-10-10): Apple Music colección 1844217381 y álbum de Spotify 6TMJisdDlRcKBBWaNVvHLd, consultados el 2026-10-13. Portada: One Page Luis Guinea/artworks/Mil Versiones.png, indicada por el propietario."
+        ],
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "32",
+      "work_id": "how-deep-is-your-love--luis-guinea--2022",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Spotify/Luis Guinea - How Deep Is Your Love.mp3",
+      "source_sha256": "a21789c24409aecd7e06d2ea40e65b7c5dd094d19d0d0fc042d77bd89e2f3b9b",
+      "preview": "assets/audio/previews/how-deep-is-your-love--luis-guinea--2022.mp3",
+      "preview_sha256": "2845be27eb4bc51b1dc8ec7c36b439ad61d27d7e033d465d778abbfbac5a5eeb",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          148.5,
+          185.5
+        ],
+        "start_s": 148.5,
+        "duration_s": 37.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el archivo privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «to learn Cause we're living in…», que aparece 5 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "decisión humana explícita del propietario (2026-10-13): el archivo corresponde a su grabación y autoriza usarlo como muestra de portafolio aunque su master o mezcla no sea idéntico al lanzamiento comercial.",
+        "evidence": [
+          "Metadatos: etiquetas del archivo: título, artista y año coinciden; comment con la URL del video de YouTube de la grabación y codificador Lavf; la letra transcrita confirma la canción.",
+          "Estructura: las vistas previas oficiales de Apple Music (47,6 s), Deezer (50,6 s) y Spotify (112,9 s) aparecen en el archivo con envolvente espectral 0,87 y forma de onda 0,26–0,30 (la de Spotify con polaridad invertida); el desfase Apple–Deezer de 3,0 s es el mismo que en las grabaciones confirmadas: misma interpretación y estructura con otro master o mezcla.",
+          "Master del preview: este archivo privado (242,881 s frente a 244,000 s (Δ −1,119 s)). Master comercial: ISRC MXE772200002, 244.000 s (2022-03-04); los enlaces oficiales de la ficha apuntan a ese master, no al del preview.",
+          "Escucha: propuesta y alternativa escuchadas y aprobadas por el propietario el 2026-10-13."
+        ]
+      }
+    },
+    {
+      "review_id": "60",
+      "work_id": "jesus-set-me-free--luis-guinea--2021",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Spotify/Luis Guinea - Jesus, Set Me Free.mp3",
+      "source_sha256": "5e30fbc61f8c462e713f4e33049d3465ec64913d8e086dd945c3e47e892084dc",
+      "preview": "assets/audio/previews/jesus-set-me-free--luis-guinea--2021.mp3",
+      "preview_sha256": "f198266823c81b6321260476af9c55f523054e4733bc40d9018ddc19b41a7745",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          91.5,
+          129.0
+        ],
+        "start_s": 91.5,
+        "duration_s": 37.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el archivo privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «me free Oh Jesus set me…», que aparece 7 veces en la canción."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "Etiquetas del archivo: título «Jesus, Set Me Free», artista «Luis Guinea», álbum «Jesus, Set Me Free», año 2021; coinciden con jesus-set-me-free--luis-guinea--2021.",
+          "Duración del archivo 276.677 s frente a 276.666 s en catálogo (Δ +0.011 s, silencio de relleno en los extremos).",
+          "El audio contiene la vista previa oficial de 30 s: Apple Music en 47.8 s (correlación 0.96) (correlación normalizada de forma de onda; 1 = idéntico)."
+        ]
+      }
+    },
+    {
+      "review_id": "61",
+      "work_id": "por-que-lloras--renata-isabel--2017",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Spotify/Renata Isabel, Luis Guinea - ¿Por Qué Lloras.mp3",
+      "source_sha256": "961908d09a3b873c36d583f037ba3e20185c398293ec1d9da8550f680bbe124b",
+      "preview": "assets/audio/previews/por-que-lloras--renata-isabel--2017.mp3",
+      "preview_sha256": "b719690ed7603c8dacc5dbcca3e91b8d5f5f71b7404accfa1d482d64b5178688",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          108.0,
+          142.0
+        ],
+        "start_s": 108.0,
+        "duration_s": 34.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el archivo privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «lloras? Si tú nunca abriste el…», que aparece 5 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "decisión humana explícita del propietario (2026-10-13): el archivo corresponde a su grabación y autoriza usarlo como muestra de portafolio aunque su master o mezcla no sea idéntico al lanzamiento comercial.",
+        "evidence": [
+          "Metadatos: etiquetas del archivo: título, artista y año coinciden; comment con la URL del video de YouTube de la grabación y codificador Lavf; la letra transcrita confirma la canción.",
+          "Estructura: la vista previa de Spotify aparece en 133,4 s con envolvente espectral 0,96 y forma de onda 0,76: misma interpretación y estructura con otro master o mezcla.",
+          "Master del preview: este archivo privado (214,761 s frente a 219,428 s (Δ −4,667 s: final más corto)). Master comercial: ISRC QZ5AB1792819, 219.428 s (2017-11-11); los enlaces oficiales de la ficha apuntan a ese master, no al del preview.",
+          "Escucha: propuesta y alternativa escuchadas y aprobadas por el propietario el 2026-10-13."
+        ]
+      }
+    },
+    {
+      "review_id": "58",
+      "work_id": "sin-mirar-atras--alexander-acha--2024",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Spotify/Alexander Acha - Sin Mirar Atrás.mp3",
+      "source_sha256": "348d3a8972b345bcdf54bc5ddf1e8eebf5838ebe427a49bfdffe2d383d670edc",
+      "preview": "assets/audio/previews/sin-mirar-atras--alexander-acha--2024.mp3",
+      "preview_sha256": "db4219b8b5fe70d941bc65e566c76f7de9a6bf9a92d6ee2866753b941b725e5f",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          138.5,
+          178.5
+        ],
+        "start_s": 138.5,
+        "duration_s": 40.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el archivo privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «paso al amor Deja hoy que…», que aparece 3 veces en la canción."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "Etiquetas del archivo: título «Sin Mirar Atrás», artista «Alexander Acha», álbum «Sin Mirar Atrás», año 2024; coinciden con sin-mirar-atras--alexander-acha--2024.",
+          "Duración del archivo 240.000 s frente a 240.000 s en catálogo (Δ +0.000 s, silencio de relleno en los extremos).",
+          "El audio contiene la vista previa oficial de 30 s: Deezer en 51.0 s (correlación 0.99); Apple Music en 48.0 s (correlación 0.93) (correlación normalizada de forma de onda; 1 = idéntico)."
+        ]
+      }
+    },
+    {
+      "review_id": "63",
+      "work_id": "llegue-muy-tarde--valeria-ferro--2023",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Spotify/Valeria Ferro - Llegue Muy Tarde.mp3",
+      "source_sha256": "106082468ee67c315f04c698ba3c6ce620a7e4f9bd1703e1fbc139dad77c1b0d",
+      "preview": "assets/audio/previews/llegue-muy-tarde--valeria-ferro--2023.mp3",
+      "preview_sha256": "e7a467c8093619fbdff89d459f79f486da3f6b6ff9234a9e9daf3740f6bbc401",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          156.5,
+          195.5
+        ],
+        "start_s": 156.5,
+        "duration_s": 39.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el archivo privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «Quizás me merezco el castigo De…», que aparece 2 veces en la canción."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "Etiquetas del archivo: título «Llegue Muy Tarde», artista «Valeria Ferro», álbum «Llegue Muy Tarde», año 2023; coinciden con llegue-muy-tarde--valeria-ferro--2023.",
+          "Duración del archivo 224.768 s frente a 215.000 s en catálogo (Δ +9.768 s, silencio de relleno en los extremos).",
+          "El audio contiene la vista previa oficial de 30 s: Deezer en 53.9 s (correlación 0.99) (correlación normalizada de forma de onda; 1 = idéntico)."
+        ]
+      }
+    },
+    {
+      "review_id": "59",
+      "work_id": "si-estas-de-paso--allan-perz--2016",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Si Estás de Paso (masterizada).mp3",
+      "source_sha256": "af3873d3b55ba369f8e5bf273419ec20dd3807edc875e7173afbb3c75e823ecc",
+      "preview": "assets/audio/previews/si-estas-de-paso--allan-perz--2016.mp3",
+      "preview_sha256": "6d788d02a6d7303f3006410ef1d057bc61c5eb1f540d247c1fa6f5af12311cf0",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          75.0,
+          116.6
+        ],
+        "start_s": 75.0,
+        "duration_s": 41.6,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el archivo privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; opciones escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (ventana equivalente a la aprobada antes sobre otro archivo). Segundo verso y estribillo: de «no me brindes tus caricias» a «vuelva a sufrir tu partida»."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "decisión humana explícita del propietario (2026-10-13): «Si Estás de Paso (masterizada).mp3» es el archivo correcto, a usar como fuente si coincide con la grabación comercial.",
+        "evidence": [
+          "Identidad: el archivo contiene las vistas previas oficiales de Apple Music (33,0 s; forma de onda 0,75, envolvente espectral 0,90) y Spotify (106,2 s; 0,85 y 0,86): misma grabación que el lanzamiento comercial, con diferencias de master.",
+          "Master del preview: este archivo privado (211,931 s, etiqueta TSS «Logic 10.2.0»). Master comercial: ISRC BGA471601298, 210.000 s (Δ +1.931 s).",
+          "La letra transcrita y la estructura (dos versos, estribillo, puente «tengo miedo a recaer», estribillo final) coinciden con la canción; el archivo anterior de audios/Spotify era otra grabación y queda descartado."
+        ]
+      }
+    },
+    {
+      "review_id": "62",
+      "work_id": "alguien-como-yo--segundo-piso--2014",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Spotify/Segundo Piso - Alguien Como Yo.mp3",
+      "source_sha256": "56480d5b4a6dc55151a065db91cbb6ccbe5af659fd47c3e3fb1ed268977cdf9d",
+      "preview": "assets/audio/previews/alguien-como-yo--segundo-piso--2014.mp3",
+      "preview_sha256": "3111477296281569e5e2e53db93397d113018e44d2ecaad6456624d68da9fe72",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          114.0,
+          153.0
+        ],
+        "start_s": 114.0,
+        "duration_s": 39.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el archivo privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «nubes a tus pasos E convertirlo…», que aparece 4 veces en la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "decisión humana explícita del propietario (2026-10-13): el archivo corresponde a su grabación y autoriza usarlo como muestra de portafolio aunque su master o mezcla no sea idéntico al lanzamiento comercial.",
+        "evidence": [
+          "Metadatos: etiquetas del archivo: título, artista y año coinciden; comment con la URL del video de YouTube de la grabación y codificador Lavf; la letra transcrita confirma la canción.",
+          "Estructura: la vista previa de Spotify aparece en 118,9 s con envolvente espectral 0,90 y forma de onda 0,37: misma interpretación y estructura con otro master o mezcla.",
+          "Master del preview: este archivo privado (232,966 s frente a 234,453 s (Δ −1,487 s)). Master comercial: ISRC BGA471403747, 234.453 s (2014-05-16); los enlaces oficiales de la ficha apuntan a ese master, no al del preview.",
+          "Escucha: propuesta y alternativa escuchadas y aprobadas por el propietario el 2026-10-13."
+        ]
+      }
+    },
+    {
+      "review_id": "64",
+      "work_id": "toxica--isabella-macias--2018",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Spotify/Isabella Macías - Tóxica.mp3",
+      "source_sha256": "2a9d47f60352547d721962353edcb6f2d0bbe206ab4e351189c67c7b4b942b70",
+      "preview": "assets/audio/previews/toxica--isabella-macias--2018.mp3",
+      "preview_sha256": "33d2a86727393a9092aefc6f69b95f173ae4b20ba078436c13ed56acb03e1699",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          98.0,
+          138.0
+        ],
+        "start_s": 98.0,
+        "duration_s": 40.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el archivo privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «tú y yo Tú y yo,…», que aparece 5 veces en la canción."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "Etiquetas del archivo: título «Tóxica», artista «Isabella Macías», álbum «Tóxica», año 2018; coinciden con toxica--isabella-macias--2018.",
+          "Duración del archivo 171.648 s frente a 172.000 s en catálogo (Δ -0.352 s, silencio de relleno en los extremos).",
+          "El audio contiene la vista previa oficial de 30 s: Deezer en 50.6 s (correlación 0.99); Apple Music en 47.6 s (correlación 0.96) (correlación normalizada de forma de onda; 1 = idéntico).",
+          "Grabación independiente de «Toxic» (#65): ISRC propio (MXE771800043 frente a MXE771800044), letra en español frente a inglés, y la vista previa de Spotify de «Toxic» solo correlaciona 0,72 con este archivo (base instrumental compartida, voz distinta), frente a 0,96–0,99 con sus propias vistas previas."
+        ]
+      }
+    },
+    {
+      "review_id": "65",
+      "work_id": "toxic--isabella-macias--2018",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Spotify/Isabella Macías - Toxic.mp3",
+      "source_sha256": "3765088206dc7efad08b18d844503fbbbe3b2d3d2a0e797fcac922ef0b6d32c8",
+      "preview": "assets/audio/previews/toxic--isabella-macias--2018.mp3",
+      "preview_sha256": "16e402d8f47017d4a8270ba0a7541f80ccc95c451cdc2e2b94e8e8c20dd55e12",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          116.5,
+          155.5
+        ],
+        "start_s": 116.5,
+        "duration_s": 39.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el archivo privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «Toxic is our love, I'm done…», que aparece 9 veces en la canción."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "Etiquetas del archivo: título «Toxic», artista «Isabella Macías», álbum «Toxic», año 2018; coinciden con toxic--isabella-macias--2018.",
+          "Duración del archivo 171.630 s frente a 172.148 s en catálogo (Δ -0.518 s, silencio de relleno en los extremos).",
+          "El audio contiene la vista previa oficial de 30 s: Apple Music en 48.5 s (correlación 0.94) (correlación normalizada de forma de onda; 1 = idéntico).",
+          "Grabación independiente de «Tóxica» (#64): ISRC propio (MXE771800044 frente a MXE771800043), letra en inglés frente a español, y la vista previa de Deezer de «Tóxica» solo correlaciona 0,71 con este archivo (base instrumental compartida, voz distinta), frente a 0,94–0,98 con sus propias vistas previas."
+        ]
+      }
+    },
+    {
+      "review_id": "66",
+      "work_id": "quien-soy-acustica--louisiana--2017",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Spotify/Louisiana - Quién Soy - Acústica.mp3",
+      "source_sha256": "1c45d8eeabc2161d1fa6b49aec75786e3068c3dd01b7d421c81bc52f6f19d99e",
+      "preview": "assets/audio/previews/quien-soy-acustica--louisiana--2017.mp3",
+      "preview_sha256": "0853b160bcad72770600754f3db47d8717aa253d293b52437ab2efe87bdf7081",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          58.5,
+          95.5
+        ],
+        "start_s": 58.5,
+        "duration_s": 37.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el archivo privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «Oh -oh -oh -oh -oh -oh…», que aparece 16 veces en la canción."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "Etiquetas del archivo: título «Quién Soy - Acústica», artista «Louisiana», álbum «Quién Soy - Single», año 2017; coinciden con quien-soy-acustica--louisiana--2017.",
+          "Duración del archivo 235.207 s frente a 235.200 s en catálogo (Δ +0.007 s, silencio de relleno en los extremos).",
+          "El audio contiene la vista previa oficial de 30 s: Apple Music en 48.0 s (correlación 0.97) (correlación normalizada de forma de onda; 1 = idéntico)."
+        ]
+      }
+    },
+    {
+      "review_id": "67",
+      "work_id": "a-million-dreams-acoustic-cover--isabella-macias--2018",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Spotify/Isabella Macías - A Million Dreams - Acoustic Cover.mp3",
+      "source_sha256": "5d99d1c515ce5ff4aaacfaff5446516d88a9a83e7538df4a9c80760875432311",
+      "preview": "assets/audio/previews/a-million-dreams-acoustic-cover--isabella-macias--2018.mp3",
+      "preview_sha256": "02a85487b2f0c3830cc6cdb1a58d7312067a1738c138430d2fbe1d0965a33d1d",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          140.5,
+          185.0
+        ],
+        "start_s": 140.5,
+        "duration_s": 44.5,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el archivo privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «They can see, they can see…», que aparece 3 veces en la canción."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "Etiquetas del archivo: título «A Million Dreams - Acoustic Cover», artista «Isabella Macías», álbum «A Million Dreams (Acoustic Cover)», año 2018; coinciden con a-million-dreams-acoustic-cover--isabella-macias--2018.",
+          "Duración del archivo 282.005 s frente a 282.000 s en catálogo (Δ +0.005 s, silencio de relleno en los extremos).",
+          "El audio contiene la vista previa oficial de 30 s: Deezer en 51.0 s (correlación 0.86); Apple Music en 48.0 s (correlación 0.97) (correlación normalizada de forma de onda; 1 = idéntico)."
+        ]
+      }
+    },
+    {
+      "review_id": "68",
+      "work_id": "shallow-cover--ana-guinea--2020",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Spotify/Ana Guinea - Shallow - Cover.mp3",
+      "source_sha256": "2ed0942f05ce8aa0f94389975abb5a5c09e4f844da71e10ed4556363e5cacd83",
+      "preview": "assets/audio/previews/shallow-cover--ana-guinea--2020.mp3",
+      "preview_sha256": "6e86e52389000ee95949251688b85f43471e419303f4aefa92d1075760d07f4d",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          101.5,
+          144.5
+        ],
+        "start_s": 101.5,
+        "duration_s": 43.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el archivo privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «the shallow, in the shallow, in…», que aparece 5 veces en la canción."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "Etiquetas del archivo: título «Shallow - Cover», artista «Ana Guinea», álbum «Covers, Vol. 1», año 2020; coinciden con shallow-cover--ana-guinea--2020.",
+          "Duración del archivo 215.597 s frente a 214.000 s en catálogo (Δ +1.597 s, silencio de relleno en los extremos).",
+          "El audio contiene la vista previa oficial de 30 s: Deezer en 52.6 s (correlación 0.92); Apple Music en 49.6 s (correlación 0.94) (correlación normalizada de forma de onda; 1 = idéntico)."
+        ]
+      }
+    },
+    {
+      "review_id": "69",
+      "work_id": "en-libertad-cover--ana-guinea--2020",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Spotify/Ana Guinea - En Libertad - Cover.mp3",
+      "source_sha256": "a3dceb4dbc7b5cfbfb984c2378a24c28a95ddc496cfca8d6bebe38ee5c6898fa",
+      "preview": "assets/audio/previews/en-libertad-cover--ana-guinea--2020.mp3",
+      "preview_sha256": "093d1e15546caadcb51537f4ff95ed046883d2b85584a3ee5aeb48bdf9b4de53",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          116.0,
+          151.0
+        ],
+        "start_s": 116.0,
+        "duration_s": 35.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el archivo privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «que conocerte Me cambió la vida…», que aparece 3 veces en la canción."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "Etiquetas del archivo: título «En Libertad - Cover», artista «Ana Guinea», álbum «Covers, Vol. 1», año 2020; coinciden con en-libertad-cover--ana-guinea--2020.",
+          "Duración del archivo 197.137 s frente a 196.005 s en catálogo (Δ +1.132 s, silencio de relleno en los extremos).",
+          "El audio contiene la vista previa oficial de 30 s: Deezer en 52.1 s (correlación 0.97); Apple Music en 49.1 s (correlación 0.97) (correlación normalizada de forma de onda; 1 = idéntico)."
+        ]
+      }
+    },
+    {
+      "review_id": "71",
+      "work_id": "te-espere-cover--ana-guinea--2020",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Ana Guinea/Te Esperé (Master).mp3",
+      "source_sha256": "11ddcc7ec7a33689b83a59e1406ee3fe9bbeae99d508d80a774879fa48227ce0",
+      "preview": "assets/audio/previews/te-espere-cover--ana-guinea--2020.mp3",
+      "preview_sha256": "e306f2f7fe6f3d765ddd8106c8446ac6c1dd443df3f30ddb8fe11cf49d7ae9d5",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          97.0,
+          132.0
+        ],
+        "start_s": 97.0,
+        "duration_s": 35.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el archivo privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; opciones escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (alternativa). Segundo estribillo completo: «Te esperé, ya sentí que me moría… el tiempo cerró la herida»."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "decisión humana explícita del propietario (2026-10-13): «Te Esperé (Master).mp3» es el archivo correcto de «Te Esperé».",
+        "evidence": [
+          "Identidad: el archivo contiene las vistas previas oficiales de Apple Music (48,0 s; forma de onda 0,62, envolvente espectral 0,89) y Deezer (51,0 s; 0,50 y 0,85), con el mismo desfase Apple–Deezer de 3,0 s que las grabaciones confirmadas: misma grabación con otro master.",
+          "No es «Shallow»: las vistas previas oficiales de «Shallow (Cover)» no aparecen en el archivo (forma de onda −0,04, envolvente 0,60, nivel de audio no relacionado), y la letra transcrita es la de «Te Esperé» (estribillo «Te esperé…», cierre «alguien más llegó a mi vida»).",
+          "Master del preview: este archivo privado (206,838 s, etiqueta TSS «Logic Pro X 10.4.1»). Master comercial: ISRC MXE772000021, 204.000 s (Δ +2.838 s)."
+        ]
+      }
+    },
+    {
+      "review_id": "70",
+      "work_id": "super-heroe--edson-corona--2017",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Spotify/Edson Corona, Charlie B - Súper Héroe.mp3",
+      "source_sha256": "9f1a598d31d22508634c7f3af2c6c64f3409c7079fd7d1a622c5abc2a59b6316",
+      "preview": "assets/audio/previews/super-heroe--edson-corona--2017.mp3",
+      "preview_sha256": "5b71ab8552b4c93fe5b4feae608d0c0e60d175d031b8b1b1acf1d524e992d39c",
+      "trim_policy": "approved-preview-window-v2",
+      "window": {
+        "approved_s": [
+          151.5,
+          191.5
+        ],
+        "start_s": 151.5,
+        "duration_s": 40.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-13 sobre el archivo privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «para salvar tu corazón cada segundo…», que aparece 5 veces en la canción."
+      },
+      "association": {
+        "basis": "objective_evidence",
+        "evidence": [
+          "Etiquetas del archivo: título «Súper Héroe», artista «Edson Corona/Charlie B», álbum «Súper Héroe», año 2017; coinciden con super-heroe--edson-corona--2017.",
+          "Duración del archivo 254.699 s frente a 246.857 s en catálogo (Δ +7.842 s, silencio de relleno en los extremos).",
+          "El audio contiene la vista previa oficial de 30 s: Apple Music en 48.1 s (correlación 0.99) (correlación normalizada de forma de onda; 1 = idéntico)."
+        ]
+      }
+    },
+    {
       "review_id": "19",
       "work_id": "asi-habla-el-amor--luis-guinea",
       "status": "verified",
@@ -888,34 +1478,6 @@
       }
     },
     {
-      "review_id": "23",
-      "work_id": "el-beso--tufic",
-      "status": "verified",
-      "source": "One Page Luis Guinea/audios/Cantautor/ElBeso_Tufic_LuisGuinea_Master.mp3",
-      "source_sha256": "b4ae6683b1ccf53a965772ffbd7ae6455aad390a7eb462ac37b99c4231889e34",
-      "preview": "assets/audio/previews/el-beso--tufic.mp3",
-      "preview_sha256": "7060f194e2c9d5798a46bcffcc7e825b25914bd641536aa331c597a23130b029",
-      "trim_policy": "approved-preview-window-v2",
-      "window": {
-        "approved_s": [
-          173.5,
-          211.5
-        ],
-        "start_s": 173.5,
-        "duration_s": 38.0,
-        "edge_adjustment": null,
-        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
-        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «acabo Tú quieres tenerme cerca Y…», que aparece 2 veces en la canción."
-      },
-      "association": {
-        "basis": "human_authorization",
-        "evidence": [
-          "catalog_recordings.json el-beso--tufic: Publicada: Apple Music «\"el beso\"» de Tufic & Luis Guinea, sencillo 6775376256 (2026-06-19, 307,710 s); Spotify 4XUUtkTby59nhAjIZ6A0uI «\"el beso\"» de Tufic, Luis Guinea (307 710 ms), verificado con el oEmbed de Spotify. Master local 307,776 s (Δ 0,066 s). Decisión explícita del propietario del 2026-10-13: título público «El Beso», sin comillas (las plataformas lo escriben «\"el beso\"»). Portada: imagen oficial del sencillo en la CDN de Spotify (640 px) convertida a WebP. Spotify fecha la pista el 2026-07-24 y Apple Music el 2026-06-19: se publica solo el año, 2026."
-        ],
-        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
-      }
-    },
-    {
       "review_id": "26",
       "work_id": "inenarrable-que-suerte-piano-voz--luis-guinea",
       "status": "verified",
@@ -939,34 +1501,6 @@
         "basis": "human_authorization",
         "evidence": [
           "catalog_recordings.json inenarrable-que-suerte-piano-voz--luis-guinea: Título y versión: nombre del archivo «Inenarrable (Qué Suerte) - PianoVoz». Artista: carpeta Cantautor. Inédita (el mismo nombre de archivo figura en Songwriting/Demo Editoras); sin lanzamiento en Apple Music."
-        ],
-        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
-      }
-    },
-    {
-      "review_id": "28",
-      "work_id": "la-martiniana--luis-guinea--2025",
-      "status": "verified",
-      "source": "One Page Luis Guinea/audios/Cantautor/La Martiniana_Master_V1.mp3",
-      "source_sha256": "41f73f51240faf20ca4d141a144c05b828097a88d7a290b3561681ba80de40bb",
-      "preview": "assets/audio/previews/la-martiniana--luis-guinea--2025.mp3",
-      "preview_sha256": "649f0f2a56f328ebe16f095bdb62ca6ff4d437d8bbe8bdc344c6fe5b3a0ab423",
-      "trim_policy": "approved-preview-window-v2",
-      "window": {
-        "approved_s": [
-          130.5,
-          169.0
-        ],
-        "start_s": 130.5,
-        "duration_s": 38.5,
-        "edge_adjustment": null,
-        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
-        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «En cambio si tu me cantas…», que aparece 5 veces en la canción."
-      },
-      "association": {
-        "basis": "human_authorization",
-        "evidence": [
-          "catalog_recordings.json la-martiniana--luis-guinea--2025: Publicada: Apple Music «La Martiniana» de Luis Guinea, sencillo 1846076710 (2025-10-17, 221,600 s); Spotify 7reI5kxLXemFShvfa2GwtK (221 596 ms), verificado con el oEmbed de Spotify. Master local 221,664 s (Δ 0,064 s). Decisión explícita del propietario del 2026-10-13: cover; créditos de arreglista, intérprete y productor. Portada: imagen oficial del sencillo en la CDN de Spotify (640 px) convertida a WebP."
         ],
         "authority": "Luis Guinea, decisión explícita del 2026-10-13"
       }
@@ -1303,88 +1837,6 @@
         "basis": "human_authorization",
         "evidence": [
           "catalog_recordings.json dame-mas-de-ti-rough-mix--rogelio-edel: Título con la grafía oficial de Mil Versiones - EP. Versión: nombre del archivo «_roughmix». La pista publicada (Apple 1844217385, Spotify 0u7hpykPEmVgSRPIkBSPr6) dura 181,016 s; esta mezcla preliminar dura 207,528 s (Δ 26,5 s): es otra grabación sin lanzamiento propio, así que no lleva enlaces ni la portada del EP."
-        ],
-        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
-      }
-    },
-    {
-      "review_id": "54",
-      "work_id": "i-want-u--rogelio-edel--2025",
-      "status": "verified",
-      "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/I want u - ROGELIO EDEL.mp3",
-      "source_sha256": "f643a133421d4060e29cc86d25ece849185095dd7d0a547f5106ded612ff842d",
-      "preview": "assets/audio/previews/i-want-u--rogelio-edel--2025.mp3",
-      "preview_sha256": "f5d3a9085922aeb482d64535e822170264d2784517c6a0021d98f1c10df65bb0",
-      "trim_policy": "approved-preview-window-v2",
-      "window": {
-        "approved_s": [
-          111.0,
-          152.0
-        ],
-        "start_s": 111.0,
-        "duration_s": 41.0,
-        "edge_adjustment": null,
-        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
-        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «I want you baby I want…», que aparece 9 veces en la canción."
-      },
-      "association": {
-        "basis": "objective_evidence",
-        "evidence": [
-          "catalog_recordings.json i-want-u--rogelio-edel--2025: Publicada en Mil Versiones - EP: Apple Music 1844217382 (190,250 s), Spotify 1hylR6ZXcZQpCCbDaxR4dG (190 250 ms). Master local 190,250 s (Δ 0,000 s). Mil Versiones - EP (Rogelio Edel, 2025-10-10): Apple Music colección 1844217381 y álbum de Spotify 6TMJisdDlRcKBBWaNVvHLd, consultados el 2026-10-13. Portada: One Page Luis Guinea/artworks/Mil Versiones.png, indicada por el propietario."
-        ]
-      }
-    },
-    {
-      "review_id": "55",
-      "work_id": "mejor-version--rogelio-edel--2025",
-      "status": "verified",
-      "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/Mejor Versión_Master.mp3",
-      "source_sha256": "45c9ce6b59e1599b829f167d3739a6d6db880b3a8643090764efe19f29fb596c",
-      "preview": "assets/audio/previews/mejor-version--rogelio-edel--2025.mp3",
-      "preview_sha256": "901c68b202396c2d23d5d25af74830f996f59c6eb9a07aa6e4441de937e460f2",
-      "trim_policy": "approved-preview-window-v2",
-      "window": {
-        "approved_s": [
-          77.0,
-          120.0
-        ],
-        "start_s": 77.0,
-        "duration_s": 43.0,
-        "edge_adjustment": null,
-        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
-        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «informal Nada que se sentimenta pa…», que aparece 4 veces en la canción."
-      },
-      "association": {
-        "basis": "objective_evidence",
-        "evidence": [
-          "catalog_recordings.json mejor-version--rogelio-edel--2025: Publicada en Mil Versiones - EP: Apple Music 1844217384 (136,347 s), Spotify 1BT7VRzdKjkTHDviLTxtlj (136 346 ms). Master local 136,416 s (Δ 0,069 s). Mil Versiones - EP (Rogelio Edel, 2025-10-10): Apple Music colección 1844217381 y álbum de Spotify 6TMJisdDlRcKBBWaNVvHLd, consultados el 2026-10-13. Portada: One Page Luis Guinea/artworks/Mil Versiones.png, indicada por el propietario."
-        ]
-      }
-    },
-    {
-      "review_id": "56",
-      "work_id": "te-extrano--rogelio-edel--2025",
-      "status": "verified",
-      "source": "One Page Luis Guinea/audios/Productor/Rogelio Edel/Te Extraño_Master.mp3",
-      "source_sha256": "68377e18555019086ba81bda28be55fc04f67136ae9ff1e62b08cf2ecaca28a6",
-      "preview": "assets/audio/previews/te-extrano--rogelio-edel--2025.mp3",
-      "preview_sha256": "a0a020fc4836f053edd3dca1c15c3b72ef045941bb8e808737fa28c1832968eb",
-      "trim_policy": "approved-preview-window-v2",
-      "window": {
-        "approved_s": [
-          94.0,
-          136.5
-        ],
-        "start_s": 94.0,
-        "duration_s": 42.5,
-        "edge_adjustment": null,
-        "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
-        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «Siento que desapareció el color y…», que aparece 2 veces en la canción."
-      },
-      "association": {
-        "basis": "human_authorization",
-        "evidence": [
-          "catalog_recordings.json te-extrano--rogelio-edel--2025: Decisión explícita del propietario del 2026-10-13: «Te Extraño» de Rogelio Edel, publicada; no es «Ya No Sigo Esperando». Publicada en Mil Versiones - EP: Apple Music 1844217383 (165,330 s), Spotify 7s3UWyjkf2qe5enTSFQbZS (165 329 ms). Master local 165,384 s (Δ 0,054 s). Mil Versiones - EP (Rogelio Edel, 2025-10-10): Apple Music colección 1844217381 y álbum de Spotify 6TMJisdDlRcKBBWaNVvHLd, consultados el 2026-10-13. Portada: One Page Luis Guinea/artworks/Mil Versiones.png, indicada por el propietario."
         ],
         "authority": "Luis Guinea, decisión explícita del 2026-10-13"
       }

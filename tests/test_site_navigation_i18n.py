@@ -151,7 +151,14 @@ class StringsTests(unittest.TestCase):
         for gone in ("facets.intro", "hero.imageNote", "hero.selected", "music.topNote", "experience.independent"):
             self.assertNotIn(gone, self.en)
         self.assertEqual(self.en["writing.title"], "What streaming data says about how artists grow.")
-        self.assertEqual(self.es["music.title"], "Lanzamientos y grabaciones como artista, compositor y productor.")
+        # /music/ header (2026-10-13): title, three-role tagline and "Selected Works", no explanatory paragraphs.
+        self.assertEqual((self.en["music.title"], self.es["music.title"]), ("Music", "Música"))
+        self.assertEqual((self.en["music.tagline"], self.es["music.tagline"]),
+                         ("Composer · Producer · Artist", "Compositor · Productor · Artista"))
+        self.assertEqual((self.en["music.playlist"], self.es["music.playlist"]), ("Selected Works", "Obras seleccionadas"))
+        for gone in ("music.label", "music.intro", "music.profilesHeading", "music.profilesIntro"):
+            self.assertNotIn(gone, self.en)
+            self.assertNotIn(gone, self.es)
         self.assertEqual(self.es["skills.music"], "producción, composición, arreglos, dirección musical.")
         self.assertNotIn("pool de", self.es["writing.a1"])
         self.assertFalse([k for k, v in self.es.items() if k.startswith("music.") and "preview" in v.lower()])

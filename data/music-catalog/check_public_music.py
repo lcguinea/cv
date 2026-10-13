@@ -173,7 +173,7 @@ def _check():
         "audio reference": rf"(?i)audio_ref|\.(?:{AUDIO_EXTENSION_PATTERN})\b",
         "master name": r"(?i)\bmaster(?:[\s._/-]|$)",
         "ISRC": r"(?i)\bisrc\b",
-        "platform URL or key": r"(?i)https?://|spotify|apple[_ ]?music|music\.apple\.com",
+        "platform URL or key": r"(?i)https?://|spotify|apple[_ ]?music|music\.apple\.com|youtube|soundcloud",
         "internal key": r"(?i)provenance|conflict|catalog_link|internal|human_review",
     }
     # Only validated preview file names may carry an audio extension in the bundle.
@@ -191,6 +191,13 @@ def _check():
         return "" if ok else match.group(0)
     scanned_js = re.sub(r", spotify:(?:'([^']*)'|null), appleMusic:(?:'([^']*)'|null)",
                         _valid_platforms, scanned_js)
+    # Same for the optional full-recording links (YouTube, SoundCloud).
+    def _valid_full(match):
+        ok = all(url is None or generator.FULL_RECORDING_URL_RES[name].match(url)
+                 for name, url in zip(("youtube", "soundcloud"), match.groups()))
+        return "" if ok else match.group(0)
+    scanned_js = re.sub(r", youtube:(?:'([^']*)'|null), soundcloud:(?:'([^']*)'|null)",
+                        _valid_full, scanned_js)
     for label, pattern in forbidden.items():
         if re.search(pattern, scanned_js):
             errors.append(f"public JavaScript contains forbidden {label}")

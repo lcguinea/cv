@@ -33,13 +33,15 @@ MAX_PREVIEW_S = 45.0
 PREVIEW_NAME = re.compile(r"^[a-z0-9][a-z0-9-]*\.mp3$")
 FORBIDDEN = re.compile(r"one page luis guinea|one%20page|audios/|master|\.\./|^/|\\", re.I)
 FIELDS = ("title", "artist", "role", "artwork", "releaseType", "year", "roles", "preview",
-          "spotify", "appleMusic", "version")
+          "spotify", "appleMusic", "version", "youtube", "soundcloud")
 RELEASED_TYPES = {"Single", "Album", "EP"}
-UNRELEASED_TYPES = {"Unreleased"}
+UNRELEASED_TYPES = {"Unreleased", "SelfPublished"}
 VERSIONS = {"Instrumental", "PianoVocal", "RoughMix", "RegionalMexican", "Mashup"}
 PLATFORM_URLS = {
     "spotify": re.compile(r"^https://open\.spotify\.com/track/[A-Za-z0-9]{22}$"),
     "appleMusic": re.compile(r"^https://music\.apple\.com/[a-z]{2}/(?:album|song)/[A-Za-z0-9%._~/?=&-]+$"),
+    "youtube": re.compile(r"^https://www\.youtube\.com/watch\?v=[A-Za-z0-9_-]{11}$"),
+    "soundcloud": re.compile(r"^https://soundcloud\.com/[a-z0-9_-]+/[a-z0-9_-]+$"),
 }
 
 failures = []

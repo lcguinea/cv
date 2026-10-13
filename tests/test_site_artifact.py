@@ -75,8 +75,9 @@ class ArtifactTest(unittest.TestCase):
         self.assertEqual(sorted(previews), sorted(published))
         self.assertEqual({p.rsplit("/", 1)[1] for p in previews}, set(build_site.verified_previews()))
         self.assertTrue(all(p.endswith(".mp3") for p in previews))
-        self.assertEqual(sorted(images), sorted(set(artworks) | {"assets/images/profile.webp"}))
-        self.assertNotIn("assets/images/cover.webp", self.present)
+        self.assertEqual(sorted(images), sorted(set(artworks) | {"assets/images/profile.webp",
+                                                                 "assets/images/cover.webp",
+                                                                 "assets/images/cover-960.webp"}))
         self.assertEqual(len(self.present), len(build_site.STATIC_FILES) + len(set(artworks)) + len(published))
 
     def test_no_private_or_development_content(self):
