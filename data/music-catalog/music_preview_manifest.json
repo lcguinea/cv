@@ -726,10 +726,10 @@
       "review_id": "16",
       "work_id": "agua-de-mar--luis-guinea--2021",
       "status": "verified",
-      "source": "One Page Luis Guinea/audios/Cantautor/Agua de Mar (Master).mp3",
-      "source_sha256": "d36bdbdbf163dd036d28593fa2663dbe927f7c4cad31fe136a8ae18329544529",
+      "source": "One Page Luis Guinea/audios/Coautorías/AGUA DE MAR_SALO x EFRA x LUISG_MstrbyPach 1 [4824].wav",
+      "source_sha256": "b773cac419cc93a641b4423ac53fa9945864641257c2ecc7c79028190e22d740",
       "preview": "assets/audio/previews/agua-de-mar--luis-guinea--2021.mp3",
-      "preview_sha256": "11eb5e8bedf42c50bd5e7845ea5a6360af3d99c7d2cdd4ac9a3701bf0518bcc8",
+      "preview_sha256": "5aedd6f87831012d2410f61ac8d51ee620492dcc85835f60e62335b97598cdfa",
       "trim_policy": "approved-preview-window-v2",
       "window": {
         "approved_s": [
@@ -740,15 +740,17 @@
         "duration_s": 43.5,
         "edge_adjustment": null,
         "method": "Análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección; propuesta y alternativa escuchadas por el propietario antes de aprobar.",
-        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «no vas a poder mentirme en…», que aparece 5 veces en la canción."
+        "justification": "Aprobada el 2026-10-13 (propuesta principal). Estribillo «no vas a poder mentirme en…», que aparece 5 veces en la canción. Fuente cambiada el 2026-10-13 al master comercial (WAV); la ventana corresponde a la misma sección musical."
       },
       "association": {
         "basis": "human_authorization",
+        "authority": "Luis Guinea, decisión explícita del 2026-10-13: el master correcto de Agua de Mar es «AGUA DE MAR_SALO x EFRA x LUISG_MstrbyPach 1 [4824].wav» (carpeta Coautorías); sustituye a «Cantautor/Agua de Mar (Master).mp3».",
         "evidence": [
           "Decisión del propietario del 2026-10-13: título definitivo «Agua de Mar», año 2021 (agua-de-mar--luis-guinea--2021).",
-          "ffprobe 193,778 s frente a duration_ms 190936 (Δ 2,842 s): la identidad descansa en la decisión humana, no en la duración."
-        ],
-        "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+          "ffprobe 190,936 s frente a duration_ms 190936 (Δ 0,000 s); WAV PCM 24 bits, 48 kHz.",
+          "Es el master comercial: contiene las vistas previas oficiales de Apple Music (57,0 s; forma de onda 0,94, envolvente espectral 0,93) y Deezer por ISRC MXE772100002 (51,0 s; 0,93 y 0,98). El MP3 anterior era otro master o mezcla (forma de onda 0,21/−0,18).",
+          "La ventana aprobada se comprobó sobre este archivo: misma estructura y tiempos (desfase ≤ 0,3 s); el estribillo «es agua de mar» empieza en 106,6 s frente a 106,5 s en el archivo anterior, así que 106,5–150,0 s corresponde a la misma sección."
+        ]
       }
     },
     {

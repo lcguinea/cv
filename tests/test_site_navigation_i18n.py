@@ -189,8 +189,12 @@ class HomeContentTests(unittest.TestCase):
 
     def test_sacm_workshop_is_listed_in_education_apart_from_the_membership(self):
         html = read("index.html")
-        name = "Taller de la Sociedad de Autores y Compositores de México (TCSACM)"
-        self.assertIn(f'<span lang="es">{name}</span>', html)
+        # Same layout as the other entries: programme, then the linked institution and the years.
+        name = "Sociedad de Autores y Compositores de México"
+        programme = ('<span data-i18n="education.workshop">Workshop (TCSACM)</span>, '
+                     '<span data-i18n="education.sacm">Scholarship recipient, 6th generation</span>')
+        link = (f'<a class="entity-link" href="https://www.sacm.org.mx/" target="_blank" rel="noopener" lang="es">{name}'
+                '<span class="sr-only" data-i18n="ui.newTab"> (opens in a new tab)</span></a>')
         section = re.search(r'data-i18n="education\.title".*?<ol>(.*?)</ol>', html, re.S).group(1)
         items = re.findall(r"<li>(.*?)</li>", section, re.S)
         order = ["Berklee College of Music", "REC Música", name, "Tec de Monterrey"]
@@ -198,13 +202,24 @@ class HomeContentTests(unittest.TestCase):
         for item, expected in zip(items, order):
             self.assertIn(expected, item)
         workshop = items[2]
-        self.assertIn('data-i18n="education.sacm">Scholarship recipient, 6th generation</span>', workshop)
         for word in ("Member", "Miembro"):
             self.assertNotIn(word, workshop)
-        self.assertIsNone(re.search(r"\b\d{4}\b", workshop))
+        # One year, August 2021 to July 2022 (confirmed by the owner); same date style as the other entries.
+        self.assertEqual(workshop, f"{programme} <small>{link} / 2021–22</small>")
+        cv = read("cv.html")
+        entry = re.search(r'<div class="cv-education">(.*?)</div>', cv, re.S).group(1)
+        entries = re.findall(r"<p>(.*?)</p>", entry, re.S)
+        self.assertEqual(len(entries), len(order))
+        for item, expected in zip(entries, order):
+            self.assertIn(expected, item)
+        self.assertEqual(entries[2], '<strong data-i18n="education.workshop">Workshop (TCSACM)</strong> '
+                         '<span class="cv-degree" data-i18n="education.sacm">Scholarship recipient, 6th generation</span>'
+                         f'<br><span>{link} · 2021 – 2022</span>')
         source = read("js/strings.js")
         self.assertIn("sacm:'Scholarship recipient, 6th generation'", source)
         self.assertIn("sacm:'Becado, 6.ª generación'", source)
+        self.assertIn("workshop:'Workshop (TCSACM)'", source)
+        self.assertIn("workshop:'Taller (TCSACM)'", source)
 
 
 @unittest.skipUnless(NODE, "node not installed")

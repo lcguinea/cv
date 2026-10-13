@@ -41,10 +41,13 @@ ENTITIES = {
     "Berklee College of Music": "https://valencia.berklee.edu/",
     "REC Música": "https://www.recmusica.com/",
     "Tec de Monterrey": "https://tec.mx/",
+    "Sociedad de Autores y Compositores de México": "https://www.sacm.org.mx/",
 }
 LINKED = {
-    "index.html": {"Jazztone Studios", "Santo Chilaquil", "Berklee College of Music", "REC Música", "Tec de Monterrey"},
-    "cv.html": {"Jazztone Studios", "Santo Chilaquil", "Moctezuma Music Group", "Berklee College of Music", "REC Música", "Tec de Monterrey"},
+    "index.html": {"Jazztone Studios", "Santo Chilaquil", "Berklee College of Music", "REC Música", "Tec de Monterrey",
+                   "Sociedad de Autores y Compositores de México"},
+    "cv.html": {"Jazztone Studios", "Santo Chilaquil", "Moctezuma Music Group", "Berklee College of Music", "REC Música", "Tec de Monterrey",
+                "Sociedad de Autores y Compositores de México"},
 }
 NEVER_LINKED = ("Grupo Botanas", "Tipazo Music Group", "Peermusic Spain")
 

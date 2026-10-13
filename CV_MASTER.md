@@ -379,7 +379,7 @@ The Berklee MA final project was the design and business plan for a music festiv
 
 ### Additional training
 
-- Taller de la Sociedad de Autores y Compositores de México (TCSACM), scholarship recipient, 6th generation. No dates are stated in the source PDF.
+- Taller de la Sociedad de Autores y Compositores de México (TCSACM), scholarship recipient, 6th generation, Aug 2021 – Jul 2022 (one year; dates confirmed by Luis, not in the source PDF). Visibility: web, print.
 
 ### Associations
 
