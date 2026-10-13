@@ -344,11 +344,10 @@ Uso:
 
 Debe existir un único acento principal, utilizado con moderación.
 
-Punto de partida recomendado:
-
 `#C85A32`
 
-Terracota / naranja quemado.
+Terracota / naranja quemado. Es el acento principal y definitivo de la
+identidad.
 
 Debe sentirse cultural y editorial, no tecnológico.
 
@@ -362,6 +361,79 @@ Puede utilizarse para:
 
 No utilizarlo como relleno dominante de grandes áreas salvo que exista
 una justificación editorial.
+
+Uso real como superficie: una sola banda, «Lo que hago» (01.1, dentro de
+Trayectoria), con texto negro `#000000` (contraste 4,96:1). Es la apertura de
+la trayectoria y no debe repetirse en otras secciones.
+
+### Colores de apoyo
+
+Dos tonos complementan la base y dan ritmo a las secciones largas. No
+son acentos: no marcan estados, enlaces ni interacciones, que siguen
+siendo exclusivos de la terracota.
+
+#### Olive
+
+`#3D4635`
+
+Verde oliva profundo.
+
+Uso:
+
+-   Superficie de la banda «Música destacada» en Inicio, con texto
+    Paper `#F2EFE8` (contraste 8,6:1) y metadatos en Mist `#D8D5CE` (6,74:1).
+    Dentro de esta banda, botones de reproducción en Paper con icono
+    Ink y foco visible en Paper, porque la terracota no contrasta lo
+    suficiente sobre oliva (2,34:1).
+-   Texto de detalle sobre Paper en «Sobre mí» de Inicio: kicker y
+    números de los capítulos (contraste 8,6:1).
+
+No utilizar como color de enlaces, estados activos ni fondos de
+elementos interactivos.
+
+#### Sand
+
+`#E6E0D3`
+
+Arena cálida, un paso más oscura que Paper.
+
+Uso:
+
+-   Superficie de «Formación y competencias» (01.3 y 01.4, dentro de
+    Trayectoria).
+-   Superficie de «Investigación».
+
+Texto sobre Sand: Ink `#111111` (14,36:1) y Graphite `#555555`
+(5,67:1). Las dos bandas de Sand nunca son contiguas: la banda oliva de
+Música las separa.
+
+### Secuencia de superficies en Inicio
+
+De arriba abajo:
+
+1.  Hero: Paper.
+2.  Trayectoria, cabecera e índice: Paper.
+3.  Lo que hago: Terracota.
+4.  Experiencia: Paper.
+5.  Formación y competencias: Sand.
+6.  Música destacada: Olive.
+7.  Investigación: Sand.
+8.  Sobre mí: Paper.
+9.  Contacto: Ink.
+
+Regla: dos secciones contiguas nunca comparten superficie de color. Al
+saltar a una banda de color desde la navegación, la banda queda pegada
+bajo la cabecera, sin franja visible de la sección anterior.
+
+### Modo oscuro
+
+-   Paper e Ink se invierten como fondo y texto; Contacto pasa a
+    superficie Paper con texto Ink.
+-   Sand pasa al fondo oscuro: sus secciones se separan mediante líneas
+    y bordes, no mediante superficie.
+-   Olive conserva su superficie en Música destacada.
+-   En «Sobre mí», el kicker pasa a texto secundario y los números de
+    capítulo a terracota para mantener contraste.
 
 ### Regla
 

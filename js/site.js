@@ -1,14 +1,5 @@
 // Shared behaviour for every page: translated aria-labels, theme switch, mobile menu, active navigation and the experience filter.
-(function(){
-  const nav=document.querySelector('.nav');
-  if(nav&&!nav.querySelector('[data-i18n="nav.about"]')){
-    const link=document.createElement('a');
-    link.href=location.pathname.includes('/music/')?'../sobre-mi.html':'sobre-mi.html';
-    link.dataset.i18n='nav.about'; link.textContent='About me';
-    if(location.pathname.endsWith('/sobre-mi.html'))link.setAttribute('aria-current','page');
-    if(nav.insertBefore)nav.insertBefore(link,nav.lastElementChild);else nav.appendChild(link);
-  }
-})();
+// The header, footer and every link are plain HTML in each page; nothing here creates navigation.
 (function(){
   const base=window.setLanguage;
   if(base)window.setLanguage=function(next){
@@ -34,12 +25,16 @@
   }));
   syncTheme();
 
-  // Mobile menu: a disclosure button that shows the navigation panel; Escape closes it and returns focus to the button.
+  // Mobile menu: a disclosure button that shows the navigation panel and reads "Close" while open; Escape closes it and
+  // returns focus to the button, choosing a destination closes it.
   const header=document.querySelector('.site-header'),menuButton=document.querySelector('.menu-toggle'),menu=document.getElementById('site-menu');
   function isOpen(){return !!menuButton&&menuButton.getAttribute('aria-expanded')==='true'}
+  function labelMenu(){if(menuButton)menuButton.textContent=t(isOpen()?'ui.close':'ui.menu')}
   function setMenu(open,focusButton){
     if(!menuButton)return;
     menuButton.setAttribute('aria-expanded',String(open));
+    menuButton.dataset.i18n=open?'ui.close':'ui.menu';
+    labelMenu();
     root.classList.toggle('menu-open',open);
     if(open){const first=menu.querySelector('a,button');if(first)first.focus()}
     else if(focusButton)menuButton.focus();
@@ -52,23 +47,49 @@
     if(window.matchMedia){const wide=window.matchMedia('(min-width: 701px)');const close=()=>{if(wide.matches&&isOpen())setMenu(false,false)};if(wide.addEventListener)wide.addEventListener('change',close)}
   }
 
-  // Active section on the home page: the in-page links get aria-current="true" while their section is under the header.
-  const spy=[...document.querySelectorAll('.nav a[href^="#"]')];
-  if(spy.length&&header){
-    const sections=[...document.querySelectorAll('main > section')];
+  // Anchors land below the sticky header whatever its height (it wraps to two lines on narrow desktops): the
+  // stylesheet reads --header-offset in scroll-margin-top. A page opened at index.html#education is placed again
+  // once the real height is known; reloads and history navigation keep the position the browser restores.
+  function measureHeader(){if(header&&root.style.setProperty)root.style.setProperty('--header-offset',Math.ceil(header.getBoundingClientRect().height)+'px')}
+  measureHeader();
+  window.addEventListener('resize',measureHeader);
+  window.addEventListener('load',()=>{
+    measureHeader();
+    const entry=window.performance&&performance.getEntriesByType?performance.getEntriesByType('navigation')[0]:null;
+    const target=location.hash&&document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if(target&&target.scrollIntoView&&(!entry||entry.type==='navigate'))target.scrollIntoView();
+  });
+
+  // Active location on Home: every part of the page declares the menu entry it belongs to (data-nav), so What I do,
+  // Education and Skills mark Background; each part also marks its own entry in the Background index and the mobile menu.
+  const spy=[...document.querySelectorAll('.site-header a[data-section],.section-index a[data-section]')];
+  const marks=[...document.querySelectorAll('main [data-nav]')];
+  if(spy.length&&marks.length&&header){
     let queued=false;
     function update(){
       queued=false;
       const line=Math.max(header.getBoundingClientRect().height+32,window.innerHeight*.25);
-      let current='';
-      sections.forEach(s=>{if(s.getBoundingClientRect().top<=line)current=s.id||''});
-      if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-2&&sections.length)current=sections[sections.length-1].id||current;
-      spy.forEach(a=>{if(a.getAttribute('href')==='#'+current)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current')});
+      let current='',part='';
+      marks.forEach(m=>{
+        const box=m.getBoundingClientRect();
+        if(box.top>line)return;
+        // A part laid out beside the previous one (Skills next to Education on wide screens) shares its row: it only
+        // takes over when it is the chosen destination.
+        if(m.dataset.beside&&box.left>window.innerWidth*.4&&location.hash!=='#'+m.id)return;
+        current=m.dataset.nav;part=m.id||'';
+      });
+      const page=document.documentElement;
+      if(typeof page.scrollHeight==='number'&&window.innerHeight+window.scrollY>=page.scrollHeight-2){current=marks[marks.length-1].dataset.nav;part=''}
+      spy.forEach(a=>{if(a.dataset.section===current||(part&&a.dataset.section===part))a.setAttribute('aria-current','location');else a.removeAttribute('aria-current')});
+      // On narrow screens the Background index scrolls sideways: keep its current entry in view.
+      const active=document.querySelector('.section-index a[aria-current]'),strip=active&&active.closest('ul');
+      if(strip&&strip.scrollWidth>strip.clientWidth){const left=active.offsetLeft-strip.offsetLeft;if(left<strip.scrollLeft||left+active.offsetWidth>strip.scrollLeft+strip.clientWidth)strip.scrollLeft=left-16}
     }
     window.addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(update)}},{passive:true});
     window.addEventListener('resize',update);
     update();
   }
+  document.addEventListener('lg:language',labelMenu);
 
   const filter=document.querySelector('#experience-filter');
   if(filter)filter.addEventListener('change',()=>document.querySelectorAll('[data-facets]').forEach(x=>x.hidden=filter.value!=='all'&&!x.dataset.facets.split(' ').includes(filter.value)));

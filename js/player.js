@@ -96,7 +96,7 @@
   // Autostart: armed for a new session until the first preview plays. Clicks on the player itself are left to its controls,
   // and utility controls (skip links, language, theme, menu) never start sound: they are often the first thing a keyboard or
   // screen reader user activates.
-  const GESTURES=['click','touchend'],NO_AUTOSTART='#mini-player,#player,#catalog,.skip-link,[data-lang],[data-theme-choice],.menu-toggle';
+  const GESTURES=['click','touchend'],NO_AUTOSTART='#mini-player,#player,#catalog,.feature-play,.skip-link,[data-lang],[data-theme-choice],.menu-toggle';
   function onGesture(event){if(event.target&&event.target.closest&&event.target.closest(NO_AUTOSTART))return;if(!isPlaying())start()}
   function armAutostart(){
     if(!autostart){autostart=true;GESTURES.forEach(type=>document.addEventListener(type,onGesture,true))}
@@ -214,4 +214,30 @@
     bar.hidden=true;
     new IntersectionObserver(entries=>entries.forEach(entry=>{bar.hidden=entry.isIntersecting})).observe(stage);
   }else bar.hidden=false;
+})();
+
+// Featured recordings on Home: each play button is one more view of the engine, so a featured preview, the bottom bar
+// and /music/ never sound together. The cards are plain HTML; the buttons stay hidden until their preview is found here.
+(function(){
+  const P=window.LGPlayer,buttons=[...document.querySelectorAll('.feature-play[data-feature]')];
+  if(!P||!buttons.length)return;
+  const indexOf=name=>P.tracks.findIndex(x=>x.preview===name);
+  function render(){
+    const playing=P.isPlaying(),active=P.index();
+    buttons.forEach(button=>{
+      const i=indexOf(button.dataset.feature),on=i>=0&&i===active&&playing;
+      button.dataset.state=on?'playing':'paused';
+      button.setAttribute('aria-label',t(on?'music.pause':'music.play')+': '+(i>=0?P.tracks[i].title:''));
+      const card=button.closest('.feature');if(card)card.classList.toggle('is-playing',on);
+    });
+  }
+  buttons.forEach(button=>{
+    const i=indexOf(button.dataset.feature);
+    if(i<0)return;
+    button.hidden=false;
+    button.addEventListener('click',()=>{if(P.index()===i&&P.isPlaying())P.pause();else P.select(i,true)});
+  });
+  P.on(type=>{if(type!=='time')render()});
+  document.addEventListener('lg:language',render);
+  render();
 })();

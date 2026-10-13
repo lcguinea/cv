@@ -19,14 +19,18 @@ ROOT = Path(__file__).resolve().parent.parent
 RUNNER = ROOT / "tests" / "support" / "run_scenario.js"
 STRINGS_JS = ROOT / "js" / "strings.js"
 NODE = shutil.which("node")
-PAGES = {"index.html": "home", "cv.html": "cv", "music/index.html": "music"}
-NAV_KEYS = ["nav.research", "nav.experience", "nav.music", "nav.cv", "nav.contact"]
+PAGES = {"index.html": "home", "cv.html": "cv", "music/index.html": "music", "sobre-mi.html": "about"}
+# One menu on every page, written in the HTML (no link is added by JavaScript), in the reading order of Home
+# (2026-10-13): Background with Experience and Education as secondary entries, Music, Research, About, CV, then
+# Contact as the action. Home is reached through the brand.
+NAV_KEYS = ["nav.background", "nav.experience", "nav.education", "nav.music", "nav.research", "nav.about", "nav.cv", "nav.contact"]
 NAV_HREFS = {
-    "home": ["#writing", "#experience", "music/", "cv.html", "#contact"],
-    "cv": ["./#writing", "./#experience", "music/", "cv.html", "./#contact"],
-    "music": ["../#writing", "../#experience", "./", "../cv.html", "../#contact"],
+    "home": ["#background", "#experience", "#education", "music/", "#writing", "sobre-mi.html", "cv.html", "#contact"],
+    "cv": ["./#background", "./#experience", "./#education", "music/", "./#writing", "sobre-mi.html", "cv.html", "./#contact"],
+    "about": ["./#background", "./#experience", "./#education", "music/", "./#writing", "sobre-mi.html", "cv.html", "./#contact"],
+    "music": ["../#background", "../#experience", "../#education", "./", "../#writing", "../sobre-mi.html", "../cv.html", "../#contact"],
 }
-CURRENT = {"home": None, "cv": "nav.cv", "music": "nav.music"}
+CURRENT = {"home": None, "cv": "nav.cv", "music": "nav.music", "about": "nav.about"}
 PUBLISHED_JS = ("strings.js", "i18n.js", "site.js", "player.js", "music-page.js", "theme-init.js")
 # Keys built at runtime from data: 'music.role'+credit and 'music.type'+release type.
 DYNAMIC_PREFIXES = ("music.role", "music.type", "music.version")
@@ -60,19 +64,18 @@ def header(html):
 
 
 class HeaderStaticTests(unittest.TestCase):
-    def test_about_link_is_added_to_the_shared_navigation(self):
+    def test_navigation_is_plain_html_not_created_by_javascript(self):
         site = read("js/site.js")
-        self.assertIn("link.dataset.i18n='nav.about'", site)
-        self.assertIn("sobre-mi.html", site)
-        self.assertIn("setAttribute('aria-current','page')", site)
+        self.assertNotIn("createElement", site)
+        self.assertNotIn("sobre-mi.html", site)
 
     def test_every_page_shares_the_same_header_and_primary_navigation(self):
         shapes = set()
         for rel, page in PAGES.items():
             block = header(read(rel))
             with self.subTest(page=page):
-                nav = re.search(r'<nav class="nav" aria-label="Primary" data-i18n-label="ui.primaryNav">(.*?)</nav>', block).group(1)
-                links = re.findall(r'<a href="([^"]+)"( aria-current="page")? data-i18n="([^"]+)">', nav)
+                nav = re.search(r'<nav class="nav" aria-label="Primary" data-i18n-label="ui.primaryNav">(.*?)</nav>(.*?)<div class="tools">', block)
+                links = re.findall(r'<a (?:class="nav-cta" )?href="([^"]+)"(?: data-section="[a-z]+")?( aria-current="page")? data-i18n="([^"]+)">', nav.group(1) + nav.group(2))
                 self.assertEqual([k for _, _, k in links], NAV_KEYS)
                 self.assertEqual([h for h, _, _ in links], NAV_HREFS[page])
                 current = [k for _, cur, k in links if cur]
@@ -83,7 +86,7 @@ class HeaderStaticTests(unittest.TestCase):
                 self.assertIn('data-theme-choice="dark" aria-pressed="false" data-i18n="ui.dark"', block)
                 self.assertNotRegex(block, r"<button(?![^>]*type=\"button\")")
             # Same structure everywhere once page-specific paths, brand suffix and CV print button are removed.
-            shape = re.sub(r'href="[^"]*"| aria-current="page"|<span> / \w+</span>|<button type="button" class="print-button".*?</button>| no-print', "", block)
+            shape = re.sub(r'href="[^"]*"| aria-current="page"|<span> / <span data-i18n="nav\.\w+">\w+</span></span>| no-print', "", block)
             shapes.add(shape)
         self.assertEqual(len(shapes), 1)
 
@@ -102,7 +105,7 @@ class HeaderStaticTests(unittest.TestCase):
     def test_sticky_header_scroll_margin_and_touch_targets(self):
         css = read("css/styles.css")
         self.assertIn(".site-header{position:sticky;top:0;", css)
-        self.assertIn("main [id]{scroll-margin-top:5rem}", css)
+        self.assertIn("main [id]{scroll-margin-top:calc(var(--header-offset,4rem) + 1rem)}", css)
         self.assertIn(".tools button{border:0;min-width:44px;min-height:44px;", css)
         self.assertIn(".nav a{display:inline-flex;align-items:center;min-height:44px;", css)
         self.assertIn("html.js .menu-toggle{display:inline-flex;align-items:center;margin-left:auto;min-height:44px;min-width:44px;", css)
@@ -237,11 +240,13 @@ class NavigationBehaviourTests(unittest.TestCase):
             "  focus: page.document.activeElement && (page.document.activeElement.getAttribute('data-i18n') || page.document.activeElement.className)});"
             "out.start = view(); page.click(button); out.open = view();"
             "page.key('Escape'); out.closed = view();"
-            "page.click(button); page.click(page.$('.nav a[data-i18n=\"nav.music\"]')); out.link = view();"
+            "out.label = button.textContent; page.click(button); out.openLabel = button.textContent;"
+            "page.click(page.$('.nav a[data-i18n=\"nav.music\"]')); out.link = view(); out.closedLabel = button.textContent;"
             "out.js = root.classList.contains('js');"
         )
         self.assertEqual(out["start"], {"expanded": "false", "open": False, "focus": None})
-        self.assertEqual(out["open"], {"expanded": "true", "open": True, "focus": "nav.research"})
+        self.assertEqual(out["open"], {"expanded": "true", "open": True, "focus": "nav.background"})
+        self.assertEqual((out["label"], out["openLabel"], out["closedLabel"]), ("Menu", "Close", "Menu"))
         self.assertEqual(out["closed"], {"expanded": "false", "open": False, "focus": "ui.menu"})
         self.assertEqual((out["link"]["expanded"], out["link"]["open"]), ("false", False))
         self.assertTrue(out["js"])
@@ -272,7 +277,7 @@ class NavigationBehaviourTests(unittest.TestCase):
             "out.lang = page.document.documentElement.lang; out.stored = browser.local['lg-language'];"
             "const cv = browser.tab().open('cv.html'); await settle(); out.cv = cv.$$('.nav a').map(a => a.textContent);"
         )
-        self.assertEqual(out["nav"], ["Investigación", "Experiencia", "Música", "CV", "Contacto", "Sobre mí"])
+        self.assertEqual(out["nav"], ["Trayectoria", "Experiencia", "Formación", "Música", "Investigación", "Sobre mí", "CV"])
         self.assertEqual((out["label"], out["menu"]), ("Principal", "Menú"))
         self.assertEqual(out["groups"], ["Idioma", "Tema"])
         self.assertEqual((out["lang"], out["stored"]), ("es", "es"))
@@ -281,18 +286,180 @@ class NavigationBehaviourTests(unittest.TestCase):
     def test_home_marks_the_section_under_the_header_as_current(self):
         out = self.run_scenario(
             "const page = browser.tab().open('index.html'); await settle();"
-            "const sections = page.$$('main > section'); const header = page.$('.site-header'); header.rect.height = 60;"
-            "const scrollTo = id => { let top = -5000; sections.forEach(s => { s.rect.top = top; top += 1000; });"
-            "  const target = sections.find(s => s.id === id); const shift = target.rect.top - 100;"
-            "  sections.forEach(s => { s.rect.top -= shift; }); page.window._fire('scroll'); };"
-            "const current = () => page.$$('.nav a[aria-current]').map(a => a.getAttribute('href') + ':' + a.getAttribute('aria-current'));"
-            "for (const id of ['writing', 'facets', 'experience', 'contact']) { scrollTo(id); await settle(); out[id] = current(); }"
+            "const parts = page.$$('main [data-nav]'); const header = page.$('.site-header'); header.rect.height = 60;"
+            "const scrollTo = id => { let top = -5000; parts.forEach(s => { s.rect.top = top; top += 1000; });"
+            "  const target = page.$('#' + id); const shift = target.rect.top - 100;"
+            "  parts.forEach(s => { s.rect.top -= shift; }); page.window._fire('scroll'); };"
+            "const current = () => page.$$('.site-header a[aria-current]').map(a => a.getAttribute('href') + ':' + a.getAttribute('aria-current'));"
+            "for (const id of ['top', 'writing', 'facets', 'experience', 'education', 'skills', 'music', 'about', 'contact']) { scrollTo(id); await settle(); out[id] = current(); }"
         )
-        self.assertEqual(out["writing"], ["#writing:true"])
-        self.assertEqual(out["facets"], [])
-        self.assertEqual(out["experience"], ["#experience:true"])
-        self.assertEqual(out["contact"], ["#contact:true"])
+        # Every part of Home marks its menu entry; What I do, Education and Skills belong to Background.
+        self.assertEqual(out["top"], [])
+        self.assertEqual(out["writing"], ["#writing:location"])
+        self.assertEqual(out["facets"], ["#background:location"])
+        self.assertEqual(out["experience"], ["#background:location", "#experience:location"])
+        self.assertEqual(out["education"], ["#background:location", "#education:location"])
+        self.assertEqual(out["skills"], ["#background:location"])
+        self.assertEqual(out["music"], ["music/:location"])
+        self.assertEqual(out["about"], ["sobre-mi.html:location"])
+        self.assertEqual(out["contact"], ["#contact:location"])
 
+
+
+class DiscoveryTests(unittest.TestCase):
+    """Home leads to every page and every page leads back: Background groups its parts, Music and About
+    have a short section on Home, and the other pages end with a few contextual links."""
+
+    def test_home_order_anchors_and_contextual_links(self):
+        html = read("index.html")
+        ids = re.findall(r'<section id="([a-z]+)"', html)
+        self.assertEqual(ids, ["top", "background", "facets", "experience", "education", "music", "writing", "about", "contact"])
+        kickers = re.findall(r'<section id="(background|music|writing|about|contact)".*?<p class="kicker">(\d\d) /', html, re.S)
+        self.assertEqual(kickers, [("background", "01"), ("music", "02"), ("writing", "03"), ("about", "04"), ("contact", "05")])
+        # Historical anchors still exist; Education and Skills have their own.
+        for anchor in ("writing", "facets", "experience", "education", "skills", "contact"):
+            self.assertIn(f'id="{anchor}"', html)
+        self.assertIn('<a class="button" href="music/"><span data-i18n="hero.ctaMusic">', html)
+        self.assertIn('<a class="button button-quiet" href="#background"><span data-i18n="hero.ctaBackground">', html)
+        # The cue under the hero leads to the section right after it.
+        self.assertIn('<div class="hero-bottom"><a href="#background" data-i18n="hero.scroll">', html)
+        data = strings()
+        self.assertEqual((data["en"]["hero"]["scroll"], data["es"]["hero"]["scroll"]),
+                         ("Explore my background ↓", "Explorar mi trayectoria ↓"))
+        index = re.search(r'<nav class="section-index"[^>]*>(.*?)</nav>', html).group(1)
+        self.assertEqual(re.findall(r'href="([^"]+)"', index), ["#facets", "#experience", "#education", "#skills", "cv.html"])
+        self.assertEqual(html.count('data-i18n="background.cvLink"'), 2)
+        self.assertIn('<a class="text-link to-page" href="music/"><span data-i18n="featured.all">', html)
+        self.assertIn('<a class="text-link to-page" href="sobre-mi.html"><span data-i18n="home.aboutLink">', html)
+
+    def test_research_is_one_featured_study_and_four_compact_cards(self):
+        html = read("index.html")
+        section = re.search(r'<section id="writing".*?</section>', html, re.S).group(0)
+        self.assertEqual(section.count('<article class="writing-feature">'), 1)
+        cards = re.findall(r'<article class="writing-card">(.*?)</article>', section, re.S)
+        self.assertEqual(len(cards), 4)
+        for n, card in zip("2345", cards):
+            with self.subTest(study=n):
+                # Every study keeps its title, one-line summary, figure and link to the full publication.
+                self.assertIn(f'id="a{n}-title"', card)
+                self.assertIn(f'data-i18n="writing.a{n}"', card)
+                self.assertIn('<span class="card-metric"><strong>', card)
+                self.assertRegex(card, r'href="https://medium\.com/@soyluisguinea/[^"]+"')
+        self.assertEqual(len(re.findall(r'href="https://medium\.com/@soyluisguinea/[^"]+"', section)), 5)
+        # Off-screen cards in the mobile strip must not widen the page through their .sr-only text.
+        self.assertIn(".writing-card{position:relative;", read("css/styles.css"))
+
+    def test_background_index_stays_on_screen_and_marks_the_part(self):
+        html, css = read("index.html"), read("css/styles.css")
+        # A direct child of the Background section, so position:sticky keeps it under the header only there.
+        self.assertRegex(html, r'aria-labelledby="background-title"><div class="wrap background-head"[^>]*>.*?</div></div><nav class="section-index"')
+        self.assertIn(".section-index{position:sticky;top:var(--header-offset,58px);", css)
+        self.assertIn(".background [id]{scroll-margin-top:calc(var(--header-offset,4rem) + 4rem)}", css)
+        self.assertIn(".section-index a[data-section]", read("js/site.js"))
+
+    def test_skills_beside_education_does_not_take_over_the_index(self):
+        # On wide screens Skills sits next to Education; it is marked only when it is the chosen destination.
+        self.assertIn('<div id="skills" class="skills-block" data-nav="background" data-beside="education">', read("index.html"))
+        self.assertIn("if(m.dataset.beside&&box.left>window.innerWidth*.4&&location.hash!=='#'+m.id)return;", read("js/site.js"))
+        self.assertIn("#content>#music,#content>#writing,#content>#contact{scroll-margin-top:var(--header-offset,4rem)}", read("css/styles.css"))
+
+    def test_about_on_home_is_a_synopsis_with_the_chapters(self):
+        html, about = read("index.html"), read("sobre-mi.html")
+        self.assertIn('<p class="about-synopsis" data-i18n="home.aboutSynopsis">', html)
+        data = strings()
+        self.assertEqual(data["es"]["home"]["aboutSynopsis"], "Del teclado de juguete en el que aprendí mi primera canción al escenario "
+                         "del Lunario, un sello propio, Berklee Valencia y Santo Chilaquil: música, tecnología y emprendimiento "
+                         "como un mismo camino.")
+        self.assertNotIn('data-i18n="about.p1"', html)
+        chapters = re.findall(r'<a href="sobre-mi\.html#([a-z-]+)"><span class="chapter-num">\d\d</span><span data-i18n="about\.c(\d)title">', html)
+        self.assertEqual([n for _, n in chapters], list("1234567"))
+        for anchor, _ in chapters:
+            self.assertIn(f'<section id="{anchor}" class="about-chapter', about)
+
+    def test_secondary_colour_is_one_olive_token_used_for_the_music_band(self):
+        css = read("css/styles.css")
+        light, dark = css_tokens(css)
+        # Approved palette (2026-10-13): paper, terracotta, sand, deep olive and ink; no other colour.
+        self.assertEqual((light["olive"], light["sand"]), ("#3d4635", "#e6e0d3"))
+        self.assertEqual(dark["olive"], "#3d4635")
+        self.assertIn("--sand:var(--bg);", re.search(r":root\[data-theme=dark\]\{([^}]*)\}", css).group(1))
+        self.assertNotIn("petrol", css)
+        self.assertGreaterEqual(contrast(light["paper"], light["olive"]), 7)
+        self.assertGreaterEqual(contrast(light["mist"], light["olive"]), 4.5)
+        self.assertGreaterEqual(contrast(light["graphite"], light["sand"]), 4.5)
+        self.assertGreaterEqual(contrast(light["ink"], light["sand"]), 7)
+        self.assertIn(".featured-section{background:var(--olive);color:var(--paper);", css)
+        # Terracotta is under 3:1 on olive: focus and hover there use paper and mist.
+        self.assertLess(contrast(light["accent"], light["olive"]), 3)
+        self.assertIn(".featured-section a:focus-visible,.featured-section .feature-play:focus-visible{outline-color:var(--paper)}", css)
+
+    def test_featured_recordings_are_entries_of_the_public_catalogue(self):
+        html = read("index.html")
+        data = read("js/music-data.js")
+        cards = re.findall(r'<li class="feature" data-preview="([^"]+)"><figure class="feature-art"><img src="assets/images/([^"]+)".*?'
+                           r'data-feature="([^"]+)".*?<h3 class="feature-title">([^<]+)</h3><p class="feature-artist">([^<]+)</p>', html)
+        self.assertEqual(len(cards), 3)
+        from urllib.parse import unquote
+        for preview, art, button, title, artist in cards:
+            with self.subTest(preview=preview):
+                self.assertEqual(preview, button)
+                line = next(l for l in data.splitlines() if f"preview:'{preview}'" in l)
+                self.assertIn(f"title:'{title}'", line)
+                self.assertIn(f"artist:'{artist}'", line)
+                self.assertIn(f"artwork:'{unquote(art)}'", line)
+                self.assertTrue((ROOT / "assets/audio/previews" / preview).is_file())
+
+    def test_pages_end_with_contextual_links_and_share_the_footer(self):
+        expected = {
+            "music/index.html": ["../#background", "../sobre-mi.html", "../#contact"],
+            "sobre-mi.html": ["music/", "./#background", "cv.html"],
+            "cv.html": ["sobre-mi.html", "music/", "./#background"],
+        }
+        for rel, hrefs in expected.items():
+            html = read(rel)
+            with self.subTest(page=rel):
+                block = re.search(r'<nav class="continue[^"]*"[^>]*>(.*?)</nav>', html).group(1)
+                self.assertEqual(re.findall(r'href="([^"]+)"', block), hrefs)
+                self.assertNotIn("↗", block)
+        for rel in PAGES:
+            footer = re.search(r'<footer class="footer[^"]*">(.*?)</footer>', read(rel)).group(1)
+            self.assertEqual(re.findall(r'data-i18n="(nav\.\w+)"', footer), ["nav.home", "nav.music", "nav.about", "nav.cv", "nav.contact"])
+
+    def test_cv_print_action_is_outside_the_menu(self):
+        cv = read("cv.html")
+        self.assertNotIn("print-button", header(cv))
+        self.assertIn('<button type="button" class="print-button no-print" onclick="window.print()">', cv)
+
+    def test_icons_follow_the_destination(self):
+        html = read("index.html")
+        # The Music facet and the CV contact row open a page of the site: →, not the external ↗.
+        self.assertIn('<span data-i18n="facets.music">Music &amp; Audio</span><i aria-hidden="true">→</i>', html)
+        self.assertIn('<span data-i18n="contact.cv">View the CV</span><b aria-hidden="true">→</b>', html)
+        self.assertIn('<svg class="icon-mail"', html)
+
+    def test_404_offers_home_and_the_main_pages(self):
+        html = read("404.html")
+        self.assertIn('<a class="home" href="/">', html)
+        self.assertEqual(re.findall(r'<li><a href="([^"]+)"', html), ["/#background", "/music/", "/#writing", "/sobre-mi.html", "/cv.html", "/#contact"])
+
+
+@unittest.skipUnless(NODE, "node not installed")
+class FeaturedPlaybackTests(unittest.TestCase):
+    def test_featured_buttons_drive_the_global_player(self):
+        result = subprocess.run([NODE, str(RUNNER), str(ROOT),
+            "const page = browser.tab().open('index.html', {autoplayBlocked: false}); await settle();"
+            "const buttons = page.$$('.feature-play'); out.hidden = buttons.map(b => b.hidden);"
+            "page.click(buttons[1]); await settle();"
+            "out.second = [page.eval('LGPlayer.current().title'), page.eval('LGPlayer.isPlaying()'), buttons.map(b => b.dataset.state), page.$('#mp-title').textContent];"
+            "page.click(buttons[2]); await settle(); out.third = [page.eval('LGPlayer.current().title'), buttons.map(b => b.dataset.state), page.engineAudio.length];"
+            "page.click(buttons[2]); await settle(); out.paused = [page.eval('LGPlayer.isPlaying()'), buttons[2].getAttribute('aria-label')];"],
+            capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        out = json.loads(result.stdout)
+        self.assertEqual(out["hidden"], [False, False, False])
+        self.assertEqual(out["second"], ["Sin Mirar Atrás", True, ["paused", "playing", "paused"], "Sin Mirar Atrás"])
+        self.assertEqual(out["third"], ["Eres Veneno", ["paused", "paused", "playing"], 1])
+        self.assertEqual(out["paused"], [False, "Play preview: Eres Veneno"])
 
 
 def css_tokens(css):
@@ -366,8 +533,8 @@ class ProductionAuditCorrectionsTests(unittest.TestCase):
 
     def test_music_title_is_a_translated_string(self):
         self.assertIn('<title data-i18n="music.pageTitle">Music / Audio · Luis Guinea</title>', read("music/index.html"))
-        # The section name in the brand mark stays MUSIC, like / CV and / 01.
-        self.assertIn('LUIS GUINEA<span> / MUSIC</span>', read("music/index.html"))
+        # The section name in the brand mark is the translated menu label, shown in capitals.
+        self.assertIn('LUIS GUINEA<span> / <span data-i18n="nav.music">Music</span></span>', read("music/index.html"))
 
     @unittest.skipUnless(NODE, "node not installed")
     def test_corrected_copy(self):

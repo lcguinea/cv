@@ -59,7 +59,7 @@ class AboutPageTest(unittest.TestCase):
     def test_shared_navigation_and_seo(self):
         for rel in ('index.html', 'cv.html', 'music/index.html', 'sobre-mi.html'):
             text = (ROOT / rel).read_text(encoding='utf-8')
-            self.assertIn('data-i18n="nav.about"', text if rel == 'sobre-mi.html' else (ROOT / 'js/site.js').read_text())
+            self.assertIn('data-i18n="nav.about"', text)
         self.assertIn('https://luisguinea.com/sobre-mi.html', self.html)
         self.assertIn('sobre-mi.html', (ROOT / 'sitemap.xml').read_text())
         self.assertIn('"sobre-mi.html"', (ROOT / 'tools/build_site.py').read_text())

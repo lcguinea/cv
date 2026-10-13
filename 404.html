@@ -5,26 +5,49 @@
 <meta name="robots" content="noindex">
 <title>Page not found · Luis Guinea</title>
 <link rel="icon" href="data:,">
-<!-- Served by GitHub Pages for any missing path at any depth, so it is self-contained: inline styles, root-absolute font URLs and a root link. -->
+<!-- Served by GitHub Pages for any missing path at any depth, so it is self-contained: inline styles and script, root-absolute font URLs and root links. -->
 <script>(function(){var r=document.documentElement;try{if(localStorage.getItem('lg-theme')==='dark')r.dataset.theme='dark'}catch(e){}})();</script>
 <style>
 @font-face{font-family:'Instrument Serif';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/instrument-serif-latin-400-normal.woff2) format('woff2')}
 @font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url(/fonts/inter-latin-wght-normal.woff2) format('woff2')}
-:root{--bg:#f2efe8;--text:#111;--muted:#555;--accent:#c85a32;color-scheme:light}
-:root[data-theme=dark]{--bg:#111;--text:#f2efe8;--muted:#d8d5ce;color-scheme:dark}
-body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--text);font-family:'Inter',Arial,sans-serif;line-height:1.55}
-main{width:min(36rem,100% - 32px);padding:4rem 0}
-h1{font:400 clamp(2.6rem,8vw,4.5rem)/1 'Instrument Serif',Georgia,serif;margin:0 0 1.5rem}
-p{margin:0 0 .5rem;color:var(--muted)}
-a{color:var(--accent);display:inline-block;margin-top:1.5rem}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/ibm-plex-mono-latin-400-normal.woff2) format('woff2')}
+:root{--bg:#f2efe8;--text:#111;--muted:#555;--rule:#d8d5ce;--accent:#c85a32;--mono:'IBM Plex Mono',monospace;color-scheme:light}
+:root[data-theme=dark]{--bg:#111;--text:#f2efe8;--muted:#d8d5ce;--rule:#555;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:'Inter',Arial,sans-serif;line-height:1.55}
+a{color:inherit;text-underline-offset:4px}
+a:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+.wrap{width:min(1320px,calc(100% - 96px));margin:0 auto}
+header{border-bottom:1px solid var(--rule);padding:.4rem 0}
+header .wrap{display:flex;align-items:center;min-height:44px}
+.brand{font:500 .8rem var(--mono);letter-spacing:.08em;text-decoration:none;white-space:nowrap}
+main{flex:1;display:flex;align-items:center;padding:4rem 0}
+h1{font:400 clamp(4rem,12vw,9rem)/1 'Instrument Serif',Georgia,serif;margin:0 0 1.5rem;color:var(--accent)}
+p{margin:0 0 .5rem;font-size:1.15rem}
+.home{display:inline-flex;align-items:center;gap:.6rem;min-height:48px;margin-top:2rem;padding:0 1.3rem;background:var(--text);color:var(--bg);font:.75rem var(--mono);text-transform:uppercase;letter-spacing:.06em;text-decoration:none}
+.home:hover{background:var(--accent);color:#000}
+ul{display:flex;flex-wrap:wrap;gap:0 1.75rem;list-style:none;margin:2.5rem 0 0;padding:1rem 0 0;border-top:1px solid var(--rule)}
+li a{display:inline-flex;align-items:center;min-height:44px;font:.75rem var(--mono);text-transform:uppercase;letter-spacing:.06em;text-decoration:none;border-bottom:1px solid currentColor}
+li a:hover{color:var(--accent)}
+@media(max-width:700px){.wrap{width:calc(100% - 32px)}.home{width:100%;justify-content:center}}
 </style>
 </head>
 <body>
-<main>
+<header><div class="wrap"><a class="brand" href="/">LUIS GUINEA</a></div></header>
+<main><div class="wrap">
 <h1>404</h1>
-<p>This page does not exist.</p>
-<p lang="es">Esta página no existe.</p>
-<a href="/">Luis Guinea</a>
-</main>
+<p data-text="This page does not exist.|Esta página no existe.">This page does not exist.</p>
+<a class="home" href="/"><span data-text="Back to home|Volver al inicio">Back to home</span> <span aria-hidden="true">→</span></a>
+<nav aria-label="Site" data-label="Site|Sitio"><ul>
+<li><a href="/#background" data-text="Background|Trayectoria">Background</a></li>
+<li><a href="/music/" data-text="Music|Música">Music</a></li>
+<li><a href="/#writing" data-text="Research|Investigación">Research</a></li>
+<li><a href="/sobre-mi.html" data-text="About|Sobre mí">About</a></li>
+<li><a href="/cv.html">CV</a></li>
+<li><a href="/#contact" data-text="Contact|Contacto">Contact</a></li>
+</ul></nav>
+</div></main>
+<!-- Same saved language as the rest of the site (lg-language); English without JavaScript. -->
+<script>(function(){var es=false;try{es=localStorage.getItem('lg-language')==='es'}catch(e){}if(!es)return;document.documentElement.lang='es';document.title='Página no encontrada · Luis Guinea';[].forEach.call(document.querySelectorAll('[data-text]'),function(el){el.textContent=el.getAttribute('data-text').split('|')[1]});[].forEach.call(document.querySelectorAll('[data-label]'),function(el){el.setAttribute('aria-label',el.getAttribute('data-label').split('|')[1])})})();</script>
 </body>
 </html>

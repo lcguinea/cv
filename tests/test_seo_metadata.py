@@ -31,8 +31,9 @@ PAGES = {
     "music/index.html": {
         "url": SITE + "music/",
         "title": "Music / Audio · Luis Guinea",
-        "description": "Releases by Luis Guinea as artist, producer and songwriter, 2020–2024, "
-                       "with chorus previews, credits and links to listen.",
+        # Updated with the catalogue of 1750421: released and unreleased recordings, previews of up to 45 s.
+        "description": "Recordings by Luis Guinea as artist, songwriter, co-writer, arranger and producer, released "
+                       "and unreleased, with previews of up to 45 seconds, credits and links to listen.",
     },
 }
 
