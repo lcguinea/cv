@@ -991,8 +991,8 @@
       "heading": "Cómo Decirte — Luis Guinea, Pablo Delgado (2022)",
       "reviewed_asset": null,
       "catalog_link": {"status": "mapped", "work_id": "como-decirte--luis-guinea--2022", "candidates": [], "detail": "Identidad sustentada por RETIRED_WORKS_INVENTORY.md: candidato único en catalog_master.json, con título, artistas y año coincidentes; confirmada por decisión humana explícita de Luis Guinea."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop", "reggae"], "mood": ["warm", "bright"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["artist", "songwriter", "producer"]}
@@ -1009,8 +1009,8 @@
       "heading": "A Escondidas — Isabella Macías (2018)",
       "reviewed_asset": null,
       "catalog_link": {"status": "mapped", "work_id": "a-escondidas--isabella-macias--2018", "candidates": [], "detail": "Identidad sustentada por RETIRED_WORKS_INVENTORY.md: candidato único en catalog_master.json, con título, artista y año coincidentes; confirmada por decisión humana explícita de Luis Guinea."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop", "latin_urban"], "mood": ["groovy", "playful"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["producer"]}
@@ -1095,8 +1095,8 @@
       "heading": "Sunday Morning — Rogelio Edel (2021)",
       "reviewed_asset": "SundayMorning_V10_LaBuenaAhoraSíMasterFinalALV.mp3",
       "catalog_link": {"status": "mapped", "work_id": "sunday-morning--rogelio-edel--2021", "candidates": [], "detail": "ffprobe 219,000 s frente a duration_ms 219000 (Δ 0,000 s); carpeta Productor/Rogelio Edel y título «Sunday Morning» en el nombre del archivo. Único candidato de catalog_master.json con ese título y artista."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop", "folk_singer_songwriter"], "mood": ["warm", "intimate"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": []
     },
     {
@@ -1104,8 +1104,8 @@
       "heading": "In My Life - Cover — Rogelio Edel (2021)",
       "reviewed_asset": "In my life_master1_1.mp3",
       "catalog_link": {"status": "mapped", "work_id": "in-my-life-cover--rogelio-edel--2021", "candidates": [], "detail": "ffprobe 155,044 s frente a duration_ms 155044 (Δ 0,000 s) en las dos entradas in-my-life--rogelio-edel--2021 e in-my-life-cover--rogelio-edel--2021; ambas comparten audio_ref «In my life_master1_1.wav» (mismo nombre base que el audio local). Las dos entradas son pistas distintas y vivas en Spotify (10Hi3n9Rmq1PEt0OeNWh9t «In My Life» y 7fxYNb7nWn9uiH51kcubNt «In My Life - Cover», ambas del 2021-09-24): no son redundantes y no se eliminan. Encargo del propietario del 2026-10-13 de evitar duplicados: se publica una sola fila, la entrada «- Cover», coherente con la convención del catálogo para versiones de obras ajenas."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop", "folk_singer_songwriter"], "mood": ["warm", "intimate"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": []
     },
     {
@@ -1113,8 +1113,8 @@
       "heading": "Contigo Aprendí - Cover — Ana Guinea (2020)",
       "reviewed_asset": "Contigo Aprendi_Master.mp3",
       "catalog_link": {"status": "mapped", "work_id": "contigo-aprendi-cover--ana-guinea--2020", "candidates": [], "detail": "Decisión del propietario del 2026-10-13: «Contigo Aprendí» es un cover; se conserva esa clasificación (contigo-aprendi-cover--ana-guinea--2020). audio_ref del catálogo «Contigo Aprendi_Master.wav» con el mismo nombre base; ffprobe 120,053 s frente a duration_ms 117000 (Δ 3,053 s)."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop", "latin_traditional"], "mood": ["warm", "intimate"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": []
     },
     {
@@ -1122,8 +1122,8 @@
       "heading": "It Feels Like Falling In Love — Anne Noor",
       "reviewed_asset": "It Feels Like Falling In Love_1.mp3",
       "catalog_link": {"status": "mapped", "work_id": "it-feels-like-falling-in-love--anne-noor", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como it-feels-like-falling-in-love--anne-noor, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop", "folk_singer_songwriter"], "mood": ["warm", "intimate"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["co_writer", "co_arranger", "co_producer"]}
@@ -1140,8 +1140,8 @@
       "heading": "Peligro — Nina Jori, Carla Calderon, Luis Guinea, Salvador Álvarez",
       "reviewed_asset": "Peligro_LUIS_CARLA_NINA_SALVADOR.mp3",
       "catalog_link": {"status": "mapped", "work_id": "peligro--nina-jori", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como peligro--nina-jori, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["latin_urban", "pop"], "mood": ["groovy", "playful"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": []
     },
     {
@@ -1149,8 +1149,8 @@
       "heading": "Diamonds - Cover — Luis Guinea",
       "reviewed_asset": "Diamonds (Mastered).m4a",
       "catalog_link": {"status": "mapped", "work_id": "diamonds-cover-instrumental--luis-guinea", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como diamonds-cover-instrumental--luis-guinea, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["cinematic_classical", "electronic"], "mood": ["dreamy", "epic"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["arranger", "producer"]}
@@ -1166,8 +1166,8 @@
       "heading": "One Last Time vs Rather Be vs Outside vs Summer — Luis Guinea",
       "reviewed_asset": "One Last Time vs Rather Be vs Outside vs Summer.m4a",
       "catalog_link": {"status": "mapped", "work_id": "one-last-time-vs-rather-be-vs-outside-vs-summer--luis-guinea", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como one-last-time-vs-rather-be-vs-outside-vs-summer--luis-guinea, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["cinematic_classical", "pop"], "mood": ["epic", "bright"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["arranger", "producer"]}
@@ -1183,8 +1183,8 @@
       "heading": "Prometheus — Luis Guinea",
       "reviewed_asset": "Prometheus.mp3",
       "catalog_link": {"status": "mapped", "work_id": "prometheus--luis-guinea", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como prometheus--luis-guinea, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["cinematic_classical", "electronic"], "mood": ["epic", "dreamy"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["songwriter", "arranger", "producer"]}
@@ -1200,8 +1200,8 @@
       "heading": "She Wolf - Cover — Luis Guinea",
       "reviewed_asset": "She Wolf (Mastered).m4a",
       "catalog_link": {"status": "mapped", "work_id": "she-wolf-cover-instrumental--luis-guinea", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como she-wolf-cover-instrumental--luis-guinea, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["cinematic_classical", "electronic"], "mood": ["dreamy", "epic"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["arranger", "producer"]}
@@ -1217,8 +1217,8 @@
       "heading": "Singularidad del Genio — Luis Guinea",
       "reviewed_asset": "Singularidad del Genio_Master.mp3",
       "catalog_link": {"status": "mapped", "work_id": "singularidad-del-genio--luis-guinea", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como singularidad-del-genio--luis-guinea, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["cinematic_classical"], "mood": ["melancholic", "epic"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["songwriter", "arranger", "producer"]}
@@ -1234,17 +1234,17 @@
       "heading": "Alacrán — Daniela Gómez",
       "reviewed_asset": "Alacran (Master).mp3",
       "catalog_link": {"status": "mapped", "work_id": "alacran--daniela-gomez", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como alacran--daniela-gomez, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
-      "negative_decisions": []
+      "values": {"genre": ["folk_singer_songwriter"], "mood": [], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
+      "negative_decisions": ["Sin mood por decisión editorial expresa del 2026-10-14: la lista de moods queda vacía a propósito."]
     },
     {
       "review_id": "52",
       "heading": "Jinne, Jinne — Canciones de Puño y Letra",
       "reviewed_asset": "Jinee Jinee (Jinee and Friends).mp3",
       "catalog_link": {"status": "mapped", "work_id": "jinne-jinne--canciones-de-puno-y-letra", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como jinne-jinne--canciones-de-puno-y-letra, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop"], "mood": ["bright", "playful", "groovy"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["co_writer", "co_arranger", "co_producer"]}
@@ -1261,8 +1261,8 @@
       "heading": "Dame Más de Ti — Rogelio Edel",
       "reviewed_asset": "Dame Más De Ti_roughmix.mp3",
       "catalog_link": {"status": "mapped", "work_id": "dame-mas-de-ti-rough-mix--rogelio-edel", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como dame-mas-de-ti-rough-mix--rogelio-edel, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop", "rock"], "mood": ["bright", "warm"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": []
     },
     {
@@ -1270,8 +1270,8 @@
       "heading": "I Want U — Rogelio Edel",
       "reviewed_asset": "I want u - ROGELIO EDEL.mp3",
       "catalog_link": {"status": "mapped", "work_id": "i-want-u--rogelio-edel--2025", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como i-want-u--rogelio-edel--2025, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop", "folk_singer_songwriter"], "mood": ["warm", "intimate"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": []
     },
     {
@@ -1279,8 +1279,8 @@
       "heading": "Mejor Versión — Rogelio Edel",
       "reviewed_asset": "Mejor Versión_Master.mp3",
       "catalog_link": {"status": "mapped", "work_id": "mejor-version--rogelio-edel--2025", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como mejor-version--rogelio-edel--2025, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop", "latin_urban"], "mood": ["groovy", "bright"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": []
     },
     {
@@ -1288,8 +1288,8 @@
       "heading": "Te Extraño — Rogelio Edel",
       "reviewed_asset": "Te Extraño_Master.mp3",
       "catalog_link": {"status": "mapped", "work_id": "te-extrano--rogelio-edel--2025", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como te-extrano--rogelio-edel--2025, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop", "folk_singer_songwriter"], "mood": ["warm", "intimate", "melancholic"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": []
     },
     {
@@ -1297,8 +1297,8 @@
       "heading": "Te Vi (We Belong Together) — Rogelio Edel, Luis Guinea",
       "reviewed_asset": "Te Vi (We Belong Together)_roughmix.mp3",
       "catalog_link": {"status": "mapped", "work_id": "te-vi-we-belong-together-rough-mix--rogelio-edel", "candidates": [], "detail": "Grabación sin entrada en catalog_master.json: alta en catalog_recordings.json como te-vi-we-belong-together-rough-mix--rogelio-edel, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop", "electronic"], "mood": ["dreamy", "intimate"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": []
     },
     {
@@ -1306,8 +1306,8 @@
       "heading": "Sin Mirar Atrás — Alexander Acha (2024)",
       "reviewed_asset": "Alexander Acha - Sin Mirar Atrás.mp3",
       "catalog_link": {"status": "mapped", "work_id": "sin-mirar-atras--alexander-acha--2024", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas del archivo coinciden con la entrada única de catalog_master.json."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop", "rock"], "mood": ["warm", "bright"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["co_writer"]}
@@ -1324,8 +1324,8 @@
       "heading": "Si Estás De Paso — Allan Perz (2016)",
       "reviewed_asset": "Allan Perz - Si Estás De Paso.mp3",
       "catalog_link": {"status": "mapped", "work_id": "si-estas-de-paso--allan-perz--2016", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas del archivo coinciden con la entrada única de catalog_master.json."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop", "rock"], "mood": ["melancholic", "warm"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["producer"]}
@@ -1342,8 +1342,8 @@
       "heading": "Jesus, Set Me Free — Luis Guinea (2021)",
       "reviewed_asset": "Luis Guinea - Jesus, Set Me Free.mp3",
       "catalog_link": {"status": "mapped", "work_id": "jesus-set-me-free--luis-guinea--2021", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas del archivo coinciden con la entrada única de catalog_master.json."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["rock", "pop"], "mood": ["warm", "bright"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["artist", "songwriter"]}
@@ -1360,8 +1360,8 @@
       "heading": "¿Por Qué Lloras? — Renata Isabel, Luis Guinea (2017)",
       "reviewed_asset": "Renata Isabel, Luis Guinea - ¿Por Qué Lloras.mp3",
       "catalog_link": {"status": "mapped", "work_id": "por-que-lloras--renata-isabel--2017", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas del archivo coinciden con la entrada única de catalog_master.json."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop", "folk_singer_songwriter"], "mood": ["intimate", "melancholic"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["artist"]}
@@ -1378,8 +1378,8 @@
       "heading": "Alguien Como Yo — Segundo Piso (2014)",
       "reviewed_asset": "Segundo Piso - Alguien Como Yo.mp3",
       "catalog_link": {"status": "mapped", "work_id": "alguien-como-yo--segundo-piso--2014", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas del archivo coinciden con la entrada única de catalog_master.json."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop", "rock"], "mood": ["bright", "warm"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["producer"]}
@@ -1396,8 +1396,8 @@
       "heading": "Llegue Muy Tarde — Valeria Ferro (2023)",
       "reviewed_asset": "Valeria Ferro - Llegue Muy Tarde.mp3",
       "catalog_link": {"status": "mapped", "work_id": "llegue-muy-tarde--valeria-ferro--2023", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas del archivo coinciden con la entrada única de catalog_master.json."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop", "folk_singer_songwriter"], "mood": ["intimate", "melancholic"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["co_writer"]}
@@ -1414,8 +1414,8 @@
       "heading": "Tóxica — Isabella Macías (2018)",
       "reviewed_asset": "Isabella Macías - Tóxica.mp3",
       "catalog_link": {"status": "mapped", "work_id": "toxica--isabella-macias--2018", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas coinciden con la entrada única de catalog_master.json, y el audio contiene la vista previa oficial: Deezer en 50.6 s (correlación 0.99); Apple Music en 47.6 s (correlación 0.96)."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop"], "mood": ["groovy", "dark"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["producer", "arranger"]}
@@ -1432,8 +1432,8 @@
       "heading": "Toxic — Isabella Macías (2018)",
       "reviewed_asset": "Isabella Macías - Toxic.mp3",
       "catalog_link": {"status": "mapped", "work_id": "toxic--isabella-macias--2018", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas coinciden con la entrada única de catalog_master.json, y el audio contiene la vista previa oficial: Apple Music en 48.5 s (correlación 0.94)."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop"], "mood": ["groovy", "dark"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["arranger", "producer"]}
@@ -1450,8 +1450,8 @@
       "heading": "Quién Soy - Acústica — Louisiana (2017)",
       "reviewed_asset": "Louisiana - Quién Soy - Acústica.mp3",
       "catalog_link": {"status": "mapped", "work_id": "quien-soy-acustica--louisiana--2017", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas coinciden con la entrada única de catalog_master.json, y el audio contiene la vista previa oficial: Apple Music en 48.0 s (correlación 0.97)."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop", "folk_singer_songwriter"], "mood": ["intimate", "melancholic"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["songwriter", "co_writer", "arranger", "performer", "producer"]}
@@ -1468,8 +1468,8 @@
       "heading": "A Million Dreams - Acoustic Cover — Isabella Macías (2018)",
       "reviewed_asset": "Isabella Macías - A Million Dreams - Acoustic Cover.mp3",
       "catalog_link": {"status": "mapped", "work_id": "a-million-dreams-acoustic-cover--isabella-macias--2018", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas coinciden con la entrada única de catalog_master.json, y el audio contiene la vista previa oficial: Deezer en 51.0 s (correlación 0.86); Apple Music en 48.0 s (correlación 0.97)."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop"], "mood": ["intimate", "warm"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["producer", "arranger"]}
@@ -1486,8 +1486,8 @@
       "heading": "Shallow - Cover — Ana Guinea (2020)",
       "reviewed_asset": "Ana Guinea - Shallow - Cover.mp3",
       "catalog_link": {"status": "mapped", "work_id": "shallow-cover--ana-guinea--2020", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas coinciden con la entrada única de catalog_master.json, y el audio contiene la vista previa oficial: Deezer en 52.6 s (correlación 0.92); Apple Music en 49.6 s (correlación 0.94)."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop", "rock"], "mood": ["intimate", "epic"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["arranger", "producer"]}
@@ -1504,8 +1504,8 @@
       "heading": "En Libertad - Cover — Ana Guinea (2020)",
       "reviewed_asset": "Ana Guinea - En Libertad - Cover.mp3",
       "catalog_link": {"status": "mapped", "work_id": "en-libertad-cover--ana-guinea--2020", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas coinciden con la entrada única de catalog_master.json, y el audio contiene la vista previa oficial: Deezer en 52.1 s (correlación 0.97); Apple Music en 49.1 s (correlación 0.97)."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop", "folk_singer_songwriter"], "mood": ["warm", "intimate"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["arranger", "producer"]}
@@ -1522,8 +1522,8 @@
       "heading": "Súper Héroe — Edson Corona, Charlie B (2017)",
       "reviewed_asset": "Edson Corona, Charlie B - Súper Héroe.mp3",
       "catalog_link": {"status": "mapped", "work_id": "super-heroe--edson-corona--2017", "candidates": [], "detail": "Grabación publicada de la carpeta audios/Spotify (incorporada por el propietario el 2026-10-13): título, artistas, álbum y año de las etiquetas coinciden con la entrada única de catalog_master.json, y el audio contiene la vista previa oficial: Apple Music en 48.1 s (correlación 0.99)."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["hip_hop", "pop"], "mood": ["warm", "melancholic"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["songwriter", "co_writer", "arranger", "producer", "performer"]}
@@ -1540,8 +1540,8 @@
       "heading": "Te Esperé - Cover — Ana Guinea (2020)",
       "reviewed_asset": "Te Esperé (Master).mp3",
       "catalog_link": {"status": "mapped", "work_id": "te-espere-cover--ana-guinea--2020", "candidates": [], "detail": "Archivo designado por el propietario el 2026-10-13 (audios/Productor/Ana Guinea/Te Esperé (Master).mp3). Única entrada «Te Esperé» de catalog_master.json (Covers, Vol. 1, 2020-05-08, ISRC MXE772000021). La letra transcrita es la de «Te Esperé» y el audio contiene las vistas previas oficiales de Apple Music y Deezer con otro master; no contiene las de «Shallow»."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["pop", "folk_singer_songwriter"], "mood": ["intimate", "melancholic"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["producer", "arranger"]}
@@ -1573,8 +1573,8 @@
       "heading": "Hagamos Un Trío — Luis Guinea, Mirley Cauich Navarro",
       "reviewed_asset": "Hagamos Un Trío.mp3",
       "catalog_link": {"status": "mapped", "work_id": "hagamos-un-trio--luis-guinea", "candidates": [], "detail": "Grabación inédita sin entrada en catalog_master.json: alta en catalog_recordings.json como hagamos-un-trio--luis-guinea, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["regional_mexican"], "mood": ["playful", "bright"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["songwriter", "co_writer"]},
@@ -1592,8 +1592,8 @@
       "heading": "Dime Señorita — Carla Calderón, Luis Guinea, Efraín Ardila, Brandon Orr",
       "reviewed_asset": "DimeSeñorita_Latin_4.26.21_LuisGuinea.CarlaCalderon.EfrainArdila.BradonOrr.mp3",
       "catalog_link": {"status": "mapped", "work_id": "dime-senorita--carla-calderon", "candidates": [], "detail": "Grabación inédita sin entrada en catalog_master.json: alta en catalog_recordings.json como dime-senorita--carla-calderon, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["latin_urban", "pop"], "mood": ["groovy", "warm"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["songwriter", "co_writer", "co_producer"]},
@@ -1613,8 +1613,8 @@
       "heading": "Vuelta Completa — Luis Guinea, Carla Merchant, Angel Elizalde, Paola Zozaya",
       "reviewed_asset": "VueltaCompleta_Latin_4.26.21_LuisGuinea.CarlaMerchant.AngelElizalde.PaolaZozaya.mp3",
       "catalog_link": {"status": "mapped", "work_id": "vuelta-completa--luis-guinea", "candidates": [], "detail": "Grabación inédita sin entrada en catalog_master.json: alta en catalog_recordings.json como vuelta-completa--luis-guinea, con la evidencia registrada allí. Preparado el 2026-10-13; preview bloqueado hasta la aprobación de su ventana."},
-      "values": {"evidence": "human_review"},
-      "notes": [],
+      "values": {"genre": ["latin_urban", "pop"], "mood": ["groovy", "bright"], "evidence": "human_review"},
+      "notes": ["Género y mood: decisión editorial explícita de Luis Guinea del 2026-10-14 (revisión de metadatos de /music/)."],
       "negative_decisions": [],
       "credits": [
         {"name": "Luis Guinea", "roles": ["songwriter", "co_writer", "producer"]},

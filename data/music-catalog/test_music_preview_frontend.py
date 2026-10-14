@@ -12,6 +12,7 @@ import json
 import re
 import shutil
 import subprocess
+import unicodedata
 import unittest
 from pathlib import Path
 from urllib.parse import quote
@@ -105,7 +106,11 @@ class MusicPlayerStaticTests(unittest.TestCase):
         # Grouping and form labels carry an English fallback in the markup and an i18n key.
         for pattern in (r'role="group" aria-label="[^"]+" data-i18n-label="music\.controls"',
                         r'<label class="sr-only" for="seek" data-i18n="music\.seek">[^<]+</label>',
-                        r'<label class="sr-only" for="role" data-i18n="music\.roleFilter">[^<]+</label>'):
+                        r'<label for="role" data-i18n="music\.roleLabel">[^<]+</label>',
+                        r'<label for="artist" data-i18n="music\.artistFilter">[^<]+</label>',
+                        r'<label for="sort" data-i18n="music\.sortLabel">[^<]+</label>',
+                        r'role="group" aria-labelledby="mood-label" aria-describedby="style-note"',
+                        r'role="group" aria-labelledby="genre-label" aria-describedby="style-note"'):
             self.assertRegex(self.html, pattern)
         self.assertIn("row.setAttribute('aria-current',String(current))", MUSIC_PAGE.read_text(encoding="utf-8"))
         self.assertNotRegex(self.html, r'<svg (?![^>]*aria-hidden="true")')
@@ -115,7 +120,7 @@ class MusicPlayerStaticTests(unittest.TestCase):
         bound = r'<(\w+)\b[^>]*\bdata-i18n="[^"]+"[^>]*>[^<]*</\1>'
         texts = {text.strip() for text in re.findall(r">([^<]+)<", re.sub(bound, "", body)) if text.strip()}
         # Brand mark, language codes, separators and the initial counters are not translatable.
-        self.assertLessEqual(texts, {"LUIS GUINEA", "/ MUSIC", "EN", "ES", "·", "/", "0", "0:00"})
+        self.assertLessEqual(texts, {"LUIS GUINEA", "/ MUSIC", "EN", "ES", "·", "/", "0", "0:00", "↺"})
 
     def test_reduced_motion_disables_player_transitions(self):
         css = STYLES.read_text(encoding="utf-8")
@@ -132,12 +137,22 @@ class MusicStringsTests(unittest.TestCase):
         data = node_json("window.MUSIC_DATA", MUSIC_DATA)
         used |= {"role" + re.sub(r"[^A-Za-z]", "", r) for x in data for r in x["roles"]}
         used |= {"type" + re.sub(r"[^A-Za-z]", "", x["releaseType"]) for x in data}
+        used |= {"genre_" + g for x in data for g in x["genres"]} | {"mood_" + m for x in data for m in x["moods"]}
         english = node_json("window.STRINGS.en.music", STRINGS_JS)
         spanish = node_json("window.STRINGS.es.music", STRINGS_JS)
         self.assertEqual(set(english), set(spanish))
         self.assertLessEqual(used, set(english))
         for key in used:
             self.assertTrue(english[key].strip() and spanish[key].strip(), key)
+
+    def test_genre_and_mood_labels_are_the_approved_vocabulary(self):
+        fields = json.loads((ROOT / "data" / "music-catalog" / "vocabularies.json").read_text(encoding="utf-8"))["fields"]
+        english = node_json("window.STRINGS.en.music", STRINGS_JS)
+        spanish = node_json("window.STRINGS.es.music", STRINGS_JS)
+        for field in ("genre", "mood"):
+            for term in fields[field]["terms"]:
+                key = f"{field}_{term['id']}"
+                self.assertEqual((english[key], spanish[key]), (term["label_en"], term["label_es"]), key)
 
 
 def year(x):
@@ -271,6 +286,112 @@ class MusicPlayerBehaviourTests(unittest.TestCase):
         self.assertEqual(out["step"]["title"], data[composer[0]]["title"])
         self.assertEqual(len(out["reset"]["rows"]), len(data))
         self.assertTrue(out["reset"]["emptyHidden"])
+
+    def test_sorting_by_year_and_artist_is_stable_and_keeps_undated_last(self):
+        out = self.run_scenario(
+            "for (const mode of ['year-desc', 'year-asc', 'artist-asc', 'artist-desc', 'curated']) {"
+            " page.change('#sort', mode); await settle(); out[mode] = snapshot(); }"
+            "out.nums = page.$$('.pl-num').slice(0, 3).map(n => n.textContent);"
+        )
+        data = out["curated"]["data"]
+        order = lambda mode: [r["index"] for r in out[mode]["rows"]]
+        # Approximates the page's Intl.Collator: accents and leading punctuation («¿») do not count.
+        title = lambda i: re.sub(r"[^a-z0-9 ]", "", unicodedata.normalize("NFD", data[i]["title"].casefold()))
+        dated = [i for i, x in enumerate(data) if x["year"] is not None]
+        undated = [i for i, x in enumerate(data) if x["year"] is None]
+        for mode, newest in (("year-desc", True), ("year-asc", False)):
+            with self.subTest(mode=mode):
+                got = order(mode)
+                self.assertEqual(len(got), len(data))
+                years = [data[i]["year"] for i in got[:len(dated)]]
+                self.assertEqual(years, sorted(years, reverse=newest))
+                # Undated recordings close the list in both directions.
+                self.assertEqual(set(got[len(dated):]), set(undated))
+        for mode, reverse in (("artist-asc", False), ("artist-desc", True)):
+            with self.subTest(mode=mode):
+                artists = [data[i]["artist"].casefold() for i in order(mode)]
+                self.assertEqual(artists[0] <= artists[-1], not reverse)
+                self.assertEqual(len(order(mode)), len(data))
+        self.assertEqual(order("curated"), list(range(len(data))))
+        # Ties are broken by title, so the order never depends on chance.
+        got = order("year-desc")
+        for a, b in zip(got, got[1:]):
+            if data[a]["year"] == data[b]["year"]:
+                self.assertLessEqual(title(a), title(b))
+        self.assertEqual(out["nums"], ["01", "02", "03"])
+
+    def test_artist_mood_and_genre_filters_combine_and_clear(self):
+        out = self.run_scenario(
+            "const chipState = () => Object.fromEntries(page.$$('.chip').map(c => [c.dataset.group + ':' + c.dataset.id,"
+            " [Number(c.querySelector('.chip-count').textContent), c.disabled, c.getAttribute('aria-pressed') === 'true']]));"
+            "out.chips = page.$$('.chip').map(c => [c.dataset.group, c.dataset.id]);"
+            "page.change('#artist', 'Rogelio Edel'); await settle(); out.artist = snapshot();"
+            "page.click('.chip[data-id=\"melancholic\"]'); await settle(); out.mood = snapshot();"
+            "page.click('.chip[data-id=\"warm\"]'); await settle(); out.moods = snapshot();"
+            "page.click('.chip[data-id=\"pop\"]'); await settle(); out.both = snapshot(); out.state = chipState();"
+            "out.clearOn = !$('clear').disabled;"
+            "page.click('.chip[data-id=\"rock\"]'); await settle(); out.genres = snapshot();"
+            "page.click('.chip[data-id=\"melancholic\"]'); await settle(); out.deselected = snapshot(); out.after = chipState();"
+            "await click(out.deselected.rows[0].index); out.play = snapshot();"
+            "page.change('#sort', 'year-asc'); await settle(); out.sorted = snapshot();"
+            "page.input('#search', 'zzz'); await settle(); out.none = snapshot();"
+            "page.click('#reset'); await settle(); out.reset = snapshot(); out.clearAfterReset = !$('clear').disabled;"
+            "out.sortKept = $('sort').value; out.pressedAfter = page.$$('.chip[aria-pressed=\"true\"]').length;"
+            "page.change('#artist', 'Ana Guinea'); page.click('.chip[data-id=\"pop\"]'); await settle();"
+            "page.click('#clear'); await settle(); out.cleared = snapshot(); out.clearOff = $('clear').disabled;"
+            "out.sortReset = $('sort').value; out.artistReset = $('artist').value;"
+            "out.pressedCleared = page.$$('.chip[aria-pressed=\"true\"]').length;"
+        )
+        data = out["reset"]["data"]
+        ids = lambda state: [r["index"] for r in state["rows"]]
+        has = lambda i, group, values: bool(set(data[i][group]) & set(values))
+        # Chips come from the data only: every value some recording has, none that it lacks.
+        self.assertEqual({tuple(c) for c in out["chips"]},
+                         {("mood", m) for x in data for m in x["moods"]} | {("genre", g) for x in data for g in x["genres"]})
+        rogelio = [i for i, x in enumerate(data) if "Rogelio Edel" in x["artists"]]
+        self.assertEqual(ids(out["artist"]), rogelio)
+        # Moods combine with OR among themselves, and with AND with the artist.
+        self.assertEqual(ids(out["mood"]), [i for i in rogelio if has(i, "moods", ["melancholic"])])
+        moods = [i for i in rogelio if has(i, "moods", ["melancholic", "warm"])]
+        self.assertGreater(len(moods), len(ids(out["mood"])))
+        self.assertEqual(ids(out["moods"]), moods)
+        # Genre and mood combine with AND.
+        both = [i for i in moods if has(i, "genres", ["pop"])]
+        self.assertTrue(both)
+        self.assertEqual(ids(out["both"]), both)
+        self.assertEqual(out["both"]["count"], str(len(both)))
+        # Each chip counts its recordings among those passing every other filter, its own group aside;
+        # a chip is disabled only when selecting it could add nothing.
+        pools = {"mood": [i for i in rogelio if has(i, "genres", ["pop"])], "genre": moods}
+        for key, (count, disabled, pressed) in out["state"].items():
+            group, value = key.split(":")
+            with self.subTest(chip=key):
+                n = sum(value in data[i][group + "s"] for i in pools[group])
+                self.assertEqual(count, n)
+                self.assertEqual(disabled, n == 0 and not pressed)
+        self.assertEqual(sorted(k for k, v in out["state"].items() if v[2]), ["genre:pop", "mood:melancholic", "mood:warm"])
+        self.assertTrue(out["clearOn"])
+        # Genres combine with OR among themselves.
+        self.assertEqual(ids(out["genres"]), [i for i in moods if has(i, "genres", ["pop", "rock"])])
+        # An active chip can be deselected.
+        self.assertEqual(ids(out["deselected"]),
+                         [i for i in rogelio if has(i, "moods", ["warm"]) and has(i, "genres", ["pop", "rock"])])
+        self.assertFalse(out["after"]["mood:melancholic"][2])
+        # Playback works on a filtered list and survives re-sorting.
+        self.assertTrue(out["play"]["playing"])
+        self.assertEqual(out["play"]["title"], data[ids(out["deselected"])[0]]["title"])
+        self.assertEqual((out["sorted"]["title"], out["sorted"]["playing"]), (out["play"]["title"], True))
+        self.assertEqual(out["none"]["rows"], [])
+        self.assertFalse(out["none"]["emptyHidden"])
+        # «Show all recordings» restores the whole catalogue and keeps the chosen order, so Reset all stays available.
+        self.assertEqual(len(out["reset"]["rows"]), len(data))
+        self.assertTrue(out["reset"]["emptyHidden"])
+        self.assertEqual((out["sortKept"], out["pressedAfter"]), ("year-asc", 0))
+        self.assertTrue(out["clearAfterReset"])
+        # Reset all returns filters, search and order to the initial curated state.
+        self.assertEqual(ids(out["cleared"]), list(range(len(data))))
+        self.assertEqual((out["sortReset"], out["artistReset"], out["pressedCleared"]), ("curated", "", 0))
+        self.assertTrue(out["clearOff"])
 
     def test_unreleased_recording_shows_type_version_and_no_year(self):
         # A synthetic unreleased row appended to a temporary copy of the front end: the page must

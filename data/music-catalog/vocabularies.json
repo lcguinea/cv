@@ -78,6 +78,7 @@
     "mood": {
       "cardinality": [1, 4],
       "multi": true,
+      "explicit_empty": {"allowed": true, "rule": "Una lista vacía (`values.mood: []`) solo es válida por decisión editorial expresa registrada en `negative_decisions` de la revisión humana. Cualquier otra lista de moods mantiene la cardinalidad 1–4; un campo ausente significa «sin clasificar». Caso aprobado: «Alacrán» (alacran--daniela-gomez), 2026-10-14."},
       "terms": [
         {"id": "bright", "label_en": "Bright", "label_es": "Luminosa", "definition": "Armonía mayor y timbres claros: sensación de luz."},
         {"id": "warm", "label_en": "Warm", "label_es": "Cálida", "definition": "Timbres acústicos o analógicos cercanos y armonía consonante: sensación de cobijo."},
@@ -223,6 +224,15 @@
     }
   },
   "amendments": [
+    {
+      "date": "2026-10-14",
+      "source": "Decisión editorial explícita de Luis Guinea (revisión de metadatos de /music/)",
+      "evidence": "human_review",
+      "changes": [
+        "mood: + explicit_empty. Se permite la lista vacía solo cuando la revisión humana la fija a propósito y la registra en negative_decisions; la cardinalidad 1–4 sigue rigiendo para toda otra lista de moods"
+      ],
+      "not_created": []
+    },
     {
       "date": "2026-09-28",
       "source": "One Page Luis Guinea/CLASIFICACION_HUMANA_MUSICA.md",

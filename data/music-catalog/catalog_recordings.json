@@ -144,8 +144,8 @@
         "storefront": "mx"
       },
       "artwork": {
-        "file": null,
-        "web_file": "assets/images/el-beso---Tufic.webp"
+        "file": "One Page Luis Guinea/artworks/El Beso - Tufic y Luis Guinea.jpg",
+        "web_file": "assets/images/El-Beso---Tufic-y-Luis-Guinea.webp"
       },
       "audio_ref": "ElBeso_Tufic_LuisGuinea_Master.mp3",
       "editorial": {
@@ -166,7 +166,7 @@
         "Publicada: Apple Music «\"el beso\"» de Tufic & Luis Guinea, sencillo 6775376256 (2026-06-19, 307,710 s); Spotify 4XUUtkTby59nhAjIZ6A0uI «\"el beso\"» de Tufic, Luis Guinea (307 710 ms), verificado con el oEmbed de Spotify.",
         "Master local 307,776 s (Δ 0,066 s).",
         "Decisión explícita del propietario del 2026-10-13: título público «El Beso», sin comillas (las plataformas lo escriben «\"el beso\"»).",
-        "Portada: imagen oficial del sencillo en la CDN de Spotify (640 px) convertida a WebP.",
+        "Portada: corrección explícita del propietario del 2026-10-14. La imagen anterior, assets/images/el-beso---Tufic.webp (sombrilla «Parada obligatoria»), no era la portada de este sencillo; se reemplaza por «El Beso - Tufic y Luis Guinea.jpg» (4000 × 4000, sha256 2f42339b…28bc3), reducida a 600 × 600 y codificada con cwebp -q 75, la convención del sitio. Se publica con un nombre de archivo nuevo para que la URL cambie y ninguna caché sirva la imagen anterior.",
         "Spotify fecha la pista el 2026-07-24 y Apple Music el 2026-06-19: se publica solo el año, 2026."
       ],
       "provisional": []

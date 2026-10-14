@@ -33,7 +33,7 @@ MAX_PREVIEW_S = 45.0
 PREVIEW_NAME = re.compile(r"^[a-z0-9][a-z0-9-]*\.mp3$")
 FORBIDDEN = re.compile(r"one page luis guinea|one%20page|audios/|master|\.\./|^/|\\", re.I)
 FIELDS = ("title", "artist", "role", "artwork", "releaseType", "year", "roles", "preview",
-          "spotify", "appleMusic", "version", "youtube", "soundcloud")
+          "spotify", "appleMusic", "version", "youtube", "soundcloud", "artists", "genres", "moods")
 RELEASED_TYPES = {"Single", "Album", "EP"}
 UNRELEASED_TYPES = {"Unreleased", "SelfPublished"}
 VERSIONS = {"Instrumental", "PianoVocal", "RoughMix", "RegionalMexican", "Mashup"}

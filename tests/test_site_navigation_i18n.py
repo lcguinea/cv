@@ -33,7 +33,8 @@ NAV_HREFS = {
 CURRENT = {"home": None, "cv": "nav.cv", "music": "nav.music", "about": "nav.about"}
 PUBLISHED_JS = ("strings.js", "i18n.js", "site.js", "player.js", "music-page.js", "theme-init.js")
 # Keys built at runtime from data: 'music.role'+credit and 'music.type'+release type.
-DYNAMIC_PREFIXES = ("music.role", "music.type", "music.version")
+# Genre and mood labels are looked up from the human-reviewed values in js/music-data.js.
+DYNAMIC_PREFIXES = ("music.role", "music.type", "music.version", "music.genre_", "music.mood_")
 
 
 def read(rel):

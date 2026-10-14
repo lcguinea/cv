@@ -121,6 +121,46 @@ html.js body{padding-bottom:4.5rem}
 .np-links[hidden]{display:none}
 @media(max-width:700px){.playlist{display:block}.playlist li{grid-template-columns:1fr}.pl-links{padding:0 .25rem .35rem 5.5rem;margin-top:-.6rem}}
 
+/* Catalogue exploration: mood and genre chips (human-reviewed data), then search, artist, credit and sort. */
+.catalog-explore{margin:2.5rem 0 2rem}
+.explore-group{display:grid;grid-template-columns:7rem minmax(0,1fr);gap:1.5rem;align-items:start;padding:.85rem 0;border-top:1px solid var(--rule)}
+.explore-group[hidden]{display:none}
+.explore-label{margin:0;padding-top:.7rem;font:.7rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.chip{display:inline-flex;align-items:center;gap:.55rem;min-height:40px;padding:0 .85rem;border:1px solid var(--muted);background:transparent;color:var(--text);font:.72rem var(--mono);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.chip-count{font-size:.65rem;color:var(--muted)}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip[aria-pressed=true]{background:var(--text);border-color:var(--text);color:var(--bg)}
+.chip[aria-pressed=true] .chip-count{color:inherit}
+.chip:disabled{opacity:.4;cursor:default;border-style:dashed}
+.chip:disabled:hover{border-color:var(--muted);color:var(--text)}
+.chip:focus-visible,.clear-filters:focus-visible,.music-toolbar select:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.explore-note{margin:0;padding:0 0 .25rem 8.5rem;font-size:.85rem;color:var(--muted)}
+.explore-note[hidden]{display:none}
+.catalog-explore .music-toolbar{grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(0,1fr)) auto;align-items:end;gap:1.25rem;margin:1rem 0 0;padding-top:1.25rem;border-top:1px solid var(--rule)}
+.field{display:flex;flex-direction:column;min-width:0}
+.field label{font:.65rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.music-toolbar input,.music-toolbar select{width:100%;padding:.6rem 0}
+.music-toolbar select{cursor:pointer;appearance:none;-webkit-appearance:none;padding-right:1.5rem;background-image:linear-gradient(45deg,transparent 50%,var(--text) 50%),linear-gradient(135deg,var(--text) 50%,transparent 50%);background-position:right 9px center,right 4px center;background-size:5px 5px;background-repeat:no-repeat}
+.music-toolbar select option{background:var(--bg);color:var(--text)}
+.clear-filters{display:inline-flex;align-items:center;gap:.4rem;min-height:44px;padding:0;border:0;border-bottom:1px solid currentColor;font:.72rem var(--mono);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.clear-filters:hover{color:var(--accent)}
+.clear-filters:disabled{opacity:.4;cursor:default;color:var(--text)}.clear-filters[hidden]{display:none}
+.empty-state p{margin:0 0 1.25rem;font-size:1.1rem}
+.np-style[hidden]{display:none}
+@media(max-width:900px){.catalog-explore .music-toolbar{grid-template-columns:repeat(3,minmax(0,1fr))}.field-search{grid-column:1/-1}.clear-filters{grid-column:1/-1;justify-self:start}}
+@media(max-width:700px){
+  .catalog-explore{margin:1.5rem 0 1.5rem}
+  .explore-group{grid-template-columns:1fr;gap:.35rem;padding:.65rem 0}
+  .explore-label{padding-top:0}
+  .chips{flex-wrap:nowrap;overflow-x:auto;margin:0 -16px;padding:.15rem 16px .35rem;scroll-padding:0 16px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .explore-note{padding:0 0 .25rem;font-size:.8rem}
+  .catalog-explore .music-toolbar{grid-template-columns:1fr 1fr;gap:.75rem 1rem}
+  .field-search{grid-column:1/-1}
+  .clear-filters{grid-column:auto;justify-self:end;align-self:end}
+}
+
 /* Music hero and platform profiles: the studio photograph leads, uncropped (5:2) at every width. */
 .music-hero{padding-top:clamp(1.5rem,3vw,2.5rem)}
 .music-stage{position:relative;margin:0 auto;width:min(1320px,calc(100% - 96px))}

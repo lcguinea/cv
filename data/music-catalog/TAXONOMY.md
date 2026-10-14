@@ -37,6 +37,7 @@ Estado: **propuesta para evaluar**. Todavía no se aplica a `catalog_master.json
 
 - En formato tabular, los valores múltiples se separan con `;` (`pop; rock`). El primero es el principal cuando el orden importa (Genre).
 - La cardinalidad indicada rige **cuando la obra está clasificada**. Una obra sin clasificar tiene todos los campos vacíos.
+- Excepción expresa: `mood` admite una lista vacía solo cuando la revisión humana la fija a propósito y lo registra en `negative_decisions` (`explicit_empty` en `vocabularies.json`). Caso aprobado: «Alacrán», 2026-10-14.
 
 | Campo | Columna | Cardinalidad | Múltiple |
 |---|---|---|---|

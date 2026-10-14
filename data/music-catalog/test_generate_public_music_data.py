@@ -81,7 +81,7 @@ class PublicMusicDataTests(unittest.TestCase):
         self.assertEqual(
             set(rows[0]),
             {"title", "artist", "role", "artwork", "releaseType", "year", "roles", "preview",
-             "spotify", "appleMusic", "version", "youtube", "soundcloud"},
+             "spotify", "appleMusic", "version", "youtube", "soundcloud", "artists", "genres", "moods"},
         )
         hasta = next(row for row in rows if row["title"] == "Hasta Que Lleguemos Al Mar")
         self.assertEqual(
@@ -101,6 +101,9 @@ class PublicMusicDataTests(unittest.TestCase):
                 "version": None,
                 "youtube": None,
                 "soundcloud": None,
+                "artists": ["Luis Guinea", "Tony Barhoum"],
+                "genres": ["pop", "folk_singer_songwriter"],
+                "moods": ["warm", "bright"],
             },
         )
         self.assertLessEqual({row["role"] for row in rows}, generator.ALLOWED_ROLES)
@@ -180,6 +183,63 @@ class PublicMusicDataTests(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError, "supported public role"):
             generator.project(self.master, selection, decisions, repo=REPO)
+
+    def test_genres_and_moods_come_only_from_the_human_review(self):
+        rows = {row["title"]: row for row in self.project_all()}
+        # Reviewed values are published literally, in the order of the review.
+        self.assertEqual(rows["La Bamba"]["genres"], ["reggae"])
+        self.assertEqual(rows["La Bamba"]["moods"], ["bright", "warm", "playful", "groovy"])
+        self.assertEqual((rows["Peligro"]["genres"], rows["Peligro"]["moods"]), (["latin_urban", "pop"], ["groovy", "playful"]))
+        # An explicit editorial decision may approve a genre and leave the moods empty on purpose.
+        self.assertEqual((rows["Alacrán"]["genres"], rows["Alacrán"]["moods"]), (["folk_singer_songwriter"], []))
+        self.assertEqual(rows["Peligro"]["artists"],
+                         ["Nina Jori", "Carla Calderon", "Luis Guinea", "Salvador Álvarez"])
+        genres, moods = set(generator.vocabulary_terms("genre")), set(generator.vocabulary_terms("mood"))
+        for row in rows.values():
+            self.assertLessEqual(set(row["genres"]), genres)
+            self.assertLessEqual(set(row["moods"]), moods)
+            self.assertEqual(", ".join(row["artists"]), row["artist"])
+
+        decisions = json.loads(json.dumps(self.decisions))
+        case = next(c for c in decisions["classifications"] if c["review_id"] == "11")
+        case["values"]["evidence"] = "analisis_audio"
+        # A work without a human review publishes empty lists, never an inference.
+        bamba = next(r for r in self.project(decisions=decisions) if r["title"] == "La Bamba")
+        self.assertEqual((bamba["genres"], bamba["moods"]), ([], []))
+        case["values"].update(evidence="human_review", mood=["sad"])
+        with self.assertRaisesRegex(ValueError, "mood outside vocabularies.json"):
+            self.project(decisions=decisions)
+
+    def test_an_empty_mood_needs_an_explicit_decision_allowed_by_the_vocabulary(self):
+        vocabularies = json.loads(generator.VOCABULARIES.read_text(encoding="utf-8"))
+        fields = vocabularies["fields"]
+        # Only mood admits an explicit empty list; every other cardinality is unchanged.
+        self.assertEqual([f for f, spec in fields.items() if "explicit_empty" in spec], ["mood"])
+        self.assertEqual((fields["mood"]["cardinality"], fields["genre"]["cardinality"]), ([1, 4], [1, 2]))
+        # «Alacrán» is published with its approved genre and no mood, as the review records.
+        alacran = next(c for c in self.decisions["classifications"] if c["review_id"] == "51")
+        self.assertEqual(alacran["values"]["mood"], [])
+        self.assertTrue(any("mood" in note.lower() for note in alacran["negative_decisions"]))
+
+        def project_with(change):
+            decisions = json.loads(json.dumps(self.decisions))
+            change(next(c for c in decisions["classifications"] if c["review_id"] == "51"))
+            return next(r for r in self.project(decisions=decisions) if r["title"] == "Alacrán")
+
+        # Without the recorded decision the empty list is rejected.
+        with self.assertRaisesRegex(ValueError, "empty mood needs an explicit editorial decision"):
+            project_with(lambda case: case.update(negative_decisions=[]))
+        # Genre has no such exception, and non-empty lists keep the vocabulary cardinality.
+        with self.assertRaisesRegex(ValueError, "empty genre needs an explicit editorial decision"):
+            project_with(lambda case: case["values"].update(genre=[]))
+        with self.assertRaisesRegex(ValueError, "5 mood values"):
+            project_with(lambda case: case["values"].update(
+                mood=["warm", "bright", "dreamy", "intimate", "calm"]))
+        with self.assertRaisesRegex(ValueError, "3 genre values"):
+            project_with(lambda case: case["values"].update(genre=["pop", "rock", "reggae"]))
+        # An absent field stays unclassified rather than invalid.
+        row = project_with(lambda case: case["values"].pop("mood"))
+        self.assertEqual((row["genres"], row["moods"]), (["folk_singer_songwriter"], []))
 
     def test_projection_rejects_unreleased_or_incomplete_works(self):
         master = json.loads(json.dumps(self.master))
@@ -298,11 +358,14 @@ class PublicMusicDataTests(unittest.TestCase):
         row = next(r for r in self.project_all() if r["title"] == "Peligro")
         javascript = generator.serialize([dict(row, preview="peligro--nina-jori.mp3")])
         self.assertIn("releaseType:'Unreleased', year:null", javascript)
-        self.assertIn("appleMusic:null, version:null, youtube:null, soundcloud:null }", javascript)
+        self.assertIn("appleMusic:null, version:null, youtube:null, soundcloud:null, artists:['Nina Jori', "
+                      "'Carla Calderon', 'Luis Guinea', 'Salvador Álvarez'], genres:['latin_urban', 'pop'], moods:['groovy', 'playful'] }", javascript)
+        with self.assertRaisesRegex(ValueError, "artists, genres and moods are string lists"):
+            generator.serialize([dict(row, preview="peligro--nina-jori.mp3", artists=[])])
         released = self.project()[0]
-        with self.assertRaisesRegex(ValueError, "thirteen-field public schema"):
+        with self.assertRaisesRegex(ValueError, "sixteen-field public schema"):
             generator.serialize([dict(released, year=None)])
-        with self.assertRaisesRegex(ValueError, "thirteen-field public schema"):
+        with self.assertRaisesRegex(ValueError, "sixteen-field public schema"):
             generator.serialize([dict(row, preview="x.mp3", spotify=released["spotify"])])
 
     def test_generated_javascript_contains_no_internal_catalog_fields(self):
@@ -591,9 +654,9 @@ class PublicMusicDataTests(unittest.TestCase):
                          sum(1 for row in rows if row["spotify"] is None))
         no_links = dict(rows[0], spotify=None, appleMusic=None)
         self.assertIn("spotify:null, appleMusic:null", generator.serialize([no_links]))
-        with self.assertRaisesRegex(ValueError, "thirteen-field public schema"):
+        with self.assertRaisesRegex(ValueError, "sixteen-field public schema"):
             generator.serialize([dict(rows[0], spotify="https://open.spotify.com/track/short")])
-        with self.assertRaisesRegex(ValueError, "thirteen-field public schema"):
+        with self.assertRaisesRegex(ValueError, "sixteen-field public schema"):
             generator.serialize([{k: v for k, v in rows[0].items() if k != "appleMusic"}])
 
     def test_checked_in_output_is_current_and_generation_is_deterministic(self):

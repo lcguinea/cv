@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate the browser-safe data consumed by /music/.
 
-Only thirteen explicitly allowed display fields are emitted. Every published song has a valid
+Only sixteen explicitly allowed display fields are emitted. Every published song has a valid
 `preview`: the file name of a verified derivative (music_preview_manifest.json) that exists in
 assets/audio/previews/, is a readable MP3 and lasts 45 s or less (measured with the standard
 library). Songs of the selection without such a preview are left out of the public output and
@@ -10,7 +10,10 @@ leave the manifest. `spotify` and `appleMusic` are optional streaming destinatio
 URL or null): Spotify comes from the catalogue entry; Apple Music comes from the catalogue entry or,
 when it has none, from the owner-certified public_platform_links.json. `youtube` and `soundcloud`
 are optional links to the full recording (owner-supplied and verified, public_platform_links.json
-`full_recordings`). No URL is ever deduced.
+`full_recordings`). No URL is ever deduced. `artists` lists the credited recording artists of the
+catalogue entry, for the artist filter. `genres` and `moods` come only from the owner's human review
+(evidence `human_review` in human_review_decisions.json), validated against vocabularies.json; a
+work without a reviewed value publishes an empty list, never an inferred one.
 Recordings that are not in the «Released» sheet (unreleased songs and instrumentals, and releases
 newer than that sheet, with links verified against the platforms) come from the hand-curated
 catalog_recordings.json, never from catalog_master.json, which is generated and hash-pinned; a
@@ -44,6 +47,7 @@ PLATFORM_LINKS = HERE / "public_platform_links.json"
 PLATFORM_LINKS_SCHEMA = "public-platform-links-v1"
 ARTWORK_CORRECTIONS = HERE / "public_artwork_corrections.json"
 ARTWORK_CORRECTIONS_SCHEMA = "public-artwork-corrections-v1"
+VOCABULARIES = HERE / "vocabularies.json"
 EXCLUSIONS_SCHEMA = "public-catalog-exclusions-v1"
 PUBLICATION_RULE = (
     "Toda canción publicada necesita un preview válido: entrada verified en "
@@ -86,8 +90,11 @@ LUIS = "Luis Guinea"
 # `youtube` and `soundcloud` link the full recording, or are None.
 # `releaseType` is Single/Album/EP for released works, SelfPublished or Unreleased otherwise; `year` is None
 # only for an unreleased recording whose year no source states. `version` is None or one of VERSIONS.
+# `artists` is the credited artist list behind `artist`; `genres` and `moods` are vocabulary ids from the
+# human review, possibly empty.
 PUBLIC_FIELDS = ("title", "artist", "role", "artwork", "releaseType", "year", "roles", "preview",
-                 "spotify", "appleMusic", "version", "youtube", "soundcloud")
+                 "spotify", "appleMusic", "version", "youtube", "soundcloud", "artists", "genres", "moods")
+SCHEMA_ERROR = "rows must match the sixteen-field public schema"
 SPOTIFY_URL_RE = re.compile(r"^https://open\.spotify\.com/track/[A-Za-z0-9]{22}$")
 APPLE_MUSIC_URL_RE = re.compile(r"^https://music\.apple\.com/[a-z]{2}/(?:album|song)/[A-Za-z0-9%._~/?=&-]+$")
 FULL_RECORDING_URL_RES = {
@@ -257,6 +264,51 @@ def _primary_role(decision, roles, work_id):
     return role
 
 
+def vocabulary_terms(field, vocabularies=None):
+    """The approved ids of a vocabularies.json field (genre or mood), in vocabulary order."""
+    if vocabularies is None:
+        vocabularies = json.loads(VOCABULARIES.read_text(encoding="utf-8"))
+    return [term["id"] for term in vocabularies["fields"][field]["terms"]]
+
+
+def vocabulary_rules(field, vocabularies=None):
+    """(ids, (minimum, maximum), explicit empty allowed) of a vocabularies.json field."""
+    if vocabularies is None:
+        vocabularies = json.loads(VOCABULARIES.read_text(encoding="utf-8"))
+    spec = vocabularies["fields"][field]
+    low, high = spec["cardinality"]
+    return [term["id"] for term in spec["terms"]], (low, high), bool((spec.get("explicit_empty") or {}).get("allowed"))
+
+
+def _reviewed_terms(decision, field, rules, work_id):
+    """Human-reviewed vocabulary ids of one field, or [] when the review has none. Never inferred.
+
+    An absent field is unclassified. A present list must respect the vocabulary cardinality; an
+    empty list is valid only where the vocabulary allows an explicit empty value and the review
+    records that choice in negative_decisions (e.g. a work published without mood on purpose).
+    """
+    terms, (low, high), explicit_empty = rules
+    values = decision.get("values") or {}
+    if values.get("evidence") != "human_review" or field not in values:
+        return []
+    found = values[field]
+    if not isinstance(found, list) or not all(isinstance(term, str) for term in found):
+        raise ValueError(f"{work_id}: human-reviewed {field} must be a list of ids")
+    unknown = [term for term in found if term not in terms]
+    if unknown:
+        raise ValueError(f"{work_id}: {field} outside vocabularies.json: {unknown}")
+    if len(set(found)) != len(found):
+        raise ValueError(f"{work_id}: duplicate {field} values")
+    if not found:
+        recorded = any(field in str(note).lower() for note in decision.get("negative_decisions") or [])
+        if not (explicit_empty and recorded):
+            raise ValueError(f"{work_id}: an empty {field} needs an explicit editorial decision "
+                             "allowed by vocabularies.json")
+    elif not low <= len(found) <= high:
+        raise ValueError(f"{work_id}: {len(found)} {field} values (vocabularies.json allows {low}-{high})")
+    return list(found)
+
+
 def preview_problem(preview, *, repo=REPO):
     """None when `preview` is a playable public MP3 of at most 45 s, else (reason, detail)."""
     path = PurePosixPath(preview)
@@ -408,6 +460,7 @@ def _candidates(master, selection, decisions, *, repo=REPO, manifest=None, links
     if unknown:
         raise ValueError(f"platform links reference unknown works: {unknown}")
 
+    genre_rules, mood_rules = vocabulary_rules("genre"), vocabulary_rules("mood")
     classifications = decisions.get("classifications")
     if not isinstance(classifications, list):
         raise ValueError("human mapping artifacts have an invalid schema")
@@ -492,6 +545,9 @@ def _candidates(master, selection, decisions, *, repo=REPO, manifest=None, links
             "version": work.get("version"),
             "youtube": full_recordings.get(work_id, {}).get("youtube"),
             "soundcloud": full_recordings.get(work_id, {}).get("soundcloud"),
+            "artists": [artist.strip() for artist in artists],
+            "genres": _reviewed_terms(decision, "genre", genre_rules, work_id),
+            "moods": _reviewed_terms(decision, "mood", mood_rules, work_id),
         }
         if tuple(row) != PUBLIC_FIELDS:
             raise AssertionError("public field order changed")
@@ -551,7 +607,7 @@ def serialize(rows):
     lines = []
     for row in rows:
         if tuple(row) != PUBLIC_FIELDS:
-            raise ValueError("rows must match the thirteen-field public schema")
+            raise ValueError(SCHEMA_ERROR)
         unreleased = row["releaseType"] in NON_COMMERCIAL_TYPES.values()
         if not all(isinstance(row[key], str) for key in PUBLIC_FIELDS[:5]) or not (
             (isinstance(row["year"], int) and not isinstance(row["year"], bool)
@@ -565,20 +621,27 @@ def serialize(rows):
         ) or not (
             isinstance(row["preview"], str) and previews.PREVIEW_NAME_RE.match(row["preview"])
         ):
-            raise ValueError("rows must match the thirteen-field public schema (preview is required)")
+            raise ValueError(f"{SCHEMA_ERROR} (preview is required)")
+        if not row["artists"] or not all(
+            isinstance(row[key], list) and all(isinstance(item, str) and item for item in row[key])
+            for key in ("artists", "genres", "moods")
+        ):
+            raise ValueError(f"{SCHEMA_ERROR} (artists, genres and moods are string lists)")
         try:
             _platform_url(row["spotify"], SPOTIFY_URL_RE, "spotify")
             _platform_url(row["appleMusic"], APPLE_MUSIC_URL_RE, "appleMusic")
             for platform, pattern in FULL_RECORDING_URL_RES.items():
                 _platform_url(row[platform], pattern, platform)
         except ValueError as exc:
-            raise ValueError(f"rows must match the thirteen-field public schema: {exc}") from None
+            raise ValueError(f"{SCHEMA_ERROR}: {exc}") from None
         values = [quote(row[key]) for key in PUBLIC_FIELDS[:5]]
         values.append("null" if row["year"] is None else str(row["year"]))
         values.append("[" + ", ".join(quote(role) for role in row["roles"]) + "]")
         values.append(quote(row["preview"]))
         values.extend("null" if row[key] is None else quote(row[key])
                       for key in ("spotify", "appleMusic", "version", "youtube", "soundcloud"))
+        values.extend("[" + ", ".join(quote(item) for item in row[key]) + "]"
+                      for key in ("artists", "genres", "moods"))
         fields = ", ".join(f"{key}:{value}" for key, value in zip(PUBLIC_FIELDS, values))
         lines.append(f"  {{ {fields} }}")
     payload = "[\n" + ",\n".join(lines) + "\n]"

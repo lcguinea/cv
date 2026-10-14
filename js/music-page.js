@@ -4,8 +4,84 @@
   if(!P)return;
   const $=id=>document.getElementById(id);
   const catalog=$('catalog'),search=$('search'),role=$('role'),count=$('count'),empty=$('empty'),toggle=$('toggle'),seek=$('seek'),volume=$('np-volume'),statusLine=$('np-status');
+  const artistFilter=$('artist'),sort=$('sort'),clear=$('clear'),chipBoxes={mood:$('moods'),genre:$('genres')};
   const tracks=P.tracks;
   let visible=[];
+  // Explore: mood and genre come only from the owner's human review (empty lists for works not yet reviewed) and
+  // `artists` is the credited artist list. Chips of one group combine with OR (any selected mood, any selected
+  // genre); groups combine with AND with each other and with artist, credit and search.
+  const moodsOf=x=>Array.isArray(x.moods)?x.moods:[],genresOf=x=>Array.isArray(x.genres)?x.genres:[];
+  const artistsOf=x=>Array.isArray(x.artists)&&x.artists.length?x.artists:[x.artist];
+  const FACETS={mood:moodsOf,genre:genresOf};
+  const chosen={mood:new Set(),genre:new Set()};
+  function facetKey(group,id){return 'music.'+group+'_'+id}
+  function collator(){return new Intl.Collator(window.currentLanguage==='es'?'es':'en',{sensitivity:'base',numeric:true})}
+  // Chips follow the data: only values some recording has, the most frequent first, in a fixed order.
+  function termsOf(group){
+    const counts=new Map();
+    tracks.forEach(x=>FACETS[group](x).forEach(id=>counts.set(id,(counts.get(id)||0)+1)));
+    return [...counts].sort((a,b)=>b[1]-a[1]||(a[0]<b[0]?-1:1)).map(([id])=>id);
+  }
+  function buildChips(){
+    Object.keys(chipBoxes).forEach(group=>{
+      const box=chipBoxes[group];
+      if(!box)return;
+      box.innerHTML=termsOf(group).map(id=>`<button type="button" class="chip" data-group="${group}" data-id="${esc(id)}" aria-pressed="false"><span class="chip-label" data-i18n="${facetKey(group,id)}">${esc(t(facetKey(group,id)))}</span><span class="chip-count"></span></button>`).join('');
+      box.closest('.explore-group').hidden=!box.children.length;
+    });
+    const reviewed=tracks.filter(x=>moodsOf(x).length||genresOf(x).length).length;
+    const note=$('style-note');
+    if(note){note.hidden=!reviewed;note.textContent=(reviewed<tracks.length?t('music.styleNote').replace('{n}',reviewed)+' ':'')+t('music.facetHint')}
+  }
+  function buildArtists(){
+    if(!artistFilter)return;
+    const counts=new Map();
+    tracks.forEach(x=>artistsOf(x).forEach(name=>counts.set(name,(counts.get(name)||0)+1)));
+    const c=collator(),current=artistFilter.value;
+    artistFilter.innerHTML=`<option value="" data-i18n="music.allArtists">${esc(t('music.allArtists'))}</option>`+[...counts].sort((a,b)=>c.compare(a[0],b[0])).map(([name,n])=>`<option value="${esc(name)}">${esc(name)} (${n})</option>`).join('');
+    artistFilter.value=current;
+  }
+  function matchesArtist(x){return !artistFilter||!artistFilter.value||artistsOf(x).includes(artistFilter.value)}
+  function matchesGroup(x,group){return !chosen[group].size||[...chosen[group]].some(id=>FACETS[group](x).includes(id))}
+  function matchesFacets(x,skip){return Object.keys(chosen).every(group=>group===skip||matchesGroup(x,group))}
+  function filtering(){return !!(search.value.trim()||role.value||(artistFilter&&artistFilter.value)||chosen.mood.size||chosen.genre.size)}
+  function changed(){return filtering()||!!(sort&&sort.value!=='curated')}
+  // Stable, predictable order: year or artist, then title, then the curated position. Undated recordings
+  // (unreleased or self-published) close the list in both year directions.
+  function ordered(list){
+    const mode=sort?sort.value:'curated',c=collator();
+    const byTitle=(a,b)=>c.compare(tracks[a].title,tracks[b].title)||a-b;
+    if(mode==='year-desc'||mode==='year-asc'){
+      const dir=mode==='year-desc'?-1:1;
+      return list.sort((a,b)=>{const ya=tracks[a].year,yb=tracks[b].year;return (ya==null)-(yb==null)||(ya!=null&&yb!=null?(ya-yb)*dir:0)||byTitle(a,b)});
+    }
+    if(mode==='artist-asc'||mode==='artist-desc'){
+      const dir=mode==='artist-desc'?-1:1;
+      return list.sort((a,b)=>c.compare(tracks[a].artist,tracks[b].artist)*dir||byTitle(a,b));
+    }
+    return list;
+  }
+  // A chip counts the recordings that carry it among those passing every other filter (its own group aside),
+  // so under OR an unselected chip shows what it would contribute and is disabled only when that is nothing.
+  function updateChips(base){
+    Object.keys(chipBoxes).forEach(group=>{
+      if(!chipBoxes[group])return;
+      const pool=base.filter(i=>matchesFacets(tracks[i],group));
+      chipBoxes[group].querySelectorAll('.chip').forEach(chip=>{
+        const id=chip.dataset.id,on=chosen[group].has(id),n=pool.filter(i=>FACETS[group](tracks[i]).includes(id)).length;
+        chip.setAttribute('aria-pressed',String(on));
+        chip.disabled=!on&&n===0;
+        chip.querySelector('.chip-count').textContent=n;
+      });
+    });
+  }
+  // «Show all recordings» clears the filters and keeps the chosen order; «Reset all» also restores the curated order.
+  function resetFilters(order){
+    search.value='';role.value='';if(artistFilter)artistFilter.value='';
+    chosen.mood.clear();chosen.genre.clear();
+    if(order&&sort)sort.value='curated';
+    renderList();
+  }
   function norm(value){return String(value||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')}
   function esc(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
   function roleKey(name){return 'music.role'+String(name).replace(/[^A-Za-z]/g,'')}
@@ -20,7 +96,7 @@
   // Composer gathers songwriting and co-writing credits, Producer production and co-production; Artist matches directly.
   const FACET_CREDITS={Composer:['Songwriter','Co-writer'],Producer:['Producer','Co-producer']};
   function matchesRole(x,value){if(!value)return true;const credits=FACET_CREDITS[value]||[value];return x.role===value||credits.some(c=>x.roles.includes(c))}
-  function matches(x,q){return !q||norm([x.title,x.artist,x.year??'',x.releaseType,t(typeKey(x.releaseType)),x.version||'',x.version?t(versionKey(x.version)):'',x.role,x.roles.join(' '),x.roles.map(r=>t(roleKey(r))).join(' ')].join(' ')).includes(q)}
+  function matches(x,q){return !q||norm([x.title,x.artist,x.year??'',x.releaseType,t(typeKey(x.releaseType)),x.version||'',x.version?t(versionKey(x.version)):'',x.role,x.roles.join(' '),x.roles.map(r=>t(roleKey(r))).join(' '),moodsOf(x).map(id=>t(facetKey('mood',id))).join(' '),genresOf(x).map(id=>t(facetKey('genre',id))).join(' ')].join(' ')).includes(q)}
   // Certified destinations in the public data: streaming releases and full recordings on YouTube or
   // SoundCloud. A platform without a URL gets no link.
   const PLATFORMS=[['spotify','Spotify'],['appleMusic','Apple Music'],['youtube','YouTube'],['soundcloud','SoundCloud']];
@@ -36,10 +112,13 @@
   }
   function renderList(){
     const q=norm(search.value);
-    visible=tracks.map((x,i)=>i).filter(i=>matchesRole(tracks[i],role.value)&&matches(tracks[i],q));
+    const base=tracks.map((x,i)=>i).filter(i=>matchesRole(tracks[i],role.value)&&matches(tracks[i],q)&&matchesArtist(tracks[i]));
+    visible=ordered(base.filter(i=>matchesFacets(tracks[i])));
+    updateChips(base);
     count.textContent=visible.length;
     empty.hidden=visible.length>0;
-    catalog.innerHTML=visible.map(i=>{const x=tracks[i];return `<li><button type="button" class="pl-row" data-index="${i}" aria-current="false"><span class="pl-num">${pad(i+1)}</span><img class="pl-thumb" src="${P.artworkUrl(x.artwork)}" alt="" loading="lazy" width="56" height="56"><span class="pl-main"><span class="pl-title">${esc(x.title)}</span><span class="pl-artist">${[x.artist].concat(tags(x)).map(esc).join(' · ')}</span></span><span class="pl-roles">${x.roles.map(r=>`<span data-i18n="${roleKey(r)}">${esc(t(roleKey(r)))}</span>`).join(' · ')}</span><span class="pl-year">${x.year??''}</span><span class="pl-state"></span></button>${hasLinks(x)?`<ul class="pl-links">${platformLinks(x)}</ul>`:''}</li>`}).join('');
+    if(clear)clear.disabled=!changed();
+    catalog.innerHTML=visible.map((i,at)=>{const x=tracks[i];return `<li><button type="button" class="pl-row" data-index="${i}" aria-current="false"><span class="pl-num">${pad(at+1)}</span><img class="pl-thumb" src="${P.artworkUrl(x.artwork)}" alt="" loading="lazy" width="56" height="56"><span class="pl-main"><span class="pl-title">${esc(x.title)}</span><span class="pl-artist">${[x.artist].concat(tags(x)).map(esc).join(' · ')}</span></span><span class="pl-roles">${x.roles.map(r=>`<span data-i18n="${roleKey(r)}">${esc(t(roleKey(r)))}</span>`).join(' · ')}</span><span class="pl-year">${x.year??''}</span><span class="pl-state"></span></button>${hasLinks(x)?`<ul class="pl-links">${platformLinks(x)}</ul>`:''}</li>`}).join('');
     updateRows();
   }
   function updateRows(){
@@ -72,6 +151,9 @@
     seek.setAttribute('aria-valuetext',clock(P.time())+' '+t('music.of')+' '+clock(P.duration()));
     $('np-roles').innerHTML=x.roles.map(r=>`<li data-i18n="${roleKey(r)}">${esc(t(roleKey(r)))}</li>`).join('');
     $('np-links').innerHTML=platformLinks(x);
+    const style=genresOf(x).map(id=>facetKey('genre',id)).concat(moodsOf(x).map(id=>facetKey('mood',id)));
+    $('np-style').innerHTML=style.map(key=>`<li data-i18n="${key}">${esc(t(key))}</li>`).join('');
+    $('np-style-field').hidden=!style.length;
     $('np-links-field').hidden=!hasLinks(x);
     if(P.failed())statusLine.textContent=t('music.loadError');
   }
@@ -109,10 +191,21 @@
     event.preventDefault();rows[target].focus();
   });
   search.addEventListener('input',renderList);role.addEventListener('change',renderList);
+  if(artistFilter)artistFilter.addEventListener('change',renderList);
+  if(sort)sort.addEventListener('change',renderList);
+  Object.keys(chipBoxes).forEach(group=>{if(chipBoxes[group])chipBoxes[group].addEventListener('click',event=>{
+    const chip=event.target.closest('.chip');if(!chip||chip.disabled)return;
+    const id=chip.dataset.id;if(chosen[group].has(id))chosen[group].delete(id);else chosen[group].add(id);
+    renderList();
+  })});
+  // Reset all returns to the initial state; focus moves to the first filter so it is not lost on a now-disabled button.
+  if(clear){clear.hidden=false;clear.addEventListener('click',()=>{resetFilters(true);const first=[...document.querySelectorAll('.catalog-explore .chip')].find(chip=>!chip.disabled)||search;first.focus()})}
+  const reset=$('reset');
+  if(reset)reset.addEventListener('click',()=>{resetFilters();const row=catalog.querySelector('.pl-row');(row||search).focus()});
   P.on(type=>{if(type==='track')renderTrack();else if(type==='time')updateTime();else updatePlayer()});
   const cover=$('music-cover');
   function updateCover(){if(cover)cover.alt=t('music.coverAlt')}
-  document.addEventListener('lg:language',()=>{updateCover();renderList();updatePlayer()});
+  document.addEventListener('lg:language',()=>{updateCover();buildChips();buildArtists();renderList();updatePlayer()});
   $('total').textContent=tracks.length;
-  updateCover();renderList();renderTrack();
+  updateCover();buildChips();buildArtists();renderList();renderTrack();
 })();
