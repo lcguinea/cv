@@ -32,6 +32,9 @@ class PublicMusicDataTests(unittest.TestCase):
         self.verified = [e for e in self.manifest["entries"] if e["status"] == "verified"]
         self.blocked = {e["review_id"]: e["work_id"] for e in self.manifest["entries"]
                         if e["status"] == "blocked"}
+        # Selection entries the owner hid ("hidden": true) keep a verified preview but are not published.
+        self.hidden = generator.hidden_review_ids(self.selection)
+        self.published = [e for e in self.verified if e["review_id"] not in self.hidden]
 
     def project(self, master=None, selection=None, decisions=None):
         return generator.project(
@@ -75,7 +78,7 @@ class PublicMusicDataTests(unittest.TestCase):
         rows = self.project()
 
         # Every selected work is validated; only those with a verified preview are published.
-        self.assertEqual(len(rows), len(self.verified))
+        self.assertEqual(len(rows), len(self.published))
         self.assertEqual(len(self.project_all()), len(self.selection["entries"]))
         self.assertEqual(len(self.selection["entries"]), len(self.manifest["entries"]))
         self.assertEqual(
@@ -406,7 +409,7 @@ class PublicMusicDataTests(unittest.TestCase):
 
         # Two published works share the title "Volver a Verte" (Luis Guinea / Ana Guinea). The
         # sixteen original previews keep their order at the head of the list.
-        self.assertEqual(len(rows), len(self.verified))
+        self.assertEqual(len(rows), len(self.published))
         self.assertEqual(
             [(row["title"], row["preview"]) for row in rows if row["title"] in self.PUBLISHED][:len(self.PUBLISHED)],
             [
@@ -429,9 +432,11 @@ class PublicMusicDataTests(unittest.TestCase):
                 ("Volver a Verte", "volver-a-verte--ana-guinea--2022.mp3"),
             ],
         )
-        self.assertEqual({item["review_id"]: item["work_id"] for item in exclusions}, self.blocked)
+        hidden = {e["review_id"]: e["work_id"] for e in self.verified if e["review_id"] in self.hidden}
+        self.assertEqual({item["review_id"]: item["work_id"] for item in exclusions}, self.blocked | hidden)
         self.assertLessEqual(self.EXCLUDED.items(), self.blocked.items())
-        self.assertEqual({item["reason"] for item in exclusions}, {"no_authorized_preview"})
+        self.assertEqual({item["reason"] for item in exclusions if item["review_id"] in self.blocked},
+                         {"no_authorized_preview"})
         self.assertTrue(all(item["detail"].strip() for item in exclusions))
 
         log = generator.exclusions_log(rows, exclusions, self.selection)
@@ -493,13 +498,14 @@ class PublicMusicDataTests(unittest.TestCase):
             self.assertEqual(rows, [])
             reasons = {item["review_id"]: item["reason"] for item in exclusions}
             self.assertEqual(len(reasons), len(self.selection["entries"]))
-            self.assertEqual({r for i, r in reasons.items() if i not in self.blocked}, {"preview_missing"})
+            self.assertEqual({r for i, r in reasons.items() if i not in self.blocked.keys() | self.hidden},
+                             {"preview_missing"})
 
     def test_serialized_preview_never_exposes_private_audio_details(self):
         javascript = generator.serialize(self.project())
 
         self.assertEqual(javascript.count("preview:null"), 0)
-        self.assertEqual(len(re.findall(r"preview:'[a-z0-9-]+\.mp3'", javascript)), len(self.verified))
+        self.assertEqual(len(re.findall(r"preview:'[a-z0-9-]+\.mp3'", javascript)), len(self.published))
         for forbidden in ("source", "sha256", "Productor", "Cantautor", "MixV1", "evidence"):
             self.assertNotIn(forbidden, javascript)
         row = dict(self.project()[0], preview="../secret/master.mp3")
@@ -671,6 +677,66 @@ class PublicMusicDataTests(unittest.TestCase):
             self.assertEqual(first.read_bytes(), second.read_bytes())
             self.assertEqual((Path(directory) / "first.json").read_bytes(),
                              generator.EXCLUSIONS_LOG.read_bytes())
+
+
+class HiddenSongsTests(unittest.TestCase):
+    """Six songs the owner withdrew from /music/ without deleting their audio or metadata."""
+
+    HIDDEN = {
+        "60": "jesus-set-me-free--luis-guinea--2021",
+        "61": "por-que-lloras--renata-isabel--2017",
+        "62": "alguien-como-yo--segundo-piso--2014",
+        "70": "super-heroe--edson-corona--2017",
+        "19": "asi-habla-el-amor--luis-guinea",
+        "31": "promesas-decepciones-cover--luis-guinea",
+    }
+    HIDDEN_PREVIEWS = {f"{work_id}.mp3" for work_id in HIDDEN.values()}
+
+    @classmethod
+    def setUpClass(cls):
+        cls.master = json.loads(generator.MASTER.read_text(encoding="utf-8"))
+        cls.selection = json.loads(generator.SELECTION.read_text(encoding="utf-8"))
+        cls.decisions = json.loads(generator.DECISIONS.read_text(encoding="utf-8"))
+        cls.manifest = json.loads(generator.PREVIEW_MANIFEST.read_text(encoding="utf-8"))
+        cls.rows, cls.exclusions = generator.project_with_exclusions(
+            cls.master, cls.selection, cls.decisions, repo=REPO, manifest=cls.manifest)
+        unhidden = {**cls.selection, "entries": [{"review_id": e["review_id"]} for e in cls.selection["entries"]]}
+        cls.all_rows = generator.project(cls.master, unhidden, cls.decisions, repo=REPO, manifest=cls.manifest)
+
+    def test_the_six_songs_are_flagged_hidden_and_kept_in_the_selection(self):
+        self.assertEqual(generator.hidden_review_ids(self.selection), set(self.HIDDEN))
+        verified = {e["review_id"]: e for e in self.manifest["entries"] if e["status"] == "verified"}
+        for review_id, work_id in self.HIDDEN.items():
+            # Mapping, verified preview and the preview file itself are preserved.
+            self.assertEqual(verified[review_id]["work_id"], work_id)
+            self.assertTrue((REPO / verified[review_id]["preview"]).is_file())
+
+    def test_hidden_songs_are_not_published_and_are_logged(self):
+        self.assertFalse({row["preview"] for row in self.rows} & self.HIDDEN_PREVIEWS)
+        javascript = (REPO / "js" / "music-data.js").read_text(encoding="utf-8")
+        for name in self.HIDDEN_PREVIEWS:
+            self.assertNotIn(name, javascript)
+        for title in ("Jesus, Set Me Free", "¿Por Qué Lloras?", "Alguien Como Yo", "Súper Héroe",
+                      "Así Habla El Amor", "Promesas Decepciones - Cover"):
+            self.assertNotIn(f"title:'{title}'", javascript)
+        logged = {item["review_id"]: item for item in self.exclusions if item["reason"] == "hidden_by_owner"}
+        self.assertEqual({k: v["work_id"] for k, v in logged.items()}, self.HIDDEN)
+        log = json.loads(generator.EXCLUSIONS_LOG.read_text(encoding="utf-8"))
+        self.assertFalse(set(log["published"]) & set(self.HIDDEN))
+
+    def test_the_rest_of_the_catalogue_keeps_its_content_and_order(self):
+        expected = [row for row in self.all_rows if row["preview"] not in self.HIDDEN_PREVIEWS]
+        self.assertEqual(self.rows, expected)
+        self.assertEqual(len(self.all_rows) - len(self.rows), len(self.HIDDEN))
+
+    def test_removing_the_flag_publishes_the_song_again(self):
+        self.assertTrue(self.HIDDEN_PREVIEWS <= {row["preview"] for row in self.all_rows})
+
+    def test_hidden_must_be_true_when_present(self):
+        selection = json.loads(json.dumps(self.selection))
+        selection["entries"][0]["hidden"] = False
+        with self.assertRaisesRegex(ValueError, "hidden must be true"):
+            generator.project(self.master, selection, self.decisions, repo=REPO, manifest=self.manifest)
 
 
 if __name__ == "__main__":

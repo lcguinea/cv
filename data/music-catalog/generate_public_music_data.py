@@ -5,7 +5,9 @@ Only sixteen explicitly allowed display fields are emitted. Every published song
 `preview`: the file name of a verified derivative (music_preview_manifest.json) that exists in
 assets/audio/previews/, is a readable MP3 and lasts 45 s or less (measured with the standard
 library). Songs of the selection without such a preview are left out of the public output and
-recorded in public_catalog_exclusions.json. The private source, its hash and the evidence never
+recorded in public_catalog_exclusions.json. A selection entry marked `"hidden": true` is withheld the
+same way (reason `hidden_by_owner`) while keeping its place, mapping, preview and metadata, so it can
+be shown again by removing the flag. The private source, its hash and the evidence never
 leave the manifest. `spotify` and `appleMusic` are optional streaming destinations (a validated
 URL or null): Spotify comes from the catalogue entry; Apple Music comes from the catalogue entry or,
 when it has none, from the owner-certified public_platform_links.json. `youtube` and `soundcloud`
@@ -53,7 +55,14 @@ PUBLICATION_RULE = (
     "Toda canción publicada necesita un preview válido: entrada verified en "
     "music_preview_manifest.json, fichero existente en assets/audio/previews/, MP3 legible y "
     "duración <= 45 s. Las canciones de la selección sin preview reproducible se excluyen de "
-    "js/music-data.js y se registran aquí."
+    "js/music-data.js y se registran aquí. Las entradas de public_music_selection.json marcadas "
+    "\"hidden\": true se ocultan por decisión del propietario (hidden_by_owner) y conservan su "
+    "posición, su preview y sus metadatos."
+)
+HIDDEN_DETAIL = (
+    "Oculta del catálogo público por decisión del propietario (\"hidden\": true en "
+    "public_music_selection.json). Audio, preview y metadatos se conservan; quitar la marca la "
+    "vuelve a publicar en su posición."
 )
 
 SELECTION_SCHEMA = "public-music-selection-v2"
@@ -336,9 +345,14 @@ def project_with_exclusions(master, selection, decisions, *, repo=REPO, manifest
                             recordings=None):
     """Return (published rows, exclusions); every published row has a valid preview."""
     rows, exclusions = [], []
+    hidden = hidden_review_ids(selection)
     for review_id, work_id, row, entry in _candidates(master, selection, decisions, repo=repo,
                                                       manifest=manifest, links=links,
                                                       recordings=recordings):
+        if review_id in hidden:
+            exclusions.append({"review_id": review_id, "work_id": work_id, "title": row["title"],
+                               "reason": "hidden_by_owner", "detail": HIDDEN_DETAIL})
+            continue
         if entry["status"] != "verified":
             exclusions.append({"review_id": review_id, "work_id": work_id, "title": row["title"],
                                "reason": "no_authorized_preview", "detail": entry["blocked_reason"]})
@@ -351,6 +365,12 @@ def project_with_exclusions(master, selection, decisions, *, repo=REPO, manifest
         row["preview"] = PurePosixPath(entry["preview"]).name
         rows.append(row)
     return rows, exclusions
+
+
+def hidden_review_ids(selection):
+    """review_ids of the selection entries the owner marked `"hidden": true`."""
+    return {entry["review_id"] for entry in selection.get("entries") or []
+            if isinstance(entry, dict) and entry.get("hidden") is True}
 
 
 def project_all(master, selection, decisions, *, repo=REPO, manifest=None, links=None,
@@ -471,8 +491,10 @@ def _candidates(master, selection, decisions, *, repo=REPO, manifest=None, links
     seen = set()
     pending = []
     for position, entry in enumerate(entries, start=1):
-        if not isinstance(entry, dict) or set(entry) != {"review_id"}:
-            raise ValueError(f"selection entry {position} must contain only review_id")
+        if not isinstance(entry, dict) or set(entry) - {"hidden"} != {"review_id"}:
+            raise ValueError(f"selection entry {position} must contain only review_id and hidden")
+        if "hidden" in entry and entry["hidden"] is not True:
+            raise ValueError(f"selection entry {position}: hidden must be true when present")
         review_id = _required_text(entry["review_id"], f"selection entry {position} review_id")
         if review_id in seen:
             raise ValueError(f"selection contains duplicate review_id: {review_id}")
@@ -697,8 +719,10 @@ def main():
     rows, exclusions = generate(output=args.output, log_path=args.log)
     for item in exclusions:
         print(f"EXCLUDED #{item['review_id']} {item['work_id']}: {item['reason']}")
-    print(f"PUBLIC MUSIC DATA OK: {len(rows)} published with preview, {len(exclusions)} excluded "
-          f"without a reproducible preview -> {args.output} (log: {args.log.name})")
+    hidden = sum(item["reason"] == "hidden_by_owner" for item in exclusions)
+    print(f"PUBLIC MUSIC DATA OK: {len(rows)} published with preview, {len(exclusions) - hidden} excluded "
+          f"without a reproducible preview, {hidden} hidden by the owner -> {args.output} "
+          f"(log: {args.log.name})")
 
 
 if __name__ == "__main__":

@@ -221,11 +221,14 @@ class BehaviourTests(unittest.TestCase):
             "  platform: a.dataset.platform, href: a.getAttribute('href'), target: a.getAttribute('target'),"
             "  rel: a.getAttribute('rel'), label: a.getAttribute('aria-label'), text: a.textContent})));"
             "out.en = read(); out.data = page.eval('MUSIC_DATA');"
+            "out.rows = page.$$('#catalog .pl-row').map(b => Number(b.dataset.index));"
             "out.np = page.$$('#np-links a').map(a => a.dataset.platform); out.current = page.eval('LGPlayer.index()');"
             "page.click('[data-lang=\"es\"]'); await settle(); out.es = read();"
         )
         names = {"spotify": "Spotify", "appleMusic": "Apple Music", "youtube": "YouTube", "soundcloud": "SoundCloud"}
-        for row, links, links_es in zip(out["data"], out["en"], out["es"]):
+        # Rows follow the default order (newest first); data-index names each row's recording.
+        self.assertEqual(sorted(out["rows"]), list(range(len(out["data"]))))
+        for row, links, links_es in zip([out["data"][i] for i in out["rows"]], out["en"], out["es"]):
             expected = [k for k in names if row[k]]
             with self.subTest(title=row["title"], artist=row["artist"]):
                 self.assertEqual([l["platform"] for l in links], expected)
@@ -271,7 +274,7 @@ class BehaviourTests(unittest.TestCase):
             "const page = browser.tab().open('music/index.html'); await settle();"
             "const data = page.eval('MUSIC_DATA');"
             "const i = data.findIndex(x => !x.appleMusic);"
-            "page.click(page.$$('#catalog > li')[i].querySelector('.pl-title')); await settle();"
+            "page.click(page.$$('#catalog > li').find(li => Number(li.querySelector('.pl-row').dataset.index) === i).querySelector('.pl-title')); await settle();"
             "out.title = data[i].title; out.np = page.$$('#np-links a').map(a => a.dataset.platform);"
             "out.hidden = page.$('#np-links-field').hidden;"
             "out.html = page.$('#catalog').innerHTML;"

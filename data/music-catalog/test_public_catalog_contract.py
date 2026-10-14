@@ -285,7 +285,9 @@ def check_not_a_master_copy(names):
 
 
 def check_exclusions(rows):
-    selection = [e["review_id"] for e in json.loads(SELECTION.read_text(encoding="utf-8"))["entries"]]
+    entries = json.loads(SELECTION.read_text(encoding="utf-8"))["entries"]
+    selection = [e["review_id"] for e in entries]
+    hidden = {e["review_id"] for e in entries if e.get("hidden") is True}
     if not EXCLUSIONS.is_file():
         fail("public_catalog_exclusions.json (exclusion log) does not exist")
         return
@@ -298,6 +300,10 @@ def check_exclusions(rows):
         fail("a review_id is both published and excluded")
     if sorted(published + excluded) != sorted(selection):
         fail("published + excluded must be exactly the public selection")
+    owner_hidden = {item.get("review_id") for item in log.get("excluded") or []
+                    if item.get("reason") == "hidden_by_owner"}
+    if owner_hidden != hidden:
+        fail("selection entries marked hidden must be excluded as hidden_by_owner, and only those")
     for item in log.get("excluded") or []:
         if not isinstance(item.get("reason"), str) or not item["reason"].strip():
             fail(f"exclusion #{item.get('review_id')} has no reason")

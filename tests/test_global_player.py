@@ -24,6 +24,12 @@ RUNNER = ROOT / "tests" / "support" / "run_scenario.js"
 PAGES = ("index.html", "cv.html", "sobre-mi.html", "music/index.html")
 # Number of published previews, read from the generated public data instead of being hard-coded.
 TRACKS = (ROOT / "js" / "music-data.js").read_text(encoding="utf-8").count("{ title:")
+# Orchestral pieces (genre cinematic_classical) stay in the catalogue but are never picked at random:
+# AUTOMATIC lists, in data order, the previews that a new session, `ended` and `next` can pick.
+ORCHESTRAL = [i for i, line in enumerate(l for l in (ROOT / "js" / "music-data.js").read_text(encoding="utf-8")
+                                         .splitlines() if l.lstrip().startswith("{ title:"))
+              if "'cinematic_classical'" in re.search(r"genres:\[([^\]]*)\]", line).group(1)]
+AUTOMATIC = [i for i in range(TRACKS) if i not in ORCHESTRAL]
 NODE = shutil.which("node")
 
 PRELUDE = r"""
@@ -79,8 +85,10 @@ class GlobalPlayerTests(unittest.TestCase):
             "for (const r of [0, 0.5, 0.99]) { browser.randomQueue.push(r);"
             "  const page = browser.tab().open('index.html'); await settle(); out[r] = state(page).index; }"
         )
-        # index = floor(random * tracks)
-        self.assertEqual((out["0"], out["0.5"], out["0.99"]), (0, int(0.5 * TRACKS), int(0.99 * TRACKS)))
+        # index = the floor(random * n)-th of the n previews that can be picked automatically
+        n = len(AUTOMATIC)
+        self.assertEqual((out["0"], out["0.5"], out["0.99"]),
+                         (AUTOMATIC[0], AUTOMATIC[int(0.5 * n)], AUTOMATIC[int(0.99 * n)]))
 
     def test_the_session_track_is_kept_while_navigating_in_the_tab(self):
         out = self.run_scenario(
@@ -88,7 +96,7 @@ class GlobalPlayerTests(unittest.TestCase):
             "for (const rel of %s) { const page = tab.open(rel); await settle(); out[rel] = state(page).index; }"
             % json.dumps(PAGES)
         )
-        self.assertEqual(set(out.values()), {int(0.25 * TRACKS)})
+        self.assertEqual(set(out.values()), {AUTOMATIC[int(0.25 * len(AUTOMATIC))]})
 
     def test_a_finished_preview_moves_to_another_random_track_without_repeating(self):
         out = self.run_scenario(
@@ -101,7 +109,7 @@ class GlobalPlayerTests(unittest.TestCase):
         )
         for before, after, playing in out["steps"]:
             self.assertNotEqual(before, after)
-            self.assertTrue(0 <= after < TRACKS)
+            self.assertIn(after, AUTOMATIC)
             self.assertTrue(playing, "the next preview keeps playing after `ended`")
 
     def test_automatic_playback_plays_every_preview_once_before_repeating(self):
@@ -110,13 +118,13 @@ class GlobalPlayerTests(unittest.TestCase):
             "page.click('#mp-toggle'); await settle(); out.order = [state(page).index];"
             "for (let n = 0; n < %d; n++) { browser.randomQueue.push([0, 0.99, 0.5, 0.3][n %% 4]);"
             "  page.audio().loadMetadata(40); page.audio().finish(); await settle(); out.order.push(state(page).index); }"
-            "out.playing = state(page).playing;" % (TRACKS + 1)
+            "out.playing = state(page).playing;" % (len(AUTOMATIC) + 1)
         )
-        order = out["order"]
-        self.assertEqual(sorted(order[:TRACKS]), list(range(TRACKS)), "the first round plays every preview once")
+        order, n = out["order"], len(AUTOMATIC)
+        self.assertEqual(sorted(order[:n]), AUTOMATIC, "the first round plays every automatic preview once")
         # A new round starts after all of them, never with the preview that just ended.
-        self.assertNotEqual(order[TRACKS], order[TRACKS - 1])
-        self.assertEqual(len(set(order[TRACKS:TRACKS + 2])), 2)
+        self.assertNotEqual(order[n], order[n - 1])
+        self.assertEqual(len(set(order[n:n + 2])), 2)
         self.assertTrue(out["playing"])
 
     def test_no_repeat_survives_page_changes_and_applies_to_next(self):
@@ -137,10 +145,41 @@ class GlobalPlayerTests(unittest.TestCase):
             "const page = browser.tab().open('music/index.html'); await settle();"
             "page.click('#toggle'); await settle(); const first = state(page).index; out.first = first;"
             "browser.randomQueue.push(0); page.audio().loadMetadata(40); page.audio().finish(); await settle();"
-            "page.click(page.$$('.pl-row')[first]); await settle(); out.again = state(page);"
+            "page.click(page.$$('.pl-row').find(b => Number(b.dataset.index) === first)); await settle(); out.again = state(page);"
         )
         self.assertEqual(out["again"]["index"], out["first"])
         self.assertTrue(out["again"]["playing"])
+
+    def test_orchestral_pieces_are_listed_and_playable_by_hand_but_never_picked_at_random(self):
+        self.assertTrue(ORCHESTRAL, "the catalogue publishes orchestral pieces")
+        out = self.run_scenario(
+            "out.starts = []; for (let k = 0; k < 40; k++) { browser.randomQueue.push(k / 40);"
+            "  const p = browser.tab().open('index.html'); await settle(); out.starts.push(state(p).index); }"
+            "const page = browser.tab().open('music/index.html', {autoplayBlocked: false}); await settle();"
+            "out.listed = page.$$('.pl-row').map(b => Number(b.dataset.index));"
+            "out.picked = []; for (let k = 0; k < 40; k++) { browser.randomQueue.push(k / 40);"
+            "  page.click('#mp-next'); await settle(); out.picked.push(state(page).index);"
+            "  browser.randomQueue.push(1 - k / 40); page.audio().loadMetadata(40); page.audio().finish(); await settle();"
+            "  out.picked.push(state(page).index); }"
+            "page.click(page.$$('.pl-row').find(b => Number(b.dataset.index) === %d)); await settle(); out.hand = state(page);"
+            % ORCHESTRAL[0]
+        )
+        self.assertFalse(set(out["starts"]) & set(ORCHESTRAL))
+        self.assertFalse(set(out["picked"]) & set(ORCHESTRAL))
+        self.assertLessEqual(set(ORCHESTRAL), set(out["listed"]))
+        self.assertEqual((out["hand"]["index"], out["hand"]["playing"]), (ORCHESTRAL[0], True))
+
+    def test_random_picks_do_not_depend_on_the_catalogue_order(self):
+        out = self.run_scenario(
+            "for (const mode of ['year-desc', 'curated', 'artist-asc']) {"
+            "  const page = browser.tab().open('music/index.html', {autoplayBlocked: false}); await settle();"
+            "  page.change('#sort', mode); await settle(); out[mode] = {rows: page.$$('.pl-row').map(b => Number(b.dataset.index))};"
+            "  browser.randomQueue.push(0.3); page.click('#mp-next'); await settle(); out[mode].next = state(page).index; }"
+        )
+        self.assertNotEqual(out["year-desc"]["rows"], out["curated"]["rows"])
+        self.assertEqual(out["curated"]["rows"], list(range(TRACKS)))
+        # The same random draw gives the same preview whatever the visual order.
+        self.assertEqual(len({out[m]["next"] for m in out}), 1)
 
     def test_next_picks_another_track_and_keeps_the_play_state(self):
         out = self.run_scenario(

@@ -235,14 +235,16 @@ class MusicPlayerBehaviourTests(unittest.TestCase):
 
     def test_play_pause_and_track_navigation_without_reload(self):
         out = self.run_scenario(
-            "await click(0); await press('toggle'); out.start = snapshot();"
+            "const first = Number(rows()[0].dataset.index);"
+            "await click(first); await press('toggle'); out.start = snapshot();"
             "await press('toggle'); out.a = snapshot();"
             "await press('toggle'); out.b = snapshot();"
             "await press('prev'); out.c = snapshot();"
             "await press('toggle'); await press('next'); out.d = snapshot();"
-            "await click(0); out.e = snapshot();"
+            "await click(first); out.e = snapshot();"
         )
-        last = out["a"]["data"][-1]
+        # Navigation follows the visible list (newest first by default), not the data order.
+        last = out["a"]["data"][out["a"]["rows"][-1]["index"]]
         self.assertFalse(out["start"]["playing"])
         self.assertTrue(out["a"]["playing"])
         self.assertEqual(out["a"]["toggleState"], "playing")
@@ -252,12 +254,12 @@ class MusicPlayerBehaviourTests(unittest.TestCase):
         self.assertEqual((out["c"]["title"], out["c"]["artist"]), (last["title"], last["artist"]))
         self.assertFalse(out["c"]["playing"])
         # Next while playing moves on in list order and keeps playing.
-        total = len(out["a"]["data"])
-        self.assertEqual(out["d"]["index"], f"01 / {total:02d}")
+        total, first = len(out["a"]["data"]), out["a"]["rows"][0]["index"]
+        self.assertEqual(out["d"]["index"], f"{first + 1:02d} / {total:02d}")
         self.assertTrue(out["d"]["playing"])
         # Clicking the song that is playing pauses it.
         self.assertFalse(out["e"]["playing"])
-        self.assertEqual(out["e"]["index"], f"01 / {total:02d}")
+        self.assertEqual(out["e"]["index"], f"{first + 1:02d} / {total:02d}")
 
     def test_role_filters_and_search(self):
         out = self.run_scenario(
@@ -269,20 +271,23 @@ class MusicPlayerBehaviourTests(unittest.TestCase):
             "await filter(''); out.reset = snapshot();"
         )
         data = out["reset"]["data"]
+        # Filters and search keep the default order (newest first) of the whole list.
+        default = [r["index"] for r in out["reset"]["rows"]]
+        ranked = lambda ids: sorted(ids, key=default.index)
         credit = {"Artist": {"Artist"}, "Producer": {"Producer", "Co-producer"}, "Composer": {"Songwriter", "Co-writer"}}
         for role, needed in credit.items():
-            expected = [i for i, x in enumerate(data) if x["role"] == role or needed & set(x["roles"])]
+            expected = ranked(i for i, x in enumerate(data) if x["role"] == role or needed & set(x["roles"]))
             with self.subTest(role=role):
                 self.assertTrue(expected)
                 self.assertEqual([r["index"] for r in out[role]["rows"]], expected)
                 self.assertEqual(out[role]["count"], str(len(expected)))
-        ana = [i for i, x in enumerate(data) if "Ana Guinea" in x["artist"]]
+        ana = ranked(i for i, x in enumerate(data) if "Ana Guinea" in x["artist"])
         self.assertEqual([r["index"] for r in out["search"]["rows"]], ana)
         self.assertEqual(out["none"]["rows"], [])
         self.assertFalse(out["none"]["emptyHidden"])
         # The active song stays on stage while filtered out; next jumps to the first visible one.
         self.assertEqual(out["none"]["title"], data[0]["title"])
-        composer = [i for i, x in enumerate(data) if {"Songwriter", "Co-writer"} & set(x["roles"])]
+        composer = ranked(i for i, x in enumerate(data) if {"Songwriter", "Co-writer"} & set(x["roles"]))
         self.assertEqual(out["step"]["title"], data[composer[0]]["title"])
         self.assertEqual(len(out["reset"]["rows"]), len(data))
         self.assertTrue(out["reset"]["emptyHidden"])
@@ -320,6 +325,33 @@ class MusicPlayerBehaviourTests(unittest.TestCase):
                 self.assertLessEqual(title(a), title(b))
         self.assertEqual(out["nums"], ["01", "02", "03"])
 
+    def test_the_catalogue_opens_newest_first_and_filters_keep_that_order(self):
+        out = self.run_scenario(
+            "out.mode = $('sort').value; out.load = snapshot();"
+            "page.change('#sort', 'year-desc'); await settle(); out.explicit = snapshot();"
+            "page.change('#sort', 'year-asc'); await settle();"
+            "page.click('#clear'); await settle(); out.cleared = snapshot(); out.clearOff = $('clear').disabled;"
+            "page.click('.chip[data-id=\"pop\"]'); await settle(); out.pop = snapshot();"
+            "await filter('', 'rogelio'); out.search = snapshot();"
+            "page.change('#sort', 'curated'); await settle(); out.curated = snapshot();"
+        )
+        data = out["load"]["data"]
+        ids = lambda state: [r["index"] for r in state["rows"]]
+        default = ids(out["load"])
+        self.assertEqual(out["mode"], "year-desc")
+        self.assertEqual(default, ids(out["explicit"]))
+        years = [data[i]["year"] for i in default if data[i]["year"] is not None]
+        self.assertEqual(years, sorted(years, reverse=True))
+        self.assertEqual(ids(out["cleared"]), default)
+        self.assertTrue(out["clearOff"], "the default order is the initial state")
+        # Filtered and searched results keep the chronological order of the whole list.
+        ranked = lambda found: sorted(found, key=default.index)
+        self.assertEqual(ids(out["pop"]), ranked(i for i, x in enumerate(data) if "pop" in x["genres"]))
+        pop_rogelio = ranked(i for i, x in enumerate(data) if "pop" in x["genres"] and "Rogelio" in x["artist"])
+        self.assertEqual(ids(out["search"]), pop_rogelio)
+        # An explicit choice wins: the curated selection is still available.
+        self.assertEqual(ids(out["curated"]), sorted(pop_rogelio))
+
     def test_artist_mood_and_genre_filters_combine_and_clear(self):
         out = self.run_scenario(
             "const chipState = () => Object.fromEntries(page.$$('.chip').map(c => [c.dataset.group + ':' + c.dataset.id,"
@@ -344,11 +376,14 @@ class MusicPlayerBehaviourTests(unittest.TestCase):
         )
         data = out["reset"]["data"]
         ids = lambda state: [r["index"] for r in state["rows"]]
+        # Reset all brings back the default order (newest first); every filter keeps it.
+        default = ids(out["cleared"])
+        ranked = lambda found: sorted(found, key=default.index)
         has = lambda i, group, values: bool(set(data[i][group]) & set(values))
         # Chips come from the data only: every value some recording has, none that it lacks.
         self.assertEqual({tuple(c) for c in out["chips"]},
                          {("mood", m) for x in data for m in x["moods"]} | {("genre", g) for x in data for g in x["genres"]})
-        rogelio = [i for i, x in enumerate(data) if "Rogelio Edel" in x["artists"]]
+        rogelio = ranked(i for i, x in enumerate(data) if "Rogelio Edel" in x["artists"])
         self.assertEqual(ids(out["artist"]), rogelio)
         # Moods combine with OR among themselves, and with AND with the artist.
         self.assertEqual(ids(out["mood"]), [i for i in rogelio if has(i, "moods", ["melancholic"])])
@@ -388,9 +423,9 @@ class MusicPlayerBehaviourTests(unittest.TestCase):
         self.assertTrue(out["reset"]["emptyHidden"])
         self.assertEqual((out["sortKept"], out["pressedAfter"]), ("year-asc", 0))
         self.assertTrue(out["clearAfterReset"])
-        # Reset all returns filters, search and order to the initial curated state.
-        self.assertEqual(ids(out["cleared"]), list(range(len(data))))
-        self.assertEqual((out["sortReset"], out["artistReset"], out["pressedCleared"]), ("curated", "", 0))
+        # Reset all returns filters, search and order to the initial state: newest first.
+        self.assertEqual(sorted(default), list(range(len(data))))
+        self.assertEqual((out["sortReset"], out["artistReset"], out["pressedCleared"]), ("year-desc", "", 0))
         self.assertTrue(out["clearOff"])
 
     def test_unreleased_recording_shows_type_version_and_no_year(self):
@@ -409,11 +444,12 @@ class MusicPlayerBehaviourTests(unittest.TestCase):
                    "version:'RoughMix', youtube:null, soundcloud:null }")
             data.write_text(text.replace("\n];", ",\n" + row + "\n];"), encoding="utf-8")
             scenario = (
-                "const last = rows().length - 1; await click(last); out.s = snapshot();"
+                "const last = rows().length - 1; const row = rows().find(r => r.dataset.index === String(last));"
+                "await click(last); out.s = snapshot();"
                 "out.meta = page.document.querySelector('.np-meta').textContent;"
                 "out.yearHidden = $('np-year-field').hidden; out.versionHidden = $('np-version-field').hidden;"
-                "out.line = rows()[last].querySelector('.pl-artist').textContent;"
-                "out.cell = rows()[last].querySelector('.pl-year').textContent;"
+                "out.line = row.querySelector('.pl-artist').textContent;"
+                "out.cell = row.querySelector('.pl-year').textContent;"
                 "out.links = $('np-links-field').hidden;"
                 "await filter('Composer'); out.composer = snapshot();"
                 "page.click('[data-lang=es]'); await settle(); out.es = page.document.querySelector('.np-meta').textContent;"
@@ -450,7 +486,9 @@ class MusicPlayerBehaviourTests(unittest.TestCase):
         # The song, audio and playback state survive the language switch untouched.
         self.assertEqual((es["title"], es["audioSrc"], es["playing"]), (en["title"], en["audioSrc"], True))
         # Search also matches translated credit labels («productor» is also inside «Coproductor»).
-        producers = [i for i, x in enumerate(es["data"]) if {"Producer", "Co-producer"} & set(x["roles"])]
+        default = [r["index"] for r in es["rows"]]
+        producers = sorted((i for i, x in enumerate(es["data"]) if {"Producer", "Co-producer"} & set(x["roles"])),
+                           key=default.index)
         self.assertEqual([r["index"] for r in out["search"]["rows"]], producers)
 
 

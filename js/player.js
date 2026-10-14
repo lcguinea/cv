@@ -29,11 +29,14 @@
   function duration(){return Number.isFinite(audio.duration)&&audio.duration>0?audio.duration:knownDuration}
   // Random picks (start, end of a preview, next) work like a shuffle: a preview that already played in this round is
   // not picked again until every other one has played; then a new round starts. `exclude` is never picked when there
-  // is an alternative. Choosing a song by hand can always repeat it.
+  // is an alternative. Orchestral pieces (genre cinematic_classical) are never picked at random; they stay in the
+  // catalogue and play when chosen by hand. Choosing a song by hand can always repeat it.
+  const shuffled=tracks.map((x,i)=>i).filter(i=>!(tracks[i].genres||[]).includes('cinematic_classical'));
+  const automatic=shuffled.length?shuffled:tracks.map((x,i)=>i);
   function randomIndex(exclude){
-    let pool=tracks.map((x,i)=>i).filter(i=>i!==exclude&&!played.has(i));
-    if(!pool.length){played.clear();pool=tracks.map((x,i)=>i).filter(i=>i!==exclude)}
-    if(!pool.length)pool=[0];
+    let pool=automatic.filter(i=>i!==exclude&&!played.has(i));
+    if(!pool.length){played.clear();pool=automatic.filter(i=>i!==exclude)}
+    if(!pool.length)pool=[automatic[0]];
     return pool[Math.floor(Math.random()*pool.length)];
   }
   function save(){

@@ -45,11 +45,14 @@
   function matchesGroup(x,group){return !chosen[group].size||[...chosen[group]].some(id=>FACETS[group](x).includes(id))}
   function matchesFacets(x,skip){return Object.keys(chosen).every(group=>group===skip||matchesGroup(x,group))}
   function filtering(){return !!(search.value.trim()||role.value||(artistFilter&&artistFilter.value)||chosen.mood.size||chosen.genre.size)}
-  function changed(){return filtering()||!!(sort&&sort.value!=='curated')}
+  // Newest first by default; the curated selection and the other orders stay available in #sort.
+  const DEFAULT_SORT='year-desc';
+  if(sort)sort.value=DEFAULT_SORT;
+  function changed(){return filtering()||!!(sort&&sort.value!==DEFAULT_SORT)}
   // Stable, predictable order: year or artist, then title, then the curated position. Undated recordings
   // (unreleased or self-published) close the list in both year directions.
   function ordered(list){
-    const mode=sort?sort.value:'curated',c=collator();
+    const mode=sort?sort.value:DEFAULT_SORT,c=collator();
     const byTitle=(a,b)=>c.compare(tracks[a].title,tracks[b].title)||a-b;
     if(mode==='year-desc'||mode==='year-asc'){
       const dir=mode==='year-desc'?-1:1;
@@ -75,11 +78,11 @@
       });
     });
   }
-  // «Show all recordings» clears the filters and keeps the chosen order; «Reset all» also restores the curated order.
+  // «Show all recordings» clears the filters and keeps the chosen order; «Reset all» also restores the default order.
   function resetFilters(order){
     search.value='';role.value='';if(artistFilter)artistFilter.value='';
     chosen.mood.clear();chosen.genre.clear();
-    if(order&&sort)sort.value='curated';
+    if(order&&sort)sort.value=DEFAULT_SORT;
     renderList();
   }
   function norm(value){return String(value||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')}

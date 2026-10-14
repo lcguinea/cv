@@ -2,8 +2,8 @@
 """Build the public site artifact for GitHub Pages and validate it.
 
 Copies an explicit allowlist of tracked files into _site/ (or --out DIR) and then checks the result:
-only authorised files, no repository Markdown, tests, catalogue data, scripts or masters, exactly the
-verified previews of music_preview_manifest.json (one per published work, each with its sha256) and
+only authorised files, no repository Markdown, tests, catalogue data, scripts or masters, only
+verified previews of music_preview_manifest.json (exactly one per published work, each with its sha256) and
 no broken local reference in the pages or the stylesheet. Artwork and previews are the ones js/music-data.js publishes, so the
 artifact carries only the images and audio the site actually uses.
 
@@ -176,10 +176,12 @@ def validate(out=DEFAULT_OUT, root=ROOT):
                 errors.append(f"audio that is not a verified preview: {rel}")
             elif hashlib.sha256((out / rel).read_bytes()).hexdigest() != previews[p.name]:
                 errors.append(f"preview differs from its manifest sha256: {rel}")
-    # Every verified preview is published exactly once and nothing else: the count comes from the
-    # manifest, never from a hard-coded number.
-    if sorted(PurePosixPath(rel).name for rel in audio) != sorted(previews):
-        errors.append(f"expected the {len(previews)} verified previews, found {len(audio)} audio files")
+    # Every preview js/music-data.js publishes is present exactly once and nothing else (a verified
+    # preview of a work hidden by the owner stays out): the count comes from the data, never from a
+    # hard-coded number.
+    published = sorted(PurePosixPath(rel).name for rel in music_files(root)[1])
+    if sorted(PurePosixPath(rel).name for rel in audio) != published:
+        errors.append(f"expected the {len(published)} published previews, found {len(audio)} audio files")
     for rel in present:
         kind = {".html": "html", ".css": "css"}.get(PurePosixPath(rel).suffix)
         if not kind:

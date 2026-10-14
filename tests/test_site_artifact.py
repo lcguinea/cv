@@ -73,7 +73,8 @@ class ArtifactTest(unittest.TestCase):
         # One preview per published work and one copy of each distinct artwork: both counts come
         # from js/music-data.js and the manifest, not from a hard-coded number.
         self.assertEqual(sorted(previews), sorted(published))
-        self.assertEqual({p.rsplit("/", 1)[1] for p in previews}, set(build_site.verified_previews()))
+        # Every published preview is verified; a verified preview of a hidden work stays out.
+        self.assertLessEqual({p.rsplit("/", 1)[1] for p in previews}, set(build_site.verified_previews()))
         self.assertTrue(all(p.endswith(".mp3") for p in previews))
         self.assertEqual(sorted(images), sorted(set(artworks) | {"assets/images/profile.webp",
                                                                  "assets/images/cover.webp",

@@ -1,7 +1,7 @@
 {
   "schema": "public-catalog-exclusions-v1",
   "generated_by": "data/music-catalog/generate_public_music_data.py",
-  "rule": "Toda canción publicada necesita un preview válido: entrada verified en music_preview_manifest.json, fichero existente en assets/audio/previews/, MP3 legible y duración <= 45 s. Las canciones de la selección sin preview reproducible se excluyen de js/music-data.js y se registran aquí.",
+  "rule": "Toda canción publicada necesita un preview válido: entrada verified en music_preview_manifest.json, fichero existente en assets/audio/previews/, MP3 legible y duración <= 45 s. Las canciones de la selección sin preview reproducible se excluyen de js/music-data.js y se registran aquí. Las entradas de public_music_selection.json marcadas \"hidden\": true se ocultan por decisión del propietario (hidden_by_owner) y conservan su posición, su preview y sus metadatos.",
   "published": [
     "25",
     "02",
@@ -34,12 +34,9 @@
     "55",
     "56",
     "32",
-    "60",
-    "61",
     "58",
     "63",
     "59",
-    "62",
     "64",
     "65",
     "66",
@@ -47,12 +44,9 @@
     "68",
     "69",
     "71",
-    "70",
-    "19",
     "22",
     "26",
     "30",
-    "31",
     "44",
     "45",
     "73",
@@ -194,14 +188,6 @@
       "preview": "how-deep-is-your-love--luis-guinea--2022.mp3"
     },
     {
-      "review_id": "60",
-      "preview": "jesus-set-me-free--luis-guinea--2021.mp3"
-    },
-    {
-      "review_id": "61",
-      "preview": "por-que-lloras--renata-isabel--2017.mp3"
-    },
-    {
       "review_id": "58",
       "preview": "sin-mirar-atras--alexander-acha--2024.mp3"
     },
@@ -212,10 +198,6 @@
     {
       "review_id": "59",
       "preview": "si-estas-de-paso--allan-perz--2016.mp3"
-    },
-    {
-      "review_id": "62",
-      "preview": "alguien-como-yo--segundo-piso--2014.mp3"
     },
     {
       "review_id": "64",
@@ -246,14 +228,6 @@
       "preview": "te-espere-cover--ana-guinea--2020.mp3"
     },
     {
-      "review_id": "70",
-      "preview": "super-heroe--edson-corona--2017.mp3"
-    },
-    {
-      "review_id": "19",
-      "preview": "asi-habla-el-amor--luis-guinea.mp3"
-    },
-    {
       "review_id": "22",
       "preview": "el-feo--luis-guinea.mp3"
     },
@@ -264,10 +238,6 @@
     {
       "review_id": "30",
       "preview": "ojos-marrones-cover--luis-guinea.mp3"
-    },
-    {
-      "review_id": "31",
-      "preview": "promesas-decepciones-cover--luis-guinea.mp3"
     },
     {
       "review_id": "44",
@@ -354,6 +324,48 @@
       "title": "Shape of You - Acoustic",
       "reason": "no_authorized_preview",
       "detail": "El audio_ref «Shape of you.mp3» no está en One Page Luis Guinea/audios y, según la relación R11, dura 365,4 s frente a los 184,000 s publicados (discrepancia abierta). Ningún archivo local coincide por nombre ni etiquetas."
+    },
+    {
+      "review_id": "60",
+      "work_id": "jesus-set-me-free--luis-guinea--2021",
+      "title": "Jesus, Set Me Free",
+      "reason": "hidden_by_owner",
+      "detail": "Oculta del catálogo público por decisión del propietario (\"hidden\": true en public_music_selection.json). Audio, preview y metadatos se conservan; quitar la marca la vuelve a publicar en su posición."
+    },
+    {
+      "review_id": "61",
+      "work_id": "por-que-lloras--renata-isabel--2017",
+      "title": "¿Por Qué Lloras?",
+      "reason": "hidden_by_owner",
+      "detail": "Oculta del catálogo público por decisión del propietario (\"hidden\": true en public_music_selection.json). Audio, preview y metadatos se conservan; quitar la marca la vuelve a publicar en su posición."
+    },
+    {
+      "review_id": "62",
+      "work_id": "alguien-como-yo--segundo-piso--2014",
+      "title": "Alguien Como Yo",
+      "reason": "hidden_by_owner",
+      "detail": "Oculta del catálogo público por decisión del propietario (\"hidden\": true en public_music_selection.json). Audio, preview y metadatos se conservan; quitar la marca la vuelve a publicar en su posición."
+    },
+    {
+      "review_id": "70",
+      "work_id": "super-heroe--edson-corona--2017",
+      "title": "Súper Héroe",
+      "reason": "hidden_by_owner",
+      "detail": "Oculta del catálogo público por decisión del propietario (\"hidden\": true en public_music_selection.json). Audio, preview y metadatos se conservan; quitar la marca la vuelve a publicar en su posición."
+    },
+    {
+      "review_id": "19",
+      "work_id": "asi-habla-el-amor--luis-guinea",
+      "title": "Así Habla El Amor",
+      "reason": "hidden_by_owner",
+      "detail": "Oculta del catálogo público por decisión del propietario (\"hidden\": true en public_music_selection.json). Audio, preview y metadatos se conservan; quitar la marca la vuelve a publicar en su posición."
+    },
+    {
+      "review_id": "31",
+      "work_id": "promesas-decepciones-cover--luis-guinea",
+      "title": "Promesas Decepciones - Cover",
+      "reason": "hidden_by_owner",
+      "detail": "Oculta del catálogo público por decisión del propietario (\"hidden\": true en public_music_selection.json). Audio, preview y metadatos se conservan; quitar la marca la vuelve a publicar en su posición."
     }
   ]
 }

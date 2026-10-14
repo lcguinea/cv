@@ -237,7 +237,8 @@ def _check():
         f"{len(rows)} public works; {len(classifications)} classifications; "
         f"{len(mapped)} mappings; {len(open_cases)} open cases; "
         f"{len(preview_names)} validated previews (<= {previews.MAX_PREVIEW_S:.0f} s), "
-        f"{len(exclusions)} selected works excluded without a reproducible preview"
+        f"{sum(e['reason'] != 'hidden_by_owner' for e in exclusions)} selected works excluded without a "
+        f"reproducible preview, {sum(e['reason'] == 'hidden_by_owner' for e in exclusions)} hidden by the owner"
     )
     return 0
 
