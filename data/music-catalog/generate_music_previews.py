@@ -62,6 +62,15 @@ POLICIES = {
             "solo para evitar un corte técnicamente defectuoso, documentado en la entrada."
         ),
     },
+    "approved-preview-window-v3": {
+        "rationale": (
+            "Ventana aprobada explícitamente por el propietario el 2026-10-20 tras escuchar dos propuestas "
+            "codificadas como el preview final (casos #76–#84 de human_review_decisions.json). Ambas salen del "
+            "análisis local del 2026-10-20 sobre el master privado completo: sonoridad EBU R128 de corto plazo "
+            "(ffmpeg ebur128), ventana de 40 s de mayor sonoridad media y comienzo en el mínimo de sonoridad "
+            "momentánea a ±2 s; sin transcripción de letra ni croma. Mismas reglas de borde que v1."
+        ),
+    },
 }
 MAX_EDGE_ADJUSTMENT_S = 1.0
 ASSOCIATION_BASES = {"objective_evidence", "human_authorization"}

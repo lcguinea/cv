@@ -19,7 +19,10 @@ work without a reviewed value publishes an empty list, never an inferred one.
 Recordings that are not in the «Released» sheet (unreleased songs and instrumentals, and releases
 newer than that sheet, with links verified against the platforms) come from the hand-curated
 catalog_recordings.json, never from catalog_master.json, which is generated and hash-pinned; a
-recording with provisional fields cannot be published. The canonical catalogue is
+recording with provisional fields cannot be published. A release may lack a Spotify URL only when its
+basis says so (SPOTIFY_UNVERIFIED): absence means unverified, never «not on Spotify». The internal
+`sync_availability` of a recording (SYNC_AVAILABILITY) is the owner's decision on sync enquiries,
+independent of editorial.use_scene and never published. The canonical catalogue is
 never copied wholesale to the web bundle because it also contains internal-use file
 references and metadata that the current UI does not need.
 """
@@ -76,6 +79,10 @@ RELEASE_TYPES = {"single": "Single", "album": "Album", "ep": "EP"}
 # artist on YouTube or SoundCloud (a `full_recordings` link is required). Neither carries a date.
 NON_COMMERCIAL_TYPES = {"unreleased": "Unreleased", "self_published": "SelfPublished"}
 # Closed vocabulary of the public `version` label (translated by js/strings.js music.version*).
+# Owner's decision on sync enquiries for a recording, or None when there is none. Neither value is a
+# one-stop or rights-cleared claim; "not_offered" (portfolio only) admits no use_scene.
+SYNC_AVAILABILITY = {"on_request", "not_offered"}
+SPOTIFY_UNVERIFIED = "Spotify sin verificar"
 VERSIONS = {"Instrumental", "PianoVocal", "RoughMix", "RegionalMexican", "Mashup"}
 CREDIT_ROLES = {
     "artist": "Artist",
@@ -388,7 +395,7 @@ def project_all(master, selection, decisions, *, repo=REPO, manifest=None, links
 
 RECORDING_KEYS = {"id", "title", "artists", "credits", "release", "duration_ms", "explicit",
                   "is_collaboration", "isrc", "spotify", "apple_music", "artwork", "audio_ref",
-                  "editorial", "version", "basis", "provisional"}
+                  "editorial", "version", "basis", "provisional", "sync_availability"}
 
 
 def recording_works(recordings):
@@ -403,6 +410,7 @@ def recording_works(recordings):
             raise ValueError(f"recording {position} keys must be {sorted(RECORDING_KEYS)}")
         label = _required_text(work["id"], f"recording {position} id")
         status = (work.get("release") or {}).get("status")
+        spotify = work["spotify"]
         if status == "released":
             # Released after the «Released» sheet was compiled: needs a verified streaming link.
             if not (work["spotify"].get("url") or work["apple_music"].get("url")):
@@ -411,6 +419,12 @@ def recording_works(recordings):
             raise ValueError(f"{label}: unsupported release status {status!r}")
         elif work["spotify"].get("url") or work["apple_music"].get("url") or work["isrc"]:
             raise ValueError(f"{label}: an unreleased recording cannot carry release identifiers")
+        if spotify.get("url") != (spotify.get("track_id") and "https://open.spotify.com/track/" + spotify["track_id"]):
+            raise ValueError(f"{label}: the Spotify URL must be the one of its track_id")
+        if work["sync_availability"] is not None and work["sync_availability"] not in SYNC_AVAILABILITY:
+            raise ValueError(f"{label}: unsupported sync_availability {work['sync_availability']!r}")
+        if work["sync_availability"] == "not_offered" and work["editorial"].get("use_scene"):
+            raise ValueError(f"{label}: a recording not offered for sync cannot list use_scene")
         if work["version"] is not None and work["version"] not in VERSIONS:
             raise ValueError(f"{label}: unsupported version {work['version']!r}")
         if not isinstance(work["provisional"], list) or not all(isinstance(f, str) for f in work["provisional"]):
@@ -418,6 +432,9 @@ def recording_works(recordings):
         if not isinstance(work["basis"], list) or not work["basis"] \
                 or not all(isinstance(b, str) and b.strip() for b in work["basis"]):
             raise ValueError(f"{label}: basis must cite the evidence of every public field")
+        if status == "released" and not spotify.get("url") \
+                and not any(SPOTIFY_UNVERIFIED in b for b in work["basis"]):
+            raise ValueError(f"{label}: a release without Spotify must record {SPOTIFY_UNVERIFIED!r} in its basis")
     return works
 
 

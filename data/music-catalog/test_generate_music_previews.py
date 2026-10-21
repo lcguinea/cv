@@ -26,7 +26,9 @@ VERIFIED = {"25", "02", "04", "35", "03", "05", "11", "01", "06", "07", "08", "0
             # Owner-designated masters with their windows approved on 2026-10-13.
             "59", "71",
             # Unreleased co-writes from Coautorías, main windows approved on 2026-10-13.
-            "73", "74", "75"}
+            "73", "74", "75",
+            # Masters of the official ZIP, windows approved on 2026-10-20 (approved-preview-window-v3).
+            "76", "77", "78", "79", "80", "81", "82", "83", "84"}
 # Selected works whose audio is not in One Page Luis Guinea/audios (no source to cut).
 BLOCKED_WITHOUT_AUDIO = {"33", "34", "37", "38"}
 # No associated source waits for a window approval.
@@ -51,6 +53,12 @@ APPROVED_V2 = {
     # Si Estás De Paso: section equivalent to the window approved on the wrong file; Te Esperé: alternative.
     "59": (75.0, 116.6, 116.6), "71": (97.0, 132.0, 132.0),
     "73": (46.0, 90.0, 90.0), "74": (76.5, 116.0, 116.0), "75": (78.0, 117.5, 117.5),
+}
+# Windows the owner chose on 2026-10-20 between two loudness-based proposals (approved-preview-window-v3).
+APPROVED_V3 = {
+    "76": (74.8, 114.8, 114.8), "77": (161.5, 201.5, 201.5), "78": (200.4, 240.4, 240.4),
+    "79": (175.4, 215.4, 215.4), "80": (199.6, 239.6, 239.6), "81": (24.7, 64.7, 64.7),
+    "82": (47.6, 87.6, 87.6), "83": (48.9, 88.9, 88.9), "84": (34.5, 74.5, 74.5),
 }
 HAVE_FFMPEG = bool(shutil.which("ffmpeg") and shutil.which("ffprobe"))
 
@@ -193,6 +201,7 @@ class PreviewManifestTests(unittest.TestCase):
         self.assertEqual(self.manifest["encoding"], previews.ENCODING)
         approved = [(r, w, "approved-chorus-window-v1") for r, w in APPROVED.items()]
         approved += [(r, w, "approved-preview-window-v2") for r, w in APPROVED_V2.items()]
+        approved += [(r, w, "approved-preview-window-v3") for r, w in APPROVED_V3.items()]
         for review_id, (start, end, encoded_end), policy in approved:
             with self.subTest(review_id=review_id):
                 entry = self.entry(self.manifest, review_id)
@@ -203,6 +212,18 @@ class PreviewManifestTests(unittest.TestCase):
                 self.assertAlmostEqual(window["start_s"] + window["duration_s"], encoded_end, places=3)
                 self.assertLessEqual(window["duration_s"], previews.MAX_PREVIEW_S)
                 self.assertEqual(window["edge_adjustment"] is not None, encoded_end != end)
+
+    def test_v3_windows_trace_to_the_owner_approval_in_the_human_case(self):
+        cases = {c["review_id"]: c for c in self.decisions["classifications"]}
+        for review_id in APPROVED_V3:
+            with self.subTest(review_id=review_id):
+                entry = self.entry(self.manifest, review_id)
+                self.assertEqual(entry["association"]["basis"], "human_authorization")
+                approval = [n for n in cases[review_id]["notes"]
+                            if n.startswith("Ventana de preview aprobada por Luis Guinea el 2026-10-20")]
+                self.assertEqual(len(approval), 1)
+                self.assertIn(entry["source_sha256"], approval[0])
+                self.assertIn(entry["preview_sha256"], approval[0])
 
     def test_manifest_rejects_undocumented_or_excessive_edge_adjustments(self):
         manifest = copy.deepcopy(self.manifest)

@@ -323,6 +323,61 @@ class PublicMusicDataTests(unittest.TestCase):
             generator.project(self.master, self.selection, self.decisions, repo=REPO,
                               recordings=recordings)
 
+    def test_a_release_without_spotify_records_it_as_unverified_and_keeps_urls_consistent(self):
+        def project(recordings):
+            return generator.project(self.master, self.selection, self.decisions, repo=REPO,
+                                     recordings=recordings)
+        recordings = json.loads(json.dumps(self.recordings))
+        work = next(w for w in recordings["recordings"] if w["id"] == "1000-dias--pablo-delgado")
+        work["basis"] = [b.replace(generator.SPOTIFY_UNVERIFIED, "") for b in work["basis"]]
+        with self.assertRaisesRegex(ValueError, "release without Spotify must record"):
+            project(recordings)
+        for track_id, url in ((None, "https://open.spotify.com/track/" + "a" * 22),
+                              ("a" * 22, None),
+                              ("a" * 22, "https://open.spotify.com/track/" + "b" * 22)):
+            recordings = json.loads(json.dumps(self.recordings))
+            work = next(w for w in recordings["recordings"] if w["id"] == "el-beso--tufic")
+            work["spotify"] = {"track_id": track_id, "url": url}
+            with self.subTest(track_id=track_id, url=url), \
+                    self.assertRaisesRegex(ValueError, "Spotify URL must be the one of its track_id"):
+                project(recordings)
+
+    def test_sync_availability_is_an_internal_owner_decision_independent_of_use_scene(self):
+        works = {w["id"]: w for w in self.recordings["recordings"]}
+        decided = {wid: w["sync_availability"] for wid, w in works.items() if w["sync_availability"]}
+        self.assertEqual(decided, {
+            "1000-dias--pablo-delgado": "on_request", "en-el-momento-justo--pablo-delgado": "on_request",
+            "solo-esta-noche--pablo-delgado": "on_request", "tonto-enamorado--pablo-delgado": "on_request",
+            "ahi-estas--canciones-de-puno-y-letra": "not_offered",
+            "el-sembrador--canciones-de-puno-y-letra": "not_offered",
+            "gracias-por-todo--canciones-de-puno-y-letra": "not_offered",
+            "hasta-el-final-de-mis-dias--canciones-de-puno-y-letra": "not_offered",
+            "juntos-somos-imparables--canciones-de-puno-y-letra": "not_offered"})
+        # No scenes approved yet: availability does not come from use_scene.
+        self.assertTrue(all(works[wid]["editorial"]["use_scene"] == [] for wid in decided))
+        # Never published.
+        rows = generator.project(self.master, self.selection, self.decisions, repo=REPO,
+                                 recordings=self.recordings)
+        javascript = generator.serialize(rows)
+        for term in ("sync", "on_request", "not_offered", "one_stop"):
+            self.assertNotIn(term, javascript)
+        for value, message in (("one_stop", "unsupported sync_availability"),
+                               (True, "unsupported sync_availability")):
+            recordings = json.loads(json.dumps(self.recordings))
+            next(w for w in recordings["recordings"] if w["id"] == "solo-esta-noche--pablo-delgado")[
+                "sync_availability"] = value
+            with self.subTest(value=value), self.assertRaisesRegex(ValueError, message):
+                generator.project(self.master, self.selection, self.decisions, repo=REPO, recordings=recordings)
+        recordings = json.loads(json.dumps(self.recordings))
+        next(w for w in recordings["recordings"] if w["id"] == "el-sembrador--canciones-de-puno-y-letra")[
+            "editorial"]["use_scene"] = ["romantic"]
+        with self.assertRaisesRegex(ValueError, "not offered for sync cannot list use_scene"):
+            generator.project(self.master, self.selection, self.decisions, repo=REPO, recordings=recordings)
+        recordings = json.loads(json.dumps(self.recordings))
+        del recordings["recordings"][0]["sync_availability"]
+        with self.assertRaisesRegex(ValueError, "keys must be"):
+            generator.project(self.master, self.selection, self.decisions, repo=REPO, recordings=recordings)
+
     def test_recordings_cannot_publish_provisional_fields_or_release_identifiers(self):
         manifest = json.loads(json.dumps(self.manifest))
         entry = next(e for e in manifest["entries"] if e["review_id"] == "22")  # El Feo, verified
@@ -531,6 +586,11 @@ class PublicMusicDataTests(unittest.TestCase):
         "How Deep Is Your Love": "https://music.apple.com/mx/album/how-deep-is-your-love/1613658995?i=1613659506&uo=4",
     }
     WITHOUT_APPLE = {"Allá", "Eres Veneno"}
+    # Releases whose Spotify URL is not verified (not a claim that they are absent from Spotify):
+    # Apple Music only, verified with the iTunes Search API on 2026-10-20 and 2026-10-21.
+    WITHOUT_SPOTIFY = {("1000 Días", "Pablo Delgado, Paz Álvarez"), ("En El Momento Justo", "Pablo Delgado"),
+                       ("Solo Esta Noche", "Pablo Delgado"), ("Tonto Enamorado", "Pablo Delgado"),
+                       ("Juntos Somos Imparables", "Canciones de Puño y Letra")}
 
     def test_streaming_links_come_from_the_catalogue_or_the_certified_additions_only(self):
         rows = self.project()
@@ -544,7 +604,15 @@ class PublicMusicDataTests(unittest.TestCase):
                 registered = work["apple_music"]["url"]
                 expected = self.CORRECTED_APPLE.get(row["title"]) or registered or self.CERTIFIED_APPLE.get(row["title"])
                 self.assertEqual(row["appleMusic"], expected)
-        self.assertTrue(all(row["spotify"] for row in released))
+        self.assertEqual({(row["title"], row["artist"]) for row in released if not row["spotify"]},
+                         self.WITHOUT_SPOTIFY)
+        for row in released:
+            if not row["spotify"]:
+                with self.subTest(unverified_spotify=row["title"]):
+                    self.assertTrue(row["appleMusic"])
+                    work = next(w for w in self.recordings["recordings"]
+                                if w["title"] == row["title"] and ", ".join(w["artists"]) == row["artist"])
+                    self.assertTrue(any(generator.SPOTIFY_UNVERIFIED in b for b in work["basis"]))
         # Unreleased recordings never carry streaming links.
         self.assertTrue(all(row["spotify"] is None and row["appleMusic"] is None
                             for row in rows if row not in released))

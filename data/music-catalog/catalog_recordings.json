@@ -1,6 +1,6 @@
 {
   "schema": "catalog-recordings-v1",
-  "description": "Grabaciones de One Page Luis Guinea/audios que no están en la hoja «Released» y por tanto no pueden estar en catalog_master.json (generado y con sha256 fijado). Mismo modelo de obra que catalog_master.json más version (vocabulario cerrado de generate_public_music_data.py), basis (evidencia de cada campo público) y provisional (campos pendientes de aprobación; una grabación con campos provisionales no puede publicarse). Las inéditas no llevan enlaces; las publicadas después de compilarse la hoja «Released» llevan enlaces verificados contra las plataformas.",
+  "description": "Grabaciones de One Page Luis Guinea/audios que no están en la hoja «Released» y por tanto no pueden estar en catalog_master.json (generado y con sha256 fijado). Mismo modelo de obra que catalog_master.json más version (vocabulario cerrado de generate_public_music_data.py), basis (evidencia de cada campo público) y provisional (campos pendientes de aprobación; una grabación con campos provisionales no puede publicarse). Las inéditas no llevan enlaces; las publicadas después de compilarse la hoja «Released» llevan enlaces verificados contra las plataformas. sync_availability es la decisión del propietario sobre consultas de sincronización (on_request: disponible bajo consulta, sujeta a autorizaciones; not_offered: solo portafolio; null: sin decisión), independiente de editorial.use_scene; no es una declaración one-stop ni de derechos liberados y no se publica.",
   "recordings": [
     {
       "id": "asi-habla-el-amor--luis-guinea",
@@ -55,7 +55,8 @@
         "Título y artista: catalogo_sin_duplicados_con_isrc_prioridad.xlsx › Local fila 41.",
         "Inédita: sin lanzamiento en Apple Music, Spotify ni Deezer (consulta del 2026-10-13); publicación del preview autorizada por el propietario."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "el-feo--luis-guinea",
@@ -110,7 +111,8 @@
         "Etiquetas del archivo: title «El Feo», artist «Luis Guinea».",
         "Inédita: sin lanzamiento en la discografía de Luis Guinea en Apple Music (consulta del 2026-10-13). La fecha 2020 de la etiqueta no es una fecha de publicación y no se muestra."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "el-beso--tufic",
@@ -169,7 +171,8 @@
         "Portada: corrección explícita del propietario del 2026-10-14. La imagen anterior, assets/images/el-beso---Tufic.webp (sombrilla «Parada obligatoria»), no era la portada de este sencillo; se reemplaza por «El Beso - Tufic y Luis Guinea.jpg» (4000 × 4000, sha256 2f42339b…28bc3), reducida a 600 × 600 y codificada con cwebp -q 75, la convención del sitio. Se publica con un nombre de archivo nuevo para que la URL cambie y ninguna caché sirva la imagen anterior.",
         "Spotify fecha la pista el 2026-07-24 y Apple Music el 2026-06-19: se publica solo el año, 2026."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "inenarrable-que-suerte-piano-voz--luis-guinea",
@@ -225,7 +228,8 @@
         "Artista: carpeta Cantautor.",
         "Inédita (el mismo nombre de archivo figura en Songwriting/Demo Editoras); sin lanzamiento en Apple Music."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "la-martiniana--luis-guinea--2025",
@@ -282,7 +286,8 @@
         "Decisión explícita del propietario del 2026-10-13: cover; créditos de arreglista, intérprete y productor.",
         "Portada: imagen oficial del sencillo en la CDN de Spotify (640 px) convertida a WebP."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "ojos-marrones-cover--luis-guinea",
@@ -339,7 +344,8 @@
         "Sufijo «- Cover»: convención de catalog_master.json para versiones de obras ajenas.",
         "Inédita: sin lanzamiento en Apple Music."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "promesas-decepciones-cover--luis-guinea",
@@ -394,7 +400,8 @@
         "Etiquetas del archivo: title «Promesas Decepciones», artist «PXNDX (Cover Luis Guinea)»: cover declarado en el propio archivo.",
         "Inédita: sin lanzamiento en Apple Music; la fecha 2020 de la etiqueta no se muestra."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "it-feels-like-falling-in-love--anne-noor",
@@ -450,7 +457,8 @@
         "Decisión explícita del propietario del 2026-10-13: intérprete Anne Noor; Luis Guinea coautor, coarreglista y coproductor.",
         "Inédita: sin lanzamiento en Apple Music ni Deezer."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "peligro--nina-jori",
@@ -510,7 +518,8 @@
         "Inédita: sin lanzamiento en Apple Music ni Deezer.",
         "Coincidencia de duración con bajo-la-mesa--mireles--2021 (Δ 0,017 s) sin coincidencia de título ni artistas: no se vincula."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "diamonds-cover-instrumental--luis-guinea",
@@ -566,7 +575,8 @@
         "Decisión explícita del propietario del 2026-10-13: cover o arreglo de obra ajena; créditos exclusivamente de arreglista y productor (sin composición).",
         "Publicación independiente: grabación completa publicada por el autor en SoundCloud, perfil Luis Guinea (lcguinea): https://soundcloud.com/lcguinea/diamonds, título «Diamonds (Symphonic Orchestra Cover) - Rihanna - Luis Guinea» (enlace aportado por el propietario y comprobado por oEmbed el 2026-10-13). Sin distribuidor, ISRC ni lanzamiento comercial en Spotify o Apple Music; no consta fecha de publicación, por lo que no se publica año."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "one-last-time-vs-rather-be-vs-outside-vs-summer--luis-guinea",
@@ -622,7 +632,8 @@
         "Decisión explícita del propietario del 2026-10-13: mashup de obras ajenas; créditos exclusivamente de arreglista y productor (sin composición).",
         "Publicación independiente: grabación completa publicada por el autor en SoundCloud, perfil Luis Guinea (lcguinea): https://soundcloud.com/lcguinea/2015mashup, título «One Last Time/Rather Be/Outside/Summer (Symphonic Orchestra) - Various Artists - Luis Guinea» (enlace aportado por el propietario y comprobado por oEmbed el 2026-10-13). Sin distribuidor, ISRC ni lanzamiento comercial en Spotify o Apple Music; no consta fecha de publicación, por lo que no se publica año."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "prometheus--luis-guinea",
@@ -678,7 +689,8 @@
         "Decisión explícita del propietario del 2026-10-13: composición original; créditos de compositor, arreglista y productor.",
         "Publicación independiente: grabación completa publicada por el autor en YouTube, canal Moctezuma Music (@MoctezumaMusic): https://www.youtube.com/watch?v=yHnT3_4kRRA, título «Prometheus - Luis Guinea» (enlace aportado por el propietario y comprobado por oEmbed el 2026-10-13). Sin distribuidor, ISRC ni lanzamiento comercial en Spotify o Apple Music; no consta fecha de publicación, por lo que no se publica año."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "she-wolf-cover-instrumental--luis-guinea",
@@ -734,7 +746,8 @@
         "Decisión explícita del propietario del 2026-10-13: cover o arreglo de obra ajena; créditos exclusivamente de arreglista y productor (sin composición).",
         "Publicación independiente: grabación completa publicada por el autor en SoundCloud, perfil Luis Guinea (lcguinea): https://soundcloud.com/lcguinea/shewolf, título «She Wolf (Symphonic Orchestra Cover) - David Guetta - Luis Guinea» (enlace aportado por el propietario y comprobado por oEmbed el 2026-10-13). Sin distribuidor, ISRC ni lanzamiento comercial en Spotify o Apple Music; no consta fecha de publicación, por lo que no se publica año."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "singularidad-del-genio--luis-guinea",
@@ -790,7 +803,8 @@
         "Decisión explícita del propietario del 2026-10-13: composición original; créditos de compositor, arreglista y productor.",
         "Publicación independiente: grabación completa publicada por el autor en YouTube, canal Moctezuma Music (@MoctezumaMusic): https://www.youtube.com/watch?v=3IOU81SGq9c, título «Singularidad del Genio (Score) - Luis Guinea» (enlace aportado por el propietario y comprobado por oEmbed el 2026-10-13). Sin distribuidor, ISRC ni lanzamiento comercial en Spotify o Apple Music; no consta fecha de publicación, por lo que no se publica año."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "alacran--daniela-gomez",
@@ -846,7 +860,8 @@
         "Rol: carpeta Productor.",
         "Inédita: sin lanzamiento en Apple Music ni Deezer; la fecha 2020 de la etiqueta no se muestra."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "jinne-jinne--canciones-de-puno-y-letra",
@@ -901,7 +916,8 @@
         "Decisión explícita del propietario del 2026-10-13: título «Jinne, Jinne», artista Canciones de Puño y Letra; Luis Guinea coautor, coarreglista y coproductor junto con Pablo Delgado.",
         "Inédita: sin lanzamiento en Apple Music ni Deezer."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "dame-mas-de-ti-rough-mix--rogelio-edel",
@@ -956,7 +972,8 @@
         "Título con la grafía oficial de Mil Versiones - EP. Versión: nombre del archivo «_roughmix».",
         "La pista publicada (Apple 1844217385, Spotify 0u7hpykPEmVgSRPIkBSPr6) dura 181,016 s; esta mezcla preliminar dura 207,528 s (Δ 26,5 s): es otra grabación sin lanzamiento propio, así que no lleva enlaces ni la portada del EP."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "i-want-u--rogelio-edel--2025",
@@ -1012,7 +1029,8 @@
         "Mil Versiones - EP (Rogelio Edel, 2025-10-10): Apple Music colección 1844217381 y álbum de Spotify 6TMJisdDlRcKBBWaNVvHLd, consultados el 2026-10-13.",
         "Portada: One Page Luis Guinea/artworks/Mil Versiones.png, indicada por el propietario."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "mejor-version--rogelio-edel--2025",
@@ -1068,7 +1086,8 @@
         "Mil Versiones - EP (Rogelio Edel, 2025-10-10): Apple Music colección 1844217381 y álbum de Spotify 6TMJisdDlRcKBBWaNVvHLd, consultados el 2026-10-13.",
         "Portada: One Page Luis Guinea/artworks/Mil Versiones.png, indicada por el propietario."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "te-extrano--rogelio-edel--2025",
@@ -1125,7 +1144,8 @@
         "Mil Versiones - EP (Rogelio Edel, 2025-10-10): Apple Music colección 1844217381 y álbum de Spotify 6TMJisdDlRcKBBWaNVvHLd, consultados el 2026-10-13.",
         "Portada: One Page Luis Guinea/artworks/Mil Versiones.png, indicada por el propietario."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "te-vi-we-belong-together-rough-mix--rogelio-edel",
@@ -1182,7 +1202,8 @@
         "Versión: nombre del archivo «_roughmix».",
         "Inédita: no figura en la discografía de Rogelio Edel en Apple Music ni Spotify; la fecha 2021 de la etiqueta no se muestra."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "hagamos-un-trio--luis-guinea",
@@ -1240,7 +1261,8 @@
         "Decisión explícita del propietario del 2026-10-13: Luis Guinea compositor y coautor con Mirley Cauich Navarro.",
         "Inédita: sin resultados en Apple Music ni Deezer."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "dime-senorita--carla-calderon",
@@ -1300,7 +1322,8 @@
         "Decisión explícita del propietario del 2026-10-13: Luis Guinea compositor y coautor con Carla Calderón, Efraín Ardila y Brandon Orr.",
         "Inédita: sin resultados en Apple Music ni Deezer."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
     },
     {
       "id": "vuelta-completa--luis-guinea",
@@ -1360,7 +1383,531 @@
         "Decisión explícita del propietario del 2026-10-13: Luis Guinea compositor y coautor con Paola Zozaya, Carla Merchant y Angel Elizalde.",
         "Inédita: sin resultados en Apple Music ni Deezer."
       ],
-      "provisional": []
+      "provisional": [],
+      "sync_availability": null
+    },
+    {
+      "id": "1000-dias--pablo-delgado",
+      "title": "1000 Días",
+      "artists": [
+        "Pablo Delgado",
+        "Paz Álvarez"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": 2021,
+        "type": "single",
+        "track_number": null,
+        "disc_number": null,
+        "status": "released"
+      },
+      "duration_ms": null,
+      "explicit": false,
+      "is_collaboration": true,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": "https://music.apple.com/mx/album/1000-d%C3%ADas-feat-paz-alvarez/1602305241?i=1602305243&uo=4",
+        "track_id": "1602305243",
+        "collection_id": "1602305241",
+        "storefront": "mx"
+      },
+      "artwork": {
+        "file": "One Page Luis Guinea/audios/_zip_extraido_20261019/_MASTERS y COVER ARTS OFICIALES/Cover Art 1000 Días.jpg",
+        "web_file": "assets/images/1000-Días---Pablo-Delgado.webp"
+      },
+      "audio_ref": "Pablo Delgado - 1000 Días.wav",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Master oficial del ZIP «_MASTERS y COVER ARTS OFICIALES» (sha256 del ZIP 3e02d56f…0320e): «Pablo Delgado - 1000 Días.wav», 226,046 s, sha256 81e9c32df1baf07ecea9fdf14b8490cf40854cbd694b289453ebdab7e2ce9609. Título y artistas tomados del nombre de archivo.",
+        "Publicada: Apple Music «1000 Días (feat. Paz, Alvarez)» de Pablo Delgado, «1000 Días (feat. Paz, Alvarez) - Single» 1602305241 (2021-12-30, 226,046 s; master Δ 0,000 s), consultada con la API de búsqueda de iTunes el 2026-10-20. Spotify sin verificar.",
+        "Portada candidata «Cover Art 1000 Días.jpg» (sha256 47354a45…b3450), asociada solo por nombre de archivo; reducida a 600 × 600 y codificada con cwebp -q 75, la convención del sitio.",
+        "Autorización del propietario del 2026-10-20 para incluir la obra en el catálogo público. Aprobados en el caso #76 de spikes/essentia/human_review_decisions.json: la ventana de preview y los créditos de Luis Guinea (coproducción, coarreglos, ingeniería de grabación y edición, multiinstrumentista). Decisión editorial del propietario del 2026-10-20 (caso #76): título, artistas (Paz Álvarez, artista invitada; Apple Music escribe «feat. Paz, Alvarez»), año 2021 y portada original confirmados. Solo se publican los créditos confirmados de Luis Guinea. Disponible para sincronización según el propietario, sin afirmar one-stop ni derechos liberados. Revisión humana completada el 2026-10-20 (caso #76): género, mood, créditos y rol principal Producer aprobados; ningún campo queda provisional."
+      ],
+      "provisional": [],
+      "sync_availability": "on_request"
+    },
+    {
+      "id": "en-el-momento-justo--pablo-delgado",
+      "title": "En El Momento Justo",
+      "artists": [
+        "Pablo Delgado"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": 2023,
+        "type": "single",
+        "track_number": null,
+        "disc_number": null,
+        "status": "released"
+      },
+      "duration_ms": null,
+      "explicit": false,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": "https://music.apple.com/mx/album/en-el-momento-justo/1711169818?i=1711169819&uo=4",
+        "track_id": "1711169819",
+        "collection_id": "1711169818",
+        "storefront": "mx"
+      },
+      "artwork": {
+        "file": "One Page Luis Guinea/audios/_zip_extraido_20261019/_MASTERS y COVER ARTS OFICIALES/Cover Art En El Momento Justo.jpg",
+        "web_file": "assets/images/En-El-Momento-Justo---Pablo-Delgado.webp"
+      },
+      "audio_ref": "Pablo Delgado - En El Momento Justo.wav",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Master oficial del ZIP «_MASTERS y COVER ARTS OFICIALES» (sha256 del ZIP 3e02d56f…0320e): «Pablo Delgado - En El Momento Justo.wav», 237,831 s, sha256 3efdcdacf1d23e43534f7b62663687c7101cfe2af859dedad7f94430e6f289ed. Título y artistas tomados del nombre de archivo.",
+        "Publicada: Apple Music «En El Momento Justo» de Pablo Delgado, «En El Momento Justo - Single» 1711169818 (2023-10-15, 237,831 s; master Δ 0,000 s), consultada con la API de búsqueda de iTunes el 2026-10-20. Spotify sin verificar.",
+        "Portada candidata «Cover Art En El Momento Justo.jpg» (sha256 d6608dd1…19791), asociada solo por nombre de archivo; reducida a 600 × 600 y codificada con cwebp -q 75, la convención del sitio.",
+        "Autorización del propietario del 2026-10-20 para incluir la obra en el catálogo público. Aprobados en el caso #77 de spikes/essentia/human_review_decisions.json: la ventana de preview y los créditos de Luis Guinea (coproducción, coarreglos, ingeniería de grabación y edición, multiinstrumentista). Decisión editorial del propietario del 2026-10-20 (caso #77): título, artistas, año 2023 y portada original confirmados. Solo se publican los créditos confirmados de Luis Guinea. Disponible para sincronización según el propietario, sin afirmar one-stop ni derechos liberados. Revisión humana completada el 2026-10-20 (caso #77): género, mood, créditos y rol principal Producer aprobados; ningún campo queda provisional."
+      ],
+      "provisional": [],
+      "sync_availability": "on_request"
+    },
+    {
+      "id": "solo-esta-noche--pablo-delgado",
+      "title": "Solo Esta Noche",
+      "artists": [
+        "Pablo Delgado"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": 2022,
+        "type": "single",
+        "track_number": null,
+        "disc_number": null,
+        "status": "released"
+      },
+      "duration_ms": null,
+      "explicit": false,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": "https://music.apple.com/mx/album/solo-esta-noche/1631043372?i=1631043373&uo=4",
+        "track_id": "1631043373",
+        "collection_id": "1631043372",
+        "storefront": "mx"
+      },
+      "artwork": {
+        "file": "One Page Luis Guinea/audios/_zip_extraido_20261019/_MASTERS y COVER ARTS OFICIALES/Cover Art Solo Esta Noche.jpg",
+        "web_file": "assets/images/Solo-Esta-Noche---Pablo-Delgado.webp"
+      },
+      "audio_ref": "Pablo Delgado - Solo Esta Noche.wav",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Master oficial del ZIP «_MASTERS y COVER ARTS OFICIALES» (sha256 del ZIP 3e02d56f…0320e): «Pablo Delgado - Solo Esta Noche.wav», 255,109 s, sha256 c470a3529416ff85228fb7d24874a476486b7fa9e37a173ac85d5aee44338f60. Título y artistas tomados del nombre de archivo.",
+        "Publicada: Apple Music «Solo Esta Noche» de Pablo Delgado, «Solo Esta Noche - Single» 1631043372 (2022-06-30, 255,109 s; master Δ 0,000 s), consultada con la API de búsqueda de iTunes el 2026-10-20. Spotify sin verificar.",
+        "Portada candidata «Cover Art Solo Esta Noche.jpg» (sha256 b4a3706a…8ab66), asociada solo por nombre de archivo; reducida a 600 × 600 y codificada con cwebp -q 75, la convención del sitio.",
+        "Autorización del propietario del 2026-10-20 para incluir la obra en el catálogo público. Aprobados en el caso #78 de spikes/essentia/human_review_decisions.json: la ventana de preview y los créditos de Luis Guinea (coproducción, coarreglos, ingeniería de grabación y edición, multiinstrumentista). Decisión editorial del propietario del 2026-10-20 (caso #78): título, artistas, año 2022 y portada original confirmados. Solo se publican los créditos confirmados de Luis Guinea. Disponible para sincronización según el propietario, sin afirmar one-stop ni derechos liberados. Revisión humana completada el 2026-10-20 (caso #78): género, mood, créditos y rol principal Producer aprobados; ningún campo queda provisional."
+      ],
+      "provisional": [],
+      "sync_availability": "on_request"
+    },
+    {
+      "id": "tonto-enamorado--pablo-delgado",
+      "title": "Tonto Enamorado",
+      "artists": [
+        "Pablo Delgado"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": 2023,
+        "type": "single",
+        "track_number": null,
+        "disc_number": null,
+        "status": "released"
+      },
+      "duration_ms": null,
+      "explicit": false,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": "https://music.apple.com/mx/album/tonto-enamorado/1673803348?i=1673803349&uo=4",
+        "track_id": "1673803349",
+        "collection_id": "1673803348",
+        "storefront": "mx"
+      },
+      "artwork": {
+        "file": "One Page Luis Guinea/audios/_zip_extraido_20261019/_MASTERS y COVER ARTS OFICIALES/Cover Art Tonto Enamorado (Warm).jpeg",
+        "web_file": "assets/images/Tonto-Enamorado---Pablo-Delgado.webp"
+      },
+      "audio_ref": "Pablo Delgado - Tonto Enamorado.wav",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Master oficial del ZIP «_MASTERS y COVER ARTS OFICIALES» (sha256 del ZIP 3e02d56f…0320e): «Pablo Delgado - Tonto Enamorado.wav», 256,615 s, sha256 9775a2ca669e74cfbcf3fe6b91bca4b2135d6561df356704a5f9360e2ae371f0. Título y artistas tomados del nombre de archivo.",
+        "Publicada: Apple Music «Tonto Enamorado» de Pablo Delgado, «Tonto Enamorado - Single» 1673803348 (2023-02-28, 256,615 s; master Δ 0,000 s), consultada con la API de búsqueda de iTunes el 2026-10-20. Spotify sin verificar.",
+        "Portada candidata «Cover Art Tonto Enamorado (Warm).jpeg» (sha256 0afad1f3…d9a54), asociada solo por nombre de archivo; reducida a 600 × 600 y codificada con cwebp -q 75, la convención del sitio.",
+        "Autorización del propietario del 2026-10-20 para incluir la obra en el catálogo público. Aprobados en el caso #79 de spikes/essentia/human_review_decisions.json: la ventana de preview y los créditos de Luis Guinea (coproducción, coarreglos, ingeniería de grabación y edición, multiinstrumentista). Decisión editorial del propietario del 2026-10-20 (caso #79): título, artistas, año 2023 y portada original confirmados; «Warm» en el nombre de la portada es un tecnicismo del master, no parte del título. Solo se publican los créditos confirmados de Luis Guinea. Disponible para sincronización según el propietario, sin afirmar one-stop ni derechos liberados. Revisión humana completada el 2026-10-20 (caso #79): género, mood, créditos y rol principal Producer aprobados; ningún campo queda provisional."
+      ],
+      "provisional": [],
+      "sync_availability": "on_request"
+    },
+    {
+      "id": "ahi-estas--canciones-de-puno-y-letra",
+      "title": "Ahí Estás",
+      "artists": [
+        "Canciones de Puño y Letra"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": "One Page Luis Guinea/audios/_zip_extraido_20261019/_MASTERS y COVER ARTS OFICIALES/PyL Cover Art Allí Estás (Claudia y Carlos).jpg",
+        "web_file": "assets/images/Ahí-Estás---Canciones-de-Puño-y-Letra.webp"
+      },
+      "audio_ref": "PyL Allí Estás (Claudia y Carlos) - Pablo Delgado y Luis Guinea (SPOTIFY).wav",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Master oficial del ZIP «_MASTERS y COVER ARTS OFICIALES» (sha256 del ZIP 3e02d56f…0320e): «PyL Allí Estás (Claudia y Carlos) - Pablo Delgado y Luis Guinea (SPOTIFY).wav», 249,865 s, sha256 45d2f6ddd8328ed0ae76d12ad42e2bb0e832657b1329369e8620e5e395519951. Título y artistas tomados del nombre de archivo.",
+        "Estado de lanzamiento sin confirmar: no aparece en Apple Music (mx, us, es) el 2026-10-20; el nombre del master lleva «(SPOTIFY)». Se registra como inédita de forma provisional.",
+        "Portada candidata «PyL Cover Art Allí Estás (Claudia y Carlos).jpg» (sha256 c7de1461…b7dd3), asociada solo por nombre de archivo; reducida a 600 × 600 y codificada con cwebp -q 75, la convención del sitio.",
+        "Autorización del propietario del 2026-10-20 para incluir la obra en el catálogo público. Aprobada en el caso #80 de spikes/essentia/human_review_decisions.json: la ventana de preview. Decisión editorial del propietario del 2026-10-20 (caso #80): título «Ahí Estás» definitivo, artista principal Canciones de Puño y Letra, portada original confirmada. Encargo personalizado: el propietario declara contar con autorización expresa de los destinatarios para mostrar públicamente la portada con sus nombres. Solo portafolio: no se ofrece para sincronización. El nombre del master y de la portada dicen «Allí Estás»; la imagen de la portada, «Ahí Estás». Creada en 2022 y entregada de forma privada, sin publicación pública anterior (decisión del propietario del 2026-10-20): inédita sin año público; 2022 es el año de creación, no de lanzamiento. Revisión humana completada el 2026-10-20 (caso #80): género, mood, créditos y rol principal Producer aprobados; ningún campo queda provisional."
+      ],
+      "provisional": [],
+      "sync_availability": "not_offered"
+    },
+    {
+      "id": "el-sembrador--canciones-de-puno-y-letra",
+      "title": "El Sembrador",
+      "artists": [
+        "Canciones de Puño y Letra"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": "One Page Luis Guinea/audios/_zip_extraido_20261019/_MASTERS y COVER ARTS OFICIALES/PyL Cover Art El Sembrador (Familia y Chucho).jpg",
+        "web_file": "assets/images/El-Sembrador---Canciones-de-Puño-y-Letra.webp"
+      },
+      "audio_ref": "PyL El Sembrador (Familia y Chucho) - Luis Guinea (SPOTIFY).wav",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Master oficial del ZIP «_MASTERS y COVER ARTS OFICIALES» (sha256 del ZIP 3e02d56f…0320e): «PyL El Sembrador (Familia y Chucho) - Luis Guinea (SPOTIFY).wav», 170,687 s, sha256 a16ab1194101dcf10744b2057ca89c10a01ee9ed9fc099b06014e00525cd2a84. Título y artistas tomados del nombre de archivo.",
+        "Estado de lanzamiento sin confirmar: no aparece en Apple Music (mx, us, es) el 2026-10-20; el nombre del master lleva «(SPOTIFY)». Se registra como inédita de forma provisional.",
+        "Portada candidata «PyL Cover Art El Sembrador (Familia y Chucho).jpg» (sha256 b6ff15a5…719fb), asociada solo por nombre de archivo; reducida a 600 × 600 y codificada con cwebp -q 75, la convención del sitio.",
+        "Autorización del propietario del 2026-10-20 para incluir la obra en el catálogo público. Aprobada en el caso #81 de spikes/essentia/human_review_decisions.json: la ventana de preview. Decisión editorial del propietario del 2026-10-20 (caso #81): título «El Sembrador» definitivo, artista principal Canciones de Puño y Letra, portada original confirmada. Encargo personalizado: el propietario declara contar con autorización expresa de los destinatarios para mostrar públicamente la portada con sus nombres. Solo portafolio: no se ofrece para sincronización. Creada en 2022 y entregada de forma privada, sin publicación pública anterior (decisión del propietario del 2026-10-20): inédita sin año público; 2022 es el año de creación, no de lanzamiento. Revisión humana completada el 2026-10-20 (caso #81): género, mood, créditos y rol principal Producer aprobados; ningún campo queda provisional."
+      ],
+      "provisional": [],
+      "sync_availability": "not_offered"
+    },
+    {
+      "id": "gracias-por-todo--canciones-de-puno-y-letra",
+      "title": "Gracias Por Todo",
+      "artists": [
+        "Canciones de Puño y Letra"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": "One Page Luis Guinea/audios/_zip_extraido_20261019/_MASTERS y COVER ARTS OFICIALES/PyL Cover Art Gracias Por Todo (Nietos y Tita).jpg",
+        "web_file": "assets/images/Gracias-Por-Todo---Canciones-de-Puño-y-Letra.webp"
+      },
+      "audio_ref": "PyL Gracias Por Todo (Nietos y Tita) - Pablo Delgado y Luis Guinea (SPOTIFY).wav",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Master oficial del ZIP «_MASTERS y COVER ARTS OFICIALES» (sha256 del ZIP 3e02d56f…0320e): «PyL Gracias Por Todo (Nietos y Tita) - Pablo Delgado y Luis Guinea (SPOTIFY).wav», 168,817 s, sha256 79ed1b0e0cabb9934681906b7130430bdf740ebe57b50f26c64460c1007c5e18. Título y artistas tomados del nombre de archivo.",
+        "Estado de lanzamiento sin confirmar: no aparece en Apple Music (mx, us, es) el 2026-10-20; el nombre del master lleva «(SPOTIFY)». Se registra como inédita de forma provisional.",
+        "Portada candidata «PyL Cover Art Gracias Por Todo (Nietos y Tita).jpg» (sha256 728494c5…cd36b), asociada solo por nombre de archivo; reducida a 600 × 600 y codificada con cwebp -q 75, la convención del sitio.",
+        "Autorización del propietario del 2026-10-20 para incluir la obra en el catálogo público. Aprobada en el caso #82 de spikes/essentia/human_review_decisions.json: la ventana de preview. Decisión editorial del propietario del 2026-10-20 (caso #82): título «Gracias Por Todo» definitivo, artista principal Canciones de Puño y Letra, portada original confirmada. Encargo personalizado: el propietario declara contar con autorización expresa de los destinatarios para mostrar públicamente la portada con sus nombres. Solo portafolio: no se ofrece para sincronización. Creada en 2022 y entregada de forma privada, sin publicación pública anterior (decisión del propietario del 2026-10-20): inédita sin año público; 2022 es el año de creación, no de lanzamiento. Revisión humana completada el 2026-10-20 (caso #82): género, mood, créditos y rol principal Producer aprobados; ningún campo queda provisional."
+      ],
+      "provisional": [],
+      "sync_availability": "not_offered"
+    },
+    {
+      "id": "hasta-el-final-de-mis-dias--canciones-de-puno-y-letra",
+      "title": "Hasta el Final de mis Días",
+      "artists": [
+        "Canciones de Puño y Letra"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": "One Page Luis Guinea/audios/_zip_extraido_20261019/_MASTERS y COVER ARTS OFICIALES/PyL Cover Art Hasta el Final de mis Días (Coté y Javier).jpg",
+        "web_file": "assets/images/Hasta-el-Final-de-mis-Días---Canciones-de-Puño-y-Letra.webp"
+      },
+      "audio_ref": "PyL Hasta el Final de mis Días (Coté y Javier) - Luis Guinea (SPOTIFY).wav",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Master oficial del ZIP «_MASTERS y COVER ARTS OFICIALES» (sha256 del ZIP 3e02d56f…0320e): «PyL Hasta el Final de mis Días (Coté y Javier) - Luis Guinea (SPOTIFY).wav», 173,000 s, sha256 55fe3ff13eb58a3d71d6311a5c998ccf39c66055365afce4b9e1b37c73533311. Título y artistas tomados del nombre de archivo.",
+        "Estado de lanzamiento sin confirmar: no aparece en Apple Music (mx, us, es) el 2026-10-20; el nombre del master lleva «(SPOTIFY)». Se registra como inédita de forma provisional.",
+        "Portada candidata «PyL Cover Art Hasta el Final de mis Días (Coté y Javier).jpg» (sha256 115dccbe…c0bea), asociada solo por nombre de archivo; reducida a 600 × 600 y codificada con cwebp -q 75, la convención del sitio.",
+        "Autorización del propietario del 2026-10-20 para incluir la obra en el catálogo público. Aprobada en el caso #83 de spikes/essentia/human_review_decisions.json: la ventana de preview. Decisión editorial del propietario del 2026-10-20 (caso #83): título «Hasta el Final de mis Días» definitivo, artista principal Canciones de Puño y Letra, portada original confirmada. Encargo personalizado: el propietario declara contar con autorización expresa de los destinatarios para mostrar públicamente la portada con sus nombres. Solo portafolio: no se ofrece para sincronización. Creada en 2022 y entregada de forma privada, sin publicación pública anterior (decisión del propietario del 2026-10-20): inédita sin año público; 2022 es el año de creación, no de lanzamiento. Revisión humana completada el 2026-10-20 (caso #83): género, mood, créditos y rol principal Producer aprobados; ningún campo queda provisional."
+      ],
+      "provisional": [],
+      "sync_availability": "not_offered"
+    },
+    {
+      "id": "juntos-somos-imparables--canciones-de-puno-y-letra",
+      "title": "Juntos Somos Imparables",
+      "artists": [
+        "Canciones de Puño y Letra"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": 2025,
+        "type": "single",
+        "track_number": null,
+        "disc_number": null,
+        "status": "released"
+      },
+      "duration_ms": null,
+      "explicit": false,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": "https://music.apple.com/mx/album/juntos-somos-imparables-sofi-y-tony-feat-luis-guinea/1847613618?i=1847613623&uo=4",
+        "track_id": "1847613623",
+        "collection_id": "1847613618",
+        "storefront": "mx"
+      },
+      "artwork": {
+        "file": "One Page Luis Guinea/audios/_zip_extraido_20261019/_MASTERS y COVER ARTS OFICIALES/PyL Cover Art Juntos Somos Imparables (Sofi y Tony).jpg",
+        "web_file": "assets/images/Juntos-Somos-Imparables---Canciones-de-Puño-y-Letra.webp"
+      },
+      "audio_ref": "PyL Juntos Somos Imparables (Sofi y Tony) - Luis Guinea (SPOTIFY).wav",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Master oficial del ZIP «_MASTERS y COVER ARTS OFICIALES» (sha256 del ZIP 3e02d56f…0320e): «PyL Juntos Somos Imparables (Sofi y Tony) - Luis Guinea (SPOTIFY).wav», 213,073 s, sha256 27664e369860c4992f676ba4326f2043298e9ba2a0349c7a0f3c9fb3166aa609. Título y artistas tomados del nombre de archivo.",
+        "Publicada: Apple Music «Juntos Somos Imparables (Sofi y Tony) [feat. Luis Guinea]» de Canciones de Puño y Letra, «Juntos Somos Imparables (Sofi y Tony) [feat. Luis Guinea] - Single» 1847613618 (2025-10-14, 213,073 s; master Δ 0,000 s), consultada con la API de búsqueda de iTunes el 2026-10-20. Spotify sin verificar.",
+        "Portada candidata «PyL Cover Art Juntos Somos Imparables (Sofi y Tony).jpg» (sha256 b2bd1f37…5776d), asociada solo por nombre de archivo; reducida a 600 × 600 y codificada con cwebp -q 75, la convención del sitio.",
+        "Autorización del propietario del 2026-10-20 para incluir la obra en el catálogo público. Aprobada en el caso #84 de spikes/essentia/human_review_decisions.json: la ventana de preview. Decisión editorial del propietario del 2026-10-20 (caso #84): título «Juntos Somos Imparables» definitivo, artista principal Canciones de Puño y Letra, portada original confirmada. Encargo personalizado: el propietario declara contar con autorización expresa de los destinatarios para mostrar públicamente la portada con sus nombres. Solo portafolio: no se ofrece para sincronización. Apple Music la acredita a «Canciones de Puño y Letra» con «feat. Luis Guinea»; el master, a «Luis Guinea». Lanzamiento público en 2025 confirmado por el propietario el 2026-10-20. Revisión humana completada el 2026-10-20 (caso #84): género, mood, créditos y rol principal Producer aprobados; ningún campo queda provisional."
+      ],
+      "provisional": [],
+      "sync_availability": "not_offered"
     }
   ]
 }

@@ -17,6 +17,9 @@
     },
     "approved-preview-window-v2": {
       "rationale": "Ventana aprobada explícitamente por el propietario el 2026-10-13 tras escuchar la propuesta y una alternativa codificadas como el preview final. Ambas salen del análisis local del 2026-10-13 sobre el master privado: repetición de letra transcrita (Whisper small, tiempos por palabra), repetición armónica de croma, energía RMS y límites de sección (en los instrumentales, solo las tres últimas). Mismas reglas de borde que v1: como máximo 1 s y solo para evitar un corte técnicamente defectuoso, documentado en la entrada."
+    },
+    "approved-preview-window-v3": {
+      "rationale": "Ventana aprobada explícitamente por el propietario el 2026-10-20 tras escuchar dos propuestas codificadas como el preview final (casos #76–#84 de human_review_decisions.json). Ambas salen del análisis local del 2026-10-20 sobre el master privado completo: sonoridad EBU R128 de corto plazo (ffmpeg ebur128), ventana de 40 s de mayor sonoridad media y comienzo en el mínimo de sonoridad momentánea a ±2 s; sin transcripción de letra ni croma. Mismas reglas de borde que v1."
     }
   },
   "entries": [
@@ -1959,6 +1962,272 @@
           "catalog_recordings.json te-vi-we-belong-together-rough-mix--rogelio-edel: Etiquetas del archivo: title «Te Vi (We Belong Together)_rou», artist «Rogelio Edel & Luis Guinea». Versión: nombre del archivo «_roughmix». Inédita: no figura en la discografía de Rogelio Edel en Apple Music ni Spotify; la fecha 2021 de la etiqueta no se muestra."
         ],
         "authority": "Luis Guinea, decisión explícita del 2026-10-13"
+      }
+    },
+    {
+      "review_id": "76",
+      "work_id": "1000-dias--pablo-delgado",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/_zip_extraido_20261019/_MASTERS y COVER ARTS OFICIALES/Pablo Delgado - 1000 Días.wav",
+      "source_sha256": "81e9c32df1baf07ecea9fdf14b8490cf40854cbd694b289453ebdab7e2ce9609",
+      "preview": "assets/audio/previews/1000-dias--pablo-delgado.mp3",
+      "preview_sha256": "8b3d51884805bd2473d7fb73a2840bf3f58b7ca4aceb4c86f504ce15624f8102",
+      "trim_policy": "approved-preview-window-v3",
+      "window": {
+        "approved_s": [
+          74.8,
+          114.8
+        ],
+        "start_s": 74.8,
+        "duration_s": 40.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-20 sobre el master completo: sonoridad EBU R128 de corto plazo (ffmpeg ebur128), ventana de 40 s de mayor sonoridad media y comienzo en el mínimo de sonoridad momentánea a ±2 s; dos propuestas codificadas como preview final y escuchadas por el propietario.",
+        "justification": "Aprobada por Luis Guinea el 2026-10-20: opción B. El preview generado reproduce byte a byte el que escuchó (sha256 registrado en el caso)."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, decisión explícita del 2026-10-20: este master del ZIP oficial es la grabación de «1000 Días» y su inclusión en el catálogo público está autorizada.",
+        "evidence": [
+          "Master del ZIP oficial «_MASTERS y COVER ARTS OFICIALES» (sha256 del ZIP 3e02d56f4922a153e125ec16a7c24527b55d03021a2cfc5877e5add775a0320e), extraído sin cambios; ffprobe 226.046 s.",
+          "Inclusión en el catálogo, título, artistas y portada aprobados por el propietario el 2026-10-20 (caso #76).",
+          "Apple Music 1602305241 (2021): duración igual a la del master a la décima de segundo."
+        ]
+      }
+    },
+    {
+      "review_id": "77",
+      "work_id": "en-el-momento-justo--pablo-delgado",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/_zip_extraido_20261019/_MASTERS y COVER ARTS OFICIALES/Pablo Delgado - En El Momento Justo.wav",
+      "source_sha256": "3efdcdacf1d23e43534f7b62663687c7101cfe2af859dedad7f94430e6f289ed",
+      "preview": "assets/audio/previews/en-el-momento-justo--pablo-delgado.mp3",
+      "preview_sha256": "7a732367ec5987a7442138bf9b347f501680250de217d2ac18d80a2cf502560e",
+      "trim_policy": "approved-preview-window-v3",
+      "window": {
+        "approved_s": [
+          161.5,
+          201.5
+        ],
+        "start_s": 161.5,
+        "duration_s": 40.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-20 sobre el master completo: sonoridad EBU R128 de corto plazo (ffmpeg ebur128), ventana de 40 s de mayor sonoridad media y comienzo en el mínimo de sonoridad momentánea a ±2 s; dos propuestas codificadas como preview final y escuchadas por el propietario.",
+        "justification": "Aprobada por Luis Guinea el 2026-10-20: opción B. El preview generado reproduce byte a byte el que escuchó (sha256 registrado en el caso)."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, decisión explícita del 2026-10-20: este master del ZIP oficial es la grabación de «En El Momento Justo» y su inclusión en el catálogo público está autorizada.",
+        "evidence": [
+          "Master del ZIP oficial «_MASTERS y COVER ARTS OFICIALES» (sha256 del ZIP 3e02d56f4922a153e125ec16a7c24527b55d03021a2cfc5877e5add775a0320e), extraído sin cambios; ffprobe 237.831 s.",
+          "Inclusión en el catálogo, título, artistas y portada aprobados por el propietario el 2026-10-20 (caso #77).",
+          "Apple Music 1711169818 (2023): duración igual a la del master a la décima de segundo."
+        ]
+      }
+    },
+    {
+      "review_id": "78",
+      "work_id": "solo-esta-noche--pablo-delgado",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/_zip_extraido_20261019/_MASTERS y COVER ARTS OFICIALES/Pablo Delgado - Solo Esta Noche.wav",
+      "source_sha256": "c470a3529416ff85228fb7d24874a476486b7fa9e37a173ac85d5aee44338f60",
+      "preview": "assets/audio/previews/solo-esta-noche--pablo-delgado.mp3",
+      "preview_sha256": "67b530cfc23fff0d70be187a0a4580ce07e924f8f7581b0fba07c3c05c8f2f11",
+      "trim_policy": "approved-preview-window-v3",
+      "window": {
+        "approved_s": [
+          200.4,
+          240.4
+        ],
+        "start_s": 200.4,
+        "duration_s": 40.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-20 sobre el master completo: sonoridad EBU R128 de corto plazo (ffmpeg ebur128), ventana de 40 s de mayor sonoridad media y comienzo en el mínimo de sonoridad momentánea a ±2 s; dos propuestas codificadas como preview final y escuchadas por el propietario.",
+        "justification": "Aprobada por Luis Guinea el 2026-10-20: opción A. El preview generado reproduce byte a byte el que escuchó (sha256 registrado en el caso)."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, decisión explícita del 2026-10-20: este master del ZIP oficial es la grabación de «Solo Esta Noche» y su inclusión en el catálogo público está autorizada.",
+        "evidence": [
+          "Master del ZIP oficial «_MASTERS y COVER ARTS OFICIALES» (sha256 del ZIP 3e02d56f4922a153e125ec16a7c24527b55d03021a2cfc5877e5add775a0320e), extraído sin cambios; ffprobe 255.109 s.",
+          "Inclusión en el catálogo, título, artistas y portada aprobados por el propietario el 2026-10-20 (caso #78).",
+          "Apple Music 1631043372 (2022): duración igual a la del master a la décima de segundo."
+        ]
+      }
+    },
+    {
+      "review_id": "79",
+      "work_id": "tonto-enamorado--pablo-delgado",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/_zip_extraido_20261019/_MASTERS y COVER ARTS OFICIALES/Pablo Delgado - Tonto Enamorado.wav",
+      "source_sha256": "9775a2ca669e74cfbcf3fe6b91bca4b2135d6561df356704a5f9360e2ae371f0",
+      "preview": "assets/audio/previews/tonto-enamorado--pablo-delgado.mp3",
+      "preview_sha256": "347e13a1056598130793196f850eb4fcd4b69def0332ce416eceac71aa83877b",
+      "trim_policy": "approved-preview-window-v3",
+      "window": {
+        "approved_s": [
+          175.4,
+          215.4
+        ],
+        "start_s": 175.4,
+        "duration_s": 40.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-20 sobre el master completo: sonoridad EBU R128 de corto plazo (ffmpeg ebur128), ventana de 40 s de mayor sonoridad media y comienzo en el mínimo de sonoridad momentánea a ±2 s; dos propuestas codificadas como preview final y escuchadas por el propietario.",
+        "justification": "Aprobada por Luis Guinea el 2026-10-20: opción A. El preview generado reproduce byte a byte el que escuchó (sha256 registrado en el caso)."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, decisión explícita del 2026-10-20: este master del ZIP oficial es la grabación de «Tonto Enamorado» y su inclusión en el catálogo público está autorizada.",
+        "evidence": [
+          "Master del ZIP oficial «_MASTERS y COVER ARTS OFICIALES» (sha256 del ZIP 3e02d56f4922a153e125ec16a7c24527b55d03021a2cfc5877e5add775a0320e), extraído sin cambios; ffprobe 256.615 s.",
+          "Inclusión en el catálogo, título, artistas y portada aprobados por el propietario el 2026-10-20 (caso #79).",
+          "Apple Music 1673803348 (2023): duración igual a la del master a la décima de segundo."
+        ]
+      }
+    },
+    {
+      "review_id": "80",
+      "work_id": "ahi-estas--canciones-de-puno-y-letra",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/_zip_extraido_20261019/_MASTERS y COVER ARTS OFICIALES/PyL Allí Estás (Claudia y Carlos) - Pablo Delgado y Luis Guinea (SPOTIFY).wav",
+      "source_sha256": "45d2f6ddd8328ed0ae76d12ad42e2bb0e832657b1329369e8620e5e395519951",
+      "preview": "assets/audio/previews/ahi-estas--canciones-de-puno-y-letra.mp3",
+      "preview_sha256": "67b2c0f54c8b991f6494efe608aa061576dc7359df361b6ff7b1ff85cb087370",
+      "trim_policy": "approved-preview-window-v3",
+      "window": {
+        "approved_s": [
+          199.6,
+          239.6
+        ],
+        "start_s": 199.6,
+        "duration_s": 40.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-20 sobre el master completo: sonoridad EBU R128 de corto plazo (ffmpeg ebur128), ventana de 40 s de mayor sonoridad media y comienzo en el mínimo de sonoridad momentánea a ±2 s; dos propuestas codificadas como preview final y escuchadas por el propietario.",
+        "justification": "Aprobada por Luis Guinea el 2026-10-20: opción A. El preview generado reproduce byte a byte el que escuchó (sha256 registrado en el caso)."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, decisión explícita del 2026-10-20: este master del ZIP oficial es la grabación de «Ahí Estás» y su inclusión en el catálogo público está autorizada.",
+        "evidence": [
+          "Master del ZIP oficial «_MASTERS y COVER ARTS OFICIALES» (sha256 del ZIP 3e02d56f4922a153e125ec16a7c24527b55d03021a2cfc5877e5add775a0320e), extraído sin cambios; ffprobe 249.865 s.",
+          "Inclusión en el catálogo, título, artistas y portada aprobados por el propietario el 2026-10-20 (caso #80)."
+        ]
+      }
+    },
+    {
+      "review_id": "81",
+      "work_id": "el-sembrador--canciones-de-puno-y-letra",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/_zip_extraido_20261019/_MASTERS y COVER ARTS OFICIALES/PyL El Sembrador (Familia y Chucho) - Luis Guinea (SPOTIFY).wav",
+      "source_sha256": "a16ab1194101dcf10744b2057ca89c10a01ee9ed9fc099b06014e00525cd2a84",
+      "preview": "assets/audio/previews/el-sembrador--canciones-de-puno-y-letra.mp3",
+      "preview_sha256": "4f3866fb5bd77313534ce7d486d9990b6e0eb8beea15c76c13beaa9a32d55e9b",
+      "trim_policy": "approved-preview-window-v3",
+      "window": {
+        "approved_s": [
+          24.7,
+          64.7
+        ],
+        "start_s": 24.7,
+        "duration_s": 40.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-20 sobre el master completo: sonoridad EBU R128 de corto plazo (ffmpeg ebur128), ventana de 40 s de mayor sonoridad media y comienzo en el mínimo de sonoridad momentánea a ±2 s; dos propuestas codificadas como preview final y escuchadas por el propietario.",
+        "justification": "Aprobada por Luis Guinea el 2026-10-20: opción B. El preview generado reproduce byte a byte el que escuchó (sha256 registrado en el caso)."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, decisión explícita del 2026-10-20: este master del ZIP oficial es la grabación de «El Sembrador» y su inclusión en el catálogo público está autorizada.",
+        "evidence": [
+          "Master del ZIP oficial «_MASTERS y COVER ARTS OFICIALES» (sha256 del ZIP 3e02d56f4922a153e125ec16a7c24527b55d03021a2cfc5877e5add775a0320e), extraído sin cambios; ffprobe 170.687 s.",
+          "Inclusión en el catálogo, título, artistas y portada aprobados por el propietario el 2026-10-20 (caso #81)."
+        ]
+      }
+    },
+    {
+      "review_id": "82",
+      "work_id": "gracias-por-todo--canciones-de-puno-y-letra",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/_zip_extraido_20261019/_MASTERS y COVER ARTS OFICIALES/PyL Gracias Por Todo (Nietos y Tita) - Pablo Delgado y Luis Guinea (SPOTIFY).wav",
+      "source_sha256": "79ed1b0e0cabb9934681906b7130430bdf740ebe57b50f26c64460c1007c5e18",
+      "preview": "assets/audio/previews/gracias-por-todo--canciones-de-puno-y-letra.mp3",
+      "preview_sha256": "56ca890e8c2d41d21fc380032647e74d992ba7ec968562400a2c1c5ac4046583",
+      "trim_policy": "approved-preview-window-v3",
+      "window": {
+        "approved_s": [
+          47.6,
+          87.6
+        ],
+        "start_s": 47.6,
+        "duration_s": 40.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-20 sobre el master completo: sonoridad EBU R128 de corto plazo (ffmpeg ebur128), ventana de 40 s de mayor sonoridad media y comienzo en el mínimo de sonoridad momentánea a ±2 s; dos propuestas codificadas como preview final y escuchadas por el propietario.",
+        "justification": "Aprobada por Luis Guinea el 2026-10-20: opción B. El preview generado reproduce byte a byte el que escuchó (sha256 registrado en el caso)."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, decisión explícita del 2026-10-20: este master del ZIP oficial es la grabación de «Gracias Por Todo» y su inclusión en el catálogo público está autorizada.",
+        "evidence": [
+          "Master del ZIP oficial «_MASTERS y COVER ARTS OFICIALES» (sha256 del ZIP 3e02d56f4922a153e125ec16a7c24527b55d03021a2cfc5877e5add775a0320e), extraído sin cambios; ffprobe 168.817 s.",
+          "Inclusión en el catálogo, título, artistas y portada aprobados por el propietario el 2026-10-20 (caso #82)."
+        ]
+      }
+    },
+    {
+      "review_id": "83",
+      "work_id": "hasta-el-final-de-mis-dias--canciones-de-puno-y-letra",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/_zip_extraido_20261019/_MASTERS y COVER ARTS OFICIALES/PyL Hasta el Final de mis Días (Coté y Javier) - Luis Guinea (SPOTIFY).wav",
+      "source_sha256": "55fe3ff13eb58a3d71d6311a5c998ccf39c66055365afce4b9e1b37c73533311",
+      "preview": "assets/audio/previews/hasta-el-final-de-mis-dias--canciones-de-puno-y-letra.mp3",
+      "preview_sha256": "6c2a9fa41b40da4452ef0a6511b5f0135d35142e7d0b5d04930459b334c04400",
+      "trim_policy": "approved-preview-window-v3",
+      "window": {
+        "approved_s": [
+          48.9,
+          88.9
+        ],
+        "start_s": 48.9,
+        "duration_s": 40.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-20 sobre el master completo: sonoridad EBU R128 de corto plazo (ffmpeg ebur128), ventana de 40 s de mayor sonoridad media y comienzo en el mínimo de sonoridad momentánea a ±2 s; dos propuestas codificadas como preview final y escuchadas por el propietario.",
+        "justification": "Aprobada por Luis Guinea el 2026-10-20: opción B. El preview generado reproduce byte a byte el que escuchó (sha256 registrado en el caso)."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, decisión explícita del 2026-10-20: este master del ZIP oficial es la grabación de «Hasta el Final de mis Días» y su inclusión en el catálogo público está autorizada.",
+        "evidence": [
+          "Master del ZIP oficial «_MASTERS y COVER ARTS OFICIALES» (sha256 del ZIP 3e02d56f4922a153e125ec16a7c24527b55d03021a2cfc5877e5add775a0320e), extraído sin cambios; ffprobe 173.000 s.",
+          "Inclusión en el catálogo, título, artistas y portada aprobados por el propietario el 2026-10-20 (caso #83)."
+        ]
+      }
+    },
+    {
+      "review_id": "84",
+      "work_id": "juntos-somos-imparables--canciones-de-puno-y-letra",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/_zip_extraido_20261019/_MASTERS y COVER ARTS OFICIALES/PyL Juntos Somos Imparables (Sofi y Tony) - Luis Guinea (SPOTIFY).wav",
+      "source_sha256": "27664e369860c4992f676ba4326f2043298e9ba2a0349c7a0f3c9fb3166aa609",
+      "preview": "assets/audio/previews/juntos-somos-imparables--canciones-de-puno-y-letra.mp3",
+      "preview_sha256": "07d9d3b9d5f29e825efacf16884c704ecea2da849ee2671f756c868dd0065973",
+      "trim_policy": "approved-preview-window-v3",
+      "window": {
+        "approved_s": [
+          34.5,
+          74.5
+        ],
+        "start_s": 34.5,
+        "duration_s": 40.0,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-20 sobre el master completo: sonoridad EBU R128 de corto plazo (ffmpeg ebur128), ventana de 40 s de mayor sonoridad media y comienzo en el mínimo de sonoridad momentánea a ±2 s; dos propuestas codificadas como preview final y escuchadas por el propietario.",
+        "justification": "Aprobada por Luis Guinea el 2026-10-20: opción B. El preview generado reproduce byte a byte el que escuchó (sha256 registrado en el caso)."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, decisión explícita del 2026-10-20: este master del ZIP oficial es la grabación de «Juntos Somos Imparables» y su inclusión en el catálogo público está autorizada.",
+        "evidence": [
+          "Master del ZIP oficial «_MASTERS y COVER ARTS OFICIALES» (sha256 del ZIP 3e02d56f4922a153e125ec16a7c24527b55d03021a2cfc5877e5add775a0320e), extraído sin cambios; ffprobe 213.073 s.",
+          "Inclusión en el catálogo, título, artistas y portada aprobados por el propietario el 2026-10-20 (caso #84).",
+          "Apple Music 1847613618 (2025): duración igual a la del master a la décima de segundo."
+        ]
       }
     }
   ]

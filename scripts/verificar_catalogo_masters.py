@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Verifica el estado de la integración del ZIP de masters: ficha de pendientes completa, nada
-pendiente publicado, seis ocultas intactas y ningún audio versionado fuera de previews."""
+"""Verifica el estado de la integración del ZIP de masters: ficha de pendientes completa, las nueve
+obras nuevas publicadas una sola vez (aprobadas el 2026-10-20, casos #76–#84), los dos duplicados sin
+repetir, seis ocultas intactas y ningún audio versionado fuera de previews."""
 import json
 import re
 import subprocess
@@ -9,7 +10,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 PENDIENTES = ["Cómo Decirte", "Jinee Jinee", "1000 Días", "En El Momento Justo", "Solo Esta Noche",
-              "Tonto Enamorado", "Allí Estás", "El Sembrador", "Gracias Por Todo",
+              "Tonto Enamorado", "Ahí Estás", "El Sembrador", "Gracias Por Todo",
               "Hasta el Final de mis Días", "Juntos Somos Imparables"]
 NUEVAS = PENDIENTES[2:]
 OCULTAS = {"60", "61", "62", "70", "19", "31"}
@@ -21,9 +22,10 @@ for titulo in PENDIENTES:
         errores.append(f"ficha ausente: {titulo}")
 
 data = (REPO / "js/music-data.js").read_text(encoding="utf-8")
-for titulo in NUEVAS:
-    if re.search(r"title:\s*['\"]%s['\"]" % re.escape(titulo), data):
-        errores.append(f"obra pendiente publicada: {titulo}")
+for titulo in NUEVAS + ["Cómo Decirte", "Jinne, Jinne"]:
+    veces = len(re.findall(r"title:\s*['\"]%s['\"]" % re.escape(titulo), data))
+    if veces != 1:
+        errores.append(f"obra publicada {veces} veces (se espera 1): {titulo}")
 ids = re.findall(r'\bid:\s*"([^"]+)"', data)
 if len(ids) != len(set(ids)):
     errores.append("ids duplicados en music-data.js")

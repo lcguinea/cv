@@ -60,7 +60,16 @@
     "51",
     "52",
     "53",
-    "57"
+    "57",
+    "76",
+    "77",
+    "78",
+    "79",
+    "80",
+    "81",
+    "82",
+    "83",
+    "84"
   ],
   "published_previews": [
     {
@@ -294,6 +303,42 @@
     {
       "review_id": "57",
       "preview": "te-vi-we-belong-together-rough-mix--rogelio-edel.mp3"
+    },
+    {
+      "review_id": "76",
+      "preview": "1000-dias--pablo-delgado.mp3"
+    },
+    {
+      "review_id": "77",
+      "preview": "en-el-momento-justo--pablo-delgado.mp3"
+    },
+    {
+      "review_id": "78",
+      "preview": "solo-esta-noche--pablo-delgado.mp3"
+    },
+    {
+      "review_id": "79",
+      "preview": "tonto-enamorado--pablo-delgado.mp3"
+    },
+    {
+      "review_id": "80",
+      "preview": "ahi-estas--canciones-de-puno-y-letra.mp3"
+    },
+    {
+      "review_id": "81",
+      "preview": "el-sembrador--canciones-de-puno-y-letra.mp3"
+    },
+    {
+      "review_id": "82",
+      "preview": "gracias-por-todo--canciones-de-puno-y-letra.mp3"
+    },
+    {
+      "review_id": "83",
+      "preview": "hasta-el-final-de-mis-dias--canciones-de-puno-y-letra.mp3"
+    },
+    {
+      "review_id": "84",
+      "preview": "juntos-somos-imparables--canciones-de-puno-y-letra.mp3"
     }
   ],
   "excluded": [
