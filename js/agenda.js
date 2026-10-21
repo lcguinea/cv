@@ -8,7 +8,18 @@
   var MEET_RE = /^https:\/\/meet\.google\.com\/[a-z0-9-]+$/i;
   var DURATIONS = [30, 60, 120, 180];
   var MODALITIES = { virtual: 'agenda.virtual', in_person: 'agenda.inPerson' };
-  var TZ = 'Europe/Madrid';
+  // Time zone: the visitor's own (Intl) unless they picked another one, which is remembered (lg-timezone). Slots are
+  // UTC instants (start/end): days, weekdays and times are computed in that zone, so day changes and daylight saving
+  // follow the zone. The backend's Madrid day/time fields are not used for display; requests still send the UTC start.
+  var HOME_ZONE = 'Europe/Madrid', ZONE_KEY = 'lg-timezone';
+  var SUGGESTED_ZONES = ['Europe/Madrid', 'Atlantic/Canary', 'Europe/London', 'America/Mexico_City', 'America/Cancun', 'America/Tijuana',
+    'America/New_York', 'America/Chicago', 'America/Los_Angeles', 'America/Bogota', 'America/Argentina/Buenos_Aires'];
+  function validZone(z) {
+    if (typeof z !== 'string' || !z) return '';
+    try { return new Intl.DateTimeFormat('en-US', { timeZone: z }).resolvedOptions().timeZone; } catch (e) { return ''; }
+  }
+  var deviceZone = (function () { try { return validZone(Intl.DateTimeFormat().resolvedOptions().timeZone) || HOME_ZONE; } catch (e) { return HOME_ZONE; } })();
+  var zone = (function () { try { return validZone(localStorage.getItem(ZONE_KEY)) || deviceZone; } catch (e) { return deviceZone; } })();
   var MEET_POLLS = 6, MEET_POLL_MS = 4000;
   var ERRORS = {
     invalid_name: 'agenda.errName', invalid_email: 'agenda.errEmail', invalid_notes: 'agenda.errNotes',
@@ -51,10 +62,30 @@
     return b;
   }
   function locale() { return window.currentLanguage === 'es' ? 'es-ES' : 'en-GB'; }
-  function fmt(iso, opts) { return new Intl.DateTimeFormat(locale(), Object.assign({ timeZone: TZ }, opts)).format(new Date(iso)); }
+  function fmt(iso, opts) { return new Intl.DateTimeFormat(locale(), Object.assign({ timeZone: zone }, opts)).format(new Date(iso)); }
+  // Calendar day of an instant in the current zone ("2026-10-24"): the key that groups slots by day.
+  function dayKey(iso) {
+    var x = {};
+    new Intl.DateTimeFormat('en-US', { timeZone: zone, year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date(iso))
+      .forEach(function (p) { x[p.type] = p.value; });
+    return x.year + '-' + x.month + '-' + x.day;
+  }
+  // UTC offset of a zone at an instant ("GMT-6"; daylight saving included), and "Mexico City · GMT-6".
+  function offsetOf(iso, z) {
+    var offset = '';
+    try {
+      new Intl.DateTimeFormat('en-US', { timeZone: z || zone, timeZoneName: 'shortOffset' }).formatToParts(new Date(iso || Date.now()))
+        .forEach(function (p) { if (p.type === 'timeZoneName') offset = p.value; });
+    } catch (e) { offset = ''; }
+    return offset;
+  }
+  function zoneName(z, iso) {
+    var place = z.split('/').pop().replace(/_/g, ' '), offset = offsetOf(iso, z);
+    return offset ? place + ' · ' + offset : place;
+  }
   function parts(iso) {
     var out = {};
-    new Intl.DateTimeFormat(locale(), { timeZone: TZ, weekday: 'short', day: 'numeric', month: 'short' }).formatToParts(new Date(iso))
+    new Intl.DateTimeFormat(locale(), { timeZone: zone, weekday: 'short', day: 'numeric', month: 'short' }).formatToParts(new Date(iso))
       .forEach(function (p) { out[p.type] = p.value.replace(/\.$/, ''); });
     return out;
   }
@@ -62,13 +93,29 @@
   function fullLabel(iso) { return fmt(iso, { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }); }
   function timeLabel(iso) { return fmt(iso, { hour: '2-digit', minute: '2-digit' }); }
   function plusMinutes(iso, min) { return new Date(Date.parse(iso) + min * 60000).toISOString(); }
-  function range(start, end) { return timeLabel(start) + '–' + timeLabel(end); }
+  // On the night clocks change, the same local time can happen twice: then each time carries its offset.
+  function range(start, end) {
+    var a = offsetOf(start), b = offsetOf(end);
+    return a === b ? timeLabel(start) + '–' + timeLabel(end) : timeLabel(start) + ' ' + a + '–' + timeLabel(end) + ' ' + b;
+  }
   function minutes(n) { return n + ' ' + t('agenda.minutes'); }
   function focusQuietly(node) { if (node) { try { node.focus({ preventScroll: true }); } catch (e) { node.focus(); } } }
   function reveal(node) {
     if (!node || !node.scrollIntoView) return;
     var box = node.getBoundingClientRect();
     if (box.top < 80 || box.top > window.innerHeight * 0.6) node.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+  }
+
+  // ---------- headline: the title with its accent word in italics (BRAND.md: "Luis *Guinea*") ----------
+  // agenda.title is the whole headline and agenda.titleAccent the part set in italics, so no translation is ever
+  // empty: "Let’s meet." / "meet." and "¡Conectemos!" / "¡Conectemos!".
+  function renderTitle() {
+    var h1 = $('agenda-title'), title = t('agenda.title'), accent = t('agenda.titleAccent'), at = title.lastIndexOf(accent);
+    clear(h1);
+    if (at < 0) { h1.textContent = title; return; }
+    if (at > 0) h1.appendChild(document.createTextNode(title.slice(0, at)));
+    h1.appendChild(el('em', '', accent));
+    if (at + accent.length < title.length) h1.appendChild(document.createTextNode(title.slice(at + accent.length)));
   }
 
   // ---------- progress: 01 choose, 02 confirm by email, 03 invitation ----------
@@ -83,7 +130,7 @@
   // ---------- day and time pickers (booking and rescheduling share them) ----------
   function daysOf(slots) {
     var seen = {}, out = [];
-    slots.forEach(function (s) { if (!seen[s.day]) { seen[s.day] = true; out.push({ day: s.day, start: s.start }); } });
+    slots.forEach(function (s) { var day = dayKey(s.start); if (!seen[day]) { seen[day] = true; out.push({ day: day, start: s.start }); } });
     return out;
   }
   function skeleton(box, count, cls) {
@@ -102,10 +149,16 @@
       b.appendChild(el('span', 'agenda-day-month', x.month));
       daysBox.appendChild(b);
     });
-    p.slots.filter(function (s) { return s.day === p.day; }).forEach(function (s) {
+    var daySlots = p.slots.filter(function (s) { return dayKey(s.start) === p.day; });
+    // A day with a clock change shows the offset on every time, so repeated or skipped hours are unambiguous.
+    var offsets = {};
+    daySlots.forEach(function (s) { offsets[offsetOf(s.start)] = true; offsets[offsetOf(plusMinutes(s.start, duration))] = true; });
+    var mixed = Object.keys(offsets).length > 1;
+    daySlots.forEach(function (s) {
       var b = choice('agenda-time', !!p.slot && p.slot.start === s.start, function () { p.slot = s; onPick(s); });
-      b.appendChild(el('span', 'agenda-time-start', s.time));
-      b.appendChild(el('span', 'agenda-time-end', '–' + timeLabel(plusMinutes(s.start, duration))));
+      var end = plusMinutes(s.start, duration);
+      b.appendChild(el('span', 'agenda-time-start', timeLabel(s.start) + (mixed ? ' ' + offsetOf(s.start) : '')));
+      b.appendChild(el('span', 'agenda-time-end', '–' + timeLabel(end) + (mixed ? ' ' + offsetOf(end) : '')));
       timesBox.appendChild(b);
     });
     keepChosenInView(daysBox);
@@ -133,6 +186,12 @@
     box.addEventListener('scroll', function () { syncStrip(box); }, { passive: true });
     window.addEventListener('resize', function () { syncStrip(box); });
   });
+  // After a zone change the chosen slot keeps its instant; its day (or the first day) is selected again.
+  function regroup(p) {
+    var days = daysOf(p.slots);
+    if (p.slot) p.day = dayKey(p.slot.start);
+    else if (!days.some(function (d) { return d.day === p.day; })) p.day = days[0] ? days[0].day : null;
+  }
   function acceptSlots(p, data) {
     if (!data || !data.ok || !Array.isArray(data.slots)) throw new Error('bad');
     p.slots = data.slots.filter(function (s) { return s && typeof s.start === 'string' && typeof s.day === 'string' && typeof s.time === 'string'; });
@@ -161,11 +220,17 @@
   }
   function renderSummary() {
     var s = state.slot, empty = t('agenda.pending');
-    function put(id, value) { var dd = $(id); dd.textContent = value || empty; dd.classList.toggle('is-empty', !value); }
-    put('agenda-sum-modality', modality() ? t(MODALITIES[modality()]) : '');
-    put('agenda-sum-length', minutes(state.duration));
-    put('agenda-sum-date', s ? longDay(s.start) : '');
-    put('agenda-sum-time', s ? range(s.start, plusMinutes(s.start, state.duration)) : '');
+    // A choice that changes plays a short entrance (CSS, off with reduced motion), so it is seen to land. It follows
+    // the chosen value, not its text, so switching language or time zone does not animate anything.
+    function put(id, value, choice) {
+      var dd = $(id), key = String(choice || ''), changed = !!choice && dd.dataset.choice !== undefined && dd.dataset.choice !== '' && dd.dataset.choice !== key;
+      dd.textContent = value || empty; dd.classList.toggle('is-empty', !value); dd.dataset.choice = key;
+      if (changed && !reduceMotion) { dd.classList.remove('is-changed'); void dd.offsetWidth; dd.classList.add('is-changed'); }
+    }
+    put('agenda-sum-modality', modality() ? t(MODALITIES[modality()]) : '', modality());
+    put('agenda-sum-length', minutes(state.duration), state.duration);
+    put('agenda-sum-date', s ? longDay(s.start) : '', s && s.start);
+    put('agenda-sum-time', s ? range(s.start, plusMinutes(s.start, state.duration)) : '', s && s.start + '/' + state.duration);
     $('agenda-summary').classList.toggle('is-ready', !!s);
   }
   function render() {
@@ -175,7 +240,7 @@
       if (picked) { reveal($('agenda-details')); focusQuietly($('agenda-details-title')); }
     });
     $('agenda-details').hidden = !state.slot;
-    renderSummary();
+    renderSummary(); renderZone();
   }
   Array.prototype.forEach.call(form.elements.modality, function (r) { r.addEventListener('change', renderSummary); });
 
@@ -263,7 +328,11 @@
     $(prefix + '-reason').textContent = s.reason;
     $(prefix + '-reason-row').hidden = !s.reason;
   }
-  function when(s) { return fullLabel(s.start) + (s.end ? '–' + timeLabel(s.end) : ''); }
+  function when(s) {
+    if (!s.end) return fullLabel(s.start);
+    var a = offsetOf(s.start), b = offsetOf(s.end);
+    return fullLabel(s.start) + (a === b ? '' : ' ' + a) + '–' + timeLabel(s.end) + (a === b ? '' : ' ' + b);
+  }
   function renderShown() {
     var s = state.shown;
     if (!s) return;
@@ -278,6 +347,7 @@
       $('agenda-manage-note').textContent = note ? t(note) : '';
       $('agenda-manage-note').hidden = !note;
     }
+    renderZone();
   }
   // Step 1 done: nothing is booked or sent to a calendar until the visitor opens the link in the email.
   function showCheckEmail(data, payload) {
@@ -351,7 +421,7 @@
     $('agenda-manage-meet').hidden = !ready;
     if (ready) $('agenda-manage-meet').href = meet.link;
     var hours = Math.round((Date.parse(b.start) - Date.parse(b.changeUntil)) / 3600000);
-    $('agenda-manage-policy').textContent = !confirmed ? '' : b.canChange ? tr('agenda.changeUntil', { date: fullLabel(b.changeUntil) }) : tr('agenda.tooLateNote', { hours: hours });
+    $('agenda-manage-policy').textContent = !confirmed ? '' : b.canChange ? tr('agenda.changeUntil', { date: fullLabel(b.changeUntil), zone: zoneName(zone, b.changeUntil) }) : tr('agenda.tooLateNote', { hours: hours });
     var open = confirmed && b.canChange;
     $('agenda-manage-actions').hidden = !open || manage.mode !== 'view';
     $('agenda-manage-move').hidden = !(b.reschedulesLeft > 0 && DURATIONS.indexOf(b.duration) !== -1);
@@ -359,6 +429,7 @@
     $('agenda-move').hidden = !open || manage.mode !== 'move';
     $('agenda-restart').hidden = confirmed;
     if (manage.mode === 'move') renderMove();
+    renderZone();
     var cancelling = manage.busy && manage.mode === 'cancel', moving = manage.busy && manage.mode === 'move';
     $('agenda-cancel-yes').disabled = manage.busy; $('agenda-cancel-yes').textContent = t(cancelling ? 'agenda.cancelling' : 'agenda.cancelYes');
     $('agenda-move-yes').disabled = manage.busy || !manage.slot; $('agenda-move-yes').textContent = t(moving ? 'agenda.moving' : 'agenda.moveConfirm');
@@ -429,15 +500,62 @@
       .catch(function () { say('agenda.errNetwork'); $('agenda-restart').hidden = false; });
   }
 
+  // ---------- time zone indicator and selector ----------
+  // The offset shown is the one of the meeting in view (the chosen or first slot, or the booking being managed).
+  function zoneInstant() {
+    var b = manage.booking, s = state.slot || state.slots[0];
+    return b && !$('agenda-manage').hidden ? b.start : state.shown ? state.shown.start : s ? s.start : undefined;
+  }
+  function allZones() {
+    var list = [];
+    try { if (Intl.supportedValuesOf) list = Intl.supportedValuesOf('timeZone'); } catch (e) { list = []; }
+    if (!list.length) list = SUGGESTED_ZONES.slice();
+    return list;
+  }
+  function option(z, label) { var o = el('option', '', label); o.value = z; o.selected = z === zone; return o; }
+  function renderZoneSelect(select) {
+    clear(select);
+    var suggested = el('optgroup'), all = el('optgroup');
+    suggested.label = t('agenda.zoneSuggested'); all.label = t('agenda.zoneAll');
+    var seen = {};
+    [deviceZone, zone].concat(SUGGESTED_ZONES).forEach(function (z) {
+      if (seen[z] || !validZone(z)) return;
+      seen[z] = true;
+      suggested.appendChild(option(z, zoneName(z) + (z === deviceZone ? ' · ' + t('agenda.zoneDevice') : '')));
+    });
+    allZones().forEach(function (z) { if (!seen[z]) all.appendChild(option(z, z.replace(/_/g, ' ') + ' · ' + zoneName(z).replace(/^.*\(|\)$/g, ''))); });
+    select.appendChild(suggested); select.appendChild(all);
+  }
+  function renderZone() {
+    var text = tr('agenda.tzNote', { zone: zoneName(zone, zoneInstant()) });
+    Array.prototype.forEach.call(document.querySelectorAll('.agenda-zone-now'), function (n) { n.textContent = text; });
+  }
+  function renderZoneSelects() { Array.prototype.forEach.call(document.querySelectorAll('.agenda-zone-select'), renderZoneSelect); }
+  function rerender() {
+    regroup(state); regroup(manage);
+    if (!booking.hidden) render();
+    renderShown(); renderManage(); renderZone();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.agenda-zone-select'), function (select) {
+    select.addEventListener('change', function () {
+      var next = validZone(select.value);
+      if (!next) return;
+      zone = next;
+      try { localStorage.setItem(ZONE_KEY, zone); } catch (e) {}
+      renderZoneSelects(); rerender();
+    });
+  });
+
   // Keep dynamic text in the chosen language when the visitor switches EN/ES (site.js announces it).
   document.addEventListener('lg:language', function () {
     if (statusEl.dataset.key) say(statusEl.dataset.key);
     if ($('agenda-error').dataset.key) showError($('agenda-error').dataset.key);
     if ($('agenda-manage-error').dataset.key) manageError($('agenda-manage-error').dataset.key);
     if (!booking.hidden) render();
-    renderShown(); renderManage();
+    renderShown(); renderManage(); renderZoneSelects(); renderZone(); renderTitle();
   });
 
+  renderTitle(); renderZoneSelects(); renderZone();
   if (!ENDPOINT_RE.test(endpoint)) { setStage(null); say('agenda.notConfigured'); return; }
   var fromLink = TOKEN_RE.exec(location.hash || '');
   if (fromLink) { confirmFromLink(fromLink[1]); return; }

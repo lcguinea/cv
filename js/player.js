@@ -99,14 +99,10 @@
   // Autostart: armed for a new session until the first preview plays. Clicks on the player itself are left to its controls,
   // and utility controls (skip links, language, theme, menu) never start sound: they are often the first thing a keyboard or
   // screen reader user activates.
-  const GESTURES=['click','touchend'],NO_AUTOSTART='#mini-player,#player,#catalog,.feature-play,.skip-link,[data-lang],[data-theme-choice],.menu-toggle';
+  const GESTURES=['click','touchend'],NO_AUTOSTART='#mini-player,#player,#catalog,.feature-play,[data-player-now],.skip-link,[data-lang],[data-theme-choice],.menu-toggle';
   function onGesture(event){if(event.target&&event.target.closest&&event.target.closest(NO_AUTOSTART))return;if(!isPlaying())start()}
-  // A page can opt out (<body data-player-autostart="off">, the booking form): there sound only starts from the player.
-  // The armed state is kept in the session, so the other pages still start on their first click.
-  const quiet=!!(document.body&&document.body.dataset.playerAutostart==='off');
   function armAutostart(){
-    if(!autostart){autostart=true;if(!quiet)GESTURES.forEach(type=>document.addEventListener(type,onGesture,true))}
-    if(quiet)return;
+    if(!autostart){autostart=true;GESTURES.forEach(type=>document.addEventListener(type,onGesture,true))}
     audio.preload='auto';start();
   }
   function disarmAutostart(){if(autostart){autostart=false;GESTURES.forEach(type=>document.removeEventListener(type,onGesture,true))}}
@@ -244,6 +240,25 @@
     button.hidden=false;
     button.addEventListener('click',()=>{if(P.index()===i&&P.isPlaying())P.pause();else P.select(i,true)});
   });
+  P.on(type=>{if(type!=='time')render()});
+  document.addEventListener('lg:language',render);
+  render();
+})();
+
+// "Playing while you choose" on /agenda/: one more view of the engine, like the featured buttons on Home. It shows the
+// current preview and its button plays or pauses it; it has no audio of its own.
+(function(){
+  const P=window.LGPlayer,box=document.querySelector('[data-player-now]');
+  if(!P||!box)return;
+  const art=box.querySelector('img'),title=box.querySelector('.agenda-now-title'),artist=box.querySelector('.agenda-now-artist'),button=box.querySelector('button');
+  function render(){
+    const x=P.current(),playing=P.isPlaying();
+    art.src=P.artworkUrl(x.artwork);title.textContent=x.title;artist.textContent=x.artist;
+    button.dataset.state=playing?'playing':'paused';
+    button.setAttribute('aria-label',t(playing?'music.pause':'music.play')+': '+x.title);
+    box.classList.toggle('is-playing',playing);
+  }
+  button.addEventListener('click',()=>P.toggle());
   P.on(type=>{if(type!=='time')render()});
   document.addEventListener('lg:language',render);
   render();

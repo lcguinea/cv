@@ -145,3 +145,51 @@ class EarlyApplyTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+@unittest.skipUnless(NODE, "node not installed")
+class BrowserLanguageTests(unittest.TestCase):
+    """First visit without a manual choice: the browser's languages decide (Spanish or English, else English)."""
+
+    def visit(self, languages, local=None, then=""):
+        store = "".join(f"browser.local[{json.dumps(k)}] = {json.dumps(v)};" for k, v in (local or {}).items())
+        return run(store + f"const tab = browser.tab(); const page = tab.open('index.html', {{languages: {json.dumps(languages)}}}); await settle();"
+                   "const view = p => ({lang: p.$('html').getAttribute('lang'), nav: p.$('.nav a[data-i18n=\"nav.music\"]').textContent,"
+                   "  pressed: p.$('[data-lang=\"es\"]').getAttribute('aria-pressed'), stored: browser.local['lg-language'] || null,"
+                   "  manual: browser.local['lg-language-manual'] || null});"
+                   "out.first = view(page);" + then)
+
+    def test_spanish_browsers_get_spanish_and_others_english(self):
+        cases = {("es-ES",): "es", ("es-MX", "es"): "es", ("es-419",): "es", ("en-US", "en"): "en", ("en-GB",): "en",
+                 ("fr-FR", "fr"): "en", ("de-DE",): "en", ("pt-BR", "es-ES"): "es", ("fr-FR", "en-US", "es-ES"): "en", (): "en"}
+        for languages, expected in cases.items():
+            with self.subTest(languages=languages):
+                out = self.visit(list(languages))["first"]
+                self.assertEqual((out["lang"], out["nav"]), (expected, "Música" if expected == "es" else "Music"))
+                self.assertEqual(out["pressed"], str(expected == "es").lower())
+                # Detection is not a preference: nothing is written until the visitor chooses.
+                self.assertEqual((out["stored"], out["manual"]), (None, None))
+
+    def test_a_manual_choice_wins_and_follows_the_visitor_across_pages_and_visits(self):
+        out = self.visit(["es-ES"], then=(
+            "page.click('[data-lang=\"en\"]'); await settle(); out.clicked = view(page);"
+            "const next = tab.open('music/index.html', {languages: ['es-ES']}); await settle(); out.next = view(next);"
+            "const later = browser.tab().open('cv.html', {languages: ['es-MX']}); await settle(); out.later = view(later);"
+            "later.click('[data-lang=\"es\"]'); await settle(); out.back = view(later);"
+            "const en = browser.tab().open('index.html', {languages: ['en-US']}); await settle(); out.enBrowser = view(en);"))
+        self.assertEqual(out["first"]["lang"], "es")
+        self.assertEqual((out["clicked"]["lang"], out["clicked"]["stored"], out["clicked"]["manual"]), ("en", "en", "1"))
+        self.assertEqual(out["next"]["lang"], "en")
+        self.assertEqual(out["later"]["lang"], "en")
+        self.assertEqual((out["back"]["lang"], out["back"]["stored"]), ("es", "es"))
+        self.assertEqual(out["enBrowser"]["lang"], "es", "the manual Spanish choice wins over an English browser")
+
+    def test_preferences_saved_by_earlier_versions(self):
+        # Earlier versions saved 'en' on every visit without a click: not a choice, the browser decides.
+        self.assertEqual(self.visit(["es-ES"], {"lg-language": "en"})["first"]["lang"], "es")
+        # A saved 'es' could only come from a click: it is kept even on an English browser.
+        self.assertEqual(self.visit(["en-US"], {"lg-language": "es"})["first"]["lang"], "es")
+        # A manual English choice made with this version is kept on a Spanish browser.
+        self.assertEqual(self.visit(["es-MX"], {"lg-language": "en", "lg-language-manual": "1"})["first"]["lang"], "en")
+        # Anything else saved is ignored.
+        self.assertEqual(self.visit(["es-ES"], {"lg-language": "fr", "lg-language-manual": "1"})["first"]["lang"], "es")

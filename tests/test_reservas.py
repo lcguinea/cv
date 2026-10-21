@@ -119,8 +119,10 @@ class IntegrationTests(unittest.TestCase):
         self.assertEqual(nav(html), [{"./": "../music/", "../agenda/": "./"}.get(h, h) for h in nav(music)])
         # The one global player: its bar, the skip link and the shared engine, loaded once and before the agenda.
         self.assertEqual(html.count('id="mini-player"'), 1)
-        # Booking is a form: sound only starts from the player here (js/player.js), never from a first click.
-        self.assertEqual(html.count('<body data-player-autostart="off">'), 1)
+        # Same playback rules as every other page: no page-specific opt-out of the autostart.
+        self.assertIn("<body><a class=\"skip-link\"", html)
+        self.assertNotIn("autostart", html)
+        self.assertNotIn("playerAutostart", read("js/player.js"))
         self.assertIn('<a class="skip-link skip-player" href="#mini-player" data-i18n="ui.skipPlayer">Skip to music player</a>', html)
         scripts = re.findall(r'<script src="\.\./js/([^"]+)"', html)
         self.assertEqual(scripts, ["theme-init.js", "strings.js", "i18n.js", "site.js", "music-data.js", "player.js", "agenda.js"])
@@ -134,7 +136,8 @@ class IntegrationTests(unittest.TestCase):
         body = js[js.index("function manageFromLink"):]
         self.assertLess(body.index("forgetFragment()"), body.index("post("))
         self.assertEqual(js.count("sessionStorage.setItem"), 1)  # only the booking request id
-        self.assertNotIn("localStorage", js)
+        # Storage holds only the visitor's chosen time zone, never a token.
+        self.assertEqual(re.findall(r"localStorage\.(\w+)\((\w+)", js), [("getItem", "ZONE_KEY"), ("setItem", "ZONE_KEY")])
         # Cancelling is a POST with an explicit confirmation, after a second, deliberate click.
         self.assertIn("manageOp({ op: 'cancel', confirm: true }", js)
         self.assertIn("$('agenda-cancel-yes').addEventListener('click'", js)
@@ -143,6 +146,49 @@ class IntegrationTests(unittest.TestCase):
         self.assertIn("var MANAGE_NOTES = { sent: 'agenda.manageNote', failed: 'agenda.manageNoteFailed', too_late: 'agenda.manageNoteClosed' };", js)
         self.assertNotIn('data-i18n="agenda.manageNote"', read("agenda/index.html"))
         self.assertIn('<p id="agenda-manage-note" class="agenda-small" hidden></p>', read("agenda/index.html"))
+
+    def test_studio_session_composition(self):
+        html = read("agenda/index.html")
+        # Two real photographs from the repository with two jobs: the studio (Music) and the documentary portrait
+        # (Home, About), captioned instead of described twice.
+        self.assertIn('<figure class="agenda-cover"><img src="../assets/images/cover.webp"', html)
+        self.assertIn('<figure class="agenda-portrait"><img src="../assets/images/profile.webp" alt=""', html)
+        self.assertIn('<figcaption><span>Luis Guinea</span><span data-i18n="agenda.host">Your host</span></figcaption>', html)
+        self.assertEqual(html.count('class="agenda-band"'), 1)
+        self.assertEqual(html.count('class="agenda-app agenda-sheet"'), 1)
+        # The headline: the whole title plus the accent word set in italics, both languages, never an empty key.
+        self.assertIn('<h1 id="agenda-title">Let’s <em>meet.</em></h1>', html)
+        js = read("js/agenda.js")
+        self.assertIn("t('agenda.title'), accent = t('agenda.titleAccent')", js)
+        self.assertNotIn("\u2060", read("js/strings.js"))
+        # "Playing while you choose" is one more view of the global engine, excluded from the autostart like the
+        # featured buttons, so its first click plays instead of starting and stopping at once.
+        player = read("js/player.js")
+        self.assertIn(".feature-play,[data-player-now],", player)
+        self.assertIn("document.querySelector('[data-player-now]')", player)
+        self.assertEqual(player.count("document.createElement('audio')"), 1)
+        self.assertNotIn("LGPlayer", js)
+        # The time-zone picker wraps instead of overflowing narrow columns.
+        css = read("css/styles.css")
+        self.assertIn(".agenda-zone-pick{display:inline-flex;flex-wrap:wrap;max-width:100%;", css)
+        self.assertNotIn(".agenda-hero", css)
+
+    def test_times_follow_the_visitors_time_zone(self):
+        js = read("js/agenda.js")
+        # The zone comes from the browser (or the visitor's choice), never from language, country or IP.
+        self.assertIn("Intl.DateTimeFormat().resolvedOptions().timeZone", js)
+        self.assertIn("var HOME_ZONE = 'Europe/Madrid', ZONE_KEY = 'lg-timezone';", js)
+        # Days and times are computed from the UTC instants; the backend's Madrid day/time are not displayed.
+        self.assertNotRegex(js, r"\bs\.time\b(?!\s*===)|=== s\.day|\bd\.day = s\.day")
+        self.assertIn("dayKey(s.start)", js)
+        self.assertIn("timeLabel(s.start)", js)
+        self.assertNotIn("timeZone: TZ", js)
+        # Requests still carry the UTC start exactly as received.
+        self.assertIn("start: state.slot.start", js)
+        self.assertIn("{ op: 'reschedule', start: manage.slot.start }", js)
+        html = read("agenda/index.html")
+        self.assertEqual(html.count('class="agenda-zone-select"'), 2)
+        self.assertNotIn("Madrid time", html)
 
     def test_backend_rules(self):
         gs = read("apps-script/Code.gs")

@@ -465,45 +465,49 @@ class GlobalPlayerTests(unittest.TestCase):
         self.assertTrue(out["click"]["playing"])
 
 
-class QuietPageTests(unittest.TestCase):
-    """A page marked <body data-player-autostart="off"> (the booking page) never starts sound by itself."""
+class AgendaPlaybackTests(unittest.TestCase):
+    """/agenda/ follows the same playback rules as every other page (autostart, unlock on interaction, continuity).
 
-    def run_on_quiet_page(self, scenario):
+    The booking script needs fetch and form APIs that the minimal DOM does not have, so the real agenda markup is
+    loaded without js/agenda.js: what is tested is the page with the shared engine, exactly as it ships otherwise.
+    """
+
+    def run_on_agenda(self, scenario):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "js").symlink_to(ROOT / "js")
             (root / "index.html").symlink_to(ROOT / "index.html")
-            about = (ROOT / "sobre-mi.html").read_text(encoding="utf-8")
-            self.assertEqual(about.count("<body>"), 1)
-            (root / "quiet.html").write_text(about.replace("<body>", '<body data-player-autostart="off">'), encoding="utf-8")
+            (root / "agenda").mkdir()
+            html = (ROOT / "agenda" / "index.html").read_text(encoding="utf-8")
+            self.assertEqual(html.count('<script src="../js/agenda.js"></script>'), 1)
+            (root / "agenda" / "index.html").write_text(html.replace('<script src="../js/agenda.js"></script>', ""), encoding="utf-8")
             result = subprocess.run([NODE, str(RUNNER), str(root), PRELUDE + scenario], capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
         return json.loads(result.stdout)
 
-    def test_sound_starts_only_from_the_player_and_other_pages_keep_their_autostart(self):
-        out = self.run_on_quiet_page(
-            "const tab = browser.tab(); const q = tab.open('quiet.html', {autoplayBlocked: false}); await settle();"
-            "out.load = state(q); q.click('h1'); await settle(); out.click = state(q);"
-            "const home = tab.open('index.html'); await settle(); out.homeIdle = state(home);"
-            "home.click('h1'); await settle(); out.homeClick = state(home);"
-            "const t2 = browser.tab(); const q2 = t2.open('quiet.html'); await settle();"
-            "q2.click('#mp-toggle'); await settle(); out.button = state(q2);"
-            "const t3 = browser.tab(); const h3 = t3.open('index.html', {autoplayBlocked: false}); await settle(); out.h3 = state(h3);"
-            "const q3 = t3.open('quiet.html', {autoplayBlocked: false}); await settle(); out.resumed = state(q3);"
+    def test_agenda_autostarts_unlocks_and_continues_like_the_other_pages(self):
+        out = self.run_on_agenda(
+            # Browser refuses sound before any interaction: armed, then the first click on the page starts it.
+            "const tab = browser.tab(); const a = tab.open('agenda/index.html'); await settle(); out.refused = state(a);"
+            "a.click('.agenda-option'); await settle(); out.firstClick = state(a);"
+            # Continuity: the same preview keeps playing on the next page.
+            "const home = tab.open('index.html', {autoplayBlocked: false}); await settle(); out.home = state(home);"
+            # Browser allows sound: a new session on /agenda/ starts on its own, like Home.
+            "const t2 = browser.tab(); const b = t2.open('agenda/index.html', {autoplayBlocked: false}); await settle(); out.allowed = state(b);"
+            # Utility controls never start it; the player's own controls work.
+            "const t3 = browser.tab(); const c = t3.open('agenda/index.html'); await settle();"
+            "c.click('[data-lang=\"es\"]'); c.click('.menu-toggle'); await settle(); out.utility = state(c);"
+            "c.click('#mp-toggle'); await settle(); out.button = state(c);"
         )
-        # Even where the browser would allow it, neither loading nor clicking the page starts sound.
-        self.assertFalse(out["load"]["playing"])
-        self.assertFalse(out["click"]["playing"])
-        # The other pages behave as before: the session arrives armed (saved on leaving the quiet page) and the
-        # first click outside the player starts a preview.
-        self.assertTrue(out["homeIdle"]["session"]["auto"])
-        self.assertFalse(out["homeIdle"]["playing"])
-        self.assertTrue(out["homeClick"]["playing"])
-        # The player's own button works, and what was already playing keeps playing on the quiet page.
+        self.assertFalse(out["refused"]["playing"])
+        self.assertIn("blocked:engine", out["refused"]["log"])
+        self.assertTrue(out["refused"]["session"] is None or out["refused"]["session"]["auto"])
+        self.assertTrue(out["firstClick"]["playing"], "the first click on the agenda unlocks sound, as elsewhere")
+        self.assertTrue(out["home"]["playing"])
+        self.assertEqual(out["home"]["title"], out["firstClick"]["title"])
+        self.assertTrue(out["allowed"]["playing"])
+        self.assertFalse(out["utility"]["playing"])
         self.assertTrue(out["button"]["playing"])
-        self.assertTrue(out["h3"]["playing"])
-        self.assertTrue(out["resumed"]["playing"])
-        self.assertEqual(out["resumed"]["title"], out["h3"]["title"])
 
 
 class GlobalPlayerStaticTests(unittest.TestCase):

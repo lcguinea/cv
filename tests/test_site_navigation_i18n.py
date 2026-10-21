@@ -168,6 +168,11 @@ class StringsTests(unittest.TestCase):
             self.assertNotIn(gone, self.en)
             self.assertNotIn(gone, self.es)
         self.assertEqual(self.es["skills.music"], "producción, composición, arreglos, dirección musical.")
+        # /agenda/ headline (2026-10-21): the accent word is part of the title in both languages.
+        self.assertEqual((self.en["agenda.title"], self.en["agenda.titleAccent"]), ("Let’s meet.", "meet."))
+        self.assertEqual((self.es["agenda.title"], self.es["agenda.titleAccent"]), ("¡Conectemos!", "¡Conectemos!"))
+        for lang in (self.en, self.es):
+            self.assertIn(lang["agenda.titleAccent"], lang["agenda.title"])
         self.assertNotIn("pool de", self.es["writing.a1"])
         self.assertFalse([k for k, v in self.es.items() if k.startswith("music.") and "preview" in v.lower()])
         # The long CV profile stays as it is in CV_MASTER.md.

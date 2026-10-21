@@ -287,7 +287,8 @@ class Page {
     const ctx = {
       document: doc, location: {href: url, pathname: '/' + rel}, console, URL, JSON, Promise, Date, setTimeout, clearTimeout, setImmediate,
       localStorage: makeStorage(browser.local), sessionStorage: makeStorage(tab.session),
-      navigator: options.mediaSession === false ? {} : {mediaSession: this.mediaSession},
+      navigator: Object.assign(options.mediaSession === false ? {} : {mediaSession: this.mediaSession},
+        options.languages ? {languages: options.languages, language: options.languages[0]} : {}),
       BroadcastChannel: options.broadcastChannel === false ? undefined : BroadcastChannel,
       IntersectionObserver, CustomEvent, MediaMetadata,
       requestAnimationFrame: fn => setImmediate(fn),

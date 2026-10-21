@@ -332,11 +332,9 @@ html.js body{padding-bottom:4.5rem}
   :root[data-theme=dark] .writing-card{background:var(--ink);border:1px solid var(--rule)}
 }
 @media print{.writing-section{background:#fff}.writing-list .writing-feature{background:#eee;color:#111}}
-/* Booking page (/agenda/): numbered steps, a running summary, and the panels for email confirmation and for the guest's own changes */
-.agenda-hero{padding:clamp(3rem,8vw,7rem) 0 clamp(1.5rem,3vw,2.5rem);display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);column-gap:clamp(2rem,6vw,6rem);align-items:end}
-.agenda-hero .eyebrow{grid-column:1/-1;margin:0}.agenda-hero h1{font-size:clamp(3.6rem,10vw,9rem);margin:.6rem 0 0;max-width:9ch}
-.agenda-lede{font:clamp(1.25rem,2.2vw,1.8rem)/1.2 var(--serif);max-width:24ch;margin:0 0 .6rem}
-.agenda-progress{grid-column:1/-1;list-style:none;margin:clamp(2rem,5vw,4rem) 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--rule)}
+/* Booking page (/agenda/): numbered steps, a running summary, and the panels for email confirmation and for the guest's own changes.
+   Its composition (studio stage, portrait, Olive band, Sand sheet) follows below the shared rules. */
+.agenda-progress{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--rule)}
 .agenda-progress li{display:flex;gap:.7rem;align-items:baseline;margin-top:-1px;padding:.9rem 1rem 0 0;border-top:2px solid transparent;font:.72rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
 .agenda-progress[hidden]{display:none}.agenda-progress b{font-weight:400}.agenda-progress li[aria-current]{border-top-color:var(--text);color:var(--text)}.agenda-progress li[aria-current] b{color:var(--accent)}
 .agenda-page{padding-bottom:clamp(3rem,7vw,6rem)}.agenda-app{padding-top:clamp(1rem,3vw,2rem)}
@@ -358,10 +356,11 @@ html.js body{padding-bottom:4.5rem}
 .agenda-duration{display:flex;align-items:baseline;justify-content:center;gap:.35rem;min-height:5.2rem;padding:.8rem}.agenda-duration-num{font:clamp(2rem,4vw,3rem)/1 var(--serif)}
 .agenda-duration-unit,.agenda-day-week,.agenda-day-month{font:.66rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
 .agenda-tz{margin:0 0 1rem;font:.7rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.agenda-zone{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem 1.2rem;margin:0 0 1rem}.agenda-zone .agenda-tz{margin:0}.agenda-zone-pick{display:inline-flex;flex-wrap:wrap;max-width:100%;align-items:center;gap:.6rem;font:.68rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}.agenda-zone-select{min-height:44px;min-width:0;max-width:min(24rem,100%);padding:0 .6rem;border:1px solid var(--rule);border-radius:0;background:var(--bg);color:var(--text);font:.85rem var(--sans);text-transform:none;letter-spacing:0}.agenda-zone-select:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .agenda-slot-state{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1rem}.agenda-slot-state p{margin:0;color:var(--muted)}.agenda-slot-state p:not(:empty){margin-bottom:1rem}.agenda-slot-state .agenda-quiet{margin-bottom:1rem}
 .agenda-strip{display:flex;align-items:stretch;gap:.5rem;margin-bottom:1.2rem}.agenda-days{display:flex;flex:1;gap:.6rem;min-width:0;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;padding:6px;scroll-padding-inline:6px}.agenda-days::-webkit-scrollbar{display:none}.agenda-strip-prev,.agenda-strip-next{flex:none;width:2.75rem;border:1px solid var(--rule);background:transparent;color:var(--text);font:1rem var(--mono);cursor:pointer}.agenda-strip-prev:hover:not(:disabled),.agenda-strip-next:hover:not(:disabled){border-color:var(--text)}.agenda-strip-prev:disabled,.agenda-strip-next:disabled{opacity:.3;cursor:default}.agenda-strip:not(.is-scrollable) .agenda-strip-prev,.agenda-strip:not(.is-scrollable) .agenda-strip-next{display:none}.agenda-day{display:grid;flex:none;justify-items:center;gap:.15rem;width:4.8rem;padding:.7rem .3rem .8rem;scroll-snap-align:start}.agenda-day-num{font:2rem/1 var(--serif)}
 .agenda-times{display:grid;grid-template-columns:repeat(auto-fill,minmax(8.5rem,1fr));gap:.6rem}
-.agenda-time{display:flex;justify-content:center;align-items:baseline;gap:.1rem;min-height:3rem;padding:0 .6rem;font:.95rem var(--mono)}.agenda-time-end{font-size:.75rem;color:var(--muted)}
+.agenda-time{display:flex;justify-content:center;align-items:center;gap:.1rem;min-height:3rem;padding:0 .6rem;font:.95rem var(--mono)}.agenda-time-end{font-size:.75rem;color:var(--muted)}
 .agenda-skeleton{display:block;background:var(--rule);opacity:.35;cursor:default}.agenda-skeleton.agenda-day{height:5.15rem}.agenda-skeleton.agenda-time{height:3rem}
 .agenda-summary{grid-column:2;grid-row:1/span 4;position:sticky;top:calc(var(--header-offset,4rem) + 1.5rem);padding-top:1rem;border-top:2px solid var(--text)}.agenda-summary .kicker{margin:0 0 .4rem}
 .agenda-ticket{margin:0;border-top:1px solid var(--rule)}.agenda-summary .agenda-ticket{border-top:0}
@@ -389,6 +388,150 @@ html.js body{padding-bottom:4.5rem}
 .agenda-app [hidden]{display:none!important} /* display rules above must never reveal a hidden element (e.g. the Meet link) */
 @keyframes agenda-in{from{opacity:0;transform:translateY(8px)}}@keyframes agenda-pulse{to{opacity:.12}}
 @media(prefers-reduced-motion:no-preference){.agenda-details:not([hidden]),.agenda-panel.is-entering,.agenda-move:not([hidden]),.agenda-confirm:not([hidden]){animation:agenda-in .28s cubic-bezier(.2,.7,.2,1) both}.agenda-skeleton{animation:agenda-pulse 1.1s ease-in-out infinite alternate}}
-@media(max-width:900px){.agenda-hero{grid-template-columns:minmax(0,1fr)}.agenda-lede{margin-top:1.2rem}.agenda-flow{grid-template-columns:minmax(0,1fr)}.agenda-summary{grid-column:1;grid-row:auto;position:static;margin:0 0 2.4rem}.agenda-summary:not(.is-ready){display:none}.agenda-summary .agenda-ticket>div{grid-template-columns:minmax(6.5rem,9rem) 1fr;gap:1rem}}
-@media(max-width:700px){.agenda-hero{padding-top:2.5rem}.agenda-hero h1{font-size:clamp(3.2rem,16vw,5rem)}.agenda-progress li{flex-direction:column;gap:.2rem;padding-right:.6rem;font-size:.62rem}.agenda-options{grid-template-columns:minmax(0,1fr)}.agenda-durations{gap:.5rem}.agenda-duration{flex-direction:column;align-items:center;gap:.1rem;min-height:4.6rem;padding:.6rem .2rem}.agenda-strip-prev,.agenda-strip-next{display:none}.agenda-strip{margin-inline:-16px}.agenda-days{scroll-padding-inline:16px;padding:6px 16px}.agenda-times{grid-template-columns:repeat(2,minmax(0,1fr))}.agenda-fields{grid-template-columns:minmax(0,1fr)}.agenda-actions>.agenda-submit{width:100%}.agenda-ticket>div,.agenda-summary .agenda-ticket>div{grid-template-columns:minmax(0,1fr);gap:.2rem}}
+@media(max-width:900px){.agenda-flow{grid-template-columns:minmax(0,1fr)}.agenda-summary{grid-column:1;grid-row:auto;position:static;margin:0 0 2.4rem}.agenda-summary:not(.is-ready){display:none}.agenda-summary .agenda-ticket>div{grid-template-columns:minmax(6.5rem,9rem) 1fr;gap:1rem}}
+@media(max-width:700px){.agenda-zone-pick{width:100%}.agenda-zone-select{flex:1;min-width:0}.agenda-progress li{flex-direction:column;gap:.2rem;padding-right:.6rem;font-size:.62rem}.agenda-options{grid-template-columns:minmax(0,1fr)}.agenda-durations{gap:.5rem}.agenda-duration{flex-direction:column;align-items:center;gap:.1rem;min-height:4.6rem;padding:.6rem .2rem}.agenda-strip-prev,.agenda-strip-next{display:none}.agenda-strip{margin-inline:-16px}.agenda-days{scroll-padding-inline:16px;padding:6px 16px}.agenda-times{grid-template-columns:repeat(2,minmax(0,1fr))}.agenda-fields{grid-template-columns:minmax(0,1fr)}.agenda-actions>.agenda-submit{width:100%}.agenda-ticket>div,.agenda-summary .agenda-ticket>div{grid-template-columns:minmax(0,1fr);gap:.2rem}}
 @media(prefers-reduced-motion:reduce){.agenda-option,.agenda-duration,.agenda-day,.agenda-time{transition:none}}
+/* Composition ("studio session", approved preview B revised). Music's stage (the studio photograph with the title over its scrim, same treatment
+   as /music/), then Home's Featured-music Olive band holding what the global player is playing, then the booking as a
+   session sheet on Sand, the support tone the manual gives to long sections: image → Olive → Sand → Paper.
+   On Olive the manual keeps focus and active states in Paper (terracotta is under 3:1 there). In dark mode Sand
+   becomes the background and the sheet is set apart by rules, as the manual says; Olive keeps its surface. */
+.agenda-page .agenda-stage{position:relative;width:min(1320px,calc(100% - 96px));margin:clamp(1.5rem,3vw,2.5rem) auto 0}
+.agenda-page .agenda-cover{margin:0}
+.agenda-page .agenda-cover img{display:block;width:100%;height:auto;aspect-ratio:5/2;object-fit:cover;background:#1b140e}
+.agenda-page .agenda-stage-copy{position:absolute;inset:auto 0 0;padding:clamp(2rem,4vw,3.5rem);color:#f2efe8;background:linear-gradient(to top,rgba(12,8,5,.84),rgba(12,8,5,.42) 55%,rgba(12,8,5,0))}
+.agenda-page .agenda-stage-copy .eyebrow{color:#e6e2da;margin:0}
+.agenda-page .agenda-stage h1{font-size:clamp(3.6rem,8vw,8.4rem);line-height:.9;letter-spacing:-.02em;margin:.5rem 0 1rem;max-width:none}
+.agenda-page .agenda-meta{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.3rem 1.8rem;font:.75rem var(--mono);text-transform:uppercase;letter-spacing:.14em;color:#e6e2da}
+
+/* Olive band: the progress of the booking and what the site's player is playing (one more view of the engine). */
+.agenda-page .agenda-band{background:var(--olive);color:var(--paper);margin-top:clamp(2rem,4vw,3rem)}
+.agenda-page .agenda-band-inner{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(1.5rem,4vw,4rem);align-items:center;padding:1.5rem 0 1.6rem}
+.agenda-page .agenda-band .agenda-progress{margin:0;border-top-color:rgba(242,239,232,.3)}
+.agenda-page .agenda-band .agenda-progress li{color:var(--mist)}
+.agenda-page .agenda-band .agenda-progress li[aria-current]{color:var(--paper);border-top-color:var(--paper)}
+.agenda-page .agenda-band .agenda-progress li[aria-current] b{color:var(--paper)}
+.agenda-page .agenda-now{display:grid;grid-template-columns:56px minmax(0,1fr) 48px;gap:1rem;align-items:center}
+.agenda-page .agenda-now img{width:56px;height:56px;object-fit:cover;background:rgba(242,239,232,.15)}
+.agenda-page .agenda-now-text{display:flex;flex-direction:column;min-width:0;margin:0;line-height:1.25}
+.agenda-page .agenda-now-label,.agenda-page .agenda-now-artist{font:.64rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--mist);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.agenda-page .agenda-now-title{font:1.45rem/1.1 var(--serif);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.agenda-page .agenda-now-play{display:grid;place-items:center;width:48px;height:48px;padding:0;border:0;background:var(--paper);color:var(--ink)}
+.agenda-page .agenda-now-play svg{width:1rem;height:1rem;fill:currentColor}
+.agenda-page .agenda-now-play .icon-pause,.agenda-page .agenda-now-play[data-state=playing] .icon-play{display:none}.agenda-page .agenda-now-play[data-state=playing] .icon-pause{display:block}
+.agenda-page .agenda-now-play:focus-visible{outline:3px solid var(--paper);outline-offset:3px}
+
+/* Sand session sheet: like the large player on /music/, a headline (here: your meeting) over label/value rows. */
+.agenda-page .agenda-sheet{background:var(--sand);padding:clamp(2.5rem,5vw,4.5rem) 0 clamp(3.5rem,7vw,6rem)}
+:root[data-theme=dark] .agenda-page .agenda-sheet{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.agenda-page .agenda-app{padding-top:0}
+.agenda-page .agenda-flow{grid-template-columns:minmax(0,1fr)}
+.agenda-page .agenda-summary{grid-column:1;grid-row:1;position:sticky;top:var(--header-offset,58px);z-index:4;margin:0 0 .5rem;padding:1rem 0 1.1rem;background:var(--sand);border-top:2px solid var(--text);border-bottom:1px solid var(--rule)}
+.agenda-page .agenda-summary .kicker{margin:0 0 .5rem}
+.agenda-page .agenda-summary .agenda-ticket{display:grid;grid-template-columns:1fr .9fr 2.2fr 1.4fr;gap:1.6rem;border:0}
+.agenda-page .agenda-summary .agenda-ticket>div{grid-template-columns:1fr;gap:.2rem;padding:0;border:0}
+.agenda-page .agenda-summary dd{font-size:1.35rem}
+.agenda-page #agenda-sum-date,.agenda-page #agenda-sum-time{font-size:clamp(1.9rem,3.2vw,3rem);line-height:1}
+.agenda-page .agenda-summary dd.is-empty{font-size:.78rem;line-height:1.4}
+.agenda-page .agenda-summary .agenda-small{margin-top:.6rem}
+
+/* Rows: mono label column (01 / question) and the choices beside it, the label/value rhythm of the music player. */
+.agenda-page .agenda-flow>.agenda-step{grid-column:1;display:block;padding:1.8rem 0 2rem;border-top:1px solid var(--rule)}
+.agenda-page .agenda-step legend{float:left;width:min(15rem,30%);margin:0;padding-right:1.5rem;display:block;font:.72rem/1.5 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.agenda-page .agenda-step legend b{display:block;margin-bottom:.35rem;font:400 2.4rem/1 var(--serif);letter-spacing:0;color:var(--text)}
+.agenda-page .agenda-step:has([aria-pressed=true]) legend b,.agenda-page .agenda-modality legend b{color:var(--accent)}
+.agenda-page .agenda-step legend+*{clear:none}
+.agenda-page .agenda-step>:not(legend){margin-left:min(15rem,30%)}
+.agenda-page .agenda-option{border-color:var(--mist);background:var(--paper)}
+:root[data-theme=dark] .agenda-page .agenda-option{background:transparent;border-color:var(--rule)}
+.agenda-page .agenda-option:not(:has(input:checked)) .agenda-option-note{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.agenda-page .agenda-duration,.agenda-page .agenda-day,.agenda-page .agenda-time,.agenda-page .agenda-strip-prev,.agenda-page .agenda-strip-next{border-color:var(--mist);background:var(--paper)}
+:root[data-theme=dark] .agenda-page .agenda-duration,:root[data-theme=dark] .agenda-page .agenda-day,:root[data-theme=dark] .agenda-page .agenda-time,:root[data-theme=dark] .agenda-page .agenda-strip-prev,:root[data-theme=dark] .agenda-page .agenda-strip-next{background:transparent;border-color:var(--rule)}
+/* Durations drawn to scale: each is as wide as its length, so 180 min reads six times 30 min. */
+.agenda-page .agenda-durations{display:flex;gap:.6rem;align-items:stretch}
+.agenda-page .agenda-duration{min-height:4.6rem;justify-content:flex-start;padding:.8rem 1rem}
+.agenda-page .agenda-duration:nth-child(1){flex:1 1 0}.agenda-page .agenda-duration:nth-child(2){flex:2 1 0}.agenda-page .agenda-duration:nth-child(3){flex:4 1 0}.agenda-page .agenda-duration:nth-child(4){flex:6 1 0}
+.agenda-page .agenda-duration-num{font-size:clamp(1.9rem,3vw,2.6rem)}
+.agenda-page .agenda-duration[aria-pressed=true],.agenda-page .agenda-day[aria-pressed=true],.agenda-page .agenda-time[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#000}
+.agenda-page .agenda-duration:hover,.agenda-page .agenda-day:hover,.agenda-page .agenda-time:hover{border-color:var(--text)}
+.agenda-page .agenda-zone-select{background:var(--paper)}
+:root[data-theme=dark] .agenda-page .agenda-zone-select{background:var(--bg)}
+.agenda-page .agenda-field input,.agenda-page .agenda-field textarea{background:transparent}
+.agenda-page .agenda-panel{border-top-color:var(--text)}
+.agenda-page .agenda-panel h2{font-size:clamp(2.8rem,6vw,5.4rem)}
+
+@media(prefers-reduced-motion:no-preference){.agenda-page .agenda-summary dd.is-changed{animation:agenda-changed .32s cubic-bezier(.2,.7,.2,1)}}
+@keyframes agenda-changed{from{opacity:0;transform:translateY(6px)}}
+@media(max-width:900px){
+  .agenda-page .agenda-band-inner{grid-template-columns:minmax(0,1fr)}
+  .agenda-page .agenda-summary .agenda-ticket{grid-template-columns:1fr 1fr}
+}
+@media(max-width:700px){
+  .agenda-page .agenda-stage{width:100%;margin-top:0}
+  .agenda-page .agenda-cover img{aspect-ratio:4/5;object-position:58% 50%}
+  .agenda-page .agenda-stage-copy{padding:2rem 16px}
+  .agenda-page .agenda-stage h1{font-size:clamp(3.6rem,19vw,6rem)}
+  .agenda-page .agenda-meta{gap:.2rem 1rem;font-size:.66rem;letter-spacing:.1em}
+  .agenda-page .agenda-band{margin-top:0}
+  .agenda-page .agenda-step legend{float:none;width:auto;padding:0;margin-bottom:1rem}
+  .agenda-page .agenda-step legend b{display:inline;margin-right:.6rem;font-size:1.7rem;vertical-align:-.15em}
+  .agenda-page .agenda-step>:not(legend){margin-left:0}
+  .agenda-page .agenda-summary{top:calc(var(--header-offset,53px) - 1px);padding:.7rem 0 .8rem}
+  .agenda-page .agenda-summary .kicker,.agenda-page .agenda-summary .agenda-small{display:none}
+  .agenda-page .agenda-summary .agenda-ticket{grid-template-columns:auto auto;gap:.3rem 1.2rem}
+  .agenda-page .agenda-summary dt{display:none}
+  .agenda-page #agenda-sum-date,.agenda-page #agenda-sum-time{font-size:1.4rem}
+  .agenda-page .agenda-summary dd{font-size:1rem}
+  .agenda-page .agenda-durations{flex-wrap:wrap}
+  .agenda-page .agenda-duration{flex-direction:column;align-items:flex-start;gap:0;min-height:4.4rem;padding:.6rem .7rem}
+}
+.agenda-page .agenda-time{align-items:center}
+.agenda-page .agenda-band .agenda-progress{grid-column:auto}
+.agenda-page .agenda-summary{padding:.8rem 0 .9rem}
+.agenda-page .agenda-summary .kicker,.agenda-page .agenda-summary .agenda-small{display:none}
+.agenda-page #agenda-sum-date,.agenda-page #agenda-sum-time{font-size:clamp(1.6rem,2.4vw,2.2rem)}
+.agenda-page .agenda-summary dd{font-size:1.2rem}
+@media(max-width:700px){
+  .agenda-page .agenda-durations{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+  .agenda-page .agenda-duration{align-items:center}
+}
+.agenda-page .agenda-summary dd.is-empty{font:.78rem/1.4 var(--mono);color:var(--muted)}
+:root[data-theme=dark] .agenda-page .agenda-duration[aria-pressed=true],:root[data-theme=dark] .agenda-page .agenda-day[aria-pressed=true],:root[data-theme=dark] .agenda-page .agenda-time[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#000}
+.agenda-page #agenda-sum-date.is-empty,.agenda-page #agenda-sum-time.is-empty{font:.78rem/1.4 var(--mono);color:var(--muted)}
+@media(max-width:700px){.agenda-page .agenda-step legend{float:left;width:100%;margin-bottom:1.1rem}.agenda-page .agenda-step legend+*{clear:both}}
+.agenda-page .agenda-sheet :is(input,textarea,select,button,legend,h2,h3,[tabindex]){scroll-margin-top:calc(var(--header-offset,58px) + 8.5rem)}
+@media(max-width:700px){.agenda-page .agenda-sheet :is(input,textarea,select,button,legend,h2,h3,[tabindex]){scroll-margin-top:calc(var(--header-offset,53px) + 6rem)}}
+
+/* The portrait. Two photographs with two jobs: the studio is Luis's musical world, the documentary
+   black-and-white portrait (the one on Home and About, same grayscale treatment) is the person you will meet.
+   It is laid on the scene like a print: rectangular, no shadow, no frame, bridging the photograph and the Olive band
+   so the two surfaces read as one composition. It never sits beside the form and never covers the title. */
+.agenda-page{--agenda-pw:clamp(10.5rem,16vw,15rem);--agenda-pr:clamp(1.5rem,3vw,3rem);--agenda-overlap:clamp(3.5rem,5.5vw,5.5rem)}
+.agenda-page .agenda-portrait{position:absolute;z-index:2;right:var(--agenda-pr);bottom:calc(-1 * var(--agenda-overlap) - 1.6rem);width:var(--agenda-pw);margin:0}
+.agenda-page .agenda-portrait img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:50% 28%;filter:grayscale(100%);background:#1b140e}
+.agenda-page .agenda-portrait figcaption{display:flex;justify-content:space-between;gap:.6rem;height:1.6rem;align-items:flex-end;font:.62rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--mist)}
+.agenda-page .agenda-portrait figcaption span:first-child{color:var(--paper)}
+.agenda-page .agenda-stage-copy{padding-right:calc(var(--agenda-pw) + var(--agenda-pr) + 2rem)}
+.agenda-page .agenda-band-inner{padding-right:calc(var(--agenda-pw) + var(--agenda-pr) + 2rem);min-height:calc(var(--agenda-overlap) + 4.5rem)}
+/* Spanish headline: one word, wholly the italic accent ("¡Conectemos!"); sized so it never runs into the portrait. */
+html[lang=es] .agenda-page .agenda-stage h1{font-size:clamp(3.4rem,7.4vw,8rem)}
+@media(max-width:900px){
+  .agenda-page .agenda-band-inner{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:700px){
+  /* Phone: the print moves to the top corner of the photograph, the headline keeps the bottom. */
+  .agenda-page{--agenda-pw:36vw;--agenda-pr:16px}
+  .agenda-page .agenda-portrait{top:16px;bottom:auto}
+  .agenda-page .agenda-portrait figcaption{color:#e6e2da;height:auto;padding-top:.4rem;flex-direction:column;gap:.1rem;font-size:.58rem}
+  .agenda-page .agenda-portrait figcaption span:first-child{color:#f2efe8}
+  .agenda-page .agenda-stage-copy{padding-right:16px}
+  .agenda-page .agenda-band-inner{padding-right:0;min-height:0}
+  html[lang=es] .agenda-page .agenda-stage h1{font-size:clamp(3rem,15.6vw,5.4rem)}
+}
+/* The time-zone picker wraps under its label when the column is narrow (from about 701 to 900 px). */
+.agenda-page .agenda-zone-pick{flex-wrap:wrap;max-width:100%}.agenda-page .agenda-zone-select{min-width:0;max-width:100%}
+@media(max-width:700px){
+  /* The caption sits on the photograph: a top scrim, the same device as Music's bottom one, keeps it legible. */
+  .agenda-page .agenda-cover{position:relative}
+  .agenda-page .agenda-cover::after{content:"";position:absolute;inset:0 0 auto 0;height:62%;background:linear-gradient(to bottom,rgba(12,8,5,.7),rgba(12,8,5,.35) 60%,rgba(12,8,5,0));pointer-events:none}
+}

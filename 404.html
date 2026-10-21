@@ -47,7 +47,8 @@ li a:hover{color:var(--accent)}
 <li><a href="/#contact" data-text="Contact|Contacto">Contact</a></li>
 </ul></nav>
 </div></main>
-<!-- Same saved language as the rest of the site (lg-language); English without JavaScript. -->
-<script>(function(){var es=false;try{es=localStorage.getItem('lg-language')==='es'}catch(e){}if(!es)return;document.documentElement.lang='es';document.title='Página no encontrada · Luis Guinea';[].forEach.call(document.querySelectorAll('[data-text]'),function(el){el.textContent=el.getAttribute('data-text').split('|')[1]});[].forEach.call(document.querySelectorAll('[data-label]'),function(el){el.setAttribute('aria-label',el.getAttribute('data-label').split('|')[1])})})();</script>
+<!-- Same language rule as js/i18n.js: a manual choice (lg-language, with lg-language-manual for 'en'), else the
+     browser's first Spanish or English language, else English. English without JavaScript. -->
+<script>(function(){var es=false;try{var s=localStorage.getItem('lg-language');if(s==='es'||(s==='en'&&localStorage.getItem('lg-language-manual')==='1'))es=s==='es';else{var l=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||''];for(var i=0;i<l.length;i++){var b=String(l[i]).toLowerCase().split('-')[0];if(b==='es'||b==='en'){es=b==='es';break}}}}catch(e){}if(!es)return;document.documentElement.lang='es';document.title='Página no encontrada · Luis Guinea';[].forEach.call(document.querySelectorAll('[data-text]'),function(el){el.textContent=el.getAttribute('data-text').split('|')[1]});[].forEach.call(document.querySelectorAll('[data-label]'),function(el){el.setAttribute('aria-label',el.getAttribute('data-label').split('|')[1])})})();</script>
 </body>
 </html>
