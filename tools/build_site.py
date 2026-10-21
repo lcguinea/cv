@@ -30,7 +30,7 @@ MANIFEST = ROOT / "data" / "music-catalog" / "music_preview_manifest.json"
 PREVIEW_DIR = "assets/audio/previews"
 ARTWORK_DIR = "assets/images"
 
-PAGES = ("index.html", "cv.html", "music/index.html", "sobre-mi.html", "404.html")
+PAGES = ("index.html", "cv.html", "music/index.html", "sobre-mi.html", "agenda/index.html", "404.html")
 STATIC_FILES = PAGES + (
     "robots.txt",
     "sitemap.xml",
@@ -42,6 +42,7 @@ STATIC_FILES = PAGES + (
     MUSIC_DATA,
     "js/player.js",
     "js/music-page.js",
+    "js/agenda.js",
     "fonts/instrument-serif-latin-400-normal.woff2",
     "fonts/instrument-serif-latin-400-italic.woff2",
     "fonts/inter-latin-wght-normal.woff2",

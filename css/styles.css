@@ -332,3 +332,27 @@ html.js body{padding-bottom:4.5rem}
   :root[data-theme=dark] .writing-card{background:var(--ink);border:1px solid var(--rule)}
 }
 @media print{.writing-section{background:#fff}.writing-list .writing-feature{background:#eee;color:#111}}
+/* Booking page (/agenda/) */
+.agenda-page{padding:clamp(3rem,7vw,6rem) 0 clamp(4rem,9vw,8rem)}.agenda-page h1{font-size:clamp(2.8rem,7vw,6rem);max-width:14ch;margin:.4rem 0 1.2rem}.agenda-page .about-lede{max-width:52ch}
+.agenda-app{margin-top:3rem;max-width:56rem}.agenda-status{min-height:1.5rem;font:.8rem var(--mono);color:var(--muted)}
+.agenda-app fieldset{border:0;border-top:1px solid var(--rule);margin:0;padding:1.2rem 0 1.4rem;min-width:0}.agenda-app legend{padding:0;font:.7rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.agenda-choices{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem}
+.agenda-choices button{min-height:44px;padding:0 1.1rem;border:1px solid var(--text);background:transparent;color:var(--text);font:.8rem var(--mono);cursor:pointer}
+.agenda-choices button:hover{border-color:var(--accent);color:var(--accent)}.agenda-choices button[aria-pressed=true]{background:var(--text);color:var(--bg)}
+.agenda-choices button:focus-visible,.agenda-form input:focus-visible,.agenda-form textarea:focus-visible,.agenda-submit:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.agenda-tz{font:.75rem var(--mono);color:var(--muted);margin:.2rem 0 1rem}
+.agenda-form{border-top:2px solid var(--text);padding-top:1.6rem;display:grid;gap:.5rem}.agenda-form h2{font-size:clamp(1.8rem,3vw,2.6rem);margin:0 0 .4rem}
+.agenda-form label{font:.7rem var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-top:.8rem}
+.agenda-form input,.agenda-form textarea{width:100%;min-height:44px;padding:.6rem .7rem;border:1px solid var(--text);background:transparent;color:var(--text);font:1rem var(--sans,inherit);border-radius:0}
+.agenda-trap{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.agenda-error{min-height:1.4rem;color:var(--accent);font-size:.95rem;margin:.4rem 0 0}
+.agenda-submit{min-height:48px;justify-self:start;padding:0 1.6rem;border:0;background:var(--text);color:var(--bg);font:.75rem var(--mono);text-transform:uppercase;letter-spacing:.06em;cursor:pointer}.agenda-submit:hover:not(:disabled){background:var(--accent);color:#000}.agenda-submit:disabled{opacity:.6;cursor:progress}
+.agenda-done{border-top:2px solid var(--text);padding-top:1.6rem}.agenda-done h2{font-size:clamp(2rem,4vw,3.4rem)}.agenda-done a{display:inline-flex;align-items:center;min-height:44px}
+.agenda-fallback{margin-top:2.5rem;font:.75rem var(--mono);text-transform:uppercase}.agenda-fallback a{display:inline-flex;align-items:center;min-height:44px}
+.agenda-form .agenda-modality{padding-bottom:.6rem}.agenda-options{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem}
+.agenda-form .agenda-options label{display:inline-flex;align-items:center;gap:.55rem;min-height:44px;margin:0;padding:0 1.1rem;border:1px solid var(--text);font:.8rem var(--mono);text-transform:none;letter-spacing:0;cursor:pointer}
+.agenda-form .agenda-options label:has(input:checked){background:var(--text);color:var(--bg)}.agenda-form .agenda-options input{width:auto;min-height:0;margin:0;padding:0;border:0;accent-color:var(--accent)}
+.agenda-hint{font:.75rem var(--mono);color:var(--muted);margin:.8rem 0 0}
+.agenda-app [hidden]{display:none!important} /* display rules above must never reveal a hidden element (e.g. the Meet link) */
+@media(max-width:700px){.agenda-choices button{flex:1 1 calc(33% - .6rem)}.agenda-form .agenda-options label{flex:1 1 calc(50% - .6rem)}.agenda-submit{width:100%;justify-self:stretch}}
+@media(prefers-reduced-motion:reduce){.agenda-choices button,.agenda-submit{transition:none}}

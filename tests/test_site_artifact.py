@@ -23,7 +23,7 @@ build_site = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(build_site)
 
 SITE = "https://luisguinea.com/"
-CANONICAL = {"index.html": SITE, "cv.html": SITE + "cv.html", "music/index.html": SITE + "music/", "sobre-mi.html": SITE + "sobre-mi.html"}
+CANONICAL = {"index.html": SITE, "cv.html": SITE + "cv.html", "music/index.html": SITE + "music/", "sobre-mi.html": SITE + "sobre-mi.html", "agenda/index.html": SITE + "agenda/"}
 FONTS = {
     "instrument-serif-latin-400-normal.woff2": ("Instrument Serif", "normal"),
     "instrument-serif-latin-400-italic.woff2": ("Instrument Serif", "italic"),
@@ -65,7 +65,7 @@ class ArtifactTest(unittest.TestCase):
     def test_exact_composition(self):
         self.assertEqual(self.present, sorted(self.files))
         top = {p.split("/")[0] for p in self.present}
-        self.assertEqual(top, {"404.html", "assets", "css", "cv.html", "fonts", "index.html", "js", "music",
+        self.assertEqual(top, {"404.html", "agenda", "assets", "css", "cv.html", "fonts", "index.html", "js", "music",
                                "robots.txt", "sitemap.xml", "sobre-mi.html"})
         previews = [p for p in self.present if p.startswith("assets/audio/previews/")]
         images = [p for p in self.present if p.startswith("assets/images/")]

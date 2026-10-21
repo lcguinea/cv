@@ -31,7 +31,7 @@ NAV_HREFS = {
     "music": ["../#background", "../#experience", "../#education", "./", "../#writing", "../sobre-mi.html", "../cv.html", "../#contact"],
 }
 CURRENT = {"home": None, "cv": "nav.cv", "music": "nav.music", "about": "nav.about"}
-PUBLISHED_JS = ("strings.js", "i18n.js", "site.js", "player.js", "music-page.js", "theme-init.js")
+PUBLISHED_JS = ("strings.js", "i18n.js", "site.js", "player.js", "music-page.js", "agenda.js", "theme-init.js")
 # Keys built at runtime from data: 'music.role'+credit and 'music.type'+release type.
 # Genre and mood labels are looked up from the human-reviewed values in js/music-data.js.
 DYNAMIC_PREFIXES = ("music.role", "music.type", "music.version", "music.genre_", "music.mood_")
@@ -135,6 +135,7 @@ class StringsTests(unittest.TestCase):
             used |= set(re.findall(r'data-i18n(?:-label|-placeholder)?="([\w.]+)"', html))
             code += re.findall(r"<script>(.*?)</script>", html, re.S)
         used |= set(re.findall(r'data-i18n(?:-label|-placeholder)?="([\w.]+)"', read("sobre-mi.html")))
+        used |= set(re.findall(r'data-i18n(?:-label|-placeholder)?="([\w.]+)"', read("agenda/index.html")))
         for source in code:
             used |= {m for m in re.findall(r"'([a-z]+\.[A-Za-z]+)'", source) if m in self.en}
         return used
@@ -170,7 +171,7 @@ class StringsTests(unittest.TestCase):
         self.assertTrue(self.en["cv.profileText"].startswith("I work where creative and analytical thinking meet."))
 
     def test_no_em_dash_in_published_copy(self):
-        for rel in list(PAGES) + ["js/" + n for n in PUBLISHED_JS if (ROOT / "js" / n).is_file()]:
+        for rel in list(PAGES) + ["agenda/index.html"] + ["js/" + n for n in PUBLISHED_JS if (ROOT / "js" / n).is_file()]:
             with self.subTest(file=rel):
                 self.assertNotIn("—", read(rel))
 
