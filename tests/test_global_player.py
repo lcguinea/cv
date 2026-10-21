@@ -15,6 +15,7 @@ import json
 import re
 import shutil
 import subprocess
+import tempfile
 import sys
 import unittest
 from pathlib import Path
@@ -462,6 +463,47 @@ class GlobalPlayerTests(unittest.TestCase):
         self.assertIn("blocked:engine", out["cv"]["log"])
         self.assertTrue(out["cv"]["session"]["auto"])
         self.assertTrue(out["click"]["playing"])
+
+
+class QuietPageTests(unittest.TestCase):
+    """A page marked <body data-player-autostart="off"> (the booking page) never starts sound by itself."""
+
+    def run_on_quiet_page(self, scenario):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "js").symlink_to(ROOT / "js")
+            (root / "index.html").symlink_to(ROOT / "index.html")
+            about = (ROOT / "sobre-mi.html").read_text(encoding="utf-8")
+            self.assertEqual(about.count("<body>"), 1)
+            (root / "quiet.html").write_text(about.replace("<body>", '<body data-player-autostart="off">'), encoding="utf-8")
+            result = subprocess.run([NODE, str(RUNNER), str(root), PRELUDE + scenario], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return json.loads(result.stdout)
+
+    def test_sound_starts_only_from_the_player_and_other_pages_keep_their_autostart(self):
+        out = self.run_on_quiet_page(
+            "const tab = browser.tab(); const q = tab.open('quiet.html', {autoplayBlocked: false}); await settle();"
+            "out.load = state(q); q.click('h1'); await settle(); out.click = state(q);"
+            "const home = tab.open('index.html'); await settle(); out.homeIdle = state(home);"
+            "home.click('h1'); await settle(); out.homeClick = state(home);"
+            "const t2 = browser.tab(); const q2 = t2.open('quiet.html'); await settle();"
+            "q2.click('#mp-toggle'); await settle(); out.button = state(q2);"
+            "const t3 = browser.tab(); const h3 = t3.open('index.html', {autoplayBlocked: false}); await settle(); out.h3 = state(h3);"
+            "const q3 = t3.open('quiet.html', {autoplayBlocked: false}); await settle(); out.resumed = state(q3);"
+        )
+        # Even where the browser would allow it, neither loading nor clicking the page starts sound.
+        self.assertFalse(out["load"]["playing"])
+        self.assertFalse(out["click"]["playing"])
+        # The other pages behave as before: the session arrives armed (saved on leaving the quiet page) and the
+        # first click outside the player starts a preview.
+        self.assertTrue(out["homeIdle"]["session"]["auto"])
+        self.assertFalse(out["homeIdle"]["playing"])
+        self.assertTrue(out["homeClick"]["playing"])
+        # The player's own button works, and what was already playing keeps playing on the quiet page.
+        self.assertTrue(out["button"]["playing"])
+        self.assertTrue(out["h3"]["playing"])
+        self.assertTrue(out["resumed"]["playing"])
+        self.assertEqual(out["resumed"]["title"], out["h3"]["title"])
 
 
 class GlobalPlayerStaticTests(unittest.TestCase):

@@ -20,17 +20,20 @@ RUNNER = ROOT / "tests" / "support" / "run_scenario.js"
 STRINGS_JS = ROOT / "js" / "strings.js"
 NODE = shutil.which("node")
 PAGES = {"index.html": "home", "cv.html": "cv", "music/index.html": "music", "sobre-mi.html": "about"}
+# Pages that share the site header (the booking page has its own content tests in tests/test_reservas.py).
+HEADER_PAGES = dict(PAGES, **{"agenda/index.html": "agenda"})
 # One menu on every page, written in the HTML (no link is added by JavaScript), in the reading order of Home
-# (2026-10-13): Background with Experience and Education as secondary entries, Music, Research, About, CV, then
-# Contact as the action. Home is reached through the brand.
-NAV_KEYS = ["nav.background", "nav.experience", "nav.education", "nav.music", "nav.research", "nav.about", "nav.cv", "nav.contact"]
+# (2026-10-13): Background with Experience and Education as secondary entries, Music, Research, About, CV, Agenda
+# (booking page, 2026-10-21), then Contact as the action. Home is reached through the brand.
+NAV_KEYS = ["nav.background", "nav.experience", "nav.education", "nav.music", "nav.research", "nav.about", "nav.cv", "nav.agenda", "nav.contact"]
 NAV_HREFS = {
-    "home": ["#background", "#experience", "#education", "music/", "#writing", "sobre-mi.html", "cv.html", "#contact"],
-    "cv": ["./#background", "./#experience", "./#education", "music/", "./#writing", "sobre-mi.html", "cv.html", "./#contact"],
-    "about": ["./#background", "./#experience", "./#education", "music/", "./#writing", "sobre-mi.html", "cv.html", "./#contact"],
-    "music": ["../#background", "../#experience", "../#education", "./", "../#writing", "../sobre-mi.html", "../cv.html", "../#contact"],
+    "home": ["#background", "#experience", "#education", "music/", "#writing", "sobre-mi.html", "cv.html", "agenda/", "#contact"],
+    "cv": ["./#background", "./#experience", "./#education", "music/", "./#writing", "sobre-mi.html", "cv.html", "agenda/", "./#contact"],
+    "about": ["./#background", "./#experience", "./#education", "music/", "./#writing", "sobre-mi.html", "cv.html", "agenda/", "./#contact"],
+    "music": ["../#background", "../#experience", "../#education", "./", "../#writing", "../sobre-mi.html", "../cv.html", "../agenda/", "../#contact"],
+    "agenda": ["../#background", "../#experience", "../#education", "../music/", "../#writing", "../sobre-mi.html", "../cv.html", "./", "../#contact"],
 }
-CURRENT = {"home": None, "cv": "nav.cv", "music": "nav.music", "about": "nav.about"}
+CURRENT = {"home": None, "cv": "nav.cv", "music": "nav.music", "about": "nav.about", "agenda": "nav.agenda"}
 PUBLISHED_JS = ("strings.js", "i18n.js", "site.js", "player.js", "music-page.js", "agenda.js", "theme-init.js")
 # Keys built at runtime from data: 'music.role'+credit and 'music.type'+release type.
 # Genre and mood labels are looked up from the human-reviewed values in js/music-data.js.
@@ -72,7 +75,7 @@ class HeaderStaticTests(unittest.TestCase):
 
     def test_every_page_shares_the_same_header_and_primary_navigation(self):
         shapes = set()
-        for rel, page in PAGES.items():
+        for rel, page in HEADER_PAGES.items():
             block = header(read(rel))
             with self.subTest(page=page):
                 nav = re.search(r'<nav class="nav" aria-label="Primary" data-i18n-label="ui.primaryNav">(.*?)</nav>(.*?)<div class="tools">', block)
@@ -279,7 +282,7 @@ class NavigationBehaviourTests(unittest.TestCase):
             "out.lang = page.document.documentElement.lang; out.stored = browser.local['lg-language'];"
             "const cv = browser.tab().open('cv.html'); await settle(); out.cv = cv.$$('.nav a').map(a => a.textContent);"
         )
-        self.assertEqual(out["nav"], ["Trayectoria", "Experiencia", "Formación", "Música", "Investigación", "Sobre mí", "CV"])
+        self.assertEqual(out["nav"], ["Trayectoria", "Experiencia", "Formación", "Música", "Investigación", "Sobre mí", "CV", "Agenda"])
         self.assertEqual((out["label"], out["menu"]), ("Principal", "Menú"))
         self.assertEqual(out["groups"], ["Idioma", "Tema"])
         self.assertEqual((out["lang"], out["stored"]), ("es", "es"))

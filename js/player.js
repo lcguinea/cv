@@ -101,8 +101,12 @@
   // screen reader user activates.
   const GESTURES=['click','touchend'],NO_AUTOSTART='#mini-player,#player,#catalog,.feature-play,.skip-link,[data-lang],[data-theme-choice],.menu-toggle';
   function onGesture(event){if(event.target&&event.target.closest&&event.target.closest(NO_AUTOSTART))return;if(!isPlaying())start()}
+  // A page can opt out (<body data-player-autostart="off">, the booking form): there sound only starts from the player.
+  // The armed state is kept in the session, so the other pages still start on their first click.
+  const quiet=!!(document.body&&document.body.dataset.playerAutostart==='off');
   function armAutostart(){
-    if(!autostart){autostart=true;GESTURES.forEach(type=>document.addEventListener(type,onGesture,true))}
+    if(!autostart){autostart=true;if(!quiet)GESTURES.forEach(type=>document.addEventListener(type,onGesture,true))}
+    if(quiet)return;
     audio.preload='auto';start();
   }
   function disarmAutostart(){if(autostart){autostart=false;GESTURES.forEach(type=>document.removeEventListener(type,onGesture,true))}}

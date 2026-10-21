@@ -85,6 +85,52 @@ enlace `https://meet.google.com/…`. Si la sala sigue en `pending`, la página 
 y consulta `op: "status"` unas veces más; si Google responde `failure`, lo dice y ofrece el correo. La
 invitación se envía en todo caso.
 
+### Gestión por el invitado: cancelar o reprogramar
+
+Tras confirmar, el backend envía a la dirección ya verificada un segundo correo con un **enlace privado de
+gestión** `https://luisguinea.com/agenda/#manage=<id>.<secreto>`. Con él, el invitado ve su reserva y
+puede cancelarla o cambiarla de horario sin escribir a Luis.
+
+- **Secreto**: 64 hex aleatorios (256 bits), ligado a una reserva concreta (`id`). Solo se guarda su
+  hash `sha256("manage:" + secreto)`, separado del de confirmación: el enlace de confirmación no sirve
+  para gestionar y viceversa. Nunca aparece en respuestas de la API, en el evento de Calendar, en el
+  registro ni en el aviso a Luis; solo en ese correo.
+- **Fragmento `#`**: no se envía a GitHub Pages ni viaja en el `Referer`; la página lo borra de la barra
+  de direcciones antes de cualquier petición y lo guarda solo en memoria (ni `sessionStorage` ni
+  `localStorage`). El sitio no tiene analíticas.
+- **Solo POST** (`text/plain`, como el resto); `doGet` no tiene ninguna operación de gestión.
+
+| Operación | Campos exactos | Efecto |
+|---|---|---|
+| `manage` | `op`, `token` | Solo lectura: `status` (`confirmed`/`cancelled`), `start`, `end`, `duration`, `modality`, `reason`, `meet`, `changeUntil`, `canChange`, `reschedulesLeft`. Nunca el correo ni las notas |
+| `cancel` | `op`, `token`, `confirm: true` | Sin `confirm: true` → `confirmation_required`. Borra el evento con `sendUpdates: 'all'` (Google envía la cancelación al invitado), libera el horario y borra la caché |
+| `reschedule` | `op`, `token`, `start` | Misma duración y modalidad. Revalida el nuevo inicio dentro del bloqueo con datos frescos (las mismas reglas que una reserva nueva, incluida `MIN_NOTICE_HOURS`) mientras el evento original sigue ocupando su hora; solo entonces mueve **el mismo evento** con un `patch` de `start`/`end` y `sendUpdates: 'all'`. La invitación se actualiza y el enlace de Meet se conserva; presencial sigue sin videollamada |
+
+- **Política**: se puede cancelar o reprogramar hasta `CHANGE_NOTICE_HOURS` antes del inicio (12 por
+  defecto); después → `too_late` y la página indica escribir por correo. Máximo `MAX_RESCHEDULES`
+  cambios de horario por reserva (3); cancelar sigue siendo posible.
+- **Idempotencia**: repetir una cancelación devuelve el mismo estado `cancelled`; repetir un cambio al
+  mismo horario devuelve la reserva ya movida. Si Google movió o borró el evento pero la respuesta se
+  perdió, el backend lo comprueba leyendo el evento y no repite nada. Si Google falla de verdad →
+  `unavailable` y la reserva queda exactamente como estaba.
+- **Concurrencia**: ambas operaciones van dentro de `LockService` (petición simultánea → `busy`).
+- **Errores**: `invalid_token` (enlace desconocido, manipulado o caducado: el registro se purga un día
+  después del encuentro), `cancelled`, `too_late`, `reschedule_limit`, `slot_unavailable`,
+  `invalid_start`, `confirmation_required`, `busy`, `unavailable`.
+- **¿Se envió el enlace?** Las respuestas `confirmed` de `confirm` y `status` incluyen `manageEmail`:
+  `"sent"` (el correo de gestión salió, ahora o antes), `"failed"` (no salió por un error de MailApp o
+  falta de cuota; reabrir el enlace de confirmación lo reintenta una vez mientras haya plazo) o
+  `"too_late"` (ya rige `CHANGE_NOTICE_HOURS` y no se emite). Es solo un estado: nunca contiene el enlace
+  ni el token. La página solo dice que ha enviado el correo con `"sent"`; sin el campo no dice nada.
+- **Aviso a Luis** (opcional): con `NOTIFY_EMAIL`, cada cancelación o cambio envía un correo breve a
+  esa dirección (el organizador no recibe correo de Calendar por cambios hechos con su propia cuenta).
+- **Compatibilidad**: las reservas confirmadas con la versión anterior no tenían enlace de gestión; si
+  el invitado vuelve a abrir su enlace de confirmación, recibe uno (una sola vez). Si el correo de
+  gestión falla, la reserva sigue confirmada y se reintenta igual. En ambos casos el enlace solo se
+  emite **antes** del plazo de `CHANGE_NOTICE_HOURS`: un enlace de confirmación reabierto después (o
+  tras el encuentro) sigue mostrando la reserva, pero no da acceso de gestión. Un enlace de
+  confirmación nunca sirve para `manage`, `cancel` ni `reschedule`.
+
 ### Comunicación GitHub Pages ↔ Apps Script (CORS)
 
 Las web apps de Apps Script responden a `/exec` con una redirección 302 a
@@ -158,6 +204,9 @@ pendientes durante un rato (la reserva vuelve a funcionar al caducar). Si ocurre
    | `HOLD_MINUTES` | no | Validez del enlace de confirmación y del bloqueo, 30 por defecto (mínimo 5) |
    | `MAX_PENDING_HOLDS` | no | Bloqueos sin confirmar simultáneos, 10 por defecto |
    | `RATE_PER_EMAIL_HOUR` / `RATE_GLOBAL_HOUR` | no | 3 y 20 por defecto (correos enviados por hora) |
+   | `CHANGE_NOTICE_HOURS` | no | Antelación mínima para que el invitado cancele o reprograme, 12 por defecto |
+   | `MAX_RESCHEDULES` | no | Cambios de horario por reserva, 3 por defecto |
+   | `NOTIFY_EMAIL` | no | Dirección a la que avisar de cancelaciones y cambios (vacía = sin aviso) |
 
 5. **Autorizar y comprobar**: en el editor elige la función `checkSetup` y pulsa *Ejecutar*. Acepta los
    permisos (Calendar y "Enviar correo como tú"; la pantalla de "app no verificada" es normal para un
@@ -181,6 +230,12 @@ existente (misma URL) y publica la web nueva **a la vez**; entre ambos pasos, la
 recibiría `invalid_modality`. No hay propiedades nuevas ni permisos nuevos. Las reservas antiguas
 pendientes sin modalidad se tratan como virtuales.
 
+**Actualizar a la versión con gestión (cancelar/reprogramar):** el cambio es aditivo; el contrato de
+`slots`, `book`, `confirm` y `status` no cambia (solo añaden `cancelled` como error posible). Se puede
+desplegar primero el backend (la página actual lo ignora) y después publicar la web. Sin permisos
+nuevos; propiedades nuevas opcionales. Cada confirmación envía ahora un segundo correo (cuenta en la
+cuota diaria de MailApp).
+
 ## Primera reserva real de prueba
 
 1. Antes de publicar, abre en el navegador `<URL /exec>?action=slots&duration=60`: debe devolver
@@ -198,7 +253,12 @@ pendientes sin modalidad se tratan como virtuales.
 6. Repite con otra duración y deja caducar una reserva sin confirmar: tras `HOLD_MINUTES` el evento
    provisional desaparece y el horario vuelve a ofrecerse.
 7. Comprueba la consola del navegador en `/agenda/`: no debe haber errores CORS.
-8. Borra los eventos de prueba (borrarlos manda una cancelación al invitado, que eres tú).
+8. Abre el enlace de gestión del segundo correo: muestra fecha, duración y modalidad. Pulsa
+   *Cambiar horario*, elige otro y confirma: el mismo evento se mueve, llega la invitación actualizada y
+   el Meet es el mismo; el horario antiguo vuelve a ofrecerse. Después pulsa *Cancelar encuentro* →
+   *Sí, cancelar*: el evento desaparece, llega la cancelación de Google y el horario se libera. Con
+   `NOTIFY_EMAIL`, comprueba los dos avisos.
+9. Borra los eventos de prueba que queden (borrarlos manda una cancelación al invitado, que eres tú).
 
 ## Pruebas locales
 
@@ -219,3 +279,5 @@ python3 tools/build_site.py --out "$TMPDIR/site"
   (paso 7 de la prueba). Si el navegador bloquease la respuesta, no hay alternativa segura sin otro
   servidor; no se ha implementado JSONP porque expondría el POST.
 - `LockService` y `CacheService` reales bajo carga.
+- `Events.remove` con `sendUpdates: 'all'` (correo de cancelación real) y `Events.patch` de `start`/`end`
+  con `sendUpdates: 'all'` (invitación actualizada, Meet conservado) en la cuenta real.

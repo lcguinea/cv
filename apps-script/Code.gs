@@ -10,6 +10,10 @@
  *   2. op "confirm": whoever opens that link proves they read that mailbox. Only then is the visitor added as an
  *      attendee, the invitation sent and, for virtual meetings, the Google Meet conference requested. In-person
  *      meetings get no conference: the place is agreed afterwards. Unconfirmed holds expire.
+ *   3. After confirming, the verified address receives a second private link (#manage=...) to see, cancel or
+ *      reschedule the meeting (ops "manage", "cancel", "reschedule"; POST only, cancelling needs confirm:true).
+ *      Changes are allowed until CHANGE_NOTICE_HOURS before the start. A reschedule moves the same event, so the
+ *      invitation and the Meet link stay; the original time is kept until the new one is checked inside the lock.
  *
  * Every setting lives in Script Properties; nothing secret is stored in the repository. See apps-script/README.md.
  * Plain ES5-style JavaScript with no modules so the same file runs in Apps Script and in the Node tests
@@ -31,6 +35,8 @@ var TOKEN_RE = /^([0-9a-f]{32})\.([0-9a-f]{64})$/;
 var MEET_RE = /^https:\/\/meet\.google\.com\/[a-z0-9-]+$/i;
 var BOOK_FIELDS = ['op', 'requestId', 'name', 'email', 'start', 'duration', 'modality', 'reason', 'notes', 'website', 'lang'];
 var TOKEN_FIELDS = ['op', 'token'];
+// Booking management (link sent after confirmation). Exact field lists: anything else is rejected.
+var MANAGE_FIELDS = { manage: ['op', 'token'], cancel: ['op', 'token', 'confirm'], reschedule: ['op', 'token', 'start'] };
 var CACHE_VALUE_MAX = 90 * 1024; // CacheService rejects values over 100 KB; keep a margin.
 var RECORD_PREFIX = 'bk:';
 var DEFAULTS = {
@@ -42,7 +48,9 @@ var DEFAULTS = {
   HOLD_MINUTES: 30,
   MAX_PENDING_HOLDS: 10,
   RATE_PER_EMAIL_HOUR: 3,
-  RATE_GLOBAL_HOUR: 20
+  RATE_GLOBAL_HOUR: 20,
+  CHANGE_NOTICE_HOURS: 12,
+  MAX_RESCHEDULES: 3
 };
 
 // ---------- configuration ----------
@@ -62,6 +70,8 @@ function loadConfig_() {
   if (busy.indexOf(booking) === -1) busy.push(booking); // our own bookings and holds always block time
   var confirmUrl = p.getProperty('CONFIRM_URL') || DEFAULTS.CONFIRM_URL;
   if (!/^https:\/\/[^\s#?]+$/.test(confirmUrl)) throw new Error('not_configured');
+  // Optional: where Luis is told about cancellations and reschedules (the organizer gets no Calendar email for them).
+  var notify = (p.getProperty('NOTIFY_EMAIL') || '').trim();
   return {
     availabilityCalendarId: availability,
     bookingCalendarId: booking,
@@ -74,7 +84,10 @@ function loadConfig_() {
     holdMs: Math.max(5, num('HOLD_MINUTES')) * 60000,
     maxPendingHolds: num('MAX_PENDING_HOLDS'),
     ratePerEmail: num('RATE_PER_EMAIL_HOUR'),
-    rateGlobal: num('RATE_GLOBAL_HOUR')
+    rateGlobal: num('RATE_GLOBAL_HOUR'),
+    changeNoticeMs: num('CHANGE_NOTICE_HOURS') * 3600000,
+    maxReschedules: num('MAX_RESCHEDULES'),
+    notifyEmail: EMAIL_RE.test(notify) && !CONTROL_RE.test(notify) ? notify : ''
   };
 }
 
@@ -141,9 +154,8 @@ function validateBooking_(raw) {
   if (local.length > 64 || local.indexOf('..') !== -1 || local.charAt(0) === '.' || local.charAt(local.length - 1) === '.') return { ok: false, error: 'invalid_email' };
   var duration = raw.duration;
   if (typeof duration !== 'number' || DURATIONS.indexOf(duration) === -1) return { ok: false, error: 'invalid_duration' };
-  if (typeof raw.start !== 'string' || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:00(?:\.000)?Z$/.test(raw.start)) return { ok: false, error: 'invalid_start' };
-  var startMs = Date.parse(raw.start);
-  if (!isFinite(startMs) || startMs % (STEP_MINUTES * 60000) !== 0) return { ok: false, error: 'invalid_start' };
+  var startMs = parseStart_(raw.start);
+  if (startMs === null) return { ok: false, error: 'invalid_start' };
   if (typeof raw.modality !== 'string' || MODALITIES.indexOf(raw.modality) === -1) return { ok: false, error: 'invalid_modality' };
   var reason = raw.reason === undefined ? '' : cleanText_(raw.reason, REASON_MAX, false);
   if (reason === null) return { ok: false, error: 'invalid_reason' };
@@ -154,9 +166,16 @@ function validateBooking_(raw) {
     modality: raw.modality, reason: reason, notes: notes, lang: lang } };
 }
 
-/** {op:"confirm"|"status", token:"<32 hex id>.<64 hex secret>"} */
-function validateToken_(raw) {
-  if (!raw || typeof raw !== 'object' || Array.isArray(raw) || !onlyFields_(raw, TOKEN_FIELDS)) return null;
+/** UTC instant on the 30-minute grid ("2026-11-02T09:00:00.000Z"), as epoch ms, or null. */
+function parseStart_(value) {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:00(?:\.000)?Z$/.test(value)) return null;
+  var ms = Date.parse(value);
+  return isFinite(ms) && ms % (STEP_MINUTES * 60000) === 0 ? ms : null;
+}
+
+/** {op:"confirm"|"status", token:"<32 hex id>.<64 hex secret>"}; management ops pass their own field list. */
+function validateToken_(raw, fields) {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw) || !onlyFields_(raw, fields || TOKEN_FIELDS)) return null;
   var m = typeof raw.token === 'string' ? TOKEN_RE.exec(raw.token) : null;
   return m ? { op: raw.op, id: m[1], secret: m[2] } : null;
 }
@@ -281,9 +300,12 @@ function putRecord_(rec) { PropertiesService.getScriptProperties().setProperty(R
 function deleteRecord_(id) { PropertiesService.getScriptProperties().deleteProperty(RECORD_PREFIX + id); }
 
 /** Removes a hold from the calendar. True when the event is gone (removed now or already). */
-function releaseHold_(cfg, rec) {
+function releaseHold_(cfg, rec) { return removeEvent_(cfg, rec, 'none'); }
+
+/** Deletes the booking's event; `updates` is 'none' for holds (no attendees) and 'all' for a guest's cancellation. */
+function removeEvent_(cfg, rec, updates) {
   try {
-    Calendar.Events.remove(cfg.bookingCalendarId, rec.eventId, { sendUpdates: 'none' });
+    Calendar.Events.remove(cfg.bookingCalendarId, rec.eventId, { sendUpdates: updates });
     return true;
   } catch (e) {
     var ev = getEventOrNull_(cfg, rec.eventId);
@@ -380,6 +402,16 @@ function doPost(e) {
     var raw;
     try { raw = JSON.parse(contents); } catch (parseErr) { return json_({ ok: false, error: 'invalid_request' }); }
     var op = raw && typeof raw === 'object' ? raw.op : undefined;
+    if (typeof op === 'string' && Object.prototype.hasOwnProperty.call(MANAGE_FIELDS, op)) {
+      var mtok = validateToken_(raw, MANAGE_FIELDS[op]);
+      if (!mtok) return json_({ ok: false, error: 'invalid_token' });
+      if (op === 'cancel' && raw.confirm !== true) return json_({ ok: false, error: 'confirmation_required' });
+      var newStart = op === 'reschedule' ? parseStart_(raw.start) : null;
+      if (op === 'reschedule' && newStart === null) return json_({ ok: false, error: 'invalid_start' });
+      var mcfg = loadConfig_();
+      if (op === 'manage') return json_(manageView_(mcfg, mtok));
+      return json_(op === 'cancel' ? cancelBooking_(mcfg, mtok) : rescheduleBooking_(mcfg, mtok, newStart));
+    }
     if (op === 'confirm' || op === 'status') {
       var tok = validateToken_(raw);
       if (!tok) return json_({ ok: false, error: 'invalid_token' });
@@ -548,9 +580,19 @@ function checkToken_(tok) {
   return rec;
 }
 
-function confirmedResponse_(rec) {
+/**
+ * manageEmail tells the page whether the management link really went out, so it never claims an email that was not
+ * sent: "sent", "failed" (not sent yet; opening the confirmation link again retries while changes are allowed) or
+ * "too_late" (CHANGE_NOTICE_HOURS has started, so no link is issued). Never the link or its token.
+ */
+function manageEmailState_(cfg, rec) {
+  if (rec.manageMailed) return 'sent';
+  return Date.now() >= changeDeadline_(cfg, rec) ? 'too_late' : 'failed';
+}
+
+function confirmedResponse_(cfg, rec) {
   return { ok: true, status: 'confirmed', emailVerified: true, start: new Date(rec.startMs).toISOString(), end: new Date(rec.endMs).toISOString(),
-    modality: rec.modality, reason: rec.reason, meet: rec.meet };
+    modality: rec.modality, reason: rec.reason, meet: rec.meet, manageEmail: manageEmailState_(cfg, rec) };
 }
 
 function confirmBooking_(cfg, tok) {
@@ -558,7 +600,12 @@ function confirmBooking_(cfg, tok) {
     var now = Date.now();
     var rec = checkToken_(tok);
     if (!rec) return { ok: false, error: 'invalid_token' };
-    if (rec.state === 'confirmed') return confirmedResponse_(refreshMeet_(cfg, rec)); // repeated click or retry
+    if (rec.state === 'cancelled') return { ok: false, error: 'cancelled' };
+    if (rec.state === 'confirmed') {
+      // Repeated click or retry; it also re-sends the management link if that email never left.
+      sendManageLink_(cfg, rec);
+      return confirmedResponse_(cfg, refreshMeet_(cfg, rec));
+    }
     if (now >= rec.expiresMs) {
       if (releaseHold_(cfg, rec)) deleteRecord_(rec.id);
       invalidateSlots_();
@@ -585,7 +632,8 @@ function confirmBooking_(cfg, tok) {
     rec.meet = virtual ? meetState_(updated) : { status: 'none' };
     rec.purgeMs = rec.endMs + 86400000;
     putRecord_(rec);
-    return confirmedResponse_(rec);
+    sendManageLink_(cfg, rec);
+    return confirmedResponse_(cfg, rec);
   });
 }
 
@@ -600,8 +648,160 @@ function refreshMeet_(cfg, rec) {
 function bookingStatus_(cfg, tok) {
   var rec = checkToken_(tok);
   if (!rec) return { ok: false, error: 'invalid_token' };
+  if (rec.state === 'cancelled') return { ok: false, error: 'cancelled' };
   if (rec.state !== 'confirmed') return Date.now() >= rec.expiresMs ? { ok: false, error: 'expired' } : pendingResponse_(rec);
-  return confirmedResponse_(refreshMeet_(cfg, rec));
+  return confirmedResponse_(cfg, refreshMeet_(cfg, rec));
+}
+
+// ---------- step 3: the guest manages a confirmed booking ----------
+
+/**
+ * Sends the private management link to the address that just proved it is theirs. The secret is random (256 bits),
+ * tied to this booking id, stored only as a hash and domain-separated from the confirmation secret, so neither link
+ * works as the other. It is only ever emailed: never returned by the API, written to the event or logged.
+ */
+function sendManageLink_(cfg, rec) {
+  if (rec.state !== 'confirmed' || rec.manageMailed) return;
+  // Only while changes are allowed: an old confirmation link reopened later (legacy booking, or a management
+  // email that failed) must not hand out management access once CHANGE_NOTICE_HOURS has started.
+  if (Date.now() >= changeDeadline_(cfg, rec)) return;
+  try { if (MailApp.getRemainingDailyQuota() < 1) return; } catch (e) { return; }
+  var secret = randomHex_(64);
+  rec.manageHash = sha256Hex_('manage:' + secret);
+  putRecord_(rec); // stored before sending: a link that leaves is always valid
+  var link = cfg.confirmUrl + '#manage=' + rec.id + '.' + secret;
+  var when = localParts_(rec.startMs, cfg.timeZone);
+  var minutes = (rec.endMs - rec.startMs) / 60000;
+  var hours = Math.round(cfg.changeNoticeMs / 3600000);
+  var es = rec.lang === 'es';
+  var inPerson = rec.modality === 'in_person';
+  var kind = es ? (inPerson ? 'encuentro presencial' : 'encuentro virtual (Google Meet)') : (inPerson ? 'in-person meeting' : 'virtual meeting (Google Meet)');
+  var body = es
+    ? 'Tu ' + kind + ' de ' + minutes + ' minutos con Luis Guinea está confirmado para el ' + when.day + ' a las ' + when.time +
+      ' (hora de Madrid). La invitación de Google Calendar te llega por separado.\n\nSi necesitas cancelarlo o cambiarlo de horario, usa este enlace privado (no lo compartas):\n' +
+      link + '\n\nPuedes hacerlo hasta ' + hours + ' horas antes del encuentro. Después, escríbeme por correo.'
+    : 'Your ' + kind + ' of ' + minutes + ' minutes with Luis Guinea is confirmed for ' + when.day + ' at ' + when.time +
+      ' (Madrid time). The Google Calendar invitation arrives separately.\n\nIf you need to cancel it or move it to another time, use this private link (do not share it):\n' +
+      link + '\n\nYou can do so up to ' + hours + ' hours before the meeting. After that, write to me by email.';
+  try {
+    MailApp.sendEmail({ to: rec.email, subject: es ? 'Tu reserva con Luis Guinea' : 'Your booking with Luis Guinea', body: body, name: 'Luis Guinea' });
+  } catch (err) {
+    return; // the booking stays confirmed; opening the confirmation link again retries this email
+  }
+  rec.manageMailed = true;
+  putRecord_(rec);
+}
+
+function checkManageToken_(tok) {
+  var rec = getRecord_(tok.id);
+  if (!rec || !rec.manageHash || sha256Hex_('manage:' + tok.secret) !== rec.manageHash) return null;
+  return rec;
+}
+
+function changeDeadline_(cfg, rec) { return rec.startMs - cfg.changeNoticeMs; }
+
+/** What the management page shows. Never contains the token, the email address or the guest's notes. */
+function manageResponse_(cfg, rec, nowMs) {
+  var confirmed = rec.state === 'confirmed';
+  var deadline = changeDeadline_(cfg, rec);
+  return { ok: true, status: rec.state, start: new Date(rec.startMs).toISOString(), end: new Date(rec.endMs).toISOString(),
+    duration: (rec.endMs - rec.startMs) / 60000, modality: rec.modality === 'in_person' ? 'in_person' : 'virtual',
+    reason: rec.reason || '', meet: confirmed ? rec.meet || { status: 'pending' } : { status: 'none' },
+    changeUntil: new Date(deadline).toISOString(), canChange: confirmed && nowMs < deadline,
+    reschedulesLeft: Math.max(0, cfg.maxReschedules - (rec.reschedules || 0)) };
+}
+
+/** Read-only view of the booking behind a management link. */
+function manageView_(cfg, tok) {
+  var rec = checkManageToken_(tok);
+  if (!rec || (rec.state !== 'confirmed' && rec.state !== 'cancelled')) return { ok: false, error: 'invalid_token' };
+  if (rec.state === 'confirmed') rec = refreshMeet_(cfg, rec);
+  return manageResponse_(cfg, rec, Date.now());
+}
+
+/** Cancels on explicit request: deletes the event (Google notifies the guest) and frees the time at once. */
+function cancelBooking_(cfg, tok) {
+  return withLock_(function () {
+    var now = Date.now();
+    var rec = checkManageToken_(tok);
+    if (!rec) return { ok: false, error: 'invalid_token' };
+    if (rec.state === 'cancelled') return manageResponse_(cfg, rec, now); // retry after a lost response
+    if (rec.state !== 'confirmed') return { ok: false, error: 'invalid_token' };
+    if (now >= changeDeadline_(cfg, rec)) return { ok: false, error: 'too_late' };
+    if (!removeEvent_(cfg, rec, 'all')) return { ok: false, error: 'unavailable' };
+    rec.state = 'cancelled';
+    rec.cancelledMs = now;
+    putRecord_(rec);
+    invalidateSlots_(); // the freed time is offered again right away
+    notifyOwner_(cfg, rec, null);
+    return manageResponse_(cfg, rec, now);
+  });
+}
+
+/**
+ * Moves the booking to another free start with the same duration. The new time is re-checked inside the lock
+ * against fresh calendar data while the original event still blocks its own time; only then is that same event
+ * moved (one patch: Google updates the invitation, the Meet link stays). If anything fails, nothing has changed.
+ */
+function rescheduleBooking_(cfg, tok, startMs) {
+  return withLock_(function () {
+    var now = Date.now();
+    var rec = checkManageToken_(tok);
+    if (!rec) return { ok: false, error: 'invalid_token' };
+    if (rec.state === 'cancelled') return { ok: false, error: 'cancelled' };
+    if (rec.state !== 'confirmed') return { ok: false, error: 'invalid_token' };
+    if (startMs === rec.startMs) return manageResponse_(cfg, rec, now); // retry of a move that already happened
+    if (now >= changeDeadline_(cfg, rec)) return { ok: false, error: 'too_late' };
+    if ((rec.reschedules || 0) >= cfg.maxReschedules) return { ok: false, error: 'reschedule_limit' };
+    var durationMin = (rec.endMs - rec.startMs) / 60000;
+    var fresh = slotsFor_(cfg, durationMin, now);
+    if (!fresh.some(function (s) { return s.start === startMs; })) return { ok: false, error: 'slot_unavailable' };
+    var endMs = startMs + durationMin * 60000;
+    try {
+      Calendar.Events.patch({
+        start: { dateTime: new Date(startMs).toISOString(), timeZone: cfg.timeZone },
+        end: { dateTime: new Date(endMs).toISOString(), timeZone: cfg.timeZone }
+      }, cfg.bookingCalendarId, rec.eventId, { sendUpdates: 'all' });
+    } catch (err) {
+      // A lost response: the event may already be at the new time. Anything else leaves the booking as it was.
+      var ev = getEventOrNull_(cfg, rec.eventId);
+      if (!ev || ev.status === 'cancelled') {
+        rec.state = 'cancelled';
+        putRecord_(rec);
+        return { ok: false, error: 'cancelled' };
+      }
+      if (!ev.start || Date.parse(ev.start.dateTime) !== startMs) throw err;
+    }
+    var oldStart = rec.startMs;
+    rec.startMs = startMs;
+    rec.endMs = endMs;
+    rec.purgeMs = endMs + 86400000;
+    rec.reschedules = (rec.reschedules || 0) + 1;
+    putRecord_(rec);
+    invalidateSlots_(); // the old time is free again and the new one is taken
+    notifyOwner_(cfg, rec, oldStart);
+    return manageResponse_(cfg, rec, now);
+  });
+}
+
+/** Optional email to Luis (NOTIFY_EMAIL) after a cancellation or reschedule. Best effort; never the link. */
+function notifyOwner_(cfg, rec, oldStartMs) {
+  if (!cfg.notifyEmail) return;
+  var now = localParts_(rec.startMs, cfg.timeZone);
+  var tx = meetingText_({ lang: 'es' });
+  var what = rec.modality === 'in_person' ? tx.inPersonDetail : tx.virtualDetail;
+  var subject, body;
+  if (oldStartMs === null) {
+    subject = 'Reserva cancelada: ' + rec.name;
+    body = rec.name + ' <' + rec.email + '> ha cancelado el encuentro (' + what + ') del ' + now.day + ' a las ' + now.time +
+      ' (hora de Madrid). El horario vuelve a estar disponible.';
+  } else {
+    var before = localParts_(oldStartMs, cfg.timeZone);
+    subject = 'Reserva reprogramada: ' + rec.name;
+    body = rec.name + ' <' + rec.email + '> ha movido el encuentro (' + what + ') del ' + before.day + ' a las ' + before.time +
+      ' al ' + now.day + ' a las ' + now.time + ' (hora de Madrid). El evento de Google Calendar ya está actualizado.';
+  }
+  try { MailApp.sendEmail({ to: cfg.notifyEmail, subject: subject, body: body, name: 'Agenda luisguinea.com' }); } catch (e) { /* best effort */ }
 }
 
 /**

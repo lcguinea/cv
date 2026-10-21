@@ -4,7 +4,7 @@
 The Apps Script runs in Node's vm with Google services replaced by mocks (tests/support/reservas_scenarios.js):
 availability, 30/60/120/180 minute durations, Europe/Madrid and daylight saving, notice and horizon limits,
 buffers, conflicts without leaking private details, email verification before any invitation, virtual (Google
-Meet) and in-person (no conference, place to be agreed) meetings, duplicates,
+Meet) and in-person (no conference, place to be agreed) meetings, guest-managed cancellation and rescheduling through a private link, duplicates,
 simultaneous requests, idempotent retries, rate limits, CacheService limits, Google Meet states and strict
 validation. Static checks cover the page, the integration rules and that no secret or iframe is shipped.
 
@@ -42,7 +42,7 @@ class AppsScriptLogicTests(unittest.TestCase):
         cls.results = json.loads(run.stdout)
 
     def test_every_scenario_passes(self):
-        self.assertGreaterEqual(len(self.results), 47)
+        self.assertGreaterEqual(len(self.results), 63)
         for name, outcome in self.results.items():
             with self.subTest(scenario=name):
                 self.assertEqual(outcome, "ok")
@@ -57,7 +57,15 @@ class AppsScriptLogicTests(unittest.TestCase):
                      "meet_link_is_only_reported_once_it_exists", "meet_failure",
                      "virtual_booking_keeps_meet_and_carries_modality_and_reason",
                      "in_person_booking_sends_invitation_without_any_conference", "in_person_in_spanish_says_the_place_is_pending",
-                     "in_person_and_virtual_share_availability_holds_and_expiry"):
+                     "in_person_and_virtual_share_availability_holds_and_expiry",
+                     "management_link_is_emailed_once_after_confirmation_and_never_exposed",
+                     "management_tokens_are_scoped_unguessable_and_strict", "cancel_deletes_the_event_notifies_the_guest_and_frees_the_time",
+                     "configurable_notice_policy", "reschedule_moves_the_same_event_keeps_meet",
+                     "reschedule_keeps_the_original_until_the_new_time_is_validated", "retries_are_idempotent",
+                     "simultaneous_management_requests_are_serialised", "existing_bookings_stay_compatible",
+                     "change_policy_is_enforced_by_the_backend_whatever_the_token",
+                     "old_confirmation_links_never_grant_management_outside_the_policy",
+                     "confirmation_reports_whether_the_management_email_really_went_out"):
             self.assertIn(area, names)
 
 
@@ -103,6 +111,39 @@ class IntegrationTests(unittest.TestCase):
         # The agenda's display rules (e.g. links as inline-flex) must not reveal a hidden Meet link.
         self.assertIn(".agenda-app [hidden]{display:none!important}", read("css/styles.css"))
 
+    def test_page_shares_the_site_navigation_and_the_global_player(self):
+        html = read("agenda/index.html")
+        # Same header and footer links as /music/ (one level down), written in the HTML.
+        music = read("music/index.html")
+        nav = lambda page: re.findall(r'<a href="([^"]+)"[^>]*data-i18n="nav\.\w+"', re.search(r"<header.*?</header>", page, re.S).group(0))
+        self.assertEqual(nav(html), [{"./": "../music/", "../agenda/": "./"}.get(h, h) for h in nav(music)])
+        # The one global player: its bar, the skip link and the shared engine, loaded once and before the agenda.
+        self.assertEqual(html.count('id="mini-player"'), 1)
+        # Booking is a form: sound only starts from the player here (js/player.js), never from a first click.
+        self.assertEqual(html.count('<body data-player-autostart="off">'), 1)
+        self.assertIn('<a class="skip-link skip-player" href="#mini-player" data-i18n="ui.skipPlayer">Skip to music player</a>', html)
+        scripts = re.findall(r'<script src="\.\./js/([^"]+)"', html)
+        self.assertEqual(scripts, ["theme-init.js", "strings.js", "i18n.js", "site.js", "music-data.js", "player.js", "agenda.js"])
+        self.assertNotRegex(html, r"<audio\b|\bautoplay\b")
+        self.assertNotIn("LGPlayer", read("js/agenda.js"))  # the agenda never drives or duplicates the player
+
+    def test_management_link_is_handled_safely_in_the_page(self):
+        js = read("js/agenda.js")
+        self.assertIn("var MANAGE_RE = /^#manage=([0-9a-f]{32}\\.[0-9a-f]{64})$/;", js)
+        # The token leaves the address bar before any request and is kept only in memory.
+        body = js[js.index("function manageFromLink"):]
+        self.assertLess(body.index("forgetFragment()"), body.index("post("))
+        self.assertEqual(js.count("sessionStorage.setItem"), 1)  # only the booking request id
+        self.assertNotIn("localStorage", js)
+        # Cancelling is a POST with an explicit confirmation, after a second, deliberate click.
+        self.assertIn("manageOp({ op: 'cancel', confirm: true }", js)
+        self.assertIn("$('agenda-cancel-yes').addEventListener('click'", js)
+        self.assertIn('id="agenda-cancel-confirm"', read("agenda/index.html"))
+        # The page only says the management email was sent when the backend reports manageEmail "sent".
+        self.assertIn("var MANAGE_NOTES = { sent: 'agenda.manageNote', failed: 'agenda.manageNoteFailed', too_late: 'agenda.manageNoteClosed' };", js)
+        self.assertNotIn('data-i18n="agenda.manageNote"', read("agenda/index.html"))
+        self.assertIn('<p id="agenda-manage-note" class="agenda-small" hidden></p>', read("agenda/index.html"))
+
     def test_backend_rules(self):
         gs = read("apps-script/Code.gs")
         self.assertIn("LockService.getScriptLock()", gs)
@@ -110,9 +151,25 @@ class IntegrationTests(unittest.TestCase):
             body = gs[gs.index(fn):]
             self.assertTrue(body.split("\n", 1)[1].lstrip().startswith("return withLock_("), fn)
         self.assertLess(gs.index("function requestBooking_"), gs.index("slotsFor_(cfg, req.durationMin"))
-        # Invitations: one place only, after the token check; the hold sends nothing and has no attendees.
-        self.assertEqual(gs.count("sendUpdates: 'all'"), 1)
+        # Guest notifications only after a token check: the invitation on confirmation and the updated invitation on
+        # a reschedule (management link); a cancellation passes 'all' to removeEvent_. The hold sends nothing.
+        self.assertEqual(gs.count("sendUpdates: 'all'"), 2)
         self.assertGreater(gs.index("sendUpdates: 'all'"), gs.index("function confirmBooking_"))
+        self.assertGreater(gs.rindex("sendUpdates: 'all'"), gs.index("function rescheduleBooking_"))
+        self.assertEqual(gs.count("removeEvent_(cfg, rec, 'all')"), 1)
+        self.assertGreater(gs.index("removeEvent_(cfg, rec, 'all')"), gs.index("function cancelBooking_"))
+        for fn in ("function cancelBooking_", "function rescheduleBooking_"):
+            body = gs[gs.index(fn):]
+            self.assertTrue(body.split("\n", 1)[1].lstrip().startswith("return withLock_("), fn)
+            self.assertLess(body.index("checkManageToken_(tok)"), body.index("Calendar.Events"), fn)
+        # Management: POST only, exact fields, explicit confirmation to cancel, hashed and domain-separated secret.
+        self.assertIn("var MANAGE_FIELDS = { manage: ['op', 'token'], cancel: ['op', 'token', 'confirm'], reschedule: ['op', 'token', 'start'] };", gs)
+        self.assertIn("Object.prototype.hasOwnProperty.call(MANAGE_FIELDS, op)", gs)
+        self.assertIn("raw.confirm !== true", gs)
+        self.assertIn("sha256Hex_('manage:' + secret)", gs)
+        self.assertIn("CHANGE_NOTICE_HOURS: 12", gs)
+        get = gs[gs.index("function doGet"):gs.index("function doPost")]
+        self.assertNotRegex(get, r"cancel|reschedule|manage|remove|patch")
         hold = gs[gs.index("function insertHold_"):gs.index("function sendConfirmation_")]
         self.assertNotIn("attendees", hold)
         self.assertIn("sendUpdates: 'none'", hold)

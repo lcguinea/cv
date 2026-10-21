@@ -22,9 +22,9 @@ function makeEnv(opts = {}) {
       BUSY_CALENDAR_IDS: 'work@example.com,personal@example.com', BUFFER_MINUTES: '0', MIN_NOTICE_HOURS: '24', MAX_DAYS_AHEAD: '60' }, opts.props),
     availability: opts.availability || [],
     calendars: { 'owner@example.com': [], 'work@example.com': [], 'personal@example.com': [] },
-    calendarLookups: [], freebusyCalls: 0, inserts: [], patches: [], removes: [], mails: [], invitations: [],
+    calendarLookups: [], freebusyCalls: 0, inserts: [], patches: [], removes: [], mails: [], invitations: [], cancellations: [],
     lockHeld: false, lockCalls: 0, cache: {}, onInsert: null, busyError: null, insertError: null, patchError: null,
-    loseInsertResponse: false, mailError: null, mailQuota: 100, meetMode: 'ready', cachePutError: null, logs: [],
+    loseInsertResponse: false, losePatchResponse: false, loseRemoveResponse: false, removeError: null, onPatch: null, mailError: null, mailQuota: 100, meetMode: 'ready', cachePutError: null, logs: [],
   };
   const cacheApi = {
     get: k => (k in env.cache ? env.cache[k] : null),
@@ -46,6 +46,8 @@ function makeEnv(opts = {}) {
   };
   const FakeDate = class extends Date { static now() { return env.now; } };
   const findEvent = (calId, id) => (env.calendars[calId] || []).find(e => e.id === id);
+  // What the real API returns: start and end as {dateTime}. Internally the mock keeps epoch ms for free/busy.
+  const apiShape = ev => Object.assign(clone(ev), { start: { dateTime: new Date(ev.start).toISOString() }, end: { dateTime: new Date(ev.end).toISOString() } });
   const applyMeet = ev => {
     if (env.meetMode === 'ready') { ev.hangoutLink = 'https://meet.google.com/abc-defg-hij'; ev.conferenceData.createRequest.status = { statusCode: 'success' }; }
     else ev.conferenceData.createRequest.status = { statusCode: env.meetMode === 'failure' ? 'failure' : 'pending' };
@@ -115,9 +117,9 @@ function makeEnv(opts = {}) {
           noteInvitation(ev, args);
           if (env.onInsert) env.onInsert();
           if (env.loseInsertResponse) { env.loseInsertResponse = false; throw new Error('Timeout: response lost'); }
-          return clone(ev);
+          return apiShape(ev);
         },
-        get: (calId, id) => { const ev = findEvent(calId, id); if (!ev) throw new Error('Not Found'); return clone(ev); },
+        get: (calId, id) => { const ev = findEvent(calId, id); if (!ev) throw new Error('Not Found'); return apiShape(ev); },
         patch: (resource, calId, id, args) => {
           if (env.patchError) throw new Error(env.patchError);
           const ev = findEvent(calId, id);
@@ -125,13 +127,26 @@ function makeEnv(opts = {}) {
           env.patches.push(clone({ resource, calId, id, args }));
           const sameConference = ev.conferenceData && resource.conferenceData &&
             ev.conferenceData.createRequest.requestId === resource.conferenceData.createRequest.requestId;
-          if (!sameConference) Object.assign(ev, clone(resource));
-          else Object.assign(ev, clone(Object.assign({}, resource, { conferenceData: undefined })));
+          const changes = clone(resource);
+          if (changes.start) changes.start = Date.parse(changes.start.dateTime);
+          if (changes.end) changes.end = Date.parse(changes.end.dateTime);
+          if (!sameConference) Object.assign(ev, changes);
+          else Object.assign(ev, Object.assign(changes, { conferenceData: ev.conferenceData }));
           if (resource.conferenceData && !sameConference) applyMeet(ev);
           noteInvitation(ev, args);
-          return clone(ev);
+          if (env.onPatch) env.onPatch();
+          if (env.losePatchResponse) { env.losePatchResponse = false; throw new Error('Timeout: response lost'); }
+          return apiShape(ev);
         },
-        remove: (calId, id) => { const ev = findEvent(calId, id); if (!ev || ev.status === 'cancelled') throw new Error('Resource has been deleted'); ev.status = 'cancelled'; env.removes.push(id); },
+        remove: (calId, id, args) => {
+          if (env.removeError) throw new Error(env.removeError);
+          const ev = findEvent(calId, id);
+          if (!ev || ev.status === 'cancelled') throw new Error('Resource has been deleted');
+          ev.status = 'cancelled'; env.removes.push(id);
+          // Like Calendar: deleting with sendUpdates 'all' emails a cancellation to every attendee.
+          if (args && args.sendUpdates === 'all' && (ev.attendees || []).length) env.cancellations.push(ev.attendees.map(a => a.email));
+          if (env.loseRemoveResponse) { env.loseRemoveResponse = false; throw new Error('Timeout: response lost'); }
+        },
       },
     },
   };
@@ -142,7 +157,16 @@ function makeEnv(opts = {}) {
   env.rawGet = (params) => vm.runInContext('doGet', ctx)({ parameter: params }).text;
   env.fn = name => vm.runInContext(name, ctx);
   env.book = over => env.post(goodBooking(over));
-  env.token = (i = env.mails.length - 1) => /#confirm=([0-9a-f]{32}\.[0-9a-f]{64})\n/.exec(env.mails[i].body)[1];
+  // Confirmation link of mail i, or of the latest mail that has one (after confirming, a management email follows).
+  env.token = i => {
+    const mails = i === undefined ? env.mails.filter(m => m.body.includes('#confirm=')) : [env.mails[i]];
+    return /#confirm=([0-9a-f]{32}\.[0-9a-f]{64})\n/.exec(mails[mails.length - 1].body)[1];
+  };
+  env.manageToken = () => {
+    const mails = env.mails.filter(m => m.body.includes('#manage='));
+    return /#manage=([0-9a-f]{32}\.[0-9a-f]{64})\n/.exec(mails[mails.length - 1].body)[1];
+  };
+  env.manage = (op, extra, token) => env.post(Object.assign({ op, token: token !== undefined ? token : env.manageToken() }, extra));
   env.confirm = token => env.post({ op: 'confirm', token: token || env.token() });
   env.status = token => env.post({ op: 'status', token: token || env.token() });
   env.bookAndConfirm = over => { const b = env.book(over); assert.strictEqual(b.ok, true, JSON.stringify(b)); return env.confirm(); };
@@ -380,7 +404,8 @@ const scenarios = {
     assert.deepStrictEqual(env.confirm(), c);
     assert.deepStrictEqual(env.status().meet, { status: 'none' });
     assert.strictEqual(env.post(body).status, 'confirmed');
-    assert.deepStrictEqual([env.inserts.length, env.patches.length, env.mails.length, env.invitations.length], [1, 1, 1, 1]);
+    // Mails: the confirmation link, then one management link after confirming.
+    assert.deepStrictEqual([env.inserts.length, env.patches.length, env.mails.length, env.invitations.length], [1, 1, 2, 1]);
     assert.ok(env.live().every(e => !e.conferenceData && !e.hangoutLink));
   },
   in_person_in_spanish_says_the_place_is_pending() {
@@ -450,7 +475,7 @@ const scenarios = {
     // Retries after confirmation keep answering, still without new events or emails.
     env.confirm();
     assert.deepStrictEqual(env.post(body).status, 'confirmed');
-    assert.deepStrictEqual([env.inserts.length, env.mails.length, env.patches.length], [1, 1, 1]);
+    assert.deepStrictEqual([env.inserts.length, env.mails.length, env.patches.length], [1, 2, 1]); // + the management link
   },
   retry_after_a_lost_calendar_response_reuses_the_event() {
     const env = makeEnv({ availability: MONDAY });
@@ -673,6 +698,387 @@ const scenarios = {
     assert.strictEqual(env.book().error, 'not_configured');
     const bad = makeEnv({ availability: MONDAY, props: { CONFIRM_URL: 'http://luisguinea.com/agenda/' } });
     assert.strictEqual(bad.book().error, 'not_configured');
+  },
+
+  // ----- managing a confirmed booking: private link, cancel, reschedule -----
+  management_link_is_emailed_once_after_confirmation_and_never_exposed() {
+    const env = makeEnv({ availability: MONDAY });
+    env.book();
+    assert.ok(!env.mails[0].body.includes('#manage='), 'no management link before the address is verified');
+    const c = env.confirm();
+    assert.strictEqual(env.mails.length, 2);
+    const mail = env.mails[1];
+    assert.strictEqual(mail.to, 'ana@example.com');
+    assert.ok(mail.body.includes('https://luisguinea.com/agenda/#manage='));
+    assert.ok(mail.body.includes('2026-11-02') && mail.body.includes('10:00') && mail.body.includes('12 hours'));
+    const token = env.manageToken();
+    const secret = token.split('.')[1];
+    // Only emailed: not in any response, in the stored records, in the calendar event or in the logs.
+    const seen = JSON.stringify([c, env.confirm(), env.status(), env.manage('manage'), env.props, env.calendars, env.patches, env.logs]);
+    assert.ok(!seen.includes(secret));
+    assert.strictEqual(env.mails.length, 2, 'confirming again sends no second management email');
+    const view = env.manage('manage');
+    assert.deepStrictEqual([view.ok, view.status, view.start, view.end, view.duration, view.modality, view.canChange, view.reschedulesLeft],
+      [true, 'confirmed', '2026-11-02T09:00:00.000Z', '2026-11-02T10:00:00.000Z', 60, 'virtual', true, 3]);
+    assert.strictEqual(view.changeUntil, '2026-11-01T21:00:00.000Z', '12 hours before the start by default');
+    assert.deepStrictEqual(view.meet, { status: 'ready', link: 'https://meet.google.com/abc-defg-hij' });
+    assert.ok(!/ana@example|Hola/.test(JSON.stringify(view)), 'no email address or notes in the view');
+    assert.deepStrictEqual([env.patches.length, env.removes.length], [1, 0], 'viewing changes nothing');
+  },
+  management_tokens_are_scoped_unguessable_and_strict() {
+    const env = makeEnv({ availability: MONDAY });
+    env.bookAndConfirm();
+    const confirmToken = env.token(), manageToken = env.manageToken();
+    env.bookAndConfirm({ email: 'b@example.com', start: '2026-11-02T11:00:00.000Z' });
+    const other = env.manageToken();
+    assert.notStrictEqual(manageToken.split('.')[1], other.split('.')[1]);
+    const [id, secret] = manageToken.split('.');
+    const bad = [confirmToken, id + '.' + other.split('.')[1], other.split('.')[0] + '.' + secret, id + '.' + 'f'.repeat(64),
+      id + '.' + secret.toUpperCase(), id, '', 7, null];
+    ['manage', 'cancel', 'reschedule'].forEach(op => bad.forEach(token => {
+      const extra = op === 'cancel' ? { confirm: true } : op === 'reschedule' ? { start: '2026-11-02T08:00:00.000Z' } : {};
+      assert.strictEqual(env.manage(op, extra, token).error, 'invalid_token', op + ' ' + String(token).slice(0, 12));
+    }));
+    // A management link cannot confirm or poll a booking.
+    assert.strictEqual(env.confirm(manageToken).error, 'invalid_token');
+    assert.strictEqual(env.status(manageToken).error, 'invalid_token');
+    // Exact fields only; destructive operations need an explicit confirmation and are never reachable by GET.
+    assert.strictEqual(env.manage('manage', { extra: 1 }).error, 'invalid_token');
+    assert.strictEqual(env.manage('cancel', { confirm: true, start: '2026-11-02T08:00:00.000Z' }).error, 'invalid_token');
+    assert.strictEqual(env.manage('cancel').error, 'confirmation_required');
+    [false, 'true', 1, 'yes'].forEach(confirm => assert.strictEqual(env.manage('cancel', { confirm }).error, 'confirmation_required'));
+    ['tomorrow', '2026-11-02T08:15:00.000Z', 3, undefined].forEach(start => assert.strictEqual(env.manage('reschedule', { start }).error, 'invalid_start'));
+    ['__proto__', 'constructor', 'toString', 'hasOwnProperty'].forEach(op => assert.strictEqual(env.post({ op, token: manageToken }).error, 'invalid_request', op));
+    ['cancel', 'reschedule', 'manage'].forEach(action => assert.strictEqual(env.get({ action, token: manageToken, confirm: 'true' }).error, 'invalid_request'));
+    assert.deepStrictEqual([env.removes.length, env.patches.length, env.live().length], [0, 2, 2]);
+  },
+  cancel_deletes_the_event_notifies_the_guest_and_frees_the_time() {
+    const env = makeEnv({ availability: MONDAY, props: { NOTIFY_EMAIL: 'luis@example.com' } });
+    env.bookAndConfirm();
+    assert.ok(!starts(env.get({ action: 'slots', duration: '60' })).includes('09:00'), 'booked time is hidden (and cached)');
+    const r = env.manage('cancel', { confirm: true });
+    assert.deepStrictEqual([r.ok, r.status, r.canChange, r.meet], [true, 'cancelled', false, { status: 'none' }]);
+    assert.deepStrictEqual(env.cancellations, [['ana@example.com']], 'Google emails the cancellation to the guest');
+    assert.strictEqual(env.live().length, 0);
+    assert.ok(starts(env.get({ action: 'slots', duration: '60' })).includes('09:00'), 'the time is offered again at once');
+    const owner = env.mails.filter(m => m.to === 'luis@example.com');
+    assert.strictEqual(owner.length, 1);
+    assert.ok(owner[0].body.includes('cancelado') && owner[0].body.includes('2026-11-02') && !owner[0].body.includes('#manage='));
+    // Retries and later visits see the cancellation; nothing can bring the booking back or move it.
+    assert.deepStrictEqual(env.manage('cancel', { confirm: true }), r);
+    assert.strictEqual(env.manage('manage').status, 'cancelled');
+    assert.strictEqual(env.manage('reschedule', { start: '2026-11-02T11:00:00.000Z' }).error, 'cancelled');
+    assert.strictEqual(env.confirm().error, 'cancelled');
+    assert.strictEqual(env.status().error, 'cancelled');
+    assert.deepStrictEqual([env.removes.length, env.cancellations.length, env.patches.length], [1, 1, 1]);
+    assert.strictEqual(env.book({ email: 'next@example.com' }).ok, true, 'someone else can book the freed time');
+  },
+  cancel_and_reschedule_follow_the_configurable_notice_policy() {
+    const start = Z('2026-11-02T09:00:00Z');
+    const env = makeEnv({ availability: MONDAY });
+    env.bookAndConfirm();
+    env.now = start - 11 * 3600000;
+    const view = env.manage('manage');
+    assert.deepStrictEqual([view.canChange, view.status], [false, 'confirmed']);
+    assert.strictEqual(env.manage('cancel', { confirm: true }).error, 'too_late');
+    assert.strictEqual(env.manage('reschedule', { start: '2026-11-02T11:00:00.000Z' }).error, 'too_late');
+    env.now = start;
+    assert.strictEqual(env.manage('cancel', { confirm: true }).error, 'too_late', 'a meeting that started cannot be cancelled online');
+    assert.deepStrictEqual([env.removes.length, env.patches.length, env.live().length], [0, 1, 1]);
+    env.now = start - 12 * 3600000 - 60000;
+    assert.strictEqual(env.manage('cancel', { confirm: true }).status, 'cancelled');
+    const relaxed = makeEnv({ availability: MONDAY, props: { CHANGE_NOTICE_HOURS: '2' } });
+    relaxed.bookAndConfirm();
+    relaxed.now = start - 11 * 3600000;
+    const v2 = relaxed.manage('manage');
+    assert.deepStrictEqual([v2.canChange, v2.changeUntil], [true, '2026-11-02T07:00:00.000Z']);
+    assert.strictEqual(relaxed.manage('cancel', { confirm: true }).status, 'cancelled');
+    assert.ok(relaxed.mails.some(m => m.body.includes('up to 2 hours before')), 'the email states the configured policy');
+  },
+  reschedule_moves_the_same_event_keeps_meet_and_frees_the_old_time() {
+    const env = makeEnv({ availability: MONDAY, props: { NOTIFY_EMAIL: 'luis@example.com' } });
+    const c = env.bookAndConfirm();
+    const before = env.live()[0];
+    [30, 60].forEach(d => env.get({ action: 'slots', duration: String(d) })); // cached listings
+    const r = env.manage('reschedule', { start: '2026-11-02T11:00:00.000Z' });
+    assert.deepStrictEqual([r.ok, r.status, r.start, r.end, r.duration, r.modality, r.reschedulesLeft],
+      [true, 'confirmed', '2026-11-02T11:00:00.000Z', '2026-11-02T12:00:00.000Z', 60, 'virtual', 2]);
+    assert.deepStrictEqual(r.meet, c.meet, 'the same Meet link');
+    const move = env.patches[env.patches.length - 1];
+    assert.deepStrictEqual(Object.keys(move.resource).sort(), ['end', 'start'], 'only the time changes');
+    assert.deepStrictEqual(move.args, { sendUpdates: 'all' }, 'Google sends the updated invitation');
+    assert.strictEqual(move.resource.start.timeZone, 'Europe/Madrid');
+    const after = env.live();
+    assert.deepStrictEqual([after.length, after[0].id, after[0].hangoutLink, after[0].start], [1, before.id, before.hangoutLink, Z('2026-11-02T11:00:00Z')]);
+    assert.deepStrictEqual(env.invitations, [['ana@example.com'], ['ana@example.com']]);
+    assert.deepStrictEqual([env.inserts.length, env.removes.length], [1, 0]);
+    const listed = starts(env.get({ action: 'slots', duration: '60' }));
+    assert.ok(listed.includes('09:00') && !listed.includes('11:00'), 'old time freed, new time taken, cache refreshed');
+    assert.ok(!starts(env.get({ action: 'slots', duration: '30' })).includes('11:00'));
+    const owner = env.mails.filter(m => m.to === 'luis@example.com');
+    assert.ok(owner.length === 1 && owner[0].body.includes('10:00') && owner[0].body.includes('12:00'));
+    assert.strictEqual(env.manage('manage').start, '2026-11-02T11:00:00.000Z');
+    assert.strictEqual(env.status(env.token()).start, '2026-11-02T11:00:00.000Z', 'the confirmation page shows the new time too');
+  },
+  reschedule_keeps_the_original_until_the_new_time_is_validated() {
+    const env = makeEnv({ availability: MONDAY });
+    env.bookAndConfirm();
+    env.calendars['work@example.com'].push({ start: Z('2026-11-02T11:00:00Z'), end: Z('2026-11-02T12:00:00Z') });
+    const unchanged = () => {
+      const ev = env.live()[0];
+      assert.deepStrictEqual([env.live().length, ev.start, env.patches.length, env.manage('manage').start],
+        [1, Z('2026-11-02T09:00:00Z'), 1, '2026-11-02T09:00:00.000Z']);
+    };
+    ['2026-11-02T11:00:00.000Z', '2026-11-02T13:00:00.000Z', '2026-11-02T09:30:00.000Z', '2026-11-03T09:00:00.000Z'].forEach(start => {
+      assert.strictEqual(env.manage('reschedule', { start }).error, 'slot_unavailable', start);
+      unchanged();
+    });
+    env.patchError = 'Backend Error';
+    assert.strictEqual(env.manage('reschedule', { start: '2026-11-02T10:00:00.000Z' }).error, 'unavailable');
+    unchanged();
+    assert.strictEqual(env.lockHeld, false);
+    env.patchError = null;
+    assert.strictEqual(env.manage('reschedule', { start: '2026-11-02T10:00:00.000Z' }).start, '2026-11-02T10:00:00.000Z');
+    // The new time must respect the booking notice (24 h) like any new booking, even if the change policy allows the move.
+    const late = makeEnv({ availability: [{ start: Z('2026-11-02T08:00:00Z'), end: Z('2026-11-03T12:00:00Z') }] });
+    late.bookAndConfirm({ start: '2026-11-03T09:00:00.000Z' });
+    late.now = Z('2026-11-02T07:00:00Z');
+    assert.strictEqual(late.manage('reschedule', { start: '2026-11-02T10:00:00.000Z' }).error, 'slot_unavailable');
+    assert.strictEqual(late.manage('reschedule', { start: '2026-11-03T10:00:00.000Z' }).start, '2026-11-03T10:00:00.000Z');
+  },
+  reschedule_and_cancel_retries_are_idempotent() {
+    const env = makeEnv({ availability: MONDAY });
+    env.bookAndConfirm();
+    env.losePatchResponse = true; // the event moves but the API call reports a timeout
+    const r = env.manage('reschedule', { start: '2026-11-02T11:00:00.000Z' });
+    assert.deepStrictEqual([r.ok, r.start, r.reschedulesLeft], [true, '2026-11-02T11:00:00.000Z', 2]);
+    assert.deepStrictEqual(env.manage('reschedule', { start: '2026-11-02T11:00:00.000Z' }), r, 'a retry changes nothing');
+    assert.strictEqual(env.patches.length, 2);
+    env.loseRemoveResponse = true; // deleted, response lost
+    const c = env.manage('cancel', { confirm: true });
+    assert.deepStrictEqual([c.ok, c.status], [true, 'cancelled']);
+    assert.deepStrictEqual(env.manage('cancel', { confirm: true }), c);
+    assert.deepStrictEqual([env.removes.length, env.cancellations.length], [1, 1]);
+    // A real failure leaves the booking confirmed and changeable.
+    const env2 = makeEnv({ availability: MONDAY });
+    env2.bookAndConfirm();
+    env2.removeError = 'Backend Error';
+    assert.strictEqual(env2.manage('cancel', { confirm: true }).error, 'unavailable');
+    assert.deepStrictEqual([env2.manage('manage').status, env2.manage('manage').canChange, env2.live().length], ['confirmed', true, 1]);
+  },
+  reschedules_are_capped() {
+    const env = makeEnv({ availability: MONDAY, props: { MAX_RESCHEDULES: '1' } });
+    env.bookAndConfirm();
+    assert.strictEqual(env.manage('reschedule', { start: '2026-11-02T10:00:00.000Z' }).reschedulesLeft, 0);
+    assert.strictEqual(env.manage('reschedule', { start: '2026-11-02T11:00:00.000Z' }).error, 'reschedule_limit');
+    assert.strictEqual(env.manage('cancel', { confirm: true }).status, 'cancelled', 'cancelling is still possible');
+  },
+  simultaneous_management_requests_are_serialised() {
+    const env = makeEnv({ availability: MONDAY });
+    env.bookAndConfirm();
+    let nested;
+    env.onPatch = () => { env.onPatch = null; nested = env.manage('cancel', { confirm: true }); };
+    assert.strictEqual(env.manage('reschedule', { start: '2026-11-02T11:00:00.000Z' }).ok, true);
+    assert.strictEqual(nested.error, 'busy');
+    assert.deepStrictEqual([env.live().length, env.removes.length, env.lockHeld], [1, 0, false]);
+    // Two guests aiming at the same free time: the second one is re-checked inside the lock and refused.
+    env.bookAndConfirm({ email: 'b@example.com', start: '2026-11-02T08:00:00.000Z', duration: 30 });
+    const second = env.manageToken();
+    assert.strictEqual(env.manage('reschedule', { start: '2026-11-02T09:00:00.000Z' }, second).ok, true);
+    const first = env.mails.filter(m => m.to === 'ana@example.com' && m.body.includes('#manage='))[0];
+    const firstToken = /#manage=([0-9a-f.]+)\n/.exec(first.body)[1];
+    assert.strictEqual(env.manage('reschedule', { start: '2026-11-02T09:00:00.000Z' }, firstToken).error, 'slot_unavailable');
+    // The moved booking blocks its new time for new bookings too.
+    assert.strictEqual(env.book({ email: 'c@example.com', start: '2026-11-02T11:00:00.000Z' }).error, 'slot_unavailable');
+  },
+  in_person_reschedule_and_cancel_never_add_a_conference() {
+    const env = makeEnv({ availability: MONDAY });
+    env.bookAndConfirm({ modality: 'in_person', lang: 'es' });
+    assert.ok(env.mails[1].body.includes('encuentro presencial') && env.mails[1].body.includes('12 horas'));
+    const r = env.manage('reschedule', { start: '2026-11-02T11:00:00.000Z' });
+    assert.deepStrictEqual([r.modality, r.meet], ['in_person', { status: 'none' }]);
+    const ev = env.live()[0];
+    assert.deepStrictEqual([ev.conferenceData, ev.hangoutLink, ev.location], [undefined, undefined, 'Pendiente de acordar']);
+    assert.ok(env.patches.every(p => p.resource.conferenceData === undefined && p.args.conferenceDataVersion === undefined));
+    assert.strictEqual(env.manage('cancel', { confirm: true }).status, 'cancelled');
+  },
+  event_deleted_by_the_owner_shows_as_cancelled_when_moving_it() {
+    const env = makeEnv({ availability: MONDAY });
+    env.bookAndConfirm();
+    env.live()[0].status = 'cancelled';
+    assert.strictEqual(env.manage('reschedule', { start: '2026-11-02T11:00:00.000Z' }).error, 'cancelled');
+    assert.strictEqual(env.manage('manage').status, 'cancelled');
+    assert.strictEqual(env.live().length, 0);
+  },
+  management_link_expires_with_the_booking_record() {
+    const env = makeEnv({ availability: MONDAY });
+    env.bookAndConfirm();
+    env.now = Z('2026-11-03T10:00:01Z'); // a day after the meeting ended
+    env.fn('sweepExpiredHolds')();
+    assert.strictEqual(env.manage('manage').error, 'invalid_token');
+    assert.strictEqual(env.manage('cancel', { confirm: true }).error, 'invalid_token');
+  },
+  change_policy_is_enforced_by_the_backend_whatever_the_token() {
+    const start = Z('2026-11-02T09:00:00Z');
+    const env = makeEnv({ availability: MONDAY });
+    env.bookAndConfirm();
+    // The management link stays valid (read-only view) after the deadline and even after the meeting.
+    for (const at of [start - 12 * 3600000, start - 3600000, start + 2 * 3600000]) {
+      env.now = at;
+      assert.deepStrictEqual([env.manage('manage').ok, env.manage('manage').canChange], [true, false]);
+      assert.strictEqual(env.manage('cancel', { confirm: true }).error, 'too_late');
+      assert.strictEqual(env.manage('reschedule', { start: '2026-11-02T11:00:00.000Z' }).error, 'too_late');
+    }
+    assert.deepStrictEqual([env.removes.length, env.patches.length, env.live().length], [0, 1, 1]);
+    // After a move the deadline follows the new time.
+    const moved = makeEnv({ availability: [{ start: Z('2026-11-02T08:00:00Z'), end: Z('2026-11-04T12:00:00Z') }] });
+    moved.bookAndConfirm({ start: '2026-11-04T09:00:00.000Z' });
+    moved.now = Z('2026-11-01T09:00:00Z');
+    assert.strictEqual(moved.manage('reschedule', { start: '2026-11-02T10:00:00.000Z' }).start, '2026-11-02T10:00:00.000Z');
+    moved.now = Z('2026-11-02T10:00:00Z') - 11 * 3600000;
+    assert.strictEqual(moved.manage('cancel', { confirm: true }).error, 'too_late');
+    assert.strictEqual(moved.manage('reschedule', { start: '2026-11-04T10:00:00.000Z' }).error, 'too_late');
+    // Invalid settings fall back to the 12-hour default instead of disabling the policy.
+    ['-5', 'abc', ''].forEach(v => {
+      const e = makeEnv({ availability: MONDAY, props: { CHANGE_NOTICE_HOURS: v } });
+      e.bookAndConfirm();
+      assert.strictEqual(e.manage('manage').changeUntil, '2026-11-01T21:00:00.000Z', v);
+    });
+  },
+  old_confirmation_links_never_grant_management_outside_the_policy() {
+    const start = Z('2026-11-02T09:00:00Z');
+    const manageMails = env => env.mails.filter(m => m.body.includes('#manage=')).length;
+    const asLegacy = env => {
+      const key = Object.keys(env.props).find(k => k.startsWith('bk:'));
+      const rec = JSON.parse(env.props[key]); delete rec.manageHash; delete rec.manageMailed;
+      env.props[key] = JSON.stringify(rec);
+    };
+    // A confirmation link can never cancel, move or view through the management operations.
+    const env = makeEnv({ availability: MONDAY });
+    env.bookAndConfirm();
+    const confirmToken = env.token();
+    assert.strictEqual(env.manage('cancel', { confirm: true }, confirmToken).error, 'invalid_token');
+    assert.strictEqual(env.manage('reschedule', { start: '2026-11-02T11:00:00.000Z' }, confirmToken).error, 'invalid_token');
+    assert.strictEqual(env.manage('manage', {}, confirmToken).error, 'invalid_token');
+    // Reopening it never issues a second management link.
+    env.confirm(confirmToken); env.status(confirmToken);
+    assert.strictEqual(manageMails(env), 1);
+    // A legacy booking (no management link yet), or one whose management email failed, only gets a link while
+    // changes are still allowed: not within CHANGE_NOTICE_HOURS of the start, and not after the meeting.
+    [start - 3 * 3600000, start + 3 * 3600000].forEach(at => {
+      const old = makeEnv({ availability: MONDAY });
+      old.bookAndConfirm();
+      const token = old.token();
+      asLegacy(old); old.mails = [];
+      old.now = at;
+      assert.strictEqual(old.confirm(token).status, 'confirmed', 'the confirmation page still answers');
+      assert.strictEqual(manageMails(old), 0, new Date(at).toISOString());
+      assert.ok(!JSON.parse(old.props[Object.keys(old.props).find(k => k.startsWith('bk:'))]).manageHash, 'no management secret exists');
+    });
+    const failed = makeEnv({ availability: MONDAY });
+    failed.book();
+    failed.mailError = 'Service invoked too many times';
+    failed.confirm();
+    failed.mailError = null;
+    failed.now = start - 3600000;
+    failed.confirm();
+    assert.strictEqual(manageMails(failed), 0, 'too late for a management link');
+    // (Inside the policy the same retry delivers exactly one: existing_bookings_stay_compatible_and_can_get_a_management_link.)
+  },
+  confirmation_reports_whether_the_management_email_really_went_out() {
+    const start = Z('2026-11-02T09:00:00Z');
+    const manageMails = env => env.mails.filter(m => m.body.includes('#manage=')).length;
+    const noSecretIn = (env, res) => {
+      const text = JSON.stringify(res);
+      assert.ok(!/#manage=|[0-9a-f]{64}/.test(text), 'no link or secret in the response');
+      env.mails.filter(m => m.body.includes('#manage=')).forEach(m => assert.ok(!text.includes(/#manage=([0-9a-f.]+)/.exec(m.body)[1].split('.')[1])));
+    };
+    // Sent: reported on confirmation, on every retry and on status polls, with exactly one email.
+    const sent = makeEnv({ availability: MONDAY });
+    sent.book();
+    const c = sent.confirm();
+    assert.strictEqual(c.manageEmail, 'sent');
+    noSecretIn(sent, c);
+    assert.deepStrictEqual([sent.confirm().manageEmail, sent.confirm().manageEmail, sent.status().manageEmail], ['sent', 'sent', 'sent']);
+    assert.strictEqual(manageMails(sent), 1, 'retries never send it again');
+    // Failed (MailApp error or no quota left): the booking is confirmed, the page is told the truth.
+    const failed = makeEnv({ availability: MONDAY });
+    failed.book();
+    failed.mailError = 'Service invoked too many times';
+    const f = failed.confirm();
+    assert.deepStrictEqual([f.ok, f.status, f.emailVerified, f.manageEmail], [true, 'confirmed', true, 'failed']);
+    noSecretIn(failed, f);
+    assert.strictEqual(failed.status().manageEmail, 'failed', 'a status poll does not pretend it was sent');
+    assert.strictEqual(manageMails(failed), 0);
+    failed.mailError = null;
+    assert.strictEqual(failed.confirm().manageEmail, 'sent', 'reopening the confirmation link retries once');
+    assert.deepStrictEqual([failed.confirm().manageEmail, failed.status().manageEmail, manageMails(failed)], ['sent', 'sent', 1]);
+    assert.strictEqual(failed.patches.length, 1, 'retries never touch the calendar again');
+    const quota = makeEnv({ availability: MONDAY });
+    quota.book();
+    quota.mailQuota = 0;
+    assert.deepStrictEqual([quota.confirm().manageEmail, manageMails(quota)], ['failed', 0]);
+    // Too late: a legacy booking reopened within CHANGE_NOTICE_HOURS or after the meeting gets no link, and says so.
+    [start - 3 * 3600000, start + 3 * 3600000].forEach(at => {
+      const old = makeEnv({ availability: MONDAY });
+      old.bookAndConfirm();
+      const token = old.token();
+      const key = Object.keys(old.props).find(k => k.startsWith('bk:'));
+      const rec = JSON.parse(old.props[key]); delete rec.manageHash; delete rec.manageMailed; old.props[key] = JSON.stringify(rec);
+      old.mails = [];
+      old.now = at;
+      const r = old.confirm(token);
+      assert.deepStrictEqual([r.status, r.manageEmail, manageMails(old)], ['confirmed', 'too_late', 0], new Date(at).toISOString());
+      assert.deepStrictEqual([old.confirm(token).manageEmail, old.status(token).manageEmail, manageMails(old)], ['too_late', 'too_late', 0]);
+    });
+    // A failed email that is only retried after the deadline stays unsent and is reported as too late.
+    const late = makeEnv({ availability: MONDAY });
+    late.book();
+    late.mailError = 'boom';
+    assert.strictEqual(late.confirm().manageEmail, 'failed');
+    late.mailError = null;
+    late.now = start - 3600000;
+    assert.deepStrictEqual([late.confirm().manageEmail, manageMails(late)], ['too_late', 0]);
+    // Once sent, it stays "sent" even after the deadline (it did go out).
+    sent.now = start - 3600000;
+    assert.strictEqual(sent.confirm().manageEmail, 'sent');
+  },
+  existing_bookings_stay_compatible_and_can_get_a_management_link() {
+    const env = makeEnv({ availability: MONDAY });
+    // A booking confirmed by the previous version: no management fields, no modality (treated as virtual).
+    env.bookAndConfirm();
+    const key = Object.keys(env.props).find(k => k.startsWith('bk:'));
+    const legacy = JSON.parse(env.props[key]);
+    ['manageHash', 'manageMailed', 'modality'].forEach(f => delete legacy[f]);
+    env.props[key] = JSON.stringify(legacy);
+    const oldManage = env.manageToken();
+    assert.strictEqual(env.manage('manage', {}, oldManage).error, 'invalid_token');
+    env.mails = env.mails.filter(m => !m.body.includes('#manage='));
+    // Opening the confirmation link again keeps answering "confirmed" and delivers a management link once.
+    const again = env.confirm();
+    assert.deepStrictEqual([again.ok, again.status, env.patches.length], [true, 'confirmed', 1]);
+    assert.strictEqual(env.mails.filter(m => m.body.includes('#manage=')).length, 1);
+    env.confirm();
+    assert.strictEqual(env.mails.filter(m => m.body.includes('#manage=')).length, 1);
+    assert.strictEqual(env.manage('manage').modality, 'virtual');
+    // A hold created by the previous version (no modality) and confirmed now gets the link too.
+    const env2 = makeEnv({ availability: MONDAY });
+    env2.book();
+    const k2 = Object.keys(env2.props).find(k => k.startsWith('bk:'));
+    const hold = JSON.parse(env2.props[k2]); delete hold.modality; env2.props[k2] = JSON.stringify(hold);
+    const c2 = env2.confirm();
+    assert.deepStrictEqual([c2.status, c2.meet.status], ['confirmed', 'ready']);
+    assert.strictEqual(env2.manage('manage').modality, 'virtual');
+    // Management email failures never undo a confirmation; the next click on the confirmation link retries.
+    const env3 = makeEnv({ availability: MONDAY });
+    env3.book();
+    env3.mailError = 'Service invoked too many times';
+    assert.strictEqual(env3.confirm().status, 'confirmed');
+    assert.strictEqual(env3.mails.filter(m => m.body.includes('#manage=')).length, 0);
+    env3.mailError = null;
+    env3.confirm();
+    assert.strictEqual(env3.mails.filter(m => m.body.includes('#manage=')).length, 1);
+    assert.strictEqual(env3.manage('manage').status, 'confirmed');
   },
 };
 
