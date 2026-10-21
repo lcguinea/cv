@@ -748,7 +748,7 @@ class PublicMusicDataTests(unittest.TestCase):
 
 
 class HiddenSongsTests(unittest.TestCase):
-    """Six songs the owner withdrew from /music/ without deleting their audio or metadata."""
+    """Songs the owner withdrew from /music/ without deleting their audio or metadata."""
 
     HIDDEN = {
         "60": "jesus-set-me-free--luis-guinea--2021",
@@ -757,6 +757,8 @@ class HiddenSongsTests(unittest.TestCase):
         "70": "super-heroe--edson-corona--2017",
         "19": "asi-habla-el-amor--luis-guinea",
         "31": "promesas-decepciones-cover--luis-guinea",
+        # English version only (2026-10-21); the Spanish «Tóxica» stays published.
+        "65": "toxic--isabella-macias--2018",
     }
     HIDDEN_PREVIEWS = {f"{work_id}.mp3" for work_id in HIDDEN.values()}
 
@@ -771,7 +773,7 @@ class HiddenSongsTests(unittest.TestCase):
         unhidden = {**cls.selection, "entries": [{"review_id": e["review_id"]} for e in cls.selection["entries"]]}
         cls.all_rows = generator.project(cls.master, unhidden, cls.decisions, repo=REPO, manifest=cls.manifest)
 
-    def test_the_six_songs_are_flagged_hidden_and_kept_in_the_selection(self):
+    def test_the_hidden_songs_are_flagged_hidden_and_kept_in_the_selection(self):
         self.assertEqual(generator.hidden_review_ids(self.selection), set(self.HIDDEN))
         verified = {e["review_id"]: e for e in self.manifest["entries"] if e["status"] == "verified"}
         for review_id, work_id in self.HIDDEN.items():

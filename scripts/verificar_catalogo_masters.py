@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Verifica el estado de la integración del ZIP de masters: ficha de pendientes completa, las nueve
 obras nuevas publicadas una sola vez (aprobadas el 2026-10-20, casos #76–#84), los dos duplicados sin
-repetir, seis ocultas intactas y ningún audio versionado fuera de previews."""
+repetir, siete ocultas intactas (las seis previas y «Toxic», 2026-10-21) y ningún audio versionado fuera de previews."""
 import json
 import re
 import subprocess
@@ -13,7 +13,7 @@ PENDIENTES = ["Cómo Decirte", "Jinee Jinee", "1000 Días", "En El Momento Justo
               "Tonto Enamorado", "Ahí Estás", "El Sembrador", "Gracias Por Todo",
               "Hasta el Final de mis Días", "Juntos Somos Imparables"]
 NUEVAS = PENDIENTES[2:]
-OCULTAS = {"60", "61", "62", "70", "19", "31"}
+OCULTAS = {"60", "61", "62", "70", "19", "31", "65"}
 errores = []
 
 doc = (REPO / "METADATOS-PENDIENTES-CATALOGO.md").read_text(encoding="utf-8")
