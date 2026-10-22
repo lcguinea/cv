@@ -187,6 +187,8 @@ html.js body{padding-bottom:4.5rem}
 .button:hover{background:var(--accent);border-color:var(--accent);color:#000}
 .button-quiet{background:transparent;color:var(--text)}
 .button-quiet:hover{background:transparent;border-color:var(--accent);color:var(--accent)}
+.hero-actions a[href*="/agenda/"]{background:var(--accent);border-color:var(--accent);color:#000}
+.hero-actions a[href*="/agenda/"]:hover{background:var(--text);border-color:var(--text);color:var(--bg)}
 .background{border-top:1px solid var(--rule)}
 .background-head{padding:clamp(6rem,11vw,11rem) 0 clamp(3rem,5vw,4rem)}
 .background-head h2{max-width:14ch}
