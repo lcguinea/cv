@@ -253,6 +253,9 @@ html.js body{padding-bottom:4.5rem}
 .footer a{display:inline-flex;align-items:center;min-height:44px;text-transform:uppercase;letter-spacing:.06em;text-decoration:none}
 .footer a:hover{color:var(--accent)}
 .footer a[aria-current]{color:var(--text);text-decoration:underline;text-decoration-color:var(--accent);text-decoration-thickness:2px}
+.social-links{flex-basis:100%;border-top:1px solid var(--rule);padding-top:.35rem}
+.social-links ul{gap:0 .9rem}
+.social-links a{min-height:2rem;font-size:.62rem}
 .print-button{display:inline-flex;align-items:center;gap:.55rem;min-height:44px;margin-top:1.25rem;padding:0 1rem;border:1px solid var(--text);font:.72rem var(--mono);text-transform:uppercase;letter-spacing:.06em}
 .print-button svg{width:1rem;height:1rem;fill:currentColor;fill-rule:evenodd}
 .print-button:hover{border-color:var(--accent);color:var(--accent)}

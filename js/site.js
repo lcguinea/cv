@@ -1,5 +1,5 @@
 // Shared behaviour for every page: translated aria-labels, theme switch, mobile menu, active navigation and the experience filter.
-// The header, footer and every link are plain HTML in each page; nothing here creates navigation.
+// The social links are injected here so the same footer row is kept across every published page.
 (function(){
   const base=window.setLanguage;
   if(base)window.setLanguage=function(next){
@@ -10,6 +10,23 @@
     document.querySelectorAll('a[data-href-en][data-href-es]').forEach(a=>{a.setAttribute('href',es?a.dataset.hrefEs:a.dataset.hrefEn);a.setAttribute('hreflang',es?'es':'en')});
     document.dispatchEvent(new CustomEvent('lg:language'));
   };
+})();
+(function(){
+  const footer=document.querySelector('.footer .footer-inner');
+  if(!footer||footer.querySelector('.social-links'))return;
+  const tab=t('ui.newTab'),labelKey='ui.footerSocial';
+  footer.innerHTML += '<nav class="social-links" aria-label="Social and music links" data-i18n-label="'+labelKey+'"><ul>'+
+    '<li><a href="https://www.facebook.com/soyluisguinea" target="_blank" rel="noopener">Facebook<span class="sr-only" data-i18n="ui.newTab">'+tab+'</span></a></li>'+
+    '<li><a href="https://www.instagram.com/soyluisguinea/" target="_blank" rel="noopener">Instagram<span class="sr-only" data-i18n="ui.newTab">'+tab+'</span></a></li>'+
+    '<li><a href="https://www.tiktok.com/@soyluisguinea" target="_blank" rel="noopener">TikTok<span class="sr-only" data-i18n="ui.newTab">'+tab+'</span></a></li>'+
+    '<li><a href="https://www.threads.com/@soyluisguinea" target="_blank" rel="noopener">Threads<span class="sr-only" data-i18n="ui.newTab">'+tab+'</span></a></li>'+
+    '<li><a href="https://x.com/soyluisguinea" target="_blank" rel="noopener">X<span class="sr-only" data-i18n="ui.newTab">'+tab+'</span></a></li>'+
+    '<li><a href="https://www.linkedin.com/in/lcguinea/" target="_blank" rel="noopener">LinkedIn<span class="sr-only" data-i18n="ui.newTab">'+tab+'</span></a></li>'+
+    '<li><a href="https://www.youtube.com/@MoctezumaMusic" target="_blank" rel="noopener">YouTube · Moctezuma Music<span class="sr-only" data-i18n="ui.newTab">'+tab+'</span></a></li>'+
+    '<li><a href="https://www.youtube.com/@LuisGuinea" target="_blank" rel="noopener">YouTube · Luis Guinea<span class="sr-only" data-i18n="ui.newTab">'+tab+'</span></a></li>'+
+    '<li><a href="https://open.spotify.com/artist/1WRKrGxFosVscUFGLRkW2L" target="_blank" rel="noopener">Spotify<span class="sr-only" data-i18n="ui.newTab">'+tab+'</span></a></li>'+
+    '<li><a href="https://music.apple.com/gb/artist/luis-guinea/869634170" target="_blank" rel="noopener">Apple Music<span class="sr-only" data-i18n="ui.newTab">'+tab+'</span></a></li>'+
+    '<li><a href="https://medium.com/@soyluisguinea" target="_blank" rel="noopener">Medium<span class="sr-only" data-i18n="ui.newTab">'+tab+'</span></a></li></ul></nav>';
 })();
 (function(){
   const root=document.documentElement;
