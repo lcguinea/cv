@@ -53,6 +53,11 @@ STATIC_FILES = PAGES + (
     "assets/images/profile.webp",
     "assets/images/cover.webp",
     "assets/images/cover-960.webp",
+    # Official posters of the films with Luis's additional music (/music/#film and Home).
+    "assets/images/film/atrapadas-en-familia.webp",
+    "assets/images/film/infelices-para-siempre.webp",
+    "assets/images/film/navidad-en-vivo.webp",
+    "assets/images/film/las-vocales.webp",
 )
 
 ALLOWED_SUFFIXES = {".html", ".css", ".js", ".woff2", ".txt", ".xml", ".webp", ".mp3"}

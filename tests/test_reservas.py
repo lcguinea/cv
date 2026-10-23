@@ -116,7 +116,7 @@ class IntegrationTests(unittest.TestCase):
         # Same header and footer links as /music/ (one level down), written in the HTML.
         music = read("music/index.html")
         nav = lambda page: re.findall(r'<a href="([^"]+)"[^>]*data-i18n="nav\.\w+"', re.search(r"<header.*?</header>", page, re.S).group(0))
-        self.assertEqual(nav(html), [{"./": "../music/", "../agenda/": "./"}.get(h, h) for h in nav(music)])
+        self.assertEqual(nav(html), [{"./": "../music/", "#film": "../music/#film", "../agenda/": "./"}.get(h, h) for h in nav(music)])
         # The one global player: its bar, the skip link and the shared engine, loaded once and before the agenda.
         self.assertEqual(html.count('id="mini-player"'), 1)
         # Same playback rules as every other page: no page-specific opt-out of the autostart.
