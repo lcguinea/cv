@@ -235,7 +235,13 @@ Ordered newest first. `dates` use the format shown on the site.
 - facets: `music`, `creative`
 - visibility: web, print · status: verified
 - Released original singles with editorial playlist placements on Spotify and Deezer, most recently "El Beso".
-- Composed for films distributed by major platforms. TODO: film titles.
+- Additional music for four Mexican feature films (IMDb nm15281378, Music Department, verified 2026-10-23):
+  - Las Vocales (dir. Silvia Tort), ViX+ original, 31 Aug 2022; score by Juan Carlos Enríquez. IMDb tt16589566.
+  - Navidad en Vivo (dir. Salvador Suárez Obregón), HBO Max, 9 Dec 2022; score by Juan Carlos Enríquez. IMDb tt18263854.
+  - Infelices para Siempre (dir. Noé Santillán-López), theatrical release in Mexico, Videocine, 26 Jan 2023; score by Pablo Delgado; IMDb credit "composer: additional music". IMDb tt10669914.
+  - Atrapadas en Familia (dir. Alonso Íñiguez), ViX+, 1 Feb 2023; score by Juan Carlos Enríquez. IMDb tt16589584.
+  - Public wording: "additional music" / "música adicional", never "composer of the film".
+- Jingles for TV advertising. TODO: clients, campaigns and audio (Luis is locating the files).
 - Negotiated a sync deal for an advertising campaign. TODO: brand or campaign if public.
 - Performed live and managed concert production. TODO: venues.
 - Released 12 original songs as an independent artist.
@@ -433,7 +439,7 @@ No information exclusive to the previous `CV_MASTER.md` was removed; unresolved 
 ## 10. Open items for Luis
 
 1. Santo Chilaquil metrics: confirm 30%+ growth and what "positive ROI" measured.
-2. Film titles, sync brand, venues and voice work clients.
+2. Sync brand, TV jingle clients, venues and voice work clients. (Film titles resolved 2026-10-23.)
 3. LinkedIn URL and Spotify links.
 4. LedgerApp and Dispra case study content, results, metrics and demo screenshots.
 5. Whether "Ya estoy aquí" pieces appear on the site.

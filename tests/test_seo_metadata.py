@@ -46,7 +46,7 @@ PERSON = {
     "url": SITE,
     "image": SITE + "assets/images/profile.webp",
     "email": "lguinea@berklee.edu",
-    "jobTitle": ["Music Producer", "Information Technology & Automation Developer"],
+    "jobTitle": ["Music Producer", "Composer", "Information Technology & Automation Developer"],
     "description": "Music producer and A&R with 10+ years in the music industry. Builds AI and automation systems "
                    "for real business operations, works with data and publishes research on how artists grow.",
     "worksFor": [
@@ -62,7 +62,7 @@ PERSON = {
                    "Brand strategy"],
     "knowsLanguage": ["es", "en", "fr"],
     "homeLocation": {"@type": "Place", "name": "Valencia, Spain"},
-    "sameAs": ["https://medium.com/@soyluisguinea"],
+    "sameAs": ["https://medium.com/@soyluisguinea", "https://www.imdb.com/name/nm15281378/"],
 }
 
 
