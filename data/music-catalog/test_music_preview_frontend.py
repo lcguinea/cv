@@ -47,7 +47,9 @@ const snapshot = () => ({
   year: $('np-year').textContent, type: $('np-type').textContent, index: $('np-index').textContent,
   art: $('np-art').src, alt: $('np-art').alt, roles: $('np-roles').innerHTML,
   audioSrc: engine().src, playing: !engine().paused, foreignPlaying: !foreign.paused,
-  audioCount: page.created.filter(m => m !== foreign).length + page.$$('audio').filter(m => m !== foreign).length,
+  // The engine's element; the jingle players of #jingles (their own declared audio) are counted apart.
+  audioCount: page.created.filter(m => m !== foreign).length + page.$$('audio').filter(m => m !== foreign && !m.closest('#jingles')).length,
+  jingleCount: page.$$('#jingles audio').length,
   toggleState: $('toggle').dataset.state, toggleLabel: $('toggle').getAttribute('aria-label'),
   prevLabel: $('prev').getAttribute('aria-label'), nextLabel: $('next').getAttribute('aria-label'),
   status: $('np-status').textContent, count: $('count').textContent,
@@ -74,8 +76,14 @@ class MusicPlayerStaticTests(unittest.TestCase):
         self.html = MUSIC_HTML.read_text(encoding="utf-8")
 
     def test_the_page_has_no_audio_element_of_its_own(self):
-        # The engine in js/player.js creates the page's only <audio>; the markup holds none.
-        self.assertEqual(re.findall(r"<audio\b", self.html), [])
+        # The engine in js/player.js creates the catalogue's only <audio>. The markup holds only the jingle
+        # players of #jingles, one per jingles_manifest.json file, inside that section.
+        manifest = json.loads((ROOT / "data" / "music-catalog" / "jingles_manifest.json").read_text(encoding="utf-8"))
+        section = re.search(r'<section id="jingles".*?</section>', self.html, re.S).group(0)
+        self.assertEqual(len(re.findall(r"<audio\b", self.html)), len(re.findall(r"<audio\b", section)))
+        self.assertEqual(
+            sorted(re.findall(r'<audio class="jingle-audio" controls preload="none" src="\.\./([^"]+)"', section)),
+            sorted(e["file"] for e in manifest["entries"]))
         self.assertNotRegex(self.html, r"(?i)autoplay")
         self.assertNotIn("<script>", self.html)
         scripts = re.findall(r'<script src="([^"]+)"', self.html)
@@ -231,6 +239,27 @@ class MusicPlayerBehaviourTests(unittest.TestCase):
         self.assertFalse(d["foreignPlaying"])
         for state in (a, b, c, d):
             self.assertLessEqual(int(state["playing"]) + int(state["foreignPlaying"]), 1)
+            self.assertEqual(state["audioCount"], 1)
+
+    def test_jingle_players_sound_one_at_a_time_and_pause_the_engine(self):
+        out = self.run_scenario(
+            "const jingles = page.$$('#jingles audio');"
+            "const playJingle = async i => { page.gesture = true; jingles[i].play(); page.gesture = false; await settle(); };"
+            "const playing = () => jingles.map(j => !j.paused);"
+            "await click(2); out.a = snapshot();"
+            "await playJingle(0); out.b = snapshot(); out.b.jingles = playing();"
+            "await playJingle(2); out.c = snapshot(); out.c.jingles = playing();"
+            "await press('toggle'); out.d = snapshot(); out.d.jingles = playing();"
+        )
+        a, b, c, d = out["a"], out["b"], out["c"], out["d"]
+        self.assertTrue(a["playing"])
+        self.assertEqual(b["jingleCount"], 3)
+        # A jingle pauses the catalogue preview; a second jingle pauses the first one.
+        self.assertEqual((b["playing"], b["jingles"]), (False, [True, False, False]))
+        self.assertEqual((c["playing"], c["jingles"]), (False, [False, False, True]))
+        # Resuming the catalogue pauses the jingle; the engine still owns a single element.
+        self.assertEqual((d["playing"], d["jingles"]), (True, [False, False, False]))
+        for state in (a, b, c, d):
             self.assertEqual(state["audioCount"], 1)
 
     def test_play_pause_and_track_navigation_without_reload(self):

@@ -71,6 +71,16 @@ POLICIES = {
             "momentánea a ±2 s; sin transcripción de letra ni croma. Mismas reglas de borde que v1."
         ),
     },
+    "approved-preview-window-v4": {
+        "rationale": (
+            "Ventana aprobada explícitamente por el propietario el 2026-10-24 tras escuchar dos propuestas "
+            "codificadas como el preview final (casos #85–#92 de human_review_decisions.json). Ambas salen del "
+            "análisis local del 2026-10-24 sobre el master privado completo: letra transcrita con tiempos por "
+            "palabra (faster-whisper small), sonoridad EBU R128 de corto plazo, repetición y límites de sección "
+            "por croma y pulso por flujo espectral; bordes en un pulso o en un silencio entre frases, sin cortar "
+            "palabras. Mismas reglas de borde que v1."
+        ),
+    },
 }
 MAX_EDGE_ADJUSTMENT_S = 1.0
 ASSOCIATION_BASES = {"objective_evidence", "human_authorization"}

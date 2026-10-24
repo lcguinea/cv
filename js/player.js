@@ -96,10 +96,11 @@
     if(pendingTime>0){const at=Math.min(pendingTime,Math.max(0,audio.duration-.25));pendingTime=0;try{audio.currentTime=at}catch(e){}}
     knownDuration=duration();
   });
-  // Autostart: armed for a new session until the first preview plays. Clicks on the player itself are left to its controls,
+  // Autostart: armed for a new session until the first preview plays. Clicks on the player itself (and on the jingle
+  // players of /music/#jingles, which play their own audio) are left to their controls,
   // and utility controls (skip links, language, theme, menu) never start sound: they are often the first thing a keyboard or
   // screen reader user activates.
-  const GESTURES=['click','touchend'],NO_AUTOSTART='#mini-player,#player,#catalog,.feature-play,[data-player-now],.skip-link,[data-lang],[data-theme-choice],.menu-toggle';
+  const GESTURES=['click','touchend'],NO_AUTOSTART='#mini-player,#player,#catalog,.feature-play,[data-player-now],.skip-link,[data-lang],[data-theme-choice],.menu-toggle,.jingle';
   function onGesture(event){if(event.target&&event.target.closest&&event.target.closest(NO_AUTOSTART))return;if(!isPlaying())start()}
   function armAutostart(){
     if(!autostart){autostart=true;GESTURES.forEach(type=>document.addEventListener(type,onGesture,true))}

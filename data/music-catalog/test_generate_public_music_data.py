@@ -265,7 +265,8 @@ class PublicMusicDataTests(unittest.TestCase):
         # 2026-10-13: Antes de Irme (Mariachi), Hasta El Altar, Junto A Mí, Me Equivoqué and
         # El Ganador (#72, kept in the private inventory) are not published.
         selected = {e["review_id"] for e in self.selection["entries"]}
-        for review_id in ("17", "24", "27", "29", "72"):
+        # 2026-10-24: No Hay Más (Stripped) (#90) withdrawn by the owner after its window was approved.
+        for review_id in ("17", "24", "27", "29", "72", "90"):
             case = next(c for c in self.decisions["classifications"] if c["review_id"] == review_id)
             self.assertIs(case["public_exclusion"], True)
             self.assertNotIn(review_id, selected)
@@ -590,7 +591,9 @@ class PublicMusicDataTests(unittest.TestCase):
     # Apple Music only, verified with the iTunes Search API on 2026-10-20 and 2026-10-21.
     WITHOUT_SPOTIFY = {("1000 Días", "Pablo Delgado, Paz Álvarez"), ("En El Momento Justo", "Pablo Delgado"),
                        ("Solo Esta Noche", "Pablo Delgado"), ("Tonto Enamorado", "Pablo Delgado"),
-                       ("Juntos Somos Imparables", "Canciones de Puño y Letra")}
+                       ("Juntos Somos Imparables", "Canciones de Puño y Letra"),
+                       ("Yeah (Intro)", "Abe Rapa"), ("Puerta", "Abe Rapa"), ("Luces de Ayer", "Abe Rapa"),
+                       ("Best of Me", "Abe Rapa"), ("No Hay Más", "Abe Rapa")}
 
     def test_streaming_links_come_from_the_catalogue_or_the_certified_additions_only(self):
         rows = self.project()

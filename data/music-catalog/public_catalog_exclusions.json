@@ -68,7 +68,14 @@
     "81",
     "82",
     "83",
-    "84"
+    "84",
+    "85",
+    "86",
+    "87",
+    "88",
+    "89",
+    "91",
+    "92"
   ],
   "published_previews": [
     {
@@ -334,6 +341,34 @@
     {
       "review_id": "84",
       "preview": "juntos-somos-imparables--canciones-de-puno-y-letra.mp3"
+    },
+    {
+      "review_id": "85",
+      "preview": "yeah-intro--abe-rapa--2024.mp3"
+    },
+    {
+      "review_id": "86",
+      "preview": "puerta--abe-rapa--2024.mp3"
+    },
+    {
+      "review_id": "87",
+      "preview": "luces-de-ayer--abe-rapa--2024.mp3"
+    },
+    {
+      "review_id": "88",
+      "preview": "best-of-me--abe-rapa--2024.mp3"
+    },
+    {
+      "review_id": "89",
+      "preview": "no-hay-mas--abe-rapa--2024.mp3"
+    },
+    {
+      "review_id": "91",
+      "preview": "di-que-si--alex-heredia.mp3"
+    },
+    {
+      "review_id": "92",
+      "preview": "dime--donovan-lavoignet.mp3"
     }
   ],
   "excluded": [

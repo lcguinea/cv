@@ -3,7 +3,8 @@
 
 Copies an explicit allowlist of tracked files into _site/ (or --out DIR) and then checks the result:
 only authorised files, no repository Markdown, tests, catalogue data, scripts or masters, only
-verified previews of music_preview_manifest.json (exactly one per published work, each with its sha256) and
+verified previews of music_preview_manifest.json (exactly one per published work, each with its sha256), the
+jingles of jingles_manifest.json (each with its sha256) and
 no broken local reference in the pages or the stylesheet. Artwork and previews are the ones js/music-data.js publishes, so the
 artifact carries only the images and audio the site actually uses.
 
@@ -27,6 +28,9 @@ ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_OUT = ROOT / "_site"
 MUSIC_DATA = "js/music-data.js"
 MANIFEST = ROOT / "data" / "music-catalog" / "music_preview_manifest.json"
+# Academic jingles of /music/#jingles: their own audio directory, each file pinned by sha256.
+JINGLES_MANIFEST = ROOT / "data" / "music-catalog" / "jingles_manifest.json"
+JINGLES_DIR = "assets/audio/jingles"
 PREVIEW_DIR = "assets/audio/previews"
 ARTWORK_DIR = "assets/images"
 
@@ -87,9 +91,15 @@ def music_files(root=ROOT):
     return artworks, previews
 
 
+def jingle_files():
+    """Published jingle path -> sha256, from jingles_manifest.json."""
+    manifest = json.loads(JINGLES_MANIFEST.read_text(encoding="utf-8"))
+    return {e["file"]: e["sha256"] for e in manifest["entries"]}
+
+
 def allowlist(root=ROOT):
     artworks, previews = music_files(root)
-    return list(STATIC_FILES) + sorted(set(artworks)) + previews
+    return list(STATIC_FILES) + sorted(set(artworks)) + previews + sorted(jingle_files())
 
 
 def tracked_files(root=ROOT):
@@ -163,6 +173,7 @@ def validate(out=DEFAULT_OUT, root=ROOT):
     for rel in sorted(expected - set(present)):
         errors.append(f"missing file: {rel}")
     previews = verified_previews()
+    jingles = jingle_files()
     audio = []
     for rel in present:
         p = PurePosixPath(rel)
@@ -174,7 +185,12 @@ def validate(out=DEFAULT_OUT, root=ROOT):
             errors.append(f"Markdown: {rel}")
         if FORBIDDEN_PARTS & set(p.parts[:-1]) or p.name in FORBIDDEN_NAMES or p.name.startswith("."):
             errors.append(f"private or development file: {rel}")
-        if p.suffix.lower() in AUDIO_SUFFIXES:
+        if p.suffix.lower() in AUDIO_SUFFIXES and str(p.parent) == JINGLES_DIR:
+            if rel not in jingles:
+                errors.append(f"audio that is not a declared jingle: {rel}")
+            elif hashlib.sha256((out / rel).read_bytes()).hexdigest() != jingles[rel]:
+                errors.append(f"jingle differs from its manifest sha256: {rel}")
+        elif p.suffix.lower() in AUDIO_SUFFIXES:
             audio.append(rel)
             if str(p.parent) != PREVIEW_DIR or p.suffix != ".mp3":
                 errors.append(f"audio outside {PREVIEW_DIR}: {rel}")

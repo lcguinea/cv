@@ -33,6 +33,9 @@ MUSIC_HTML = REPO / "music" / "index.html"
 PUBLIC_JS = REPO / "js" / "music-data.js"
 PLAYER_JS = REPO / "js" / "player.js"
 MUSIC_PAGE_JS = REPO / "js" / "music-page.js"
+JINGLES_MANIFEST = HERE / "jingles_manifest.json"
+JINGLES_DIR = "assets/audio/jingles"
+JINGLE_NAME_RE = re.compile(r"^[a-z0-9][a-z0-9-]*\.mp3$")
 _REAL_PATH_IS_FILE = Path.is_file
 ARTWORK_DIR = REPO / "assets" / "images"
 PREVIEW_DIR = REPO / previews.OUTPUT_DIR
@@ -138,6 +141,16 @@ def _check():
         errors.append("js/player.js does not consume MUSIC_DATA")
     # One engine-owned player element (exclusive playback) that only ever loads a validated preview.
     pages = [html] + [(REPO / rel).read_text(encoding="utf-8") for rel in ("index.html", "cv.html") if (REPO / rel).is_file()]
+    # The only declared players are the jingle players of /music/#jingles, each on a manifest file.
+    jingle_files = _check_jingles(errors)
+    jingle_tag = re.compile(r'<audio class="jingle-audio" controls preload="none" src="\.\./(assets/audio/jingles/[a-z0-9-]+\.mp3)"[^>]*></audio>')
+    declared = jingle_tag.findall(html)
+    badges = re.findall(r'<span class="badge-ai">([^<]*)</span>', html)
+    if badges != ["AI-Generated Version"] * len(jingle_files):
+        errors.append("every jingle must carry the «AI-Generated Version» label of jingles_manifest.json")
+    if sorted(declared) != sorted(jingle_files):
+        errors.append("music/index.html must declare exactly one jingle player per jingles_manifest.json entry")
+    pages = [jingle_tag.sub("", html)] + pages[1:]
     if any(re.search(r"<audio\b", markup) for markup in pages) or engine.count("createElement('audio')") != 1 \
             or "audio.src=previewUrl(tracks[i].preview)" not in engine or re.search(r"createElement\(|new Audio\b|\.play\(", page):
         errors.append("the global engine in js/player.js must own the only <audio> element, whose source "
@@ -259,7 +272,7 @@ def _check_previews(manifest, selection, decisions, errors, warnings):
     present = sorted(p.name for p in PREVIEW_DIR.iterdir()) if PREVIEW_DIR.is_dir() else []
     for name in sorted(set(present) - expected):
         errors.append(f"{previews.OUTPUT_DIR} contains an undeclared file: {name}")
-    check_audio_exposure(REPO, expected, errors)
+    check_audio_exposure(REPO, expected, errors, extra_allowed=_jingle_files())
 
     sources_available = SOURCE_ROOT.is_dir()
     if not sources_available:
@@ -381,7 +394,64 @@ def _tracked_files(repo):
     return [item for item in listed.stdout.decode("utf-8").split("\0") if item]
 
 
-def check_audio_exposure(repo, authorized, errors):
+def _jingle_files():
+    """Published jingle paths declared in jingles_manifest.json (empty when it is absent or invalid)."""
+    try:
+        doc = json.loads(JINGLES_MANIFEST.read_text(encoding="utf-8"))
+        return [e["file"] for e in doc["entries"]]
+    except (OSError, ValueError, KeyError, TypeError):
+        return []
+
+
+def _check_jingles(errors):
+    """Validate /music/#jingles audio: manifest -> file sha256 -> playable MP3 without metadata; return paths."""
+    try:
+        doc = json.loads(JINGLES_MANIFEST.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        errors.append(f"cannot read jingles_manifest.json: {exc}")
+        return []
+    if doc.get("schema") != "jingles-manifest-v1" or doc.get("public_label") != "AI-Generated Version":
+        errors.append("jingles_manifest.json has an unexpected schema or public label")
+    files = []
+    for entry in doc.get("entries") or []:
+        rel = entry.get("file", "")
+        path = PurePosixPath(rel)
+        if str(path.parent) != JINGLES_DIR or not JINGLE_NAME_RE.match(path.name):
+            errors.append(f"jingle outside {JINGLES_DIR} or with an unsafe name: {rel!r}")
+            continue
+        files.append(rel)
+        full = REPO / rel
+        if not full.is_file():
+            errors.append(f"jingle file is missing: {rel}")
+            continue
+        if previews.sha256_file(full) != entry.get("sha256"):
+            errors.append(f"jingle differs from its manifest sha256: {rel}")
+        if entry.get("date_shown") is not None:
+            errors.append(f"jingle {rel} shows a date no source confirms")
+        provenance = entry.get("provenance") or {}
+        if not provenance.get("ai_tool") or not provenance.get("evidence") or not entry.get("owner_statement"):
+            errors.append(f"jingle {rel} lacks its AI provenance or the owner's statement")
+        # The plan's usage rights rest on the account holder's own confirmation, recorded apart from any
+        # independent documentary check (which states plainly whether it was done).
+        rights = entry.get("rights") or {}
+        if not (rights.get("owner_confirmation") or {}).get("statement") \
+                or not isinstance((rights.get("independent_verification") or {}).get("done"), bool):
+            errors.append(f"jingle {rel} must record the owner's confirmation apart from independent verification")
+        if shutil.which("ffprobe"):
+            info = previews.probe(full)
+            if info["format_name"] != "mp3" or info["codec_name"] != "mp3" or info["streams"] != 1 or info["tags"]:
+                errors.append(f"jingle {rel} must be a single-stream MP3 without metadata")
+        source = REPO / entry.get("source", "")
+        if source.is_file() and previews.sha256_file(source) != entry.get("source_sha256"):
+            errors.append(f"jingle source differs from its manifest sha256: {entry.get('source')}")
+    directory = REPO / JINGLES_DIR
+    present = sorted(f"{JINGLES_DIR}/{p.name}" for p in directory.iterdir()) if directory.is_dir() else []
+    for rel in sorted(set(present) - set(files)):
+        errors.append(f"{JINGLES_DIR} contains an undeclared file: {rel}")
+    return files
+
+
+def check_audio_exposure(repo, authorized, errors, extra_allowed=()):
     """No audio may be versionable or publishable outside the authorized previews.
 
     `authorized` are the verified manifest file names inside OUTPUT_DIR. Every audio file of
@@ -391,6 +461,7 @@ def check_audio_exposure(repo, authorized, errors):
     """
     repo = Path(repo)
     allowed = {f"{previews.OUTPUT_DIR}/{name}" for name in authorized}
+    allowed |= set(extra_allowed)  # validated jingle files (jingles_manifest.json)
     present = []
     for directory, subdirs, files in os.walk(repo):
         subdirs[:] = sorted(d for d in subdirs if d != ".git")

@@ -1,0 +1,121 @@
+{
+  "schema": "jingles-manifest-v1",
+  "description": "Única fuente autorizada del audio de /music/#jingles: tres ejercicios académicos de jingles, no encargos. Cada archivo publicado bajo assets/audio/jingles/ debe figurar aquí con su sha256; ningún otro audio fuera de assets/audio/previews/ es publicable. Las marcas no son clientes; no se usan logotipos.",
+  "public_label": "AI-Generated Version",
+  "entries": [
+    {
+      "id": "bachoco",
+      "project": "Bachoco",
+      "file": "assets/audio/jingles/bachoco-academic-jingle.mp3",
+      "sha256": "d86dfd47834e618b640a1b9a45bb04e41d99f54b55fcf8459449be309831afbb",
+      "duration_s": 34.0,
+      "source": "One Page Luis Guinea/audios/Jingles/Bachoco_2019.mp3",
+      "source_sha256": "5dd1a61edb2bd4ac49e3086146b5bf19eeef6f84d746b890bfb2417549235faa",
+      "derivation": "Flujo de audio copiado sin recodificar (ffmpeg -c:a copy); solo se eliminan los metadatos (portada incrustada, título, artista, comentario y letra). PCM decodificado idéntico al de la fuente.",
+      "provenance": {
+        "ai_tool": "Suno",
+        "evidence": "Etiquetas ID3 del archivo fuente privado: comment «made with suno; created=2026-10-23T21:38:40Z; id=…» y artist con el usuario de Suno del propietario (ambos omitidos aquí; constan en el archivo fuente), title «Las Tiras de Pollo».",
+        "original_recording_available": false,
+        "unknown": "No consta qué material original se dio a Suno ni qué elementos de la grabación (melodía, letra, voces, instrumentos, mezcla) conservan el trabajo original; el audio publicado es la salida generada por Suno.",
+        "generated_at": "2026-10-23T21:38:40Z"
+      },
+      "owner_statement": "Declaración de Luis Guinea del 2026-10-24: ejercicio académico, no encargo comercial; composición y producción originales íntegramente suyas; versión posterior creada con herramientas de IA; sin colaboración, contratación ni patrocinio de la marca.",
+      "date_shown": null,
+      "date_note": "El nombre del archivo fuente termina en «_2019», pero ninguna fuente ni el propietario confirman la fecha: no se publica ninguna fecha.",
+      "rights": {
+        "plan_declared_by_owner": "Suno Pro",
+        "owner_statement": "Declaración de Luis Guinea del 2026-10-24: los tres jingles se generaron con su suscripción Suno Pro, no con el plan gratuito.",
+        "owner_confirmation": {
+          "type": "declaración del titular de la cuenta (no es una comprobación documental independiente)",
+          "date": "2026-10-24",
+          "statement": "Luis Guinea confirma personalmente que su suscripción Suno Pro estaba activa el 23 y el 24 de octubre de 2026, cuando generó los tres jingles."
+        },
+        "independent_verification": {
+          "done": false,
+          "detail": "Consulta del 2026-10-24: no se localizó ningún recibo ni factura de Suno; la vigencia de la suscripción en las fechas de generación no se ha comprobado de forma documental independiente."
+        },
+        "suno_terms_summary": "Según el centro de ayuda de Suno (consultado el 2026-10-24), las canciones generadas mientras se está suscrito a Pro o Premier tienen derechos de uso comercial, que se conservan tras cancelar; Suno indica que actúa como propietario y cede los derechos asociados a la propiedad, y no garantiza que exista copyright sobre el resultado.",
+        "sources": [
+          "https://help.suno.com/en/articles/2416769",
+          "https://help.suno.com/en/articles/2746945"
+        ]
+      }
+    },
+    {
+      "id": "bardal-w-50-fusion",
+      "project": "Bardal W 50 Fusión",
+      "file": "assets/audio/jingles/bardal-w-50-fusion-academic-jingle.mp3",
+      "sha256": "e2dbbe0bbd45997354091470b9b366a94c12653c8a22cd7523baa9b9973d00e5",
+      "duration_s": 58.76,
+      "source": "One Page Luis Guinea/audios/Jingles/Bardal W 50 Fusión_2019.mp3",
+      "source_sha256": "c70eb745fedd78058a9e9a3e52e37db90f254ae8aeb17453622a76740e45ca3a",
+      "derivation": "Flujo de audio copiado sin recodificar (ffmpeg -c:a copy); solo se eliminan los metadatos (portada incrustada, título, artista, comentario y letra). PCM decodificado idéntico al de la fuente.",
+      "provenance": {
+        "ai_tool": "Suno",
+        "evidence": "Etiquetas ID3 del archivo fuente privado: comment «made with suno; created=2026-10-23T21:41:23Z; id=…» y artist con el usuario de Suno del propietario (ambos omitidos aquí; constan en el archivo fuente), title «Bardal W 50 Fusión».",
+        "original_recording_available": false,
+        "unknown": "No consta qué material original se dio a Suno ni qué elementos de la grabación (melodía, letra, voces, instrumentos, mezcla) conservan el trabajo original; el audio publicado es la salida generada por Suno.",
+        "generated_at": "2026-10-23T21:41:23Z"
+      },
+      "owner_statement": "Declaración de Luis Guinea del 2026-10-24: ejercicio académico, no encargo comercial; composición y producción originales íntegramente suyas; versión posterior creada con herramientas de IA; sin colaboración, contratación ni patrocinio de la marca.",
+      "date_shown": null,
+      "date_note": "El nombre del archivo fuente termina en «_2019», pero ninguna fuente ni el propietario confirman la fecha: no se publica ninguna fecha.",
+      "rights": {
+        "plan_declared_by_owner": "Suno Pro",
+        "owner_statement": "Declaración de Luis Guinea del 2026-10-24: los tres jingles se generaron con su suscripción Suno Pro, no con el plan gratuito.",
+        "owner_confirmation": {
+          "type": "declaración del titular de la cuenta (no es una comprobación documental independiente)",
+          "date": "2026-10-24",
+          "statement": "Luis Guinea confirma personalmente que su suscripción Suno Pro estaba activa el 23 y el 24 de octubre de 2026, cuando generó los tres jingles."
+        },
+        "independent_verification": {
+          "done": false,
+          "detail": "Consulta del 2026-10-24: no se localizó ningún recibo ni factura de Suno; la vigencia de la suscripción en las fechas de generación no se ha comprobado de forma documental independiente."
+        },
+        "suno_terms_summary": "Según el centro de ayuda de Suno (consultado el 2026-10-24), las canciones generadas mientras se está suscrito a Pro o Premier tienen derechos de uso comercial, que se conservan tras cancelar; Suno indica que actúa como propietario y cede los derechos asociados a la propiedad, y no garantiza que exista copyright sobre el resultado.",
+        "sources": [
+          "https://help.suno.com/en/articles/2416769",
+          "https://help.suno.com/en/articles/2746945"
+        ]
+      }
+    },
+    {
+      "id": "mercadolibre",
+      "project": "MercadoLibre",
+      "file": "assets/audio/jingles/mercadolibre-academic-jingle.mp3",
+      "sha256": "7c9af62461d0d287a125dbcb4778ee2b008616f032d2558804c5fbe074c261ef",
+      "duration_s": 60.04,
+      "source": "One Page Luis Guinea/audios/Jingles/MercadoLibre_2019.mp3",
+      "source_sha256": "0744c2e64652cf56e8f28cd6c38dd5007ec305d9c4a7a5a51c48778d7400759c",
+      "derivation": "Flujo de audio copiado sin recodificar (ffmpeg -c:a copy); solo se eliminan los metadatos (portada incrustada, título, artista, comentario y letra). PCM decodificado idéntico al de la fuente.",
+      "provenance": {
+        "ai_tool": "Suno",
+        "evidence": "Etiquetas ID3 del archivo fuente privado: comment «made with suno; created=2026-10-24T12:10:04Z; id=…» y artist con el usuario de Suno del propietario (ambos omitidos aquí; constan en el archivo fuente), title «LuisGuinea_MercadoLibre».",
+        "original_recording_available": false,
+        "unknown": "No consta qué material original se dio a Suno ni qué elementos de la grabación (melodía, letra, voces, instrumentos, mezcla) conservan el trabajo original; el audio publicado es la salida generada por Suno.",
+        "generated_at": "2026-10-24T12:10:04Z"
+      },
+      "owner_statement": "Declaración de Luis Guinea del 2026-10-24: ejercicio académico, no encargo comercial; composición y producción originales íntegramente suyas; versión posterior creada con herramientas de IA; sin colaboración, contratación ni patrocinio de la marca.",
+      "date_shown": null,
+      "date_note": "El nombre del archivo fuente termina en «_2019», pero ninguna fuente ni el propietario confirman la fecha: no se publica ninguna fecha.",
+      "rights": {
+        "plan_declared_by_owner": "Suno Pro",
+        "owner_statement": "Declaración de Luis Guinea del 2026-10-24: los tres jingles se generaron con su suscripción Suno Pro, no con el plan gratuito.",
+        "owner_confirmation": {
+          "type": "declaración del titular de la cuenta (no es una comprobación documental independiente)",
+          "date": "2026-10-24",
+          "statement": "Luis Guinea confirma personalmente que su suscripción Suno Pro estaba activa el 23 y el 24 de octubre de 2026, cuando generó los tres jingles."
+        },
+        "independent_verification": {
+          "done": false,
+          "detail": "Consulta del 2026-10-24: no se localizó ningún recibo ni factura de Suno; la vigencia de la suscripción en las fechas de generación no se ha comprobado de forma documental independiente."
+        },
+        "suno_terms_summary": "Según el centro de ayuda de Suno (consultado el 2026-10-24), las canciones generadas mientras se está suscrito a Pro o Premier tienen derechos de uso comercial, que se conservan tras cancelar; Suno indica que actúa como propietario y cede los derechos asociados a la propiedad, y no garantiza que exista copyright sobre el resultado.",
+        "sources": [
+          "https://help.suno.com/en/articles/2416769",
+          "https://help.suno.com/en/articles/2746945"
+        ]
+      }
+    }
+  ]
+}

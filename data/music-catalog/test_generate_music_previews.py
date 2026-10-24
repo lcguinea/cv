@@ -28,12 +28,19 @@ VERIFIED = {"25", "02", "04", "35", "03", "05", "11", "01", "06", "07", "08", "0
             # Unreleased co-writes from Coautorías, main windows approved on 2026-10-13.
             "73", "74", "75",
             # Masters of the official ZIP, windows approved on 2026-10-20 (approved-preview-window-v3).
-            "76", "77", "78", "79", "80", "81", "82", "83", "84"}
+            "76", "77", "78", "79", "80", "81", "82", "83", "84",
+            # Abe Rapa's Best of Me EP, Di Que Sí and Dime, windows approved on 2026-10-24
+            # (approved-preview-window-v4).
+            "85", "86", "87", "88", "89", "91", "92"}
 # Selected works whose audio is not in One Page Luis Guinea/audios (no source to cut).
 BLOCKED_WITHOUT_AUDIO = {"33", "34", "37", "38"}
 # No associated source waits for a window approval.
 PENDING_WINDOW_APPROVAL = set()
-BLOCKED = BLOCKED_WITHOUT_AUDIO | PENDING_WINDOW_APPROVAL
+# Window approved, but the release status is still provisional (not publishable yet).
+PENDING_RELEASE_CONFIRMATION = set()
+# Window approved on 2026-10-24, then withdrawn from the public selection by the owner (same day).
+WITHDRAWN_AFTER_APPROVAL = {"90"}
+BLOCKED = BLOCKED_WITHOUT_AUDIO | PENDING_WINDOW_APPROVAL | PENDING_RELEASE_CONFIRMATION
 # Owner-approved chorus intervals (s) and the encoded end where an edge was adjusted.
 APPROVED = {
     "25": (106.5, 145.0, 145.0), "02": (57.5, 91.0, 91.0), "04": (67.0, 107.5, 107.5),
@@ -59,6 +66,12 @@ APPROVED_V3 = {
     "76": (74.8, 114.8, 114.8), "77": (161.5, 201.5, 201.5), "78": (200.4, 240.4, 240.4),
     "79": (175.4, 215.4, 215.4), "80": (199.6, 239.6, 239.6), "81": (24.7, 64.7, 64.7),
     "82": (47.6, 87.6, 87.6), "83": (48.9, 88.9, 88.9), "84": (34.5, 74.5, 74.5),
+}
+# Windows the owner chose on 2026-10-24 between two analysed proposals (approved-preview-window-v4).
+APPROVED_V4 = {
+    "85": (25.24, 65.84, 65.84), "86": (172.71, 214.32, 214.32), "87": (22.15, 60.6, 60.6),
+    "88": (104.61, 145.08, 145.08), "89": (143.27, 183.04, 183.04),
+    "91": (126.13, 166.37, 166.37), "92": (168.81, 212.39, 212.39),
 }
 HAVE_FFMPEG = bool(shutil.which("ffmpeg") and shutil.which("ffprobe"))
 
@@ -99,8 +112,9 @@ class PreviewManifestTests(unittest.TestCase):
                 self.assertIsNone(entry["preview"])
                 self.assertIsNone(entry["window"])
                 self.assertTrue(entry["evidence_needed"])
-                # A source awaiting its window is already associated and pinned by sha256.
-                self.assertEqual(entry["source"] is not None, entry["review_id"] in PENDING_WINDOW_APPROVAL)
+                # A source awaiting its window or its release status is already associated and pinned by sha256.
+                self.assertEqual(entry["source"] is not None,
+                                 entry["review_id"] in PENDING_WINDOW_APPROVAL | PENDING_RELEASE_CONFIRMATION)
 
     def test_authorized_sources_are_the_human_decisions(self):
         entries = {e["review_id"]: e for e in self.validate()}
@@ -202,6 +216,7 @@ class PreviewManifestTests(unittest.TestCase):
         approved = [(r, w, "approved-chorus-window-v1") for r, w in APPROVED.items()]
         approved += [(r, w, "approved-preview-window-v2") for r, w in APPROVED_V2.items()]
         approved += [(r, w, "approved-preview-window-v3") for r, w in APPROVED_V3.items()]
+        approved += [(r, w, "approved-preview-window-v4") for r, w in APPROVED_V4.items()]
         for review_id, (start, end, encoded_end), policy in approved:
             with self.subTest(review_id=review_id):
                 entry = self.entry(self.manifest, review_id)
@@ -224,6 +239,39 @@ class PreviewManifestTests(unittest.TestCase):
                 self.assertEqual(len(approval), 1)
                 self.assertIn(entry["source_sha256"], approval[0])
                 self.assertIn(entry["preview_sha256"], approval[0])
+
+    def test_v4_approvals_trace_to_the_owner_decision_in_the_human_case(self):
+        cases = {c["review_id"]: c for c in self.decisions["classifications"]}
+        for review_id in set(APPROVED_V4) | PENDING_RELEASE_CONFIRMATION:
+            with self.subTest(review_id=review_id):
+                entry = self.entry(self.manifest, review_id)
+                self.assertEqual(entry["association"]["basis"], "human_authorization")
+                approval = [n for n in cases[review_id]["notes"]
+                            if n.startswith("Ventana de preview aprobada por Luis Guinea el 2026-10-24")]
+                self.assertEqual(len(approval), 1)
+                self.assertIn(entry["source_sha256"], approval[0])
+                if review_id in APPROVED_V4:
+                    self.assertIn(entry["preview_sha256"], approval[0])
+                else:
+                    # Approved but unpublished: the case says why, the manifest stays blocked.
+                    self.assertIn("estado de publicación sigue provisional", approval[0])
+
+    def test_withdrawn_case_keeps_its_master_and_approval_record_but_is_not_selected(self):
+        cases = {c["review_id"]: c for c in self.decisions["classifications"]}
+        selected = {e["review_id"] for e in self.selection["entries"]}
+        manifest_ids = {e["review_id"] for e in self.manifest["entries"]}
+        for review_id in WITHDRAWN_AFTER_APPROVAL:
+            with self.subTest(review_id=review_id):
+                case = cases[review_id]
+                self.assertIs(case["public_exclusion"], True)
+                self.assertNotIn(review_id, selected)
+                self.assertNotIn(review_id, manifest_ids)
+                self.assertFalse((REPO / previews.OUTPUT_DIR / f"{case['catalog_link']['work_id']}.mp3").exists())
+                self.assertTrue(any(n.startswith("Ventana de preview aprobada por Luis Guinea el 2026-10-24")
+                                    for n in case["notes"]))
+                if HAVE_FFMPEG:
+                    master = REPO / "One Page Luis Guinea" / "audios" / "Productor" / "Abe Rapa" / case["reviewed_asset"]
+                    self.assertTrue(master.is_file())
 
     def test_manifest_rejects_undocumented_or_excessive_edge_adjustments(self):
         manifest = copy.deepcopy(self.manifest)

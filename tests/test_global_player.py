@@ -37,7 +37,7 @@ PRELUDE = r"""
 const state = page => ({
   index: page.eval('LGPlayer.index()'), title: page.eval('LGPlayer.current().title'),
   playing: !page.audio().paused, time: page.eval('LGPlayer.time()'), src: page.audio().src,
-  created: page.created.length, markupAudio: page.$$('audio').length,
+  created: page.created.length, markupAudio: page.$$('audio').filter(m => !m.closest('#jingles')).length,
   log: page.log.slice(), session: JSON.parse(page.tab.session['lg-player'] || 'null'),
   bar: page.$('#mini-player') && {hidden: page.$('#mini-player').hidden, title: page.$('#mp-title').textContent,
     artist: page.$('#mp-artist').textContent, art: page.$('#mp-art').src,
@@ -376,7 +376,7 @@ class GlobalPlayerTests(unittest.TestCase):
             "const page = tab.open('index.html', {autoplayBlocked: false}); await settle(); out.s = state(page);"
         )
         # Treated as a new session: a random track, from the start, which starts on its own when allowed.
-        self.assertEqual(out["s"]["index"], int(0.1 * TRACKS))
+        self.assertEqual(out["s"]["index"], AUTOMATIC[int(0.1 * len(AUTOMATIC))])
         self.assertTrue(out["s"]["playing"])
         self.assertEqual(out["s"]["time"], 0)
 
@@ -522,7 +522,9 @@ class GlobalPlayerStaticTests(unittest.TestCase):
                                    'data-i18n="ui.skipPlayer">Skip to music player</a>'),
                         1,
                     )
-                self.assertEqual(re.findall(r"<audio\b", html), [])
+                # Only /music/#jingles declares players of its own (academic jingles, jingles_manifest.json).
+                markup = re.sub(r'<section id="jingles".*?</section>', "", html, flags=re.S)
+                self.assertEqual(re.findall(r"<audio\b", markup), [])
                 self.assertNotRegex(html, r"(?i)\bautoplay\b")
                 scripts = re.findall(r'<script src="([^"]+)"', html)
                 shared = [s.rsplit("/", 1)[1] for s in scripts

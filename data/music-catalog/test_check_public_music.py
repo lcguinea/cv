@@ -196,6 +196,48 @@ class AudioExposureTest(unittest.TestCase):
         self.assertEqual(ignored, set(paths) - {PREVIEW_PATH})
 
 
+class JinglesTest(unittest.TestCase):
+    """/music/#jingles audio: only manifest files, byte-identical, without dates, versionable only when declared."""
+
+    def setUp(self):
+        self.manifest = json.loads(check.JINGLES_MANIFEST.read_text(encoding="utf-8"))
+        self.tmp = tempfile.TemporaryDirectory()
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def errors_with(self, manifest):
+        path = Path(self.tmp.name) / "jingles_manifest.json"
+        path.write_text(json.dumps(manifest), encoding="utf-8")
+        errors = []
+        with mock.patch.object(check, "JINGLES_MANIFEST", path):
+            check._check_jingles(errors)
+        return errors
+
+    def test_the_real_manifest_matches_the_published_files(self):
+        errors = []
+        self.assertEqual(len(check._check_jingles(errors)), 3)
+        self.assertEqual(errors, [])
+
+    def test_tampered_undeclared_or_dated_jingles_fail(self):
+        manifest = json.loads(json.dumps(self.manifest))
+        manifest["entries"][0]["sha256"] = "0" * 64
+        manifest["entries"][1]["date_shown"] = "2019"
+        dropped = manifest["entries"].pop()
+        errors = self.errors_with(manifest)
+        self.assertIn(f"jingle differs from its manifest sha256: {self.manifest['entries'][0]['file']}", errors)
+        self.assertIn(f"jingle {self.manifest['entries'][1]['file']} shows a date no source confirms", errors)
+        self.assertIn(f"{check.JINGLES_DIR} contains an undeclared file: {dropped['file']}", errors)
+
+    def test_an_undeclared_jingle_is_unauthorized_audio(self):
+        root = Path(self.tmp.name)
+        declared, stray = f"{check.JINGLES_DIR}/declared.mp3", f"{check.JINGLES_DIR}/stray.mp3"
+        _tree(root, [PREVIEW_PATH, declared, stray], _project_gitignores())
+        errors = []
+        check.check_audio_exposure(root, {PREVIEW}, errors, extra_allowed=[declared])
+        self.assertEqual(errors, [f"audio outside the authorized previews is versionable/publishable: {stray}"])
+
+
 class CleanCheckoutReproducibilityTest(unittest.TestCase):
     """The projection must rebuild from versionable files only (no bank, masters, spike output)."""
 

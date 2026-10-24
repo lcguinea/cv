@@ -42,11 +42,14 @@ One Page Luis Guinea/
 *.[mM][iI][dD]
 *.[aA][pP][eE]
 *.[wW][vV]
-# Única excepción: .mp3 públicos validados, directamente bajo previews.
+# Únicas excepciones: .mp3 públicos validados, directamente bajo previews (music_preview_manifest.json)
+# y bajo jingles (jingles_manifest.json), cada uno con su sha256.
 !assets/
 !assets/audio/
 !assets/audio/previews/
 !assets/audio/previews/*.mp3
+!assets/audio/jingles/
+!assets/audio/jingles/*.mp3
 
 # Python
 __pycache__/

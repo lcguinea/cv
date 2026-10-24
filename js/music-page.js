@@ -211,4 +211,6 @@
   document.addEventListener('lg:language',()=>{updateCover();buildChips();buildArtists();renderList();updatePlayer()});
   $('total').textContent=tracks.length;
   updateCover();buildChips();buildArtists();renderList();renderTrack();
+  // Jingles (#jingles) use their own native players: one at a time. The engine already pauses when any of them plays.
+  document.addEventListener('play',event=>{const own=event.target;if(!own.closest||!own.closest('.jingle'))return;document.querySelectorAll('.jingle audio').forEach(media=>{if(media!==own)media.pause()})},true);
 })();

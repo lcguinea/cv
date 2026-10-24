@@ -249,3 +249,58 @@ en las fases 3–5 («Allí Estás» es ahora «Ahí Estás»); sus campos «Fal
 3. Ventana de preview aprobada en `music_preview_manifest.json`; generar con `generate_music_previews.py`.
 4. Convertir la portada oficial a `assets/images/*.webp` y asociarla en `public_artwork_corrections.json`.
 5. Regenerar con `generate_public_music_data.py` y pasar `scripts/verificar_catalogo_masters.py`.
+
+# Masters añadidos el 2026-10-24: Abe Rapa, Alex Heredia y Donovan Lavoignet
+
+Ocho obras integradas en local (casos #85–#92), sin commit ni push. Créditos de Luis Guinea declarados por el
+propietario el 2026-10-24. Ninguna sale todavía en `/music/`: las ocho están en la selección con preview
+`blocked` hasta que el propietario apruebe una ventana. `js/music-data.js` no cambia (66 obras).
+
+| Caso | Obra | Estado | Créditos de Luis Guinea |
+| --- | --- | --- | --- |
+| #85 | Yeah (Intro) — Abe Rapa | Publicada, Best of Me - EP (2024-08-30), Apple Music | Productor, arreglista |
+| #86 | Puerta — Abe Rapa | Publicada, ídem | Productor, arreglista |
+| #87 | Luces de Ayer — Abe Rapa | Publicada, ídem | Productor, arreglista |
+| #88 | Best of Me — Abe Rapa | Publicada, ídem | Productor, arreglista |
+| #89 | No Hay Más — Abe Rapa | Publicada, ídem | Productor, arreglista |
+| #90 | No Hay Más (Stripped) — Abe Rapa | **[?]** inédita provisional | Productor, arreglista |
+| #91 | Di Que Sí — Alex Heredia | **[?]** inédita provisional | Productor, arreglista |
+| #92 | Dime — Donovan Lavoignet | **[?]** inédita provisional | Compositor y coautor, arreglista, productor |
+
+Pendiente:
+
+- **Ventanas de preview** de las ocho obras (requisito para publicarlas).
+- **Estado de publicación [?]** de #90, #91 y #92: sin resultados en Apple Music, Deezer ni búsqueda web el
+  2026-10-24. #90 no está en la edición publicada del EP (cinco pistas).
+- **Spotify** del EP de Abe Rapa: sin verificar.
+- **Títulos de Abe Rapa por duración:** «1 Intro» = «Yeah (Intro)», «3 Luces» = «Luces de Ayer» y «4 Yeah» =
+  «Best of Me» (duraciones idénticas al milisegundo en Apple Music).
+- **Dime:** el nombre del archivo empieza por «Luis Guinea»; se registró Donovan Lavoignet como artista, según el
+  propietario. Faltan los nombres de los demás coautores.
+- **Portadas** de Di Que Sí y Dime: portada genérica.
+- **Guía y asesoría de composición** en Best of Me: no tiene rol en el vocabulario y no se publica.
+- **Medley La Factoría** (`perdoname-rica-y-apretadita-…--mandala-love--2023`): productor musical según el
+  propietario; se conserva el master publicado (3:22) y no se usa `MEDLEY LA FACTORIA.mp3` (3:12). La obra no
+  está en la selección pública y no se ha modificado.
+
+## Ventanas aprobadas (2026-10-24)
+
+El propietario escuchó las 16 propuestas de `One Page Luis Guinea/revision_masters_20261024/` y aprobó una por
+canción (política `approved-preview-window-v4`; la nota de cada caso cita el sha256 del master y del preview):
+#85 A, #86 B, #87 B, #88 A, #89 B, #90 B, #91 A y #92 B.
+
+- **Integradas en local (71 obras públicas):** las cinco pistas publicadas del EP de Abe Rapa (#85–#89). Cada
+  preview es idéntico byte a byte a la propuesta aprobada. Sin commit ni push.
+- **Aprobadas pero sin publicar:** #90 No Hay Más (Stripped), #91 Di Que Sí y #92 Dime. Su estado de
+  publicación sigue provisional y el generador no publica grabaciones con campos provisionales. En cuanto el
+  propietario lo confirme, se quita `release` de `provisional` y su entrada del manifiesto pasa a `verified` con la
+  ventana ya aprobada.
+
+## Decisiones finales del propietario (2026-10-24)
+
+- **#90 No Hay Más (Stripped):** retirada del catálogo público (`public_exclusion`, fuera de la selección y del
+  manifiesto). Se conservan el master, su registro en `catalog_recordings.json`, la ventana aprobada en la nota del
+  caso y las propuestas de revisión.
+- **#91 Di Que Sí** y **#92 Dime:** inéditas confirmadas por el propietario; ya no son provisionales. Publicadas con
+  las ventanas aprobadas (A y B), sin enlaces de streaming ni fecha.
+- `/music/` en local: **73 obras** (66 anteriores + 5 de Abe Rapa + 2 inéditas). Sin commit, push ni despliegue.

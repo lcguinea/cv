@@ -80,7 +80,11 @@ class ArtifactTest(unittest.TestCase):
                                                                  "assets/images/cover.webp",
                                                                  "assets/images/cover-960.webp"}
                                                                  | {p for p in build_site.STATIC_FILES if p.startswith("assets/images/film/")}))
-        self.assertEqual(len(self.present), len(build_site.STATIC_FILES) + len(set(artworks)) + len(published))
+        # The academic jingles of /music/#jingles: exactly the files of jingles_manifest.json.
+        jingles = [p for p in self.present if p.startswith(build_site.JINGLES_DIR + "/")]
+        self.assertEqual(sorted(jingles), sorted(build_site.jingle_files()))
+        self.assertEqual(len(self.present), len(build_site.STATIC_FILES) + len(set(artworks)) + len(published)
+                         + len(jingles))
 
     def test_no_private_or_development_content(self):
         for rel in self.present:
@@ -99,6 +103,7 @@ class ArtifactTest(unittest.TestCase):
             "data/music-catalog/catalog_master.json": b"{}",
             "tests/test_x.py": b"",
             "assets/audio/previews/extra.mp3": b"ID3",
+            "assets/audio/jingles/extra.mp3": b"ID3",
             "assets/audio/master.wav": b"RIFF",
             ".DS_Store": b"",
         }
@@ -114,11 +119,20 @@ class ArtifactTest(unittest.TestCase):
         self.assertEqual(build_site.validate(self.out), [])
 
     def test_validate_rejects_altered_preview(self):
-        rel = next(p for p in self.present if p.endswith(".mp3"))
+        rel = next(p for p in self.present if p.startswith("assets/audio/previews/") and p.endswith(".mp3"))
         original = (self.out / rel).read_bytes()
         (self.out / rel).write_bytes(original + b"\0")
         try:
             self.assertIn(f"preview differs from its manifest sha256: {rel}", build_site.validate(self.out))
+        finally:
+            (self.out / rel).write_bytes(original)
+
+    def test_validate_rejects_altered_jingle(self):
+        rel = next(p for p in self.present if p.startswith(build_site.JINGLES_DIR + "/"))
+        original = (self.out / rel).read_bytes()
+        (self.out / rel).write_bytes(original + b"\0")
+        try:
+            self.assertIn(f"jingle differs from its manifest sha256: {rel}", build_site.validate(self.out))
         finally:
             (self.out / rel).write_bytes(original)
 

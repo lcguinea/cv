@@ -23,15 +23,15 @@ PAGES = {"index.html": "home", "cv.html": "cv", "music/index.html": "music", "so
 # Pages that share the site header (the booking page has its own content tests in tests/test_reservas.py).
 HEADER_PAGES = dict(PAGES, **{"agenda/index.html": "agenda"})
 # One menu on every page, written in the HTML (no link is added by JavaScript), in the reading order of Home
-# (2026-10-13): Background with Experience and Education as secondary entries, Music with Film (2026-10-23), Research, About, CV, Agenda
+# (2026-10-13): Background with Experience and Education as secondary entries, Music with Film (2026-10-23) and Jingles (2026-10-24), Research, About, CV, Agenda
 # (booking page, 2026-10-21), then Contact as the action. Home is reached through the brand.
-NAV_KEYS = ["nav.background", "nav.experience", "nav.education", "nav.music", "nav.film", "nav.research", "nav.about", "nav.cv", "nav.agenda", "nav.contact"]
+NAV_KEYS = ["nav.background", "nav.experience", "nav.education", "nav.music", "nav.film", "nav.jingles", "nav.research", "nav.about", "nav.cv", "nav.agenda", "nav.contact"]
 NAV_HREFS = {
-    "home": ["#background", "#experience", "#education", "music/", "music/#film", "#writing", "sobre-mi.html", "cv.html", "agenda/", "#contact"],
-    "cv": ["./#background", "./#experience", "./#education", "music/", "music/#film", "./#writing", "sobre-mi.html", "cv.html", "agenda/", "./#contact"],
-    "about": ["./#background", "./#experience", "./#education", "music/", "music/#film", "./#writing", "sobre-mi.html", "cv.html", "agenda/", "./#contact"],
-    "music": ["../#background", "../#experience", "../#education", "./", "#film", "../#writing", "../sobre-mi.html", "../cv.html", "../agenda/", "../#contact"],
-    "agenda": ["../#background", "../#experience", "../#education", "../music/", "../music/#film", "../#writing", "../sobre-mi.html", "../cv.html", "./", "../#contact"],
+    "home": ["#background", "#experience", "#education", "music/", "music/#film", "music/#jingles", "#writing", "sobre-mi.html", "cv.html", "agenda/", "#contact"],
+    "cv": ["./#background", "./#experience", "./#education", "music/", "music/#film", "music/#jingles", "./#writing", "sobre-mi.html", "cv.html", "agenda/", "./#contact"],
+    "about": ["./#background", "./#experience", "./#education", "music/", "music/#film", "music/#jingles", "./#writing", "sobre-mi.html", "cv.html", "agenda/", "./#contact"],
+    "music": ["../#background", "../#experience", "../#education", "./", "#film", "#jingles", "../#writing", "../sobre-mi.html", "../cv.html", "../agenda/", "../#contact"],
+    "agenda": ["../#background", "../#experience", "../#education", "../music/", "../music/#film", "../music/#jingles", "../#writing", "../sobre-mi.html", "../cv.html", "./", "../#contact"],
 }
 CURRENT = {"home": None, "cv": "nav.cv", "music": "nav.music", "about": "nav.about", "agenda": "nav.agenda"}
 PUBLISHED_JS = ("strings.js", "i18n.js", "site.js", "player.js", "music-page.js", "agenda.js", "theme-init.js")
@@ -287,7 +287,7 @@ class NavigationBehaviourTests(unittest.TestCase):
             "out.lang = page.document.documentElement.lang; out.stored = browser.local['lg-language'];"
             "const cv = browser.tab().open('cv.html'); await settle(); out.cv = cv.$$('.nav a').map(a => a.textContent);"
         )
-        self.assertEqual(out["nav"], ["Trayectoria", "Experiencia", "Formación", "Música", "Cine", "Investigación", "Sobre mí", "CV", "Agenda"])
+        self.assertEqual(out["nav"], ["Trayectoria", "Experiencia", "Formación", "Música", "Cine", "Jingles", "Investigación", "Sobre mí", "CV", "Agenda"])
         self.assertEqual((out["label"], out["menu"]), ("Principal", "Menú"))
         self.assertEqual(out["groups"], ["Idioma", "Tema"])
         self.assertEqual((out["lang"], out["stored"]), ("es", "es"))

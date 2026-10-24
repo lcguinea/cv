@@ -1908,6 +1908,482 @@
       ],
       "provisional": [],
       "sync_availability": "not_offered"
+    },
+    {
+      "id": "yeah-intro--abe-rapa--2024",
+      "title": "Yeah (Intro)",
+      "artists": [
+        "Abe Rapa"
+      ],
+      "credits": [],
+      "release": {
+        "album": "Best of Me",
+        "date": "2024-08-30",
+        "year": 2024,
+        "type": "ep",
+        "track_number": 1,
+        "disc_number": 1,
+        "status": "released"
+      },
+      "duration_ms": 119330,
+      "explicit": false,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": "https://music.apple.com/mx/album/yeah-intro/1761919380?i=1761919385&uo=4",
+        "track_id": "1761919385",
+        "collection_id": "1761919380",
+        "storefront": "mx"
+      },
+      "artwork": {
+        "file": "One Page Luis Guinea/audios/Productor/Abe Rapa/Abe_BestofMe2024.jpg",
+        "web_file": "assets/images/Best-of-Me---Abe-Rapa.webp"
+      },
+      "audio_ref": "1 Intro MASTER.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Master «1 Intro MASTER.mp3» de la carpeta Productor/Abe Rapa: 119,330 s, sha256 6e80d456ab4376de296f821e096e12c43d7f4ebb1561678279bd5ce88b5aef59.",
+        "Publicada en Best of Me - EP, pista 1: Apple Music «Yeah (Intro)» de Abe Rapa, 1761919385 (119,330 s; master Δ 0,000 s).",
+        "Best of Me - EP (Abe Rapa, 2024-08-30, ℗ 2023 Abraham Ramos Palomeque): Apple Music colección 1761919380 con cinco pistas, consultados con la API de búsqueda de iTunes y la API de Deezer el 2026-10-24. Spotify sin verificar; Deezer sin resultados.",
+        "El archivo se llama «1 Intro»; el título publicado es «Yeah (Intro)».",
+        "Portada: «Abe_BestofMe2024.jpg» de la carpeta Productor/Abe Rapa (3000 × 3000, sha256 b1938f19…0152d6), idéntica a la portada de la colección 1761919380 de Apple Music; reducida a 600 × 600 y codificada con cwebp -q 75, la convención del sitio.",
+        "Créditos de Luis Guinea: caso #85 de spikes/essentia/human_review_decisions.json (decisión del propietario del 2026-10-24). Ventana de preview aprobada el 2026-10-24 (opción A)."
+      ],
+      "provisional": [],
+      "sync_availability": null
+    },
+    {
+      "id": "puerta--abe-rapa--2024",
+      "title": "Puerta",
+      "artists": [
+        "Abe Rapa"
+      ],
+      "credits": [],
+      "release": {
+        "album": "Best of Me",
+        "date": "2024-08-30",
+        "year": 2024,
+        "type": "ep",
+        "track_number": 2,
+        "disc_number": 1,
+        "status": "released"
+      },
+      "duration_ms": 267670,
+      "explicit": false,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": "https://music.apple.com/mx/album/puerta/1761919380?i=1761919390&uo=4",
+        "track_id": "1761919390",
+        "collection_id": "1761919380",
+        "storefront": "mx"
+      },
+      "artwork": {
+        "file": "One Page Luis Guinea/audios/Productor/Abe Rapa/Abe_BestofMe2024.jpg",
+        "web_file": "assets/images/Best-of-Me---Abe-Rapa.webp"
+      },
+      "audio_ref": "2 Puerta MASTER.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Master «2 Puerta MASTER.mp3» de la carpeta Productor/Abe Rapa: 267,670 s, sha256 470f2d16c7665538f8367468bd43b40d9504ddc6e7049492fbd9151915cc4648.",
+        "Publicada en Best of Me - EP, pista 2: Apple Music «Puerta» de Abe Rapa, 1761919390 (267,670 s; master Δ 0,000 s).",
+        "Best of Me - EP (Abe Rapa, 2024-08-30, ℗ 2023 Abraham Ramos Palomeque): Apple Music colección 1761919380 con cinco pistas, consultados con la API de búsqueda de iTunes y la API de Deezer el 2026-10-24. Spotify sin verificar; Deezer sin resultados.",
+        "Portada: «Abe_BestofMe2024.jpg» de la carpeta Productor/Abe Rapa (3000 × 3000, sha256 b1938f19…0152d6), idéntica a la portada de la colección 1761919380 de Apple Music; reducida a 600 × 600 y codificada con cwebp -q 75, la convención del sitio.",
+        "Créditos de Luis Guinea: caso #86 de spikes/essentia/human_review_decisions.json (decisión del propietario del 2026-10-24). Ventana de preview aprobada el 2026-10-24 (opción B)."
+      ],
+      "provisional": [],
+      "sync_availability": null
+    },
+    {
+      "id": "luces-de-ayer--abe-rapa--2024",
+      "title": "Luces de Ayer",
+      "artists": [
+        "Abe Rapa"
+      ],
+      "credits": [],
+      "release": {
+        "album": "Best of Me",
+        "date": "2024-08-30",
+        "year": 2024,
+        "type": "ep",
+        "track_number": 3,
+        "disc_number": 1,
+        "status": "released"
+      },
+      "duration_ms": 203000,
+      "explicit": false,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": "https://music.apple.com/mx/album/luces-de-ayer/1761919380?i=1761919397&uo=4",
+        "track_id": "1761919397",
+        "collection_id": "1761919380",
+        "storefront": "mx"
+      },
+      "artwork": {
+        "file": "One Page Luis Guinea/audios/Productor/Abe Rapa/Abe_BestofMe2024.jpg",
+        "web_file": "assets/images/Best-of-Me---Abe-Rapa.webp"
+      },
+      "audio_ref": "3 Luces MASTER.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Master «3 Luces MASTER.mp3» de la carpeta Productor/Abe Rapa: 203,000 s, sha256 d6646effcabf102c4ab18f0341a4f415b80594c99cdeb45c845fcf3e39cfb9b2.",
+        "Publicada en Best of Me - EP, pista 3: Apple Music «Luces de Ayer» de Abe Rapa, 1761919397 (203,000 s; master Δ 0,000 s).",
+        "Best of Me - EP (Abe Rapa, 2024-08-30, ℗ 2023 Abraham Ramos Palomeque): Apple Music colección 1761919380 con cinco pistas, consultados con la API de búsqueda de iTunes y la API de Deezer el 2026-10-24. Spotify sin verificar; Deezer sin resultados.",
+        "El archivo se llama «3 Luces»; el título publicado es «Luces de Ayer».",
+        "Portada: «Abe_BestofMe2024.jpg» de la carpeta Productor/Abe Rapa (3000 × 3000, sha256 b1938f19…0152d6), idéntica a la portada de la colección 1761919380 de Apple Music; reducida a 600 × 600 y codificada con cwebp -q 75, la convención del sitio.",
+        "Créditos de Luis Guinea: caso #87 de spikes/essentia/human_review_decisions.json (decisión del propietario del 2026-10-24). Ventana de preview aprobada el 2026-10-24 (opción B)."
+      ],
+      "provisional": [],
+      "sync_availability": null
+    },
+    {
+      "id": "best-of-me--abe-rapa--2024",
+      "title": "Best of Me",
+      "artists": [
+        "Abe Rapa"
+      ],
+      "credits": [],
+      "release": {
+        "album": "Best of Me",
+        "date": "2024-08-30",
+        "year": 2024,
+        "type": "ep",
+        "track_number": 4,
+        "disc_number": 1,
+        "status": "released"
+      },
+      "duration_ms": 204000,
+      "explicit": false,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": "https://music.apple.com/mx/album/best-of-me/1761919380?i=1761919492&uo=4",
+        "track_id": "1761919492",
+        "collection_id": "1761919380",
+        "storefront": "mx"
+      },
+      "artwork": {
+        "file": "One Page Luis Guinea/audios/Productor/Abe Rapa/Abe_BestofMe2024.jpg",
+        "web_file": "assets/images/Best-of-Me---Abe-Rapa.webp"
+      },
+      "audio_ref": "4 Yeah MASTER.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Master «4 Yeah MASTER.mp3» de la carpeta Productor/Abe Rapa: 204,000 s, sha256 0377b17896d8cecb60cfde0b025117bcd3d1b9dd5b8dbc98c262b18ba88acebe.",
+        "Publicada en Best of Me - EP, pista 4: Apple Music «Best of Me» de Abe Rapa, 1761919492 (204,000 s; master Δ 0,000 s).",
+        "Best of Me - EP (Abe Rapa, 2024-08-30, ℗ 2023 Abraham Ramos Palomeque): Apple Music colección 1761919380 con cinco pistas, consultados con la API de búsqueda de iTunes y la API de Deezer el 2026-10-24. Spotify sin verificar; Deezer sin resultados.",
+        "El archivo se llama «4 Yeah», pero su duración coincide al milisegundo con la pista 4 «Best of Me» y con ninguna otra; «Yeah (Intro)» es la pista 1 (119,330 s).",
+        "Portada: «Abe_BestofMe2024.jpg» de la carpeta Productor/Abe Rapa (3000 × 3000, sha256 b1938f19…0152d6), idéntica a la portada de la colección 1761919380 de Apple Music; reducida a 600 × 600 y codificada con cwebp -q 75, la convención del sitio.",
+        "Créditos de Luis Guinea: caso #88 de spikes/essentia/human_review_decisions.json (decisión del propietario del 2026-10-24). Ventana de preview aprobada el 2026-10-24 (opción A)."
+      ],
+      "provisional": [],
+      "sync_availability": null
+    },
+    {
+      "id": "no-hay-mas--abe-rapa--2024",
+      "title": "No Hay Más",
+      "artists": [
+        "Abe Rapa"
+      ],
+      "credits": [],
+      "release": {
+        "album": "Best of Me",
+        "date": "2024-08-30",
+        "year": 2024,
+        "type": "ep",
+        "track_number": 5,
+        "disc_number": 1,
+        "status": "released"
+      },
+      "duration_ms": 213500,
+      "explicit": false,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": "https://music.apple.com/mx/album/no-hay-m%C3%A1s/1761919380?i=1761919497&uo=4",
+        "track_id": "1761919497",
+        "collection_id": "1761919380",
+        "storefront": "mx"
+      },
+      "artwork": {
+        "file": "One Page Luis Guinea/audios/Productor/Abe Rapa/Abe_BestofMe2024.jpg",
+        "web_file": "assets/images/Best-of-Me---Abe-Rapa.webp"
+      },
+      "audio_ref": "5 No Hay Mas MASTER.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Master «5 No Hay Mas MASTER.mp3» de la carpeta Productor/Abe Rapa: 213,500 s, sha256 7f8ae2527db0ec8d0210968b372f3597a2c5af2271a25e778423084e39f184d7.",
+        "Publicada en Best of Me - EP, pista 5: Apple Music «No Hay Más» de Abe Rapa, 1761919497 (213,500 s; master Δ 0,000 s).",
+        "Best of Me - EP (Abe Rapa, 2024-08-30, ℗ 2023 Abraham Ramos Palomeque): Apple Music colección 1761919380 con cinco pistas, consultados con la API de búsqueda de iTunes y la API de Deezer el 2026-10-24. Spotify sin verificar; Deezer sin resultados.",
+        "Portada: «Abe_BestofMe2024.jpg» de la carpeta Productor/Abe Rapa (3000 × 3000, sha256 b1938f19…0152d6), idéntica a la portada de la colección 1761919380 de Apple Music; reducida a 600 × 600 y codificada con cwebp -q 75, la convención del sitio.",
+        "Créditos de Luis Guinea: caso #89 de spikes/essentia/human_review_decisions.json (decisión del propietario del 2026-10-24). Ventana de preview aprobada el 2026-10-24 (opción B)."
+      ],
+      "provisional": [],
+      "sync_availability": null
+    },
+    {
+      "id": "no-hay-mas-stripped--abe-rapa",
+      "title": "No Hay Más (Stripped)",
+      "artists": [
+        "Abe Rapa"
+      ],
+      "credits": [],
+      "release": {
+        "album": "Best of Me",
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": "One Page Luis Guinea/audios/Productor/Abe Rapa/Abe_BestofMe2024.jpg",
+        "web_file": "assets/images/Best-of-Me---Abe-Rapa.webp"
+      },
+      "audio_ref": "6 No Hay Mas (Stripped) MASTER.mp3",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Master «6 No Hay Mas (Stripped) MASTER.mp3» de la carpeta Productor/Abe Rapa: 210,500 s, sha256 5a824032602c56225e4001791fb1851be7e92e54bcbf3e710123f33e66d4c4bc.",
+        "El propietario la registra como parte del EP «Best of Me» (decisión del 2026-10-24), pero la edición publicada en Apple Music (colección 1761919380) tiene cinco pistas y no la incluye; sin resultados en Apple Music ni Deezer (consultados con la API de búsqueda de iTunes y la API de Deezer el 2026-10-24).",
+        "Estado de publicación pendiente de confirmar: queda como inédita de forma provisional.",
+        "Portada: «Abe_BestofMe2024.jpg» de la carpeta Productor/Abe Rapa (3000 × 3000, sha256 b1938f19…0152d6), idéntica a la portada de la colección 1761919380 de Apple Music; reducida a 600 × 600 y codificada con cwebp -q 75, la convención del sitio.",
+        "Créditos de Luis Guinea: caso #90 de spikes/essentia/human_review_decisions.json (decisión del propietario del 2026-10-24). Ventana de preview pendiente de aprobación.",
+        "Retirada del catálogo público por decisión del propietario del 2026-10-24 (caso #90, public_exclusion). Se conservan el master, este registro y la ventana aprobada en la nota del caso."
+      ],
+      "provisional": [
+        "release"
+      ],
+      "sync_availability": null
+    },
+    {
+      "id": "di-que-si--alex-heredia",
+      "title": "Di Que Sí",
+      "artists": [
+        "Alex Heredia"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "LANDR-DI QUE SI FULL MIX-Balanced-Medium.wav",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Master «LANDR-DI QUE SI FULL MIX-Balanced-Medium.wav» de la carpeta Productor/Alex Heredia (WAV 16 bits, 44,1 kHz, master de LANDR): 203,913 s, sha256 f87e265114754f1f336a13d6ad0ea06b91d39d16d81d670eb4e0e7b761c65cc5.",
+        "Título y artista: decisión del propietario del 2026-10-24 («Alex Heredia, «Di Que Sí» (2021)»). 2021 es el año que indica el propietario; no hay fecha de publicación verificada y no se muestra.",
+        "Inédita, confirmado por el propietario el 2026-10-24 («Confirmo personalmente que es una producción inédita»); sin resultados en Apple Music, Deezer ni búsqueda web (consultados con la API de búsqueda de iTunes y la API de Deezer el 2026-10-24).",
+        "Créditos de Luis Guinea: caso #91 de spikes/essentia/human_review_decisions.json (decisión del propietario del 2026-10-24). Ventana de preview aprobada el 2026-10-24 (opción A)."
+      ],
+      "provisional": [],
+      "sync_availability": null
+    },
+    {
+      "id": "dime--donovan-lavoignet",
+      "title": "Dime",
+      "artists": [
+        "Donovan Lavoignet"
+      ],
+      "credits": [],
+      "release": {
+        "album": null,
+        "date": null,
+        "year": null,
+        "type": null,
+        "track_number": null,
+        "disc_number": null,
+        "status": "unreleased"
+      },
+      "duration_ms": null,
+      "explicit": null,
+      "is_collaboration": false,
+      "isrc": null,
+      "spotify": {
+        "track_id": null,
+        "url": null
+      },
+      "apple_music": {
+        "url": null,
+        "track_id": null,
+        "collection_id": null,
+        "storefront": null
+      },
+      "artwork": {
+        "file": null,
+        "web_file": "assets/images/generic-cover.webp"
+      },
+      "audio_ref": "Luis Guinea - Dime - PabliniD Mix2.0.wav",
+      "editorial": {
+        "genre": [],
+        "subgenre": [],
+        "mood": [],
+        "emotion": [],
+        "energy": null,
+        "tempo_bpm": null,
+        "vocals_instrumental": null,
+        "vocal_type": [],
+        "language": [],
+        "theme": [],
+        "use_scene": []
+      },
+      "version": null,
+      "basis": [
+        "Master «Luis Guinea - Dime - PabliniD Mix2.0.wav» de la carpeta Productor/Donovan Lavoignet (WAV 24 bits, 48 kHz, exportado de Pro Tools con fecha 2022-08-14): 226,564 s, sha256 9d0a4980b6bca39c48df5d5d640a70bd628f0af5de36ee2d6987ba4c6eaa9ed4.",
+        "Título y artista: decisión del propietario del 2026-10-24 («Donovan Lavoignet, «Dime» (2022)»). El nombre del archivo empieza por «Luis Guinea»; el artista registrado es el que indica el propietario. 2022 es el año que indica el propietario; no hay fecha de publicación verificada y no se muestra.",
+        "Inédita, confirmado por el propietario el 2026-10-24 («Confirmo personalmente que es una producción inédita»); sin resultados en Apple Music, Deezer ni búsqueda web (consultados con la API de búsqueda de iTunes y la API de Deezer el 2026-10-24).",
+        "Créditos de Luis Guinea: caso #92 de spikes/essentia/human_review_decisions.json (decisión del propietario del 2026-10-24). Ventana de preview aprobada el 2026-10-24 (opción B)."
+      ],
+      "provisional": [],
+      "sync_availability": null
     }
   ]
 }

@@ -20,6 +20,9 @@
     },
     "approved-preview-window-v3": {
       "rationale": "Ventana aprobada explícitamente por el propietario el 2026-10-20 tras escuchar dos propuestas codificadas como el preview final (casos #76–#84 de human_review_decisions.json). Ambas salen del análisis local del 2026-10-20 sobre el master privado completo: sonoridad EBU R128 de corto plazo (ffmpeg ebur128), ventana de 40 s de mayor sonoridad media y comienzo en el mínimo de sonoridad momentánea a ±2 s; sin transcripción de letra ni croma. Mismas reglas de borde que v1."
+    },
+    "approved-preview-window-v4": {
+      "rationale": "Ventana aprobada explícitamente por el propietario el 2026-10-24 tras escuchar dos propuestas codificadas como el preview final (casos #85–#92 de human_review_decisions.json). Ambas salen del análisis local del 2026-10-24 sobre el master privado completo: letra transcrita con tiempos por palabra (faster-whisper small), sonoridad EBU R128 de corto plazo, repetición y límites de sección por croma y pulso por flujo espectral; bordes en un pulso o en un silencio entre frases, sin cortar palabras. Mismas reglas de borde que v1."
     }
   },
   "entries": [
@@ -2227,6 +2230,209 @@
           "Master del ZIP oficial «_MASTERS y COVER ARTS OFICIALES» (sha256 del ZIP 3e02d56f4922a153e125ec16a7c24527b55d03021a2cfc5877e5add775a0320e), extraído sin cambios; ffprobe 213.073 s.",
           "Inclusión en el catálogo, título, artistas y portada aprobados por el propietario el 2026-10-20 (caso #84).",
           "Apple Music 1847613618 (2025): duración igual a la del master a la décima de segundo."
+        ]
+      }
+    },
+    {
+      "review_id": "85",
+      "work_id": "yeah-intro--abe-rapa--2024",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Abe Rapa/1 Intro MASTER.mp3",
+      "source_sha256": "6e80d456ab4376de296f821e096e12c43d7f4ebb1561678279bd5ce88b5aef59",
+      "preview": "assets/audio/previews/yeah-intro--abe-rapa--2024.mp3",
+      "preview_sha256": "32453f4e57f5f0c94971560b5ae9b72d046ccfc76f971042a5d603de8fe9c4cd",
+      "trim_policy": "approved-preview-window-v4",
+      "window": {
+        "approved_s": [
+          25.24,
+          65.84
+        ],
+        "start_s": 25.24,
+        "duration_s": 40.6,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-24 sobre el master privado completo: letra transcrita con tiempos por palabra (faster-whisper small), sonoridad EBU R128 de corto plazo, repetición y límites de sección por croma y pulso por flujo espectral; dos propuestas codificadas como el preview final, escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-24 (opción A). Groove principal: entra en la sección más repetida del tema (30–45 s) y sigue sus dos cambios de sección (45 y 57,5 s). 19 compases a 112 BPM, de pulso a pulso."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, decisión explícita del 2026-10-24: este master de la carpeta Productor/Abe Rapa es la grabación de «Yeah (Intro)».",
+        "evidence": [
+          "Master «1 Intro MASTER.mp3» de la carpeta Productor/Abe Rapa: 119,330 s, sha256 6e80d456ab4376de296f821e096e12c43d7f4ebb1561678279bd5ce88b5aef59.",
+          "ffprobe 119,330 s."
+        ]
+      }
+    },
+    {
+      "review_id": "86",
+      "work_id": "puerta--abe-rapa--2024",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Abe Rapa/2 Puerta MASTER.mp3",
+      "source_sha256": "470f2d16c7665538f8367468bd43b40d9504ddc6e7049492fbd9151915cc4648",
+      "preview": "assets/audio/previews/puerta--abe-rapa--2024.mp3",
+      "preview_sha256": "4a327148a2ffad4792998e4c1de9a6631d672985c00a56779ee5b55e7c54b4c3",
+      "trim_policy": "approved-preview-window-v4",
+      "window": {
+        "approved_s": [
+          172.71,
+          214.32
+        ],
+        "start_s": 172.71,
+        "duration_s": 41.61,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-24 sobre el master privado completo: letra transcrita con tiempos por palabra (faster-whisper small), sonoridad EBU R128 de corto plazo, repetición y límites de sección por croma y pulso por flujo espectral; dos propuestas codificadas como el preview final, escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-24 (opción B). Sección instrumental tras el segundo estribillo (sin voz de 171 a 207 s) que desemboca en la frase «a veces se apuerta» (transcripción dudosa); muestra la producción sin la voz principal."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, decisión explícita del 2026-10-24: este master de la carpeta Productor/Abe Rapa es la grabación de «Puerta».",
+        "evidence": [
+          "Master «2 Puerta MASTER.mp3» de la carpeta Productor/Abe Rapa: 267,670 s, sha256 470f2d16c7665538f8367468bd43b40d9504ddc6e7049492fbd9151915cc4648.",
+          "ffprobe 267,670 s."
+        ]
+      }
+    },
+    {
+      "review_id": "87",
+      "work_id": "luces-de-ayer--abe-rapa--2024",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Abe Rapa/3 Luces MASTER.mp3",
+      "source_sha256": "d6646effcabf102c4ab18f0341a4f415b80594c99cdeb45c845fcf3e39cfb9b2",
+      "preview": "assets/audio/previews/luces-de-ayer--abe-rapa--2024.mp3",
+      "preview_sha256": "186166b4a60419b0658924a09c45dd9f6f2b980691f60ceb2221d7143b668147",
+      "trim_policy": "approved-preview-window-v4",
+      "window": {
+        "approved_s": [
+          22.15,
+          60.6
+        ],
+        "start_s": 22.15,
+        "duration_s": 38.45,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-24 sobre el master privado completo: letra transcrita con tiempos por palabra (faster-whisper small), sonoridad EBU R128 de corto plazo, repetición y límites de sección por croma y pulso por flujo espectral; dos propuestas codificadas como el preview final, escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-24 (opción B). Entrada de la voz y primera estrofa completa «Esa mirada tan quebrada… no me deja dormir»: más contenida, con el arreglo que prepara el estribillo."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, decisión explícita del 2026-10-24: este master de la carpeta Productor/Abe Rapa es la grabación de «Luces de Ayer».",
+        "evidence": [
+          "Master «3 Luces MASTER.mp3» de la carpeta Productor/Abe Rapa: 203,000 s, sha256 d6646effcabf102c4ab18f0341a4f415b80594c99cdeb45c845fcf3e39cfb9b2.",
+          "ffprobe 203,000 s."
+        ]
+      }
+    },
+    {
+      "review_id": "88",
+      "work_id": "best-of-me--abe-rapa--2024",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Abe Rapa/4 Yeah MASTER.mp3",
+      "source_sha256": "0377b17896d8cecb60cfde0b025117bcd3d1b9dd5b8dbc98c262b18ba88acebe",
+      "preview": "assets/audio/previews/best-of-me--abe-rapa--2024.mp3",
+      "preview_sha256": "18d017abef6a88c8d1e6f09c48a0de3368d7ca01ce2e6167234564b4101b4e59",
+      "trim_policy": "approved-preview-window-v4",
+      "window": {
+        "approved_s": [
+          104.61,
+          145.08
+        ],
+        "start_s": 104.61,
+        "duration_s": 40.47,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-24 sobre el master privado completo: letra transcrita con tiempos por palabra (faster-whisper small), sonoridad EBU R128 de corto plazo, repetición y límites de sección por croma y pulso por flujo espectral; dos propuestas codificadas como el preview final, escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-24 (opción A). Vuelta del tema principal tras el bajón (100–104 s): la zona más repetida y estable del instrumental. 19 compases a 112 BPM."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, decisión explícita del 2026-10-24: este master de la carpeta Productor/Abe Rapa es la grabación de «Best of Me».",
+        "evidence": [
+          "Master «4 Yeah MASTER.mp3» de la carpeta Productor/Abe Rapa: 204,000 s, sha256 0377b17896d8cecb60cfde0b025117bcd3d1b9dd5b8dbc98c262b18ba88acebe.",
+          "ffprobe 204,000 s."
+        ]
+      }
+    },
+    {
+      "review_id": "89",
+      "work_id": "no-hay-mas--abe-rapa--2024",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Abe Rapa/5 No Hay Mas MASTER.mp3",
+      "source_sha256": "7f8ae2527db0ec8d0210968b372f3597a2c5af2271a25e778423084e39f184d7",
+      "preview": "assets/audio/previews/no-hay-mas--abe-rapa--2024.mp3",
+      "preview_sha256": "91b24724cca08ca75e126a7e374022a97e7399ba7ddfa5951ab3444f45d4431b",
+      "trim_policy": "approved-preview-window-v4",
+      "window": {
+        "approved_s": [
+          143.27,
+          183.04
+        ],
+        "start_s": 143.27,
+        "duration_s": 39.77,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-24 sobre el master privado completo: letra transcrita con tiempos por palabra (faster-whisper small), sonoridad EBU R128 de corto plazo, repetición y límites de sección por croma y pulso por flujo espectral; dos propuestas codificadas como el preview final, escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-24 (opción B). Sección instrumental tras el segundo estribillo (sin voz detectada entre 140 y 187 s), la parte más fuerte del tema; muestra la producción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, decisión explícita del 2026-10-24: este master de la carpeta Productor/Abe Rapa es la grabación de «No Hay Más».",
+        "evidence": [
+          "Master «5 No Hay Mas MASTER.mp3» de la carpeta Productor/Abe Rapa: 213,500 s, sha256 7f8ae2527db0ec8d0210968b372f3597a2c5af2271a25e778423084e39f184d7.",
+          "ffprobe 213,500 s."
+        ]
+      }
+    },
+    {
+      "review_id": "91",
+      "work_id": "di-que-si--alex-heredia",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Alex Heredia/LANDR-DI QUE SI FULL MIX-Balanced-Medium.wav",
+      "source_sha256": "f87e265114754f1f336a13d6ad0ea06b91d39d16d81d670eb4e0e7b761c65cc5",
+      "preview": "assets/audio/previews/di-que-si--alex-heredia.mp3",
+      "preview_sha256": "85e02ac74f4788b2684fca5020968bd9cad849e27974087ba414015c26672171",
+      "trim_policy": "approved-preview-window-v4",
+      "window": {
+        "approved_s": [
+          126.13,
+          166.37
+        ],
+        "start_s": 126.13,
+        "duration_s": 40.24,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-24 sobre el master privado completo: letra transcrita con tiempos por palabra (faster-whisper small), sonoridad EBU R128 de corto plazo, repetición y límites de sección por croma y pulso por flujo espectral; dos propuestas codificadas como el preview final, escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-24 (opción A). Tramo final cantado «Y me pido tu mano… de tu mano envejecer… di que sí»: termina con el título de la canción."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, decisión explícita del 2026-10-24: este master de la carpeta Productor/Alex Heredia es la grabación de «Di Que Sí».",
+        "evidence": [
+          "Master «LANDR-DI QUE SI FULL MIX-Balanced-Medium.wav» de la carpeta Productor/Alex Heredia (WAV 16 bits, 44,1 kHz, master de LANDR): 203,913 s, sha256 f87e265114754f1f336a13d6ad0ea06b91d39d16d81d670eb4e0e7b761c65cc5.",
+          "ffprobe 203,913 s."
+        ]
+      }
+    },
+    {
+      "review_id": "92",
+      "work_id": "dime--donovan-lavoignet",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Donovan Lavoignet/Luis Guinea - Dime - PabliniD Mix2.0.wav",
+      "source_sha256": "9d0a4980b6bca39c48df5d5d640a70bd628f0af5de36ee2d6987ba4c6eaa9ed4",
+      "preview": "assets/audio/previews/dime--donovan-lavoignet.mp3",
+      "preview_sha256": "8368828c7db887d5fb15f5a344b87f6924e39609d51ea37a197ff4d2f347ca49",
+      "trim_policy": "approved-preview-window-v4",
+      "window": {
+        "approved_s": [
+          168.81,
+          212.39
+        ],
+        "start_s": 168.81,
+        "duration_s": 43.58,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-24 sobre el master privado completo: letra transcrita con tiempos por palabra (faster-whisper small), sonoridad EBU R128 de corto plazo, repetición y límites de sección por croma y pulso por flujo espectral; dos propuestas codificadas como el preview final, escuchadas por el propietario antes de aprobar.",
+        "justification": "Aprobada el 2026-10-24 (opción B). Último estribillo y cierre bilingüe «I can give you the moon, sun and sea, for change your heart»: la sección más llena del arreglo."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, decisión explícita del 2026-10-24: este master de la carpeta Productor/Donovan Lavoignet es la grabación de «Dime».",
+        "evidence": [
+          "Master «Luis Guinea - Dime - PabliniD Mix2.0.wav» de la carpeta Productor/Donovan Lavoignet (WAV 24 bits, 48 kHz, exportado de Pro Tools con fecha 2022-08-14): 226,564 s, sha256 9d0a4980b6bca39c48df5d5d640a70bd628f0af5de36ee2d6987ba4c6eaa9ed4.",
+          "ffprobe 226,564 s."
         ]
       }
     }

@@ -1745,6 +1745,111 @@
         {"name": "Luis Guinea", "roles": ["songwriter", "arranger", "producer", "performer", "recording_engineer"]}
       ],
       "credits_decision": {"source": "decisión humana explícita", "date": "2026-10-20", "statement": "Declaración de primera mano del propietario del 2026-10-20 para las cinco obras de Canciones de Puño y Letra: Luis Guinea autor y compositor, arreglista, productor, intérprete de todos los instrumentos e ingeniero de grabación, edición, mezcla y masterización (edición, mezcla y masterización no tienen rol propio en CREDIT_ROLES y quedan en esta declaración). No se declara intérprete vocal. Rol principal público: Producer (decisión del propietario del 2026-10-20).", "public_facet": "Producer"}
+    },
+    {
+      "review_id": "85",
+      "heading": "Abe Rapa — Yeah (Intro)",
+      "reviewed_asset": "1 Intro MASTER.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "yeah-intro--abe-rapa--2024", "candidates": [], "detail": "Master de la carpeta Productor/Abe Rapa añadido el 2026-10-24; alta en catalog_recordings.json como yeah-intro--abe-rapa--2024, con la evidencia registrada allí. Preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": ["Ventana de preview aprobada por Luis Guinea el 2026-10-24 tras escuchar las dos propuestas codificadas como preview final: opción A, 25,24–65,84 s (40,60 s) del master «1 Intro MASTER.mp3» (sha256 6e80d456ab4376de296f821e096e12c43d7f4ebb1561678279bd5ce88b5aef59); preview de revisión sha256 32453f4e57f5f0c94971560b5ae9b72d046ccfc76f971042a5d603de8fe9c4cd. Descartada la opción B (80,18–119,33 s). Motivo de la propuesta: Groove principal: entra en la sección más repetida del tema (30–45 s) y sigue sus dos cambios de sección (45 y 57,5 s). 19 compases a 112 BPM, de pulso a pulso."],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer", "arranger"]}
+      ],
+      "credits_decision": {"source": "decisión humana explícita", "date": "2026-10-24", "statement": "Declaración de primera mano del propietario del 2026-10-24 para las seis canciones del EP «Best of Me» de Abe Rapa: Luis Guinea fue productor musical y arreglista, y participó como guía y asesor en el proceso de composición. No realizó la mezcla ni el mastering. La guía y asesoría de composición no tiene rol en el vocabulario de créditos y no se publica como coautoría.", "public_facet": "Producer"}
+    },
+    {
+      "review_id": "86",
+      "heading": "Abe Rapa — Puerta",
+      "reviewed_asset": "2 Puerta MASTER.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "puerta--abe-rapa--2024", "candidates": [], "detail": "Master de la carpeta Productor/Abe Rapa añadido el 2026-10-24; alta en catalog_recordings.json como puerta--abe-rapa--2024, con la evidencia registrada allí. Preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": ["Ventana de preview aprobada por Luis Guinea el 2026-10-24 tras escuchar las dos propuestas codificadas como preview final: opción B, 172,71–214,32 s (41,61 s) del master «2 Puerta MASTER.mp3» (sha256 470f2d16c7665538f8367468bd43b40d9504ddc6e7049492fbd9151915cc4648); preview de revisión sha256 4a327148a2ffad4792998e4c1de9a6631d672985c00a56779ee5b55e7c54b4c3. Descartada la opción A (52,34–95,90 s). Motivo de la propuesta: Sección instrumental tras el segundo estribillo (sin voz de 171 a 207 s) que desemboca en la frase «a veces se apuerta» (transcripción dudosa); muestra la producción sin la voz principal."],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer", "arranger"]}
+      ],
+      "credits_decision": {"source": "decisión humana explícita", "date": "2026-10-24", "statement": "Declaración de primera mano del propietario del 2026-10-24 para las seis canciones del EP «Best of Me» de Abe Rapa: Luis Guinea fue productor musical y arreglista, y participó como guía y asesor en el proceso de composición. No realizó la mezcla ni el mastering. La guía y asesoría de composición no tiene rol en el vocabulario de créditos y no se publica como coautoría.", "public_facet": "Producer"}
+    },
+    {
+      "review_id": "87",
+      "heading": "Abe Rapa — Luces de Ayer",
+      "reviewed_asset": "3 Luces MASTER.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "luces-de-ayer--abe-rapa--2024", "candidates": [], "detail": "Master de la carpeta Productor/Abe Rapa añadido el 2026-10-24; alta en catalog_recordings.json como luces-de-ayer--abe-rapa--2024, con la evidencia registrada allí. Preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": ["Ventana de preview aprobada por Luis Guinea el 2026-10-24 tras escuchar las dos propuestas codificadas como preview final: opción B, 22,15–60,60 s (38,45 s) del master «3 Luces MASTER.mp3» (sha256 d6646effcabf102c4ab18f0341a4f415b80594c99cdeb45c845fcf3e39cfb9b2); preview de revisión sha256 186166b4a60419b0658924a09c45dd9f6f2b980691f60ceb2221d7143b668147. Descartada la opción A (60,60–99,40 s). Motivo de la propuesta: Entrada de la voz y primera estrofa completa «Esa mirada tan quebrada… no me deja dormir»: más contenida, con el arreglo que prepara el estribillo."],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer", "arranger"]}
+      ],
+      "credits_decision": {"source": "decisión humana explícita", "date": "2026-10-24", "statement": "Declaración de primera mano del propietario del 2026-10-24 para las seis canciones del EP «Best of Me» de Abe Rapa: Luis Guinea fue productor musical y arreglista, y participó como guía y asesor en el proceso de composición. No realizó la mezcla ni el mastering. La guía y asesoría de composición no tiene rol en el vocabulario de créditos y no se publica como coautoría.", "public_facet": "Producer"}
+    },
+    {
+      "review_id": "88",
+      "heading": "Abe Rapa — Best of Me",
+      "reviewed_asset": "4 Yeah MASTER.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "best-of-me--abe-rapa--2024", "candidates": [], "detail": "Master de la carpeta Productor/Abe Rapa añadido el 2026-10-24; alta en catalog_recordings.json como best-of-me--abe-rapa--2024, con la evidencia registrada allí. Preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": ["Ventana de preview aprobada por Luis Guinea el 2026-10-24 tras escuchar las dos propuestas codificadas como preview final: opción A, 104,61–145,08 s (40,47 s) del master «4 Yeah MASTER.mp3» (sha256 0377b17896d8cecb60cfde0b025117bcd3d1b9dd5b8dbc98c262b18ba88acebe); preview de revisión sha256 18d017abef6a88c8d1e6f09c48a0de3368d7ca01ce2e6167234564b4101b4e59. Descartada la opción B (64,46–104,61 s). Motivo de la propuesta: Vuelta del tema principal tras el bajón (100–104 s): la zona más repetida y estable del instrumental. 19 compases a 112 BPM."],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer", "arranger"]}
+      ],
+      "credits_decision": {"source": "decisión humana explícita", "date": "2026-10-24", "statement": "Declaración de primera mano del propietario del 2026-10-24 para las seis canciones del EP «Best of Me» de Abe Rapa: Luis Guinea fue productor musical y arreglista, y participó como guía y asesor en el proceso de composición. No realizó la mezcla ni el mastering. La guía y asesoría de composición no tiene rol en el vocabulario de créditos y no se publica como coautoría.", "public_facet": "Producer"}
+    },
+    {
+      "review_id": "89",
+      "heading": "Abe Rapa — No Hay Más",
+      "reviewed_asset": "5 No Hay Mas MASTER.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "no-hay-mas--abe-rapa--2024", "candidates": [], "detail": "Master de la carpeta Productor/Abe Rapa añadido el 2026-10-24; alta en catalog_recordings.json como no-hay-mas--abe-rapa--2024, con la evidencia registrada allí. Preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": ["Ventana de preview aprobada por Luis Guinea el 2026-10-24 tras escuchar las dos propuestas codificadas como preview final: opción B, 143,27–183,04 s (39,77 s) del master «5 No Hay Mas MASTER.mp3» (sha256 7f8ae2527db0ec8d0210968b372f3597a2c5af2271a25e778423084e39f184d7); preview de revisión sha256 91b24724cca08ca75e126a7e374022a97e7399ba7ddfa5951ab3444f45d4431b. Descartada la opción A (10,80–55,08 s). Motivo de la propuesta: Sección instrumental tras el segundo estribillo (sin voz detectada entre 140 y 187 s), la parte más fuerte del tema; muestra la producción."],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer", "arranger"]}
+      ],
+      "credits_decision": {"source": "decisión humana explícita", "date": "2026-10-24", "statement": "Declaración de primera mano del propietario del 2026-10-24 para las seis canciones del EP «Best of Me» de Abe Rapa: Luis Guinea fue productor musical y arreglista, y participó como guía y asesor en el proceso de composición. No realizó la mezcla ni el mastering. La guía y asesoría de composición no tiene rol en el vocabulario de créditos y no se publica como coautoría.", "public_facet": "Producer"}
+    },
+    {
+      "review_id": "90",
+      "heading": "Abe Rapa — No Hay Más (Stripped)",
+      "reviewed_asset": "6 No Hay Mas (Stripped) MASTER.mp3",
+      "catalog_link": {"status": "mapped", "work_id": "no-hay-mas-stripped--abe-rapa", "candidates": [], "detail": "Master de la carpeta Productor/Abe Rapa añadido el 2026-10-24; alta en catalog_recordings.json como no-hay-mas-stripped--abe-rapa, con la evidencia registrada allí. Preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": ["Ventana de preview aprobada por Luis Guinea el 2026-10-24 tras escuchar las dos propuestas codificadas como preview final: opción B, 97,18–137,00 s (39,82 s) del master «6 No Hay Mas (Stripped) MASTER.mp3» (sha256 5a824032602c56225e4001791fb1851be7e92e54bcbf3e710123f33e66d4c4bc); preview de revisión sha256 b49658684f6b211dc3b43317143478dcc489f3770bf64559d82cea4764beedce. Descartada la opción A (10,80–55,00 s). Motivo de la propuesta: Segunda estrofa «No me busques más en la oscuridad…», «Voy a apagar la luz» y dos «No hay más»; termina antes del tercero. Más íntima que A. No se publica todavía: el estado de publicación sigue provisional (release) y el generador no publica grabaciones con campos provisionales.", "Decisión de Luis Guinea del 2026-10-24: retirar «No Hay Más (Stripped)» del catálogo público y de la selección. Se conservan el master original, el registro en catalog_recordings.json y la ventana aprobada anotada arriba; su preview no se publica."],
+      "negative_decisions": ["No publicar «No Hay Más (Stripped)»: excluida de la selección pública por decisión del propietario del 2026-10-24. Permanece en el inventario privado; no se eliminan sus archivos."],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer", "arranger"]}
+      ],
+      "credits_decision": {"source": "decisión humana explícita", "date": "2026-10-24", "statement": "Declaración de primera mano del propietario del 2026-10-24 para las seis canciones del EP «Best of Me» de Abe Rapa: Luis Guinea fue productor musical y arreglista, y participó como guía y asesor en el proceso de composición. No realizó la mezcla ni el mastering. La guía y asesoría de composición no tiene rol en el vocabulario de créditos y no se publica como coautoría.", "public_facet": "Producer"},
+      "public_exclusion": true
+    },
+    {
+      "review_id": "91",
+      "heading": "Di Que Sí — Alex Heredia",
+      "reviewed_asset": "LANDR-DI QUE SI FULL MIX-Balanced-Medium.wav",
+      "catalog_link": {"status": "mapped", "work_id": "di-que-si--alex-heredia", "candidates": [], "detail": "Master de la carpeta Productor/Alex Heredia añadido el 2026-10-24; alta en catalog_recordings.json como di-que-si--alex-heredia, con la evidencia registrada allí. Preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": ["Ventana de preview aprobada por Luis Guinea el 2026-10-24 tras escuchar las dos propuestas codificadas como preview final: opción A, 126,13–166,37 s (40,24 s) del master «LANDR-DI QUE SI FULL MIX-Balanced-Medium.wav» (sha256 f87e265114754f1f336a13d6ad0ea06b91d39d16d81d670eb4e0e7b761c65cc5); preview de revisión sha256 85e02ac74f4788b2684fca5020968bd9cad849e27974087ba414015c26672171. Descartada la opción B (59,03–100,73 s). Motivo de la propuesta: Tramo final cantado «Y me pido tu mano… de tu mano envejecer… di que sí»: termina con el título de la canción. No se publica todavía: el estado de publicación sigue provisional (release) y el generador no publica grabaciones con campos provisionales.", "Estado de publicación confirmado por Luis Guinea el 2026-10-24: producción inédita («Confirmo personalmente que es una producción inédita»). Se publica sin enlaces de streaming ni fecha de lanzamiento, con la ventana aprobada."],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["producer", "arranger"]}
+      ],
+      "credits_decision": {"source": "decisión humana explícita", "date": "2026-10-24", "statement": "Declaración de primera mano del propietario del 2026-10-24: Luis Guinea fue productor musical y arreglista de «Di Que Sí» de Alex Heredia. Sin otros roles confirmados.", "public_facet": "Producer"}
+    },
+    {
+      "review_id": "92",
+      "heading": "Dime — Donovan Lavoignet",
+      "reviewed_asset": "Luis Guinea - Dime - PabliniD Mix2.0.wav",
+      "catalog_link": {"status": "mapped", "work_id": "dime--donovan-lavoignet", "candidates": [], "detail": "Master de la carpeta Productor/Donovan Lavoignet añadido el 2026-10-24; alta en catalog_recordings.json como dime--donovan-lavoignet, con la evidencia registrada allí. Preview bloqueado hasta la aprobación de su ventana."},
+      "values": {"evidence": "human_review"},
+      "notes": ["Ventana de preview aprobada por Luis Guinea el 2026-10-24 tras escuchar las dos propuestas codificadas como preview final: opción B, 168,81–212,39 s (43,58 s) del master «Luis Guinea - Dime - PabliniD Mix2.0.wav» (sha256 9d0a4980b6bca39c48df5d5d640a70bd628f0af5de36ee2d6987ba4c6eaa9ed4); preview de revisión sha256 8368828c7db887d5fb15f5a344b87f6924e39609d51ea37a197ff4d2f347ca49. Descartada la opción A (53,27–96,06 s). Motivo de la propuesta: Último estribillo y cierre bilingüe «I can give you the moon, sun and sea, for change your heart»: la sección más llena del arreglo. No se publica todavía: el estado de publicación sigue provisional (release) y el generador no publica grabaciones con campos provisionales.", "Estado de publicación confirmado por Luis Guinea el 2026-10-24: producción inédita («Confirmo personalmente que es una producción inédita»). Se publica sin enlaces de streaming ni fecha de lanzamiento, con la ventana aprobada."],
+      "negative_decisions": [],
+      "credits": [
+        {"name": "Luis Guinea", "roles": ["songwriter", "co_writer", "arranger", "producer"]}
+      ],
+      "credits_decision": {"source": "decisión humana explícita", "date": "2026-10-24", "statement": "Declaración de primera mano del propietario del 2026-10-24: Luis Guinea es coautor y compositor, arreglista y productor musical de «Dime» de Donovan Lavoignet. No se indican los demás coautores, así que no se registran. Faceta principal Producer, la de la carpeta Productor donde el propietario dejó el master.", "public_facet": "Producer"}
     }
   ],
   "relations": [
