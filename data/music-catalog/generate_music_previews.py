@@ -81,6 +81,18 @@ POLICIES = {
             "palabras. Mismas reglas de borde que v1."
         ),
     },
+    "authorized-automatic-window-v5": {
+        "rationale": (
+            "Ventana elegida automáticamente, sin escucha humana, con autorización expresa previa del propietario "
+            "del 2026-10-24 para seleccionar y publicar el mejor fragmento de unos 45 s (casos #93–#95 de "
+            "human_review_decisions.json). Análisis local del 2026-10-24 sobre el master publicado completo, solo "
+            "con ffmpeg y la biblioteca estándar: sonoridad EBU R128 de corto plazo, silencios, ataques por bandas "
+            "(graves y agudos), tempo local por autocorrelación en bloques de 12 s, rejilla de compases y tonalidad "
+            "por croma. Se elige la ventana de compases enteros (como máximo 45 s) de mayor sonoridad media con "
+            "tempo estable, sin silencios internos y con bordes en el primer tiempo de un compás. Mismas reglas de "
+            "borde que v1."
+        ),
+    },
 }
 MAX_EDGE_ADJUSTMENT_S = 1.0
 ASSOCIATION_BASES = {"objective_evidence", "human_authorization"}

@@ -393,8 +393,10 @@ class ShareCheckTests(unittest.TestCase):
         return result.returncode, result.stdout + result.stderr
 
     def test_an_up_to_date_copy_passes_without_image_tools(self):
-        code, output = self.check(self.copy("ok"))
-        self.assertEqual((code, output.strip()), (0, "SHARE PAGES OK: 185 pages"))
+        root = self.copy("ok")
+        pages = len(re.findall(r'^\s*"[^"]+": "music/', (root / "js/share-pages.js").read_text(encoding="utf-8"), re.M))
+        code, output = self.check(root)
+        self.assertEqual((code, output.strip()), (0, f"SHARE PAGES OK: {pages} pages"))
 
     def test_missing_retired_and_out_of_date_pages_fail(self):
         def missing(root): shutil.rmtree(root / "music/song" / SONG)

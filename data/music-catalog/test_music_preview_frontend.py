@@ -87,7 +87,8 @@ class MusicPlayerStaticTests(unittest.TestCase):
         self.assertNotRegex(self.html, r"(?i)autoplay")
         self.assertNotIn("<script>", self.html)
         scripts = re.findall(r'<script src="([^"]+)"', self.html)
-        self.assertEqual(scripts[-3:], ["../js/music-data.js", "../js/player.js", "../js/music-page.js"])
+        # js/share-pages.js only maps selections to their link-preview pages (no audio).
+        self.assertEqual(scripts[-4:], ["../js/music-data.js", "../js/player.js", "../js/share-pages.js", "../js/music-page.js"])
 
     def test_preview_url_is_confined_to_the_public_preview_directory(self):
         player = PLAYER_JS.read_text(encoding="utf-8")

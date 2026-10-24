@@ -75,7 +75,10 @@
     "88",
     "89",
     "91",
-    "92"
+    "92",
+    "93",
+    "94",
+    "95"
   ],
   "published_previews": [
     {
@@ -369,6 +372,18 @@
     {
       "review_id": "92",
       "preview": "dime--donovan-lavoignet.mp3"
+    },
+    {
+      "review_id": "93",
+      "preview": "a-puro-dolor-medley--mandala-love--2022.mp3"
+    },
+    {
+      "review_id": "94",
+      "preview": "medley-cumbia-sabrosa--mandala-love--2023.mp3"
+    },
+    {
+      "review_id": "95",
+      "preview": "perdoname-rica-y-apretadita-no-me-trates-de-enganar-todavia--mandala-love--2023.mp3"
     }
   ],
   "excluded": [

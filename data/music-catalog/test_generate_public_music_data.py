@@ -750,6 +750,49 @@ class PublicMusicDataTests(unittest.TestCase):
                              generator.EXCLUSIONS_LOG.read_bytes())
 
 
+class MandalaLoveTests(unittest.TestCase):
+    """The three Mandala LOVE medleys, added on 2026-10-24 from the owner's express declaration (#93–#95)."""
+
+    WORKS = {
+        "93": ("a-puro-dolor-medley--mandala-love--2022", "A Puro Dolor - Medley", 2022, ["latin_tropical"],
+               "https://music.apple.com/mx/album/a-puro-dolor-medley/1638433863?i=1638434043&uo=4"),
+        "94": ("medley-cumbia-sabrosa--mandala-love--2023", "Medley Cumbia Sabrosa", 2023, ["latin_tropical"], None),
+        "95": ("perdoname-rica-y-apretadita-no-me-trates-de-enganar-todavia--mandala-love--2023",
+               "Perdóname / Rica y Apretadita / No Me Trates de Engañar / Todavía", 2023, ["latin_urban"], None),
+    }
+
+    @classmethod
+    def setUpClass(cls):
+        master = json.loads(generator.MASTER.read_text(encoding="utf-8"))
+        selection = json.loads(generator.SELECTION.read_text(encoding="utf-8"))
+        decisions = json.loads(generator.DECISIONS.read_text(encoding="utf-8"))
+        manifest = json.loads(generator.PREVIEW_MANIFEST.read_text(encoding="utf-8"))
+        cls.rows, _ = generator.project_with_exclusions(master, selection, decisions, repo=REPO, manifest=manifest)
+        cls.master = {w["id"]: w for w in master}
+
+    def test_the_medleys_publish_the_declared_credits_and_nothing_more(self):
+        by_preview = {row["preview"]: row for row in self.rows}
+        for review_id, (work_id, title, year, genres, apple) in self.WORKS.items():
+            with self.subTest(review_id=review_id):
+                row = by_preview[f"{work_id}.mp3"]
+                self.assertEqual((row["title"], row["artist"], row["artists"], row["year"], row["releaseType"]),
+                                 (title, "Mandala LOVE", ["Mandala LOVE"], year, "Single"))
+                self.assertEqual(row["role"], "Producer")
+                self.assertEqual(row["roles"], ["Producer", "Arranger", "Music Director", "Keyboards", "Audio Editing Engineer"])
+                # No composition, authorship or mixing credit is attributed.
+                self.assertFalse({"Songwriter", "Co-writer", "Artist", "Recording Engineer"} & set(row["roles"]))
+                self.assertEqual((row["genres"], row["moods"]), (genres, ["groovy", "bright"]))
+                self.assertEqual(row["spotify"], self.master[work_id]["spotify"]["url"])
+                # Apple Music only where the catalogue has a verified URL; never deduced.
+                self.assertEqual(row["appleMusic"], apple)
+                self.assertEqual(row["artwork"], self.master[work_id]["artwork"]["web_file"].split("/")[-1])
+                self.assertTrue((REPO / "assets" / "images" / row["artwork"]).is_file())
+
+    def test_the_medleys_close_the_catalogue_after_the_previous_works(self):
+        self.assertEqual(len(self.rows), 76)
+        self.assertEqual([row["preview"] for row in self.rows[-3:]], [f"{w[0]}.mp3" for w in self.WORKS.values()])
+
+
 class HiddenSongsTests(unittest.TestCase):
     """Songs the owner withdrew from /music/ without deleting their audio or metadata."""
 

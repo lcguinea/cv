@@ -31,7 +31,10 @@ VERIFIED = {"25", "02", "04", "35", "03", "05", "11", "01", "06", "07", "08", "0
             "76", "77", "78", "79", "80", "81", "82", "83", "84",
             # Abe Rapa's Best of Me EP, Di Que Sí and Dime, windows approved on 2026-10-24
             # (approved-preview-window-v4).
-            "85", "86", "87", "88", "89", "91", "92"}
+            "85", "86", "87", "88", "89", "91", "92",
+            # Mandala LOVE medleys: windows chosen automatically with the owner's prior express authorization
+            # of 2026-10-24 (authorized-automatic-window-v5).
+            "93", "94", "95"}
 # Selected works whose audio is not in One Page Luis Guinea/audios (no source to cut).
 BLOCKED_WITHOUT_AUDIO = {"33", "34", "37", "38"}
 # No associated source waits for a window approval.
@@ -72,6 +75,10 @@ APPROVED_V4 = {
     "85": (25.24, 65.84, 65.84), "86": (172.71, 214.32, 214.32), "87": (22.15, 60.6, 60.6),
     "88": (104.61, 145.08, 145.08), "89": (143.27, 183.04, 183.04),
     "91": (126.13, 166.37, 166.37), "92": (168.81, 212.39, 212.39),
+}
+# Windows chosen automatically on 2026-10-24 under the owner's prior authorization (authorized-automatic-window-v5).
+APPROVED_V5 = {
+    "93": (133.97, 177.88, 177.88), "94": (228.7, 273.36, 273.36), "95": (140.06, 184.9, 184.9),
 }
 HAVE_FFMPEG = bool(shutil.which("ffmpeg") and shutil.which("ffprobe"))
 
@@ -217,6 +224,7 @@ class PreviewManifestTests(unittest.TestCase):
         approved += [(r, w, "approved-preview-window-v2") for r, w in APPROVED_V2.items()]
         approved += [(r, w, "approved-preview-window-v3") for r, w in APPROVED_V3.items()]
         approved += [(r, w, "approved-preview-window-v4") for r, w in APPROVED_V4.items()]
+        approved += [(r, w, "authorized-automatic-window-v5") for r, w in APPROVED_V5.items()]
         for review_id, (start, end, encoded_end), policy in approved:
             with self.subTest(review_id=review_id):
                 entry = self.entry(self.manifest, review_id)
@@ -255,6 +263,27 @@ class PreviewManifestTests(unittest.TestCase):
                 else:
                     # Approved but unpublished: the case says why, the manifest stays blocked.
                     self.assertIn("estado de publicación sigue provisional", approval[0])
+
+    def test_v5_windows_trace_to_the_owner_authorization_and_the_published_drive_masters(self):
+        cases = {c["review_id"]: c for c in self.decisions["classifications"]}
+        drive = {"93": "180b4db7abf01f17de88cb30aacf2cdc715692596ce355d6fef72f8e09b89693",
+                 "94": "054600df2d55cf9d36916dd3bce0e117f83938a8629a9cdb15851529ada9b8e1",
+                 "95": "68e1acb3042439c394076bbde169098aaeba182a62740e303552ef1e317c7d9d"}
+        for review_id in APPROVED_V5:
+            with self.subTest(review_id=review_id):
+                entry, case = self.entry(self.manifest, review_id), cases[review_id]
+                # The masters published on Google Drive, never the local copies of Productor/Mandala Love.
+                self.assertEqual(entry["source_sha256"], drive[review_id])
+                self.assertTrue(entry["source"].startswith("One Page Luis Guinea/audios/Productor/Mandala LOVE (masters Drive)/"))
+                self.assertEqual(entry["association"]["basis"], "human_authorization")
+                window = [n for n in case["notes"] if n.startswith("Ventana de preview seleccionada automáticamente el 2026-10-24 "
+                                                                  "con autorización expresa previa de Luis Guinea")]
+                self.assertEqual(len(window), 1)
+                self.assertIn(entry["source_sha256"], window[0])
+                self.assertIn(entry["preview_sha256"], window[0])
+                self.assertEqual(case["credits"], [{"name": "Luis Guinea", "roles": [
+                    "producer", "arranger", "music_director", "keyboards", "audio_editing_engineer"]}])
+                self.assertEqual(case["credits_decision"]["public_facet"], "Producer")
 
     def test_withdrawn_case_keeps_its_master_and_approval_record_but_is_not_selected(self):
         cases = {c["review_id"]: c for c in self.decisions["classifications"]}

@@ -48,7 +48,7 @@ const CREDITS = {
 };
 // Same credit rule as js/music-page.js: Composer gathers songwriting and co-writing, Producer production and co-production.
 const FACET_CREDITS = {Composer: ['Songwriter', 'Co-writer'], Producer: ['Producer', 'Co-producer']};
-const ROLE_ORDER = ['Artist', 'Songwriter', 'Co-writer', 'Producer', 'Co-producer', 'Arranger', 'Co-arranger', 'Performer', 'Recording Engineer'];
+const ROLE_ORDER = ['Artist', 'Songwriter', 'Co-writer', 'Producer', 'Co-producer', 'Arranger', 'Co-arranger', 'Music Director', 'Performer', 'Keyboards', 'Recording Engineer', 'Audio Editing Engineer'];
 
 function load(file, name) {
   const context = {window: {}};

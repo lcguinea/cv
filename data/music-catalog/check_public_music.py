@@ -133,10 +133,12 @@ def _check():
     except OSError as exc:
         errors.append(f"cannot read the /music/ frontend: {exc}")
         html = engine = page = ""
-    # /music/ loads the public data, then the global engine, then the page view, in that order.
+    # /music/ loads the public data, then the global engine, the index of link-preview pages and the page view, in
+    # that order.
     scripts = re.findall(r"<script\s+[^>]*src=[\"']([^\"']+)[\"'][^>]*></script>", html, re.IGNORECASE)
-    if scripts[-3:] != ["../js/music-data.js", "../js/player.js", "../js/music-page.js"]:
-        errors.append("music/index.html must load ../js/music-data.js, ../js/player.js and ../js/music-page.js last, in that order")
+    if scripts[-4:] != ["../js/music-data.js", "../js/player.js", "../js/share-pages.js", "../js/music-page.js"]:
+        errors.append("music/index.html must load ../js/music-data.js, ../js/player.js, ../js/share-pages.js and "
+                      "../js/music-page.js last, in that order")
     if "window.MUSIC_DATA" not in engine:
         errors.append("js/player.js does not consume MUSIC_DATA")
     # One engine-owned player element (exclusive playback) that only ever loads a validated preview.
@@ -152,7 +154,7 @@ def _check():
         errors.append("music/index.html must declare exactly one jingle player per jingles_manifest.json entry")
     pages = [jingle_tag.sub("", html)] + pages[1:]
     if any(re.search(r"<audio\b", markup) for markup in pages) or engine.count("createElement('audio')") != 1 \
-            or "audio.src=previewUrl(tracks[i].preview)" not in engine or re.search(r"createElement\(|new Audio\b|\.play\(", page):
+            or "audio.src=previewUrl(tracks[i].preview)" not in engine or re.search(r"createElement\(|new Audio\b|(?<!\bP)\.play\(", page):
         errors.append("the global engine in js/player.js must own the only <audio> element, whose source "
                       "is only previewUrl(tracks[i].preview); pages must not declare their own")
     if "new URL('assets/audio/previews/'+encodeURIComponent(name),root)" not in engine \

@@ -94,6 +94,10 @@ CREDIT_ROLES = {
     "co_producer": "Co-producer",
     "performer": "Performer",
     "recording_engineer": "Recording Engineer",
+    # Declared by the owner on 2026-10-24 for the Mandala LOVE medleys (#93–#95).
+    "music_director": "Music Director",
+    "keyboards": "Keyboards",
+    "audio_editing_engineer": "Audio Editing Engineer",
 }
 # Songwriting credits surface under the Composer facet, production credits under Producer.
 COMPOSER_CREDITS = {"Songwriter", "Co-writer"}

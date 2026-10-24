@@ -23,6 +23,9 @@
     },
     "approved-preview-window-v4": {
       "rationale": "Ventana aprobada explícitamente por el propietario el 2026-10-24 tras escuchar dos propuestas codificadas como el preview final (casos #85–#92 de human_review_decisions.json). Ambas salen del análisis local del 2026-10-24 sobre el master privado completo: letra transcrita con tiempos por palabra (faster-whisper small), sonoridad EBU R128 de corto plazo, repetición y límites de sección por croma y pulso por flujo espectral; bordes en un pulso o en un silencio entre frases, sin cortar palabras. Mismas reglas de borde que v1."
+    },
+    "authorized-automatic-window-v5": {
+      "rationale": "Ventana elegida automáticamente, sin escucha humana, con autorización expresa previa del propietario del 2026-10-24 para seleccionar y publicar el mejor fragmento de unos 45 s (casos #93–#95 de human_review_decisions.json). Análisis local del 2026-10-24 sobre el master publicado completo, solo con ffmpeg y la biblioteca estándar: sonoridad EBU R128 de corto plazo, silencios, ataques por bandas (graves y agudos), tempo local por autocorrelación en bloques de 12 s, rejilla de compases y tonalidad por croma. Se elige la ventana de compases enteros (como máximo 45 s) de mayor sonoridad media con tempo estable, sin silencios internos y con bordes en el primer tiempo de un compás. Mismas reglas de borde que v1."
     }
   },
   "entries": [
@@ -2433,6 +2436,93 @@
         "evidence": [
           "Master «Luis Guinea - Dime - PabliniD Mix2.0.wav» de la carpeta Productor/Donovan Lavoignet (WAV 24 bits, 48 kHz, exportado de Pro Tools con fecha 2022-08-14): 226,564 s, sha256 9d0a4980b6bca39c48df5d5d640a70bd628f0af5de36ee2d6987ba4c6eaa9ed4.",
           "ffprobe 226,564 s."
+        ]
+      }
+    },
+    {
+      "review_id": "93",
+      "work_id": "a-puro-dolor-medley--mandala-love--2022",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Mandala LOVE (masters Drive)/MEDLEY A PURO DOLOR MASTER 2448.wav",
+      "source_sha256": "180b4db7abf01f17de88cb30aacf2cdc715692596ce355d6fef72f8e09b89693",
+      "preview": "assets/audio/previews/a-puro-dolor-medley--mandala-love--2022.mp3",
+      "preview_sha256": "3c206b670efafbb0cf01918fe439b5c9f67b48b6822d05d8e5032e25e885c84a",
+      "trim_policy": "authorized-automatic-window-v5",
+      "window": {
+        "approved_s": [
+          133.97,
+          177.88
+        ],
+        "start_s": 133.97,
+        "duration_s": 43.91,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-24 sobre el master publicado completo (ffmpeg y biblioteca estándar): sonoridad EBU R128 de corto plazo, silencios, ataques por bandas, tempo local en bloques de 12 s, rejilla de compases y tonalidad por croma. Selección automática autorizada por el propietario, sin escucha humana.",
+        "justification": "Seleccionada automáticamente el 2026-10-24 con autorización expresa previa de Luis Guinea. Sección de 98/196 BPM (salsa), la de mayor sonoridad media (−8,2 LUFS de corto plazo) con tempo estable en toda la ventana; 18 compases de primer tiempo a primer tiempo, sin silencios."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, declaración expresa del 2026-10-24: el master publicado enlazado en Google Drive «MEDLEY A PURO DOLOR MASTER 2448.wav» es la grabación de esta obra y autoriza su uso.",
+        "evidence": [
+          "Master «MEDLEY A PURO DOLOR MASTER 2448.wav» enlazado en Google Drive (enlace simbólico en One Page Luis Guinea/audios/Productor/Mandala LOVE (masters Drive)/): sha256 180b4db7abf01f17de88cb30aacf2cdc715692596ce355d6fef72f8e09b89693, igual al registrado en spikes/essentia/audio_links.json.",
+          "ffprobe 337,285 s, igual a duration_ms de catalog_master.json."
+        ]
+      }
+    },
+    {
+      "review_id": "94",
+      "work_id": "medley-cumbia-sabrosa--mandala-love--2023",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Mandala LOVE (masters Drive)/MANDALA MSTRD 2 2448.wav",
+      "source_sha256": "054600df2d55cf9d36916dd3bce0e117f83938a8629a9cdb15851529ada9b8e1",
+      "preview": "assets/audio/previews/medley-cumbia-sabrosa--mandala-love--2023.mp3",
+      "preview_sha256": "f37517addf241a6bc1b2b7075bac937c7e9e4dffb095cf232e837aebdad6446e",
+      "trim_policy": "authorized-automatic-window-v5",
+      "window": {
+        "approved_s": [
+          228.7,
+          273.36
+        ],
+        "start_s": 228.7,
+        "duration_s": 44.66,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-24 sobre el master publicado completo (ffmpeg y biblioteca estándar): sonoridad EBU R128 de corto plazo, silencios, ataques por bandas, tempo local en bloques de 12 s, rejilla de compases y tonalidad por croma. Selección automática autorizada por el propietario, sin escucha humana.",
+        "justification": "Seleccionada automáticamente el 2026-10-24 con autorización expresa previa de Luis Guinea. Ventana de mayor sonoridad media (−10,3 LUFS de corto plazo) dentro del pulso estable de 102 BPM; 19 compases de primer tiempo a primer tiempo, sin silencios."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, declaración expresa del 2026-10-24: el master publicado enlazado en Google Drive «MANDALA MSTRD 2 2448.wav» es la grabación de esta obra y autoriza su uso.",
+        "evidence": [
+          "Master «MANDALA MSTRD 2 2448.wav» enlazado en Google Drive (enlace simbólico en One Page Luis Guinea/audios/Productor/Mandala LOVE (masters Drive)/): sha256 054600df2d55cf9d36916dd3bce0e117f83938a8629a9cdb15851529ada9b8e1, igual al registrado en spikes/essentia/audio_links.json.",
+          "ffprobe 320,495 s, igual a duration_ms de catalog_master.json."
+        ]
+      }
+    },
+    {
+      "review_id": "95",
+      "work_id": "perdoname-rica-y-apretadita-no-me-trates-de-enganar-todavia--mandala-love--2023",
+      "status": "verified",
+      "source": "One Page Luis Guinea/audios/Productor/Mandala LOVE (masters Drive)/FACTORÍA MSTRD.wav",
+      "source_sha256": "68e1acb3042439c394076bbde169098aaeba182a62740e303552ef1e317c7d9d",
+      "preview": "assets/audio/previews/perdoname-rica-y-apretadita-no-me-trates-de-enganar-todavia--mandala-love--2023.mp3",
+      "preview_sha256": "bafd9e44b24a316b0c7c584f2c6e676d63966a25970e6d10e7f2b434349bcfe2",
+      "trim_policy": "authorized-automatic-window-v5",
+      "window": {
+        "approved_s": [
+          140.06,
+          184.9
+        ],
+        "start_s": 140.06,
+        "duration_s": 44.84,
+        "edge_adjustment": null,
+        "method": "Análisis local del 2026-10-24 sobre el master publicado completo (ffmpeg y biblioteca estándar): sonoridad EBU R128 de corto plazo, silencios, ataques por bandas, tempo local en bloques de 12 s, rejilla de compases y tonalidad por croma. Selección automática autorizada por el propietario, sin escucha humana.",
+        "justification": "Seleccionada automáticamente el 2026-10-24 con autorización expresa previa de Luis Guinea. Sección final a 112 BPM, la de mayor sonoridad media (−9,9 LUFS de corto plazo) y la más brillante; 21 compases de primer tiempo a primer tiempo, sin silencios. La estabilidad calculada (0,73) baja por bloques detectados a 74 BPM, que son 2/3 del mismo pulso, no un cambio de tempo."
+      },
+      "association": {
+        "basis": "human_authorization",
+        "authority": "Luis Guinea, declaración expresa del 2026-10-24: el master publicado enlazado en Google Drive «FACTORÍA MSTRD.wav» es la grabación de esta obra y autoriza su uso.",
+        "evidence": [
+          "Master «FACTORÍA MSTRD.wav» enlazado en Google Drive (enlace simbólico en One Page Luis Guinea/audios/Productor/Mandala LOVE (masters Drive)/): sha256 68e1acb3042439c394076bbde169098aaeba182a62740e303552ef1e317c7d9d, igual al registrado en spikes/essentia/audio_links.json.",
+          "ffprobe 201,562 s, igual a duration_ms de catalog_master.json."
         ]
       }
     }

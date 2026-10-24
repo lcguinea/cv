@@ -304,3 +304,21 @@ canción (política `approved-preview-window-v4`; la nota de cada caso cita el s
 - **#91 Di Que Sí** y **#92 Dime:** inéditas confirmadas por el propietario; ya no son provisionales. Publicadas con
   las ventanas aprobadas (A y B), sin enlaces de streaming ni fecha.
 - `/music/` en local: **73 obras** (66 anteriores + 5 de Abe Rapa + 2 inéditas). Sin commit, push ni despliegue.
+
+## Mandala LOVE (2026-10-24)
+
+Declaración expresa de Luis Guinea del 2026-10-24: autorización para publicar fragmentos de las tres grabaciones;
+participó como productor musical, arreglista, director musical, tecladista e ingeniero de edición; se usan los tres
+másteres publicados enlazados en Google Drive (no las copias locales de `Productor/Mandala Love`). No se atribuyen
+composición, autoría ni mezcla.
+
+- **Integradas (76 obras públicas):** #93 A Puro Dolor - Medley (2022), #94 Medley Cumbia Sabrosa (2023) y #95
+  Perdóname / Rica y Apretadita / No Me Trates de Engañar / Todavía, «Medley La Factoría» (2023). Artista Mandala LOVE.
+- **Másteres:** `MEDLEY A PURO DOLOR MASTER 2448.wav` (sha256 `180b4db7…`), `MANDALA MSTRD 2 2448.wav` (`054600df…`) y
+  `FACTORÍA MSTRD.wav` (`68e1acb3…`), enlazados desde `One Page Luis Guinea/audios/Productor/Mandala LOVE (masters Drive)/`.
+- **Créditos públicos:** Producer, Arranger, Music Director, Keyboards y Audio Editing Engineer (tres roles nuevos en
+  `CREDIT_ROLES`). Faceta Producer.
+- **Ventanas:** elegidas automáticamente con autorización previa (política `authorized-automatic-window-v5`): #93
+  133,97–177,88 s, #94 228,70–273,36 s y #95 140,06–184,90 s.
+- **Género y mood:** Tropical (#93, #94) y Urbano latino (#95); Rítmica y Luminosa en las tres.
+- **Apple Music:** solo A Puro Dolor tiene URL verificada; las otras dos quedan sin enlace.

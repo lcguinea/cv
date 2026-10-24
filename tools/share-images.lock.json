@@ -29,6 +29,13 @@
       "width": 600,
       "height": 600
     },
+    "assets/images/share/a-puro-dolor-medley-mandala-love.jpg": {
+      "source": "assets/images/A-Puro-Dolor---Medley---Mandala-LOVE.webp",
+      "source_sha256": "7b483cd1401e2ec13fb63ead57dea967e45c7a80bf5f18ac34301db833fedbff",
+      "sha256": "c7f901f87a321fd8dea68e326a35359c03957bad9b664b4f0d29616418433473",
+      "width": 600,
+      "height": 600
+    },
     "assets/images/share/abrazo-imaginario-ricardo-bojalil.jpg": {
       "source": "assets/images/Abrazo-Imaginario---Ricardo-Bojalil.webp",
       "source_sha256": "d512bb0e0cb9852ab0915a6500e57923dc4aaf496accf16184067c02ac72deae",
@@ -232,6 +239,13 @@
       "width": 600,
       "height": 600
     },
+    "assets/images/share/medley-cumbia-sabrosa-mandala-love.jpg": {
+      "source": "assets/images/Medley-Cumbia-Sabrosa---Mandala-LOVE.webp",
+      "source_sha256": "b8556830834d19becc49ad26f56f0b1490fca4c39bd61ab765053fd79cae806a",
+      "sha256": "c895c0c75b136b5d916f224be90ed2c9962cb4f22729e22b777b6e4956fbe6e6",
+      "width": 600,
+      "height": 600
+    },
     "assets/images/share/mil-versiones-rogelio-edel.jpg": {
       "source": "assets/images/Mil-Versiones---Rogelio-Edel.webp",
       "source_sha256": "7a732570a17b073251dcd187ae61252056ac5dc7b7105bb1a3711b3e602237a5",
@@ -250,6 +264,13 @@
       "source": "assets/images/Nuestro-Hogar---Luis-Guinea.webp",
       "source_sha256": "a0d05cc81db53a1373cd30ef7eb45b39db6649e168c439d8e9110472c072de7e",
       "sha256": "cbe443aec07211a7bd1fea0f0cb4dd28d6fbe78a5971c7f9f932a6c65010c5e8",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/perdoname-rica-y-apretadita-no-me-trates-de-enganar-todavia-mandala-love.jpg": {
+      "source": "assets/images/Perdóname-_-Rica-y-Apretadita-_-No-Me-Trates-de-Engañar-_-Todavía---Mandala-LOVE.webp",
+      "source_sha256": "30e5576d707e0cf4079e8667a0619223e4fb6dcc79881508320d5a0b590c1e2b",
+      "sha256": "097af5ad9a43b7e86d500f53fb2dd2076fbf5c3a25fb49b36bdd75edc6a4713e",
       "width": 600,
       "height": 600
     },
