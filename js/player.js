@@ -3,7 +3,8 @@
 // page changes in sessionStorage; volume and mute live in localStorage. A new session starts a random track on its
 // own when the browser allows it; browsers usually refuse sound before the visitor interacts with the site, so until
 // the first preview has played, the first click or tap outside the player starts it. Resuming after a page change is
-// only attempted and may be refused.
+// only attempted and may be refused. A shared link into /music/ (one recording or filters) starts what it points at
+// instead, through js/music-page.js; see the end of the engine.
 (function(){
   const tracks=window.MUSIC_DATA||[];
   if(!tracks.length)return;
@@ -22,7 +23,7 @@
   const audio=document.createElement('audio');
   audio.preload='none';
   const listeners=[];
-  let index=-1,failed=false,pendingTime=0,knownDuration=0,lastSave=0,autostart=false,played=new Set();
+  let index=-1,failed=false,pendingTime=0,knownDuration=0,lastSave=0,autostart=false,played=new Set(),queue=null;
   function emit(type){listeners.forEach(fn=>fn(type))}
   function isPlaying(){return !audio.paused&&!audio.ended}
   function time(){return audio.readyState>0?audio.currentTime:pendingTime}
@@ -31,18 +32,29 @@
   // not picked again until every other one has played; then a new round starts. `exclude` is never picked when there
   // is an alternative. Orchestral pieces (genre cinematic_classical) are never picked at random; they stay in the
   // catalogue and play when chosen by hand. Choosing a song by hand can always repeat it.
-  const shuffled=tracks.map((x,i)=>i).filter(i=>!(tracks[i].genres||[]).includes('cinematic_classical'));
+  // The queue narrows those picks to the recordings the filters of /music/ show (null: the whole catalogue). Every
+  // recording in a selection takes part, orchestral pieces included: the exclusion applies to the whole catalogue only.
+  // An empty selection has nothing to continue with.
+  const orchestral=i=>(tracks[i].genres||[]).includes('cinematic_classical');
+  const shuffled=tracks.map((x,i)=>i).filter(i=>!orchestral(i));
   const automatic=shuffled.length?shuffled:tracks.map((x,i)=>i);
+  function candidates(){return queue||automatic}
   function randomIndex(exclude){
-    let pool=automatic.filter(i=>i!==exclude&&!played.has(i));
-    if(!pool.length){played.clear();pool=automatic.filter(i=>i!==exclude)}
-    if(!pool.length)pool=[automatic[0]];
+    const from=candidates();
+    if(!from.length)return -1;
+    let pool=from.filter(i=>i!==exclude&&!played.has(i));
+    if(!pool.length){from.forEach(i=>played.delete(i));pool=from.filter(i=>i!==exclude)}
+    if(!pool.length)pool=[from[0]];
     return pool[Math.floor(Math.random()*pool.length)];
+  }
+  function setQueue(list){
+    queue=Array.isArray(list)?list.map(Number).filter((i,at,all)=>i>=0&&i<tracks.length&&all.indexOf(i)===at):null;
+    save();emit('queue');
   }
   function save(){
     if(index<0)return;
     lastSave=Date.now();
-    session.set(SESSION_KEY,JSON.stringify({preview:tracks[index].preview,time:time(),duration:duration(),playing:isPlaying(),auto:autostart,played:[...played].map(i=>tracks[i].preview),tab}));
+    session.set(SESSION_KEY,JSON.stringify({preview:tracks[index].preview,time:time(),duration:duration(),playing:isPlaying(),auto:autostart,played:[...played].map(i=>tracks[i].preview),queue:queue?queue.map(i=>tracks[i].preview):null,tab}));
   }
   function load(i,at,length){
     audio.pause();
@@ -100,7 +112,7 @@
   // players of /music/#jingles, which play their own audio) are left to their controls,
   // and utility controls (skip links, language, theme, menu, sharing a link) never start sound: they are often the first thing a keyboard or
   // screen reader user activates.
-  const GESTURES=['click','touchend'],NO_AUTOSTART='#mini-player,#player,#catalog,.feature-play,[data-player-now],.skip-link,[data-lang],[data-theme-choice],.menu-toggle,.jingle,#share-view,#share-fallback';
+  const GESTURES=['click','touchend'],NO_AUTOSTART='#mini-player,#player,#catalog,.feature-play,[data-player-now],.skip-link,[data-lang],[data-theme-choice],.menu-toggle,.jingle,#share-view,#share-fallback,#play-selection';
   function onGesture(event){if(event.target&&event.target.closest&&event.target.closest(NO_AUTOSTART))return;if(!isPlaying())start()}
   function armAutostart(){
     if(!autostart){autostart=true;GESTURES.forEach(type=>document.addEventListener(type,onGesture,true))}
@@ -109,7 +121,8 @@
   function disarmAutostart(){if(autostart){autostart=false;GESTURES.forEach(type=>document.removeEventListener(type,onGesture,true))}}
   ['play','pause'].forEach(type=>audio.addEventListener(type,()=>{if(type==='play'){disarmAutostart();played.add(index)}save();emit('state')}));
   // A finished preview moves on to another random one; the element already holds the user's permission to play.
-  audio.addEventListener('ended',()=>{select(randomIndex(index),true)});
+  audio.addEventListener('ended',()=>{const i=randomIndex(index);if(i>=0)select(i,true)});
+  function next(){const i=randomIndex(index);return i>=0?select(i,isPlaying()):Promise.resolve(false)}
   ['timeupdate','durationchange','loadedmetadata','emptied'].forEach(type=>audio.addEventListener(type,()=>{if(type==='timeupdate'&&Date.now()-lastSave>1000)save();emit('time')}));
   audio.addEventListener('error',()=>{if(audio.getAttribute('src')){failed=true;emit('state')}});
   window.addEventListener('pagehide',save);
@@ -127,31 +140,59 @@
     let saved=null;
     try{saved=JSON.parse(session.get(SESSION_KEY)||'null')}catch(e){saved=null}
     const i=saved?tracks.findIndex(x=>x.preview===saved.preview):-1;
-    const done=i>=0&&Array.isArray(saved.played)?saved.played.map(name=>tracks.findIndex(x=>x.preview===name)).filter(j=>j>=0):[];
-    return i>=0?{index:i,played:done,time:Math.max(0,Number(saved.time)||0),duration:Math.max(0,Number(saved.duration)||0),playing:saved.playing===true&&saved.tab===tab,auto:saved.auto===true}:null;
+    const indices=list=>list.map(name=>tracks.findIndex(x=>x.preview===name)).filter(j=>j>=0);
+    const done=i>=0&&Array.isArray(saved.played)?indices(saved.played):[];
+    return i>=0?{index:i,played:done,queue:Array.isArray(saved.queue)?indices(saved.queue):null,time:Math.max(0,Number(saved.time)||0),duration:Math.max(0,Number(saved.duration)||0),playing:saved.playing===true&&saved.tab===tab,auto:saved.auto===true}:null;
   }
   function resume(saved){
     const policy=navigator.getAutoplayPolicy?navigator.getAutoplayPolicy('mediaelement'):'';
     if(saved.playing&&policy!=='disallowed'){audio.preload='auto';start()}else save();
   }
-  // A shared link to one recording (/music/?song=<work id>, its preview's name without .mp3) opens on that recording,
-  // paused: the link never starts sound, so it neither resumes nor arms the autostart. js/music-page.js locates it.
-  function linkedIndex(){
-    if(!document.getElementById('catalog'))return -1;
-    let id='';
-    try{id=new URLSearchParams(location.search).get('song')||''}catch(e){id=''}
-    return /^[a-z0-9][a-z0-9-]*$/.test(id)?tracks.findIndex(x=>x.preview===id+'.mp3'):-1;
+  // Shared links into /music/: ?song=<work id> (its preview's name without .mp3) points at one recording, and q, artist,
+  // credit, mood and genre are filters. Opening such a link (not reloading it or coming back to it) hands the start to
+  // js/music-page.js, the only one that knows what the filters select: the engine loads quietly, without the autostart,
+  // until the page calls openLink (attempt to play that recording; the browser may refuse sound without a gesture, and
+  // then it waits, ready, for Play) or settleLink (select it without playing, or nothing at all: the recording is not in
+  // the catalogue, the filters select nothing, or a hash such as #jingles leads elsewhere). Reloading a link keeps the
+  // session as it was, resuming only what was already playing in this tab.
+  function linkRequest(){
+    if(!document.getElementById('catalog'))return null;
+    let params;
+    try{params=new URLSearchParams(location.search)}catch(e){return null}
+    const id=params.get('song')||'',song=/^[a-z0-9][a-z0-9-]*$/.test(id)?tracks.findIndex(x=>x.preview===id+'.mp3'):-1;
+    const filters=['q','artist','credit','mood','genre'].some(key=>params.getAll(key).some(value=>value.trim()));
+    if(!params.get('song')&&!filters)return null;
+    let type='navigate';
+    try{const entry=performance.getEntriesByType('navigation')[0];if(entry)type=entry.type}catch(e){}
+    return {song,fresh:type==='navigate'};
   }
-  const saved=readSaved(),linked=linkedIndex();
-  if(linked>=0){if(saved)played=new Set(saved.played);const same=!!saved&&saved.index===linked;load(linked,same?saved.time:0,same?saved.duration:0);save()}
-  else if(saved){played=new Set(saved.played);load(saved.index,saved.time,saved.duration);if(saved.auto&&!saved.playing)armAutostart();else resume(saved)}
+  const saved=readSaved(),link=linkRequest();
+  let awaiting=false;
+  if(saved){played=new Set(saved.played);queue=saved.queue}
+  if(link&&link.fresh){
+    const i=link.song>=0?link.song:saved?saved.index:randomIndex(-1),same=!!saved&&saved.index===i;
+    awaiting=true;load(i,same?saved.time:0,same?saved.duration:0);
+  }else if(link&&link.song>=0){
+    const same=!!saved&&saved.index===link.song;
+    load(link.song,same?saved.time:0,same?saved.duration:0);
+    if(same&&saved.playing)resume(saved);else save();
+  }
+  else if(saved){load(saved.index,saved.time,saved.duration);if(saved.auto&&!saved.playing)armAutostart();else resume(saved)}
   else{load(randomIndex(-1),0,0);armAutostart()}
+  // Only the first call after opening a link counts, so a link never starts twice.
+  function openLink(i){if(!awaiting)return Promise.resolve(false);awaiting=false;return select(i,true)}
+  function settleLink(i){
+    if(!awaiting)return;
+    awaiting=false;
+    if(i>=0&&i<tracks.length&&i!==index)load(i,0,0);
+    save();emit('state');
+  }
   // Back/forward cache: this page comes back as it was left, so it catches up with what later pages saved.
   window.addEventListener('pageshow',event=>{
     if(!event.persisted)return;
     const latest=readSaved();
     if(!latest)return;
-    played=new Set(latest.played);
+    played=new Set(latest.played);queue=latest.queue;
     if(latest.index!==index)load(latest.index,latest.time,latest.duration);
     else if(Math.abs(time()-latest.time)>.5)seek(latest.time);
     if(!latest.playing)audio.pause();
@@ -170,7 +211,7 @@
     }catch(e){}
   }
   if(mediaSession){
-    const actions={play:()=>start(),pause:()=>audio.pause(),nexttrack:()=>select(randomIndex(index),isPlaying()),seekto:details=>seek(details.seekTime)};
+    const actions={play:()=>start(),pause:()=>audio.pause(),nexttrack:next,seekto:details=>seek(details.seekTime)};
     Object.keys(actions).forEach(action=>{try{mediaSession.setActionHandler(action,actions[action])}catch(e){}});
     listeners.push(type=>{if(type==='track'||type==='state')updateMediaSession()});
     updateMediaSession();
@@ -182,8 +223,9 @@
     volume:()=>audio.volume,muted:()=>audio.muted,
     select,play:start,pause:()=>audio.pause(),
     toggle:()=>{if(isPlaying()){audio.pause();return Promise.resolve(false)}return start()},
-    next:()=>select(randomIndex(index),isPlaying()),
-    seek,setVolume,setMuted,
+    next,seek,setVolume,setMuted,
+    queue:()=>queue?queue.slice():null,setQueue,
+    linkPending:()=>awaiting,openLink,settleLink,
     on:fn=>{listeners.push(fn)},
   };
 })();

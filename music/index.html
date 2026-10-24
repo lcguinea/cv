@@ -16,7 +16,7 @@
 <section id="player" class="music-player section" aria-labelledby="player-heading"><div class="wrap">
 <h2 id="player-heading" class="sr-only" data-i18n="music.playerHeading">Player</h2>
 <article class="now-playing" aria-labelledby="np-title">
-<figure class="np-art"><img id="np-art" src="" alt="" width="640" height="640"></figure>
+<figure class="np-art"><img id="np-art" src="" alt="" width="640" height="640"><button id="np-start" class="np-start" type="button" hidden><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 2l10 6-10 6z"/></svg><span data-i18n="music.startSong">Play</span></button></figure>
 <div class="np-info">
 <p class="eyebrow"><span data-i18n="music.nowSelected"></span> · <span id="np-index" class="np-index"></span></p>
 <h3 id="np-title" class="np-title"></h3>
@@ -38,7 +38,7 @@
 </div></section>
 
 <section class="music-catalog section" aria-labelledby="playlist-heading"><div class="wrap">
-<div class="playlist-head"><h2 id="playlist-heading" data-i18n="music.playlist">Selected Works</h2><p class="catalog-count" role="status" aria-live="polite" aria-atomic="true"><span id="count">0</span> / <span id="total">0</span> <span data-i18n="music.releases"></span></p></div>
+<div class="playlist-head"><h2 id="playlist-heading" data-i18n="music.playlist">Selected Works</h2><div class="playlist-meta"><p class="catalog-count" role="status" aria-live="polite" aria-atomic="true"><span id="count">0</span> / <span id="total">0</span> <span data-i18n="music.releases"></span></p><button id="play-selection" class="clear-filters play-selection" type="button" hidden><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 2l10 6-10 6z"/></svg><span data-i18n="music.playSelection">Play selection</span></button></div></div>
 <div class="catalog-explore" role="search" aria-label="Explore the catalogue" data-i18n-label="music.exploreLabel">
 <div class="explore-group" role="group" aria-labelledby="mood-label" aria-describedby="style-note"><p id="mood-label" class="explore-label" data-i18n="music.moodLabel">Mood</p><div id="moods" class="chips"></div></div>
 <div class="explore-group" role="group" aria-labelledby="genre-label" aria-describedby="style-note"><p id="genre-label" class="explore-label" data-i18n="music.genreLabel">Genre</p><div id="genres" class="chips"></div></div>

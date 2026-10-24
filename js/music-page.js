@@ -152,7 +152,7 @@
   function commit(fromSearch){
     const replace=!!fromSearch&&typing;
     typing=!!fromSearch;
-    linked=-1;notes=[];showNotes();renderList();writeUrl(replace);
+    linked=-1;notes=[];renderList();showNotes();writeUrl(replace);
   }
   // Opening, reloading or stepping through history: the URL decides. A shared recording wins over filters that would
   // hide it (they are cleared and the notice says so); unknown values and recordings that are not (or no longer) in the
@@ -172,13 +172,43 @@
     if(initial)writeUrl(true);
     // The engine opened on the shared recording (js/player.js); a history step only selects it when nothing sounds.
     else if(linked>=0&&!P.isPlaying()&&P.index()!==linked)P.select(linked,false);
+    return state;
   }
   const notice=$('link-notice');
   function showNotes(){
     if(!notice)return;
-    notice.textContent=notes.map(([key,i])=>{const x=tracks[i];return t(key).replace('{title}',x?x.title:'').replace('{artist}',x?x.artist:'')}).join(' ');
-    notice.hidden=!notes.length;
+    const lines=notes.concat(prompt==='selection'?[['music.selectionBlocked']]:[]);
+    notice.textContent=lines.map(([key,i])=>{const x=tracks[i];return t(key).replace('{title}',x?x.title:'').replace('{artist}',x?x.artist:'').replace('{n}',visible.length)}).join(' ');
+    notice.hidden=!lines.length;
   }
+  // Playing what a link points at. The filters are the queue: Next, Previous, the end of a preview and the random picks
+  // of the engine stay among the recordings they show, and without filters the whole catalogue plays as usual. A
+  // recording that stops matching keeps playing until it ends or the visitor moves on; the next one comes from the new
+  // selection. An empty selection plays nothing more. Opening a link tries to start its recording (or the first of its
+  // selection) at once; when the browser refuses sound without a gesture, the player stays on it and a Play button on
+  // the cover (one recording) or beside the results (a selection) starts it with one press.
+  let prompt='';
+  const startSong=$('np-start'),startSelection=$('play-selection');
+  function syncQueue(){P.setQueue(filtering()?visible.slice():null)}
+  function updatePrompt(){
+    if(prompt&&P.isPlaying()){prompt='';showNotes()}
+    const x=P.current();
+    if(startSong){startSong.hidden=prompt!=='song';startSong.setAttribute('aria-label',t('music.play')+': '+x.title)}
+    if(startSelection){startSelection.hidden=prompt!=='selection'||!visible.length;startSelection.setAttribute('aria-label',t('music.playSelectionLabel').replace('{n}',visible.length))}
+  }
+  function openLink(state){
+    if(!P.linkPending())return;
+    const first=linked>=0?linked:filtering()&&visible.length?visible[0]:-1;
+    // A recording that is not there, or a hash with its own destination, selects without playing.
+    if(first<0||state.missing||location.hash){P.settleLink(first);return}
+    P.openLink(first).then(ok=>{
+      if(ok||P.isPlaying()||P.failed())return;
+      prompt=linked>=0?'song':'selection';
+      updatePlayer();showNotes();
+    });
+  }
+  if(startSong)startSong.addEventListener('click',()=>P.play());
+  if(startSelection)startSelection.addEventListener('click',()=>P.select(visible.includes(P.index())?P.index():visible[0],true));
   // Share copies a link. Without a clipboard (an insecure origin, a refused permission, an older browser) the link
   // appears selected in a field to copy by hand. Copying is announced and shown on the button for a moment.
   const shareView=$('share-view'),shareStatus=$('share-status'),fallback=$('share-fallback'),fallbackUrl=$('share-url');
@@ -258,6 +288,8 @@
     count.textContent=visible.length;
     empty.hidden=visible.length>0;
     if(clear)clear.disabled=!changed();
+    $('prev').disabled=$('next').disabled=!visible.length;
+    syncQueue();
     if(fallback&&catalog.contains(fallback))closeFallback(false);
     catalog.innerHTML=visible.map((i,at)=>{const x=tracks[i];return `<li${i===linked?' class="is-linked"':''}><button type="button" class="pl-row" data-index="${i}" aria-current="false"><span class="pl-num">${pad(at+1)}</span><img class="pl-thumb" src="${P.artworkUrl(x.artwork)}" alt="" loading="lazy" width="56" height="56"><span class="pl-main"><span class="pl-title">${esc(x.title)}</span><span class="pl-artist">${[x.artist].concat(tags(x)).map(esc).join(' · ')}</span></span><span class="pl-roles">${x.roles.map(r=>`<span data-i18n="${roleKey(r)}">${esc(t(roleKey(r)))}</span>`).join(' · ')}</span><span class="pl-year">${x.year??''}</span><span class="pl-state"></span></button><ul class="pl-links">${platformLinks(x)}<li><button type="button" class="pl-share" data-song="${esc(songId(x))}" aria-label="${esc(t('music.shareSong').replace('{title}',x.title).replace('{artist}',x.artist))}"><span class="share-text">${esc(t('music.share'))}</span></button></li></ul></li>`}).join('');
     updateRows();
@@ -301,11 +333,12 @@
   function updatePlayer(){
     const x=P.current(),playing=P.isPlaying();
     toggle.dataset.state=playing?'playing':'paused';
-    if(!P.failed())statusLine.textContent=playing?t('music.playing')+': '+x.title+' · '+x.artist:(P.time()>0?t('music.paused')+': '+x.title:'');
+    if(!P.failed())statusLine.textContent=playing?t('music.playing')+': '+x.title+' · '+x.artist:prompt?t('music.autoplayBlocked'):(P.time()>0?t('music.paused')+': '+x.title:'');
     volume.value=String(P.muted()?0:P.volume());
     volume.setAttribute('aria-valuetext',t('player.percent').replace('{n}',Math.round((P.muted()?0:P.volume())*100)));
     updateLabels();
     updateRows();
+    updatePrompt();
   }
   function updateTime(){
     const duration=P.duration();
@@ -314,7 +347,8 @@
     seek.setAttribute('aria-valuetext',clock(P.time())+' '+t('music.of')+' '+clock(duration));
   }
   function step(delta){
-    const list=visible.length?visible:tracks.map((x,i)=>i),at=list.indexOf(P.index());
+    const list=visible,at=list.indexOf(P.index());
+    if(!list.length)return;
     const next=at<0?list[delta>0?0:list.length-1]:list[(at+delta+list.length)%list.length];
     P.select(next,P.isPlaying());
   }
@@ -349,18 +383,19 @@
   document.addEventListener('lg:language',()=>{updateCover();buildChips();buildArtists();renderList();updatePlayer();showNotes()});
   $('total').textContent=tracks.length;
   updateCover();buildChips();buildArtists();
-  restore(true);renderTrack();
+  const opened=restore(true);renderTrack();openLink(opened);
   // Back and Forward between views of the catalogue restore them without reloading; what is playing is never interrupted.
   window.addEventListener('popstate',()=>{typing=false;restore(false)});
-  // A shared recording is brought into view once the layout is final, only when the link was just opened: a reload or
-  // a history step keeps the position the browser restores, and a hash (#jingles) keeps its own destination.
+  // Where a link lands, once the layout is final and only when the link was just opened (a reload or a history step
+  // keeps the position the browser restores, and a hash such as #jingles keeps its own destination): a recording opens
+  // the large player on it, with the focus on Play; filters open their results.
   function reveal(){
     const entry=window.performance&&performance.getEntriesByType?performance.getEntriesByType('navigation')[0]:null;
-    if(linked<0||location.hash||(entry&&entry.type!=='navigate'))return;
-    const row=catalog.querySelector('.is-linked .pl-row');
-    if(!row)return;
-    if(row.scrollIntoView)row.scrollIntoView({block:'center',behavior:'instant'});
-    try{row.focus({preventScroll:true})}catch(e){row.focus()}
+    if(location.hash||(entry&&entry.type!=='navigate'))return;
+    const target=linked>=0?$('player'):filtering()?$('playlist-heading'):null;
+    if(!target)return;
+    if(target.scrollIntoView)target.scrollIntoView({block:'start',behavior:'instant'});
+    if(linked>=0)try{toggle.focus({preventScroll:true})}catch(e){toggle.focus()}
   }
   if(document.readyState==='complete')reveal();else window.addEventListener('load',()=>requestAnimationFrame(reveal));
   // Jingles (#jingles) use their own native players: one at a time. The engine already pauses when any of them plays.

@@ -312,6 +312,8 @@ class Page {
         options.languages ? {languages: options.languages, language: options.languages[0]} : {}),
       BroadcastChannel: options.broadcastChannel === false ? undefined : BroadcastChannel,
       IntersectionObserver, CustomEvent, MediaMetadata,
+      // Navigation Timing: `navigation: 'reload'` or `'back_forward'` opens the page the way a reload or a history step does.
+      performance: {getEntriesByType: type => type === 'navigation' ? [{type: options.navigation || 'navigate'}] : []},
       requestAnimationFrame: fn => setImmediate(fn),
       matchMedia: () => ({matches: false, addEventListener() {}}),
     };

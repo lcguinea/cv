@@ -4,7 +4,8 @@ the Share actions with their clipboard fallback, history, reload, language and i
 
 The real page runs with its real scripts in tests/support/minidom.js, whose location and History API follow
 pushState/replaceState (every change is recorded in `page.urls`) and whose clipboard is absent unless a page is opened
-with `clipboard: 'granted'` or `'denied'`. Media elements refuse playback without a user gesture, as in browsers.
+with `clipboard: 'granted'` or `'denied'`. Media elements refuse playback without a user gesture, as in browsers. How links start playback is covered in
+tests/test_music_link_playback.py.
 Requires Node.js; standard library only.
 
 Run: python3 -m unittest tests/test_music_share_links.py
@@ -43,6 +44,8 @@ const view = page => ({
 });
 const data = () => browser.tab().open(BASE).eval('MUSIC_DATA');
 """
+# With sound refused, a link to a selection says how to start it after its other notes.
+BLOCKED = "Your browser did not let playback start on its own. Press \u201cPlay selection\u201d to listen to these {n} recordings."
 
 
 @unittest.skipUnless(NODE, "node not installed")
@@ -92,7 +95,7 @@ class MusicShareLinkTests(unittest.TestCase):
         self.assertTrue(linked["rows"])
         self.assertEqual((linked["artist"], linked["credit"], linked["sort"]), ("Rogelio Edel", "Producer", "year-asc"))
         self.assertEqual(sorted(linked["pressed"]), ["genre:pop", "mood:melancholic", "mood:warm"])
-        self.assertEqual(linked["notice"], "")
+        self.assertEqual(linked["notice"], BLOCKED.format(n=len(linked["rows"])))
         # The page writes the same URL the link had: the catalogue's ids, a fixed order, no labels and no language.
         self.assertEqual(chosen["url"], "/music/index.html?artist=Rogelio%20Edel&credit=producer&mood=warm,melancholic&genre=pop&sort=year-asc")
         self.assertEqual(linked["url"], chosen["url"])
@@ -153,25 +156,24 @@ class MusicShareLinkTests(unittest.TestCase):
         self.assertEqual(len(out["song"]["linked"]), 1)
         self.assertFalse(out["song"]["playing"])
 
-    def test_a_song_link_locates_the_recording_without_playing_it(self):
+    def test_a_song_link_locates_the_recording_and_opens_the_player_on_it(self):
         out = self.run_scenario(
             "const page = open('?song=%s', {autoplayBlocked: false}); await settle(); out.open = view(page);"
-            "page.window._fire('load'); await settle(); out.loaded = view(page); out.focus = page.document.activeElement.dataset.index;"
+            "page.window._fire('load'); await settle(); out.loaded = view(page); out.focus = page.document.activeElement.id;"
             "page.click('.music-hero'); await settle(); out.click = view(page);"
             "out.data = page.eval('MUSIC_DATA.map(x => [x.title, x.artist])');" % SONG
         )
         i = PREVIEWS.index(SONG)
         s = out["open"]
         self.assertEqual((s["linked"], s["current"]), ([i], i))
-        # Even where the browser allows sound, a link to one recording never starts it, then or on a later click.
-        self.assertEqual(s["attempts"], [])
-        self.assertFalse(s["playing"])
-        self.assertEqual((s["session"]["playing"], s["session"]["auto"]), (False, False))
-        self.assertEqual(out["click"]["attempts"], [])
+        # Where the browser allows sound, the recording starts once; a later click starts nothing more.
+        self.assertEqual((s["attempts"], s["playing"]), (["play:engine"], True))
+        self.assertEqual(out["click"]["attempts"], ["play:engine"])
         title, artist = out["data"][i]
         self.assertEqual(s["notice"], f"Shared link: {title} by {artist} is highlighted in the list.")
-        self.assertEqual(out["loaded"]["scrolled"], [{"id": "", "index": str(i), "options": {"block": "center", "behavior": "instant"}}])
-        self.assertEqual(out["focus"], str(i))
+        # The view goes to the large player, not to the list, with the focus on its Play/Pause button.
+        self.assertEqual(out["loaded"]["scrolled"], [{"id": "player", "options": {"block": "start", "behavior": "instant"}}])
+        self.assertEqual(out["focus"], "toggle")
         self.assertEqual(s["url"], f"/music/index.html?song={SONG}")
 
     def test_after_a_song_link_the_first_press_on_play_starts_that_recording(self):
@@ -183,13 +185,13 @@ class MusicShareLinkTests(unittest.TestCase):
             "const bar = open('?song=%s'); await settle(); bar.click('#mp-toggle'); await settle(); out.bar = view(bar);" % (SONG, SONG)
         )
         i = PREVIEWS.index(SONG)
-        self.assertEqual((out["open"]["attempts"], out["open"]["playing"]), ([], False))
-        # One press, one request, and it is granted because it comes from the visitor's gesture.
-        self.assertEqual((out["play"]["attempts"], out["play"]["playing"], out["play"]["current"]), (["play:engine"], True, i))
+        # Sound was refused when the link opened; one press, one more request, granted because it comes from a gesture.
+        self.assertEqual((out["open"]["attempts"], out["open"]["playing"]), (["blocked:engine"], False))
+        self.assertEqual((out["play"]["attempts"], out["play"]["playing"], out["play"]["current"]), (["blocked:engine", "play:engine"], True, i))
         self.assertTrue(out["label"].startswith("Pause preview: "))
         self.assertFalse(out["pause"]["playing"])
         # The bottom bar's button does the same.
-        self.assertEqual((out["bar"]["attempts"], out["bar"]["playing"], out["bar"]["current"]), (["play:engine"], True, i))
+        self.assertEqual((out["bar"]["attempts"], out["bar"]["playing"], out["bar"]["current"]), (["blocked:engine", "play:engine"], True, i))
 
     def test_a_song_link_wins_over_filters_that_would_hide_it_and_keeps_compatible_ones(self):
         out = self.run_scenario(
@@ -231,7 +233,8 @@ class MusicShareLinkTests(unittest.TestCase):
                 self.assertEqual(s["url"], "/music/index.html?mood=warm")
                 self.assertNotIn("<img src=x", s["html"])
                 self.assertFalse(s["playing"])
-                expected = "" if song == "" else "The shared recording is not available in this catalogue."
+                # A recording that is not there starts nothing; an empty one leaves a plain link to the selection.
+                expected = BLOCKED.format(n=len(out["warm"]["rows"])) if song == "" else "The shared recording is not available in this catalogue."
                 self.assertEqual(s["notice"], expected)
 
     def test_unknown_values_are_left_out_and_reported_and_special_characters_round_trip(self):
@@ -246,7 +249,7 @@ class MusicShareLinkTests(unittest.TestCase):
         bad = out["bad"]
         self.assertEqual((bad["pressed"], bad["artist"], bad["credit"], bad["sort"], bad["search"]), (["mood:warm"], "", "", "year-desc", ""))
         self.assertEqual(bad["url"], "/music/index.html?mood=warm")
-        self.assertEqual(bad["notice"], "Some filters in the link are not available and were left out.")
+        self.assertEqual(bad["notice"], "Some filters in the link are not available and were left out. " + BLOCKED.format(n=len(bad["rows"])))
         self.assertEqual(out["lower"]["artist"], "Carla Calderon")
         self.assertEqual(out["accent"]["artist"], "Carla Calderón")
         typed = out["typed"]
@@ -290,8 +293,8 @@ class MusicShareLinkTests(unittest.TestCase):
         self.assertEqual((out["status"], out["state"], out["text"]), ("Link copied to the clipboard.", "copied", "Copied"))
         self.assertTrue(out["songLabel"].startswith("Share: copy a link to Cómo Decirte by "))
         self.assertTrue(all(n == 1 for n in out["shares"]))
-        # Sharing never plays or selects anything.
-        self.assertEqual(out["attempts"], ["blocked:engine"])
+        # Sharing never plays or selects anything (and this link, with a hash, starts nothing itself).
+        self.assertEqual(out["attempts"], [])
         self.assertEqual(out["later"], ["", "Share"])
         self.assertTrue(out["esLabel"].startswith("Compartir: copiar un enlace a "))
 
