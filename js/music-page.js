@@ -209,6 +209,25 @@
   }
   if(startSong)startSong.addEventListener('click',()=>P.play());
   if(startSelection)startSelection.addEventListener('click',()=>P.select(visible.includes(P.index())?P.index():visible[0],true));
+  // Links with a preview: WhatsApp and social networks show the title, description and image of the URL itself without
+  // running JavaScript, so a recording or a usual selection is shared as its own static page (js/share-pages.js, made by
+  // tools/build_share_pages.js), which opens /music/ with the same parameters. Other selections (search text, rarer
+  // combinations) are shared as they are and preview as /music/. The order travels with a page as ?sort=.
+  const SHARE_PAGES=window.SHARE_PAGES||{},siteRoot=new URL('../',location.href);
+  function shareKey(){
+    if(search.value.trim())return '';
+    const parts=[];
+    if(artistFilter&&artistFilter.value)parts.push('artist='+enc(artistFilter.value));
+    if(role.value)parts.push('credit='+enc(role.value.toLowerCase()));
+    ['genre','mood'].forEach(group=>{if(chosen[group].size)parts.push(group+'='+[...chosen[group]].sort().map(enc).join(','))});
+    return parts.join('&');
+  }
+  function viewLink(){
+    const page=SHARE_PAGES[shareKey()];
+    if(!page)return pageUrl(filterQuery());
+    return new URL(page,siteRoot).href+(sort&&sort.value!==DEFAULT_SORT?'?sort='+enc(sort.value):'');
+  }
+  function songLink(id){const page=SHARE_PAGES['song='+enc(id)];return page?new URL(page,siteRoot).href:pageUrl(['song='+enc(id)])}
   // Share copies a link. Without a clipboard (an insecure origin, a refused permission, an older browser) the link
   // appears selected in a field to copy by hand. Copying is announced and shown on the button for a moment.
   const shareView=$('share-view'),shareStatus=$('share-status'),fallback=$('share-fallback'),fallbackUrl=$('share-url');
@@ -251,7 +270,7 @@
     $('share-close').addEventListener('click',()=>closeFallback(true));
     fallback.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();closeFallback(true)}});
   }
-  if(shareView){shareView.hidden=false;shareView.addEventListener('click',()=>share(pageUrl(filterQuery()),shareView))}
+  if(shareView){shareView.hidden=false;shareView.addEventListener('click',()=>share(viewLink(),shareView))}
   function norm(value){return String(value||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')}
   function esc(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
   function roleKey(name){return 'music.role'+String(name).replace(/[^A-Za-z]/g,'')}
@@ -358,7 +377,7 @@
   seek.addEventListener('input',()=>P.seek(seek.value));
   volume.addEventListener('input',()=>P.setVolume(volume.value));
   if(!P.volumeSupported)$('np-volume-field').hidden=true;
-  catalog.addEventListener('click',event=>{const button=event.target.closest('.pl-share');if(button){share(pageUrl(['song='+enc(button.dataset.song)]),button);return}const row=event.target.closest('.pl-row');if(!row)return;const i=Number(row.dataset.index);if(i===P.index()&&P.isPlaying())P.pause();else P.select(i,true)});
+  catalog.addEventListener('click',event=>{const button=event.target.closest('.pl-share');if(button){share(songLink(button.dataset.song),button);return}const row=event.target.closest('.pl-row');if(!row)return;const i=Number(row.dataset.index);if(i===P.index()&&P.isPlaying())P.pause();else P.select(i,true)});
   catalog.addEventListener('keydown',event=>{
     const rows=[...catalog.querySelectorAll('.pl-row')],at=rows.indexOf(document.activeElement);
     const target={ArrowDown:at+1,ArrowUp:at-1,Home:0,End:rows.length-1}[event.key];

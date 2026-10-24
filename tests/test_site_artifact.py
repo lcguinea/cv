@@ -68,7 +68,7 @@ class ArtifactTest(unittest.TestCase):
         self.assertEqual(top, {"404.html", "agenda", "assets", "css", "cv.html", "fonts", "index.html", "js", "music",
                                "robots.txt", "sitemap.xml", "sobre-mi.html"})
         previews = [p for p in self.present if p.startswith("assets/audio/previews/")]
-        images = [p for p in self.present if p.startswith("assets/images/")]
+        images = [p for p in self.present if p.startswith("assets/images/") and not p.startswith("assets/images/share/")]
         artworks, published = build_site.music_files()
         # One preview per published work and one copy of each distinct artwork: both counts come
         # from js/music-data.js and the manifest, not from a hard-coded number.
@@ -83,8 +83,12 @@ class ArtifactTest(unittest.TestCase):
         # The academic jingles of /music/#jingles: exactly the files of jingles_manifest.json.
         jingles = [p for p in self.present if p.startswith(build_site.JINGLES_DIR + "/")]
         self.assertEqual(sorted(jingles), sorted(build_site.jingle_files()))
+        # Link previews of shared music links: the pages of js/share-pages.js and the JPEG images they use.
+        pages, share_images = build_site.share_files()
+        self.assertEqual(sorted(p for p in self.present if p.startswith("assets/images/share/")), share_images)
+        self.assertTrue(set(pages) <= set(self.present))
         self.assertEqual(len(self.present), len(build_site.STATIC_FILES) + len(set(artworks)) + len(published)
-                         + len(jingles))
+                         + len(jingles) + len(pages) + len(share_images))
 
     def test_no_private_or_development_content(self):
         for rel in self.present:
@@ -248,6 +252,12 @@ class PublicationFilesTest(unittest.TestCase):
         checks = wf.index("python3 -m unittest tests/test_site_artifact.py")
         self.assertLess(build, checks)
         self.assertLess(checks, upload)
+        # The link-preview pages are checked against the catalogue before the artifact is built (no macOS tools).
+        previews = wf.index("node tools/build_share_pages.js --check")
+        self.assertLess(build, previews)
+        self.assertLess(previews, wf.index("python3 tools/build_site.py --out _site"))
+        self.assertNotIn("--images", wf)
+        self.assertNotIn("macos", wf)
 
 
 if __name__ == "__main__":

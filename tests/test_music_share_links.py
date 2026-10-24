@@ -267,7 +267,8 @@ class MusicShareLinkTests(unittest.TestCase):
         )
         self.assertTrue(out["es"]["notice"].startswith("Enlace compartido: Cómo Decirte de "))
         self.assertEqual(out["esBright"]["rows"], out["enRows"])
-        self.assertEqual(out["copied"], ["http://test.local/music/index.html?mood=warm,bright"])
+        # A usual selection is shared as its link-preview page (in English for every visitor).
+        self.assertEqual(out["copied"], ["http://test.local/music/mood/warm-or-bright/"])
         # Switching the language changes neither the URL nor the list.
         self.assertEqual((out["en"]["url"], out["en"]["rows"]), (out["esBright"]["url"], out["esBright"]["rows"]))
 
@@ -287,9 +288,10 @@ class MusicShareLinkTests(unittest.TestCase):
         )
         self.assertFalse(out["hidden"])
         self.assertEqual(out["label"], "Share: copy a link to this view of the catalogue")
-        # The view link holds the filters only: no hash, no foreign parameters, no recording.
-        self.assertEqual(out["copied"], ["http://test.local/music/index.html?genre=pop&sort=artist-desc",
-                                         f"http://test.local/music/index.html?song={SONG}"])
+        # The view link holds the filters only (here as the preview page of Pop, with its order): no hash, no foreign
+        # parameters, no recording. A recording is shared as its own preview page.
+        self.assertEqual(out["copied"], ["http://test.local/music/genre/pop/?sort=artist-desc",
+                                         f"http://test.local/music/song/{SONG}/"])
         self.assertEqual((out["status"], out["state"], out["text"]), ("Link copied to the clipboard.", "copied", "Copied"))
         self.assertTrue(out["songLabel"].startswith("Share: copy a link to Cómo Decirte by "))
         self.assertTrue(all(n == 1 for n in out["shares"]))
@@ -317,10 +319,10 @@ class MusicShareLinkTests(unittest.TestCase):
         )
         for name, case in out["cases"].items():
             with self.subTest(clipboard=name):
-                self.assertEqual(case["song"], {"hidden": False, "value": f"http://test.local/music/index.html?song={SONG}",
+                self.assertEqual(case["song"], {"hidden": False, "value": f"http://test.local/music/song/{SONG}/",
                                                 "inRow": True, "focus": "share-url", "selected": "share-url"})
                 self.assertEqual(case["closed"], {"hidden": True, "focus": True, "home": True})
-                self.assertEqual(case["view"], {"hidden": False, "value": "http://test.local/music/index.html?mood=warm"})
+                self.assertEqual(case["view"], {"hidden": False, "value": "http://test.local/music/mood/warm/"})
                 self.assertTrue(case["escaped"])
                 self.assertEqual(case["focus"], "share-view")
                 self.assertEqual(case["status"], "")

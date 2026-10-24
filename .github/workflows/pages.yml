@@ -24,6 +24,10 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      # The link-preview pages of shared music links must match the public catalogue: fails on a missing page, a page
+      # of a retired recording, out-of-date metadata or index, or an image whose cover changed. Writes nothing.
+      - name: Check link-preview pages
+        run: node tools/build_share_pages.js --check
       - name: Build and validate _site
         run: python3 tools/build_site.py --out _site
       - name: Focused checks

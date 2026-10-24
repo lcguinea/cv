@@ -1,0 +1,348 @@
+{
+  "generator": "tools/build_share_pages.js --images",
+  "images": {
+    "assets/images/share/1000-dias-pablo-delgado.jpg": {
+      "source": "assets/images/1000-Días---Pablo-Delgado.webp",
+      "source_sha256": "113b60348433b4d2a108e0929340c71b0803b9bd5631ab6b9ae7588f6f37d788",
+      "sha256": "1168339cff53f14fc1835208a6a93f3a9cd6e169037112ed429b1289c6972326",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/12-meses-rogelio-edel.jpg": {
+      "source": "assets/images/12-Meses---Rogelio-Edel.webp",
+      "source_sha256": "c0cd34e5512b99b6ff9cfe768c2ebf3e127bff7cf0b6e9e41263260e6e1585d9",
+      "sha256": "2e4d87fd62d855b3a9498b524094524a707b9d861898e699aa98896a73ce51fd",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/a-escondidas-isabella-macias.jpg": {
+      "source": "assets/images/A-Escondidas---Isabella-Macías.webp",
+      "source_sha256": "d9a3eb62fd79db79076d7a1b7202a8e49c993f1e621a34f57ac1ffcd93b189f6",
+      "sha256": "da1261efdd29f889e6651a55dca421f4ee9611a86e8a4398350f5aa30c74741a",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/a-million-dreams-acoustic-cover-isabella-macias.jpg": {
+      "source": "assets/images/A-Million-Dreams---Acoustic-Cover---Isabella-Macías.webp",
+      "source_sha256": "1c43ba1cd0a75e021b381679b23d2130a8af42cab317def6b74104c8440d401d",
+      "sha256": "387a9f5394745e65bfeab2321f70057d20ee9c075d254eafc60902364efef9f4",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/abrazo-imaginario-ricardo-bojalil.jpg": {
+      "source": "assets/images/Abrazo-Imaginario---Ricardo-Bojalil.webp",
+      "source_sha256": "d512bb0e0cb9852ab0915a6500e57923dc4aaf496accf16184067c02ac72deae",
+      "sha256": "92c5cf7ab531cfe7379a448ac1f8e3921057700ddb0061c62dae4868516593a9",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/agua-de-mar-luis-guinea.jpg": {
+      "source": "assets/images/Agua-de-Mar---Luis-Guinea.webp",
+      "source_sha256": "3585f3e1bdb4aa3d0864f3e70f437f0e89ef6b647c9c53aaf62c94d7b1ebc78d",
+      "sha256": "714d832663149dd8effd43256e96ecc9473cb0140d1f18c19556e67677ee36b0",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/ahi-estas-canciones-de-puno-y-letra.jpg": {
+      "source": "assets/images/Ahí-Estás---Canciones-de-Puño-y-Letra.webp",
+      "source_sha256": "69aaf3441d5a82f2f11972b7257ee8d38ff8ccdf7ed8edaf80a0ed0e5b008dc3",
+      "sha256": "7a966e8f43f8526f1b178946456a955b301d5db7d6c4c6edaaeb88d0d6cd0300",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/alla-rogelio-edel.jpg": {
+      "source": "assets/images/Allá---Rogelio-Edel.webp",
+      "source_sha256": "3bea9f3a10857c5a76286d0e40e6343f1595ceed9c7fb3b912814f966824d806",
+      "sha256": "2ca010e4cb81c552928dc1807672619fea7807dfaa843f112395460df9283ecc",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/anoche-me-enamore-2021-rogelio-edel.jpg": {
+      "source": "assets/images/Anoche-Me-Enamoré-2021---Rogelio-Edel.webp",
+      "source_sha256": "02f79a0b1dc3ec7f0725f963b492a54f3cdd2c1f1b36d197aee0130447e8a006",
+      "sha256": "6a3c9a405b82635c5032c272eb8c61858d8d69842e34cfa5da3c83c346211a2f",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/antes-de-irme-luis-guinea.jpg": {
+      "source": "assets/images/Antes-de-Irme---Luis-Guinea.webp",
+      "source_sha256": "907347c2a38848499f1526465328ad9354074a8f056b85c2b46542b07f339e5c",
+      "sha256": "90bfcba23f5422d69c755776b7abc62451c21e51fee26bc5f5344aabab1ff172",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/bendito-cacao-karla-bravo.jpg": {
+      "source": "assets/images/Bendito-Cacao---Karla-Bravo.webp",
+      "source_sha256": "7ec5e3d2e0d42b1716014bbae6adc58c60a6dd7812c970feccd870693bdb8bdd",
+      "sha256": "967534f5c7b2a55b355a51fd41e50b30dfd5e18ecb242898c8839aa2a0209161",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/best-of-me-abe-rapa.jpg": {
+      "source": "assets/images/Best-of-Me---Abe-Rapa.webp",
+      "source_sha256": "6498b191c100fd802fe714ada9989bb2ea60d069c5ae27bf55539412af67d353",
+      "sha256": "bfa69e46d28982e7e07448a07c6537f617aaa8c401bb90398d8ff6a40596ae34",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/como-decirte-luis-guinea.jpg": {
+      "source": "assets/images/Cómo-Decirte---Luis-Guinea.webp",
+      "source_sha256": "d48c16bd3fed9960085c0b031c2345d75598988be206a137450f2ce50beb536d",
+      "sha256": "b570a2aeb2c4a5067b9d7269f35281a3bfe927393b49e5534274df3349abac7d",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/contigo-aprendi-cover-ana-guinea.jpg": {
+      "source": "assets/images/Contigo-Aprendí---Cover---Ana-Guinea.webp",
+      "source_sha256": "814b0885c9179e9f573fbca4b2d527be2b6800599db0131e90481ff4f9539f65",
+      "sha256": "f1960aca729e1822bfa0a10e95e3cdaf934197fe62971843211390ee6af9110f",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/de-cabeza-luis-guinea.jpg": {
+      "source": "assets/images/De-Cabeza---Luis-Guinea.webp",
+      "source_sha256": "b9bba77a0d9aac728ec2a842ef7803b766d0264869e4038ef5b43f7e913722ab",
+      "sha256": "a929b156e2fd0ebedabfa6df6151f051b665c48b74f7521004421b1658edeb16",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/el-beso-tufic-y-luis-guinea.jpg": {
+      "source": "assets/images/El-Beso---Tufic-y-Luis-Guinea.webp",
+      "source_sha256": "d2a52622c95c210daf497b3c3dd44ef80069820c1347a099691c1e696317dffa",
+      "sha256": "1817e5312b970e0ae1a93c45dc355999b6321c7b6debc3cd6a19df7e7e8afdf5",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/el-sembrador-canciones-de-puno-y-letra.jpg": {
+      "source": "assets/images/El-Sembrador---Canciones-de-Puño-y-Letra.webp",
+      "source_sha256": "0f38e1a220da7cceb22300c8418177c4017ec2b17a0bdeeac7d2e2bd8a31ea7e",
+      "sha256": "53f0ba2504315243be9978d1242a848329244cd37d6a88c1c2cf1a4a6bc3630a",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/en-el-momento-justo-pablo-delgado.jpg": {
+      "source": "assets/images/En-El-Momento-Justo---Pablo-Delgado.webp",
+      "source_sha256": "1ac80cd2f8a67c5b8d5ed05b7b928f50e6f114209b67eb80d3d64d5d5e43bbc6",
+      "sha256": "d35960bbff5a6c9cd41746f3ce83f04754ede4e02b6700b8904954e8138c77ce",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/en-libertad-cover-ana-guinea.jpg": {
+      "source": "assets/images/En-Libertad---Cover---Ana-Guinea.webp",
+      "source_sha256": "814b0885c9179e9f573fbca4b2d527be2b6800599db0131e90481ff4f9539f65",
+      "sha256": "f1960aca729e1822bfa0a10e95e3cdaf934197fe62971843211390ee6af9110f",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/eres-veneno-rogelio-edel.jpg": {
+      "source": "assets/images/Eres-Veneno---Rogelio-Edel.webp",
+      "source_sha256": "cb77c172f56196c1fdbf1a796ffaa2480eff4eb9307d766e8caf2469d2d957b5",
+      "sha256": "d92a34354f5e6db0c17c77f1ca515b0bd145a925dcbac541fc9ea1970644bdf2",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/gracias-por-todo-canciones-de-puno-y-letra.jpg": {
+      "source": "assets/images/Gracias-Por-Todo---Canciones-de-Puño-y-Letra.webp",
+      "source_sha256": "e3341bb4067d7b0daabe18b8592da7a18f286d6c6d63fa1c23a39dd254a12025",
+      "sha256": "c830b4df7945410a3e29d96b17c69f033c737a79a338f43e9acaa79a33699643",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/hace-tanto-tiempo-luis-guinea.jpg": {
+      "source": "assets/images/Hace-Tanto-Tiempo---Luis-Guinea.webp",
+      "source_sha256": "1acae8b4bf64b3b30e70947c7224159a6e76a6395df5d97c0273845e43f80ae8",
+      "sha256": "ae6501a009a5798404399d2ef8a8d2e56559e042fbe30d785ae3c85177462c4e",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/hasta-el-final-de-mis-dias-canciones-de-puno-y-letra.jpg": {
+      "source": "assets/images/Hasta-el-Final-de-mis-Días---Canciones-de-Puño-y-Letra.webp",
+      "source_sha256": "0c5a7d79bab85cf337539b9c2a92249756d05ef8532fc7aece4b38b036061f2a",
+      "sha256": "dd339448044f4bb088ff7a6d9290e241b8119199722035b885f5df09573ae268",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/hasta-que-lleguemos-al-mar-luis-guinea.jpg": {
+      "source": "assets/images/Hasta-Que-Lleguemos-Al-Mar---Luis-Guinea.webp",
+      "source_sha256": "038ea27d605bd1e198366d477bb9529e95cff6ee639e7d084000b7b1fa791945",
+      "sha256": "bddae1922b477015b2b8407f344d160a069b58ba72f6583c4a484fc412ef0f9f",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/how-deep-is-your-love-luis-guinea.jpg": {
+      "source": "assets/images/How-Deep-Is-Your-Love---Luis-Guinea.webp",
+      "source_sha256": "938ca72e19400df6b448a114111a056ea8345b2601146a92d28e2ee91f93626b",
+      "sha256": "6597f8aabf3959051ca6c2ab859b9f9979652cc45a33a1d4d8f314493996a3e1",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/imagina-rogelio-edel.jpg": {
+      "source": "assets/images/Imagina---Rogelio-Edel.webp",
+      "source_sha256": "9b054cb43010428c308d4d1a278a15517e6cb8553b187e0301620b4d0a58afa6",
+      "sha256": "85a99c1bfb859d5362a6bd22f2b39af496b6cbea4eba80e2f893dce9255f959c",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/in-my-life-cover-rogelio-edel.jpg": {
+      "source": "assets/images/In-My-Life---Cover---Rogelio-Edel.webp",
+      "source_sha256": "39635d9cd5002760a93ca19594148e6bf0d9ec51e2da52672a897bed9e83f3e0",
+      "sha256": "af7afbc79c660a38fde4b15a4fec2e12361d3254b8e5e20f7967f6a71a9c63bc",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/invencible-ana-guinea.jpg": {
+      "source": "assets/images/Invencible---Ana-Guinea.webp",
+      "source_sha256": "38697b9c381d3a16bd4be250695f564ba98570996ca24ed952ca050d20e61917",
+      "sha256": "4cfcbe16db55d4e8257da54b4014270ce26d3df1f625b9f9820f9b12b7f069bc",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/juntos-somos-imparables-canciones-de-puno-y-letra.jpg": {
+      "source": "assets/images/Juntos-Somos-Imparables---Canciones-de-Puño-y-Letra.webp",
+      "source_sha256": "07bd80b402234ae6edeb918a92e38aa7b20097dd02b4bf3bbaafaa8747f15cbf",
+      "sha256": "abdc344753d38aeba9f059bea4f283b6624c3d5516495b963cb3b06a245984c5",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/la-bamba-rogelio-edel.jpg": {
+      "source": "assets/images/La-Bamba---Rogelio-Edel.webp",
+      "source_sha256": "acef2e406608f59eca9971ff8a01d70631a107760dc95bf42eb82998d75f8fed",
+      "sha256": "134df5d4127808a9bff20c4b7cba15de14d5f8a921b210b79ad1bdb5ff87155b",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/la-martiniana-luis-guinea.jpg": {
+      "source": "assets/images/La-Martiniana---Luis-Guinea.webp",
+      "source_sha256": "e6d30da7b8c28fbdb333fae6119154c7c3aec30b9e63674b6cc8041d92925f48",
+      "sha256": "ed7a09fa245f80f09b3edc93b1b5184bedd287c72e4dd2eb6fe58332be280ff6",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/llegue-muy-tarde-valeria-ferro.jpg": {
+      "source": "assets/images/Llegue-Muy-Tarde---Valeria-Ferro.webp",
+      "source_sha256": "557f72f7377fe5b1522b6dbfcd9fbb4886a89d136284fda5bd72ed1379109297",
+      "sha256": "82b364ef3cb06f8c234700f7d75654c87dce7513365af762d2b32c7fac6d4964",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/me-voy-rogelio-edel.jpg": {
+      "source": "assets/images/Me-Voy---Rogelio-Edel.webp",
+      "source_sha256": "813c86fbacdeae45975ae377335b8ef6750d5e5ab737fd7299a0f8c6af044229",
+      "sha256": "8f440d1e65e081af005bac6f70d2c04944d73b4b15f38b37f9a4e4599d571032",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/mil-versiones-rogelio-edel.jpg": {
+      "source": "assets/images/Mil-Versiones---Rogelio-Edel.webp",
+      "source_sha256": "7a732570a17b073251dcd187ae61252056ac5dc7b7105bb1a3711b3e602237a5",
+      "sha256": "e450347136598a61df8a3ca82a74cd21d67244ef2197d2a57fbd29748f6fb71c",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/music.jpg": {
+      "source": "assets/images/cover.webp",
+      "source_sha256": "5154aa2d3de48497c46cfae1f5b4bdb324439d3ef535ed85c6655382b8328042",
+      "sha256": "2a13956915e532c6756c1b1bf7d0cada38d359f4e9c8bc1ed3f03d49c9e19455",
+      "width": 1200,
+      "height": 630
+    },
+    "assets/images/share/nuestro-hogar-luis-guinea.jpg": {
+      "source": "assets/images/Nuestro-Hogar---Luis-Guinea.webp",
+      "source_sha256": "a0d05cc81db53a1373cd30ef7eb45b39db6649e168c439d8e9110472c072de7e",
+      "sha256": "cbe443aec07211a7bd1fea0f0cb4dd28d6fbe78a5971c7f9f932a6c65010c5e8",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/quien-soy-acustica-louisiana.jpg": {
+      "source": "assets/images/Quién-Soy---Acústica---Louisiana.webp",
+      "source_sha256": "5e4fc49c2244d599d4566d48a489ef6219ef303ceef2b8bfbffb01314b1b8435",
+      "sha256": "2a55547d5415af0de9520bf908187b0168b7dcceb4c1442e3943255d9f9ea878",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/shallow-cover-ana-guinea.jpg": {
+      "source": "assets/images/Shallow---Cover---Ana-Guinea.webp",
+      "source_sha256": "814b0885c9179e9f573fbca4b2d527be2b6800599db0131e90481ff4f9539f65",
+      "sha256": "f1960aca729e1822bfa0a10e95e3cdaf934197fe62971843211390ee6af9110f",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/si-antes-te-hubiera-conocido-cover-acustico-ana-guinea.jpg": {
+      "source": "assets/images/Si-Antes-Te-Hubiera-Conocido---Cover-Acústico---Ana-Guinea.webp",
+      "source_sha256": "359c85dc734be30295ab10f1fa2f20ced705b4558358f9b6ed5aaccf8d705238",
+      "sha256": "2433ee81b79c1270d9c44125c65f36693636acd4f75273c49bdc48a223f28ec1",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/si-estas-de-paso-allan-perz.jpg": {
+      "source": "assets/images/Si-Estás-De-Paso---Allan-Perz.webp",
+      "source_sha256": "b91d3b67b64005abfe36933d5e8befde6b1e44bdf9161a8eee3b2d29d1d181a9",
+      "sha256": "33919916a5e6c53063d961338556972e075127b5d0862053bfea15dfea0b141c",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/sin-mirar-atras-alexander-acha.jpg": {
+      "source": "assets/images/Sin-Mirar-Atrás---Alexander-Acha.webp",
+      "source_sha256": "9a1e6424ef7574815618d23f2ea46e48743c2df6443383d867876382d9af27ba",
+      "sha256": "840d9ee8522fc856d35c632f01d8e7b8e3b6122672768f96baa9291d53135201",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/solo-esta-noche-pablo-delgado.jpg": {
+      "source": "assets/images/Solo-Esta-Noche---Pablo-Delgado.webp",
+      "source_sha256": "97882c501f161f7cf0108906eb184fdc1f96c5a089fd111861b283f1fa4a154c",
+      "sha256": "ee73603f7de1f20c0647dda76f9ed283f7ebb956bb493f8323f20dd487fafb5a",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/sunday-morning-rogelio-edel.jpg": {
+      "source": "assets/images/Sunday-Morning---Rogelio-Edel.webp",
+      "source_sha256": "65c229089e9a0269ce9fa4c7eb0c95e1be42a8f102a0f7db3cb8334715547e0f",
+      "sha256": "39d1054052fb71140bb736ab11904e828163058d054dc444a841c1c2cc7832a8",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/te-espere-cover-ana-guinea.jpg": {
+      "source": "assets/images/Te-Esperé---Cover---Ana-Guinea.webp",
+      "source_sha256": "814b0885c9179e9f573fbca4b2d527be2b6800599db0131e90481ff4f9539f65",
+      "sha256": "f1960aca729e1822bfa0a10e95e3cdaf934197fe62971843211390ee6af9110f",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/tonto-enamorado-pablo-delgado.jpg": {
+      "source": "assets/images/Tonto-Enamorado---Pablo-Delgado.webp",
+      "source_sha256": "c15a9d42a9afa95f56a03c663a4bb1903e8b5fef2e3b9e43414fb90de7036929",
+      "sha256": "9c3dd9493ed41a418e4746dcc1989d180ac81550d9eddefe812dc1117b16c3c2",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/toxica-isabella-macias.jpg": {
+      "source": "assets/images/Tóxica---Isabella-Macías.webp",
+      "source_sha256": "cc164a08a281de69ab3a308559b7673c5a16a965862f072d2d10f4639e8df7c1",
+      "sha256": "3de66cfd735eca474c227fde07a583bdb10f5d3d17af49f17db56770cb4a45d7",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/vida-tras-vida-ana-guinea.jpg": {
+      "source": "assets/images/Vida-Tras-Vida---Ana-Guinea.webp",
+      "source_sha256": "2566b4a58c55a2d648caac99d02951f8bc206a1f6b55f99802bed6ffdc5ffb98",
+      "sha256": "a8f5eda066d0cd539dc2f5611b627009b0b2e784f4f94a834e5fec110d54020e",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/volver-a-verte-ana-guinea.jpg": {
+      "source": "assets/images/Volver-a-Verte---Ana-Guinea.webp",
+      "source_sha256": "98c6635f4d1c43d12e931326dbca5b1dda5820685a13f00cf1304f94432e9fa3",
+      "sha256": "45e58fc4c4666de51ef6b3e643b39dc95cf66259910ef8a4ec5dd3a259de0fdc",
+      "width": 600,
+      "height": 600
+    },
+    "assets/images/share/volver-a-verte-luis-guinea.jpg": {
+      "source": "assets/images/Volver-a-Verte---Luis-Guinea.webp",
+      "source_sha256": "f1f06238e98109ad29aa321a9d1f080b1163578b15828d3b10a296f4ddd23adf",
+      "sha256": "c5ad0a84fcf090fc02b9b4d8c76e16dc86d8629a76248beba5d7c2b6c5273b7b",
+      "width": 600,
+      "height": 600
+    }
+  }
+}
