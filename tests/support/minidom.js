@@ -1,7 +1,7 @@
 // Minimal DOM for focused frontend tests, standard library only (no jsdom). It parses the real pages, runs their
 // real scripts in a vm context and models the parts of the browser the site uses: elements and selectors, events
 // with capture and bubbling, storage, media elements with an autoplay policy, BroadcastChannel, Media Session and
-// IntersectionObserver. It is deliberately small; anything the site starts using must be added here.
+// IntersectionObserver, the query string and hash with the History API, and the clipboard. It is deliberately small; anything the site starts using must be added here.
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -84,6 +84,8 @@ class Element extends Node {
   matches(selector) { return parseSelector(selector).some(s => matchComplex(this, s, null)); }
   getBoundingClientRect() { return {top: this.rect.top, bottom: this.rect.top + this.rect.height, height: this.rect.height, left: 0, width: 0}; }
   focus() { this.ownerDocument.activeElement = this; }
+  select() { this.ownerDocument._page.selected = this; }
+  scrollIntoView(options) { this.ownerDocument._page.scrolled.push({id: this.id, index: this.dataset.index, options}); }
   click() { this.ownerDocument._userClick(this); }
 }
 
@@ -257,16 +259,35 @@ class Tab {
 
 class Page {
   constructor(tab, rel, options) {
-    this.tab = tab; this.rel = rel; this.log = []; this.created = []; this.gesture = false; this.closed = false;
+    // `rel` may carry a query string and a hash: music/index.html?song=x#jingles.
+    const file = rel.split(/[?#]/)[0];
+    this.tab = tab; this.rel = file; this.log = []; this.scrolled = []; this.selected = null; this.copied = []; this.urls = []; this.created = []; this.gesture = false; this.closed = false;
     this.autoplayBlocked = options.autoplayBlocked !== false; this.fixedVolume = !!options.fixedVolume;
     this.mediaSession = options.mediaSession === false ? undefined : {metadata: null, playbackState: 'none', handlers: {}, setActionHandler(a, fn) { this.handlers[a] = fn; }};
     this.observers = [];
     const browser = tab.browser;
-    const html = fs.readFileSync(path.join(browser.root, rel), 'utf8');
+    const html = fs.readFileSync(path.join(browser.root, file), 'utf8');
     const doc = this.document = new Document(this);
     parseInto(doc, html, doc);
     const url = 'http://test.local/' + rel;
     const page = this;
+    // Location follows the History API: pushState/replaceState change it without loading; back/forward fire popstate.
+    const location = {};
+    const setUrl = href => { const u = new URL(href, location.href || url); Object.assign(location, {href: u.href, origin: u.origin, pathname: u.pathname, search: u.search, hash: u.hash}); };
+    setUrl(url);
+    const entries = [{state: null, href: location.href}];
+    let at = 0;
+    const go = delta => { if (!entries[at + delta]) return; at += delta; setUrl(entries[at].href); setImmediate(() => win._fire('popstate', {state: entries[at].state})); };
+    const history = {
+      get length() { return entries.length; }, get state() { return entries[at].state; },
+      pushState(state, title, href) { setUrl(href); entries.splice(at + 1); entries.push({state, href: location.href}); at++; page.urls.push('push:' + location.pathname + location.search + location.hash); },
+      replaceState(state, title, href) { setUrl(href); entries[at] = {state, href: location.href}; page.urls.push('replace:' + location.pathname + location.search + location.hash); },
+      back() { go(-1); }, forward() { go(1); },
+    };
+    this.history = history; this.location = location;
+    // Clipboard: 'granted' copies, 'denied' rejects like a refused permission, absent (default) has no navigator.clipboard.
+    const clipboard = options.clipboard === 'granted' ? {writeText: text => { page.copied.push(text); return Promise.resolve(); }}
+      : options.clipboard === 'denied' ? {writeText: () => Promise.reject(Object.assign(new Error('denied'), {name: 'NotAllowedError'}))} : undefined;
     const win = this.window = {
       name: tab.name, innerHeight: 800, scrollY: 0, listeners: {},
       addEventListener(type, fn) { (this.listeners[type] = this.listeners[type] || []).push(fn); },
@@ -285,9 +306,9 @@ class Page {
     class CustomEvent { constructor(type, init) { this.type = type; this.detail = init && init.detail; } }
     class MediaMetadata { constructor(init) { Object.assign(this, init); } }
     const ctx = {
-      document: doc, location: {href: url, pathname: '/' + rel}, console, URL, JSON, Promise, Date, setTimeout, clearTimeout, setImmediate,
+      document: doc, location, history, isSecureContext: options.secure !== false, console, URL, URLSearchParams, JSON, Promise, Date, setTimeout, clearTimeout, setImmediate,
       localStorage: makeStorage(browser.local), sessionStorage: makeStorage(tab.session),
-      navigator: Object.assign(options.mediaSession === false ? {} : {mediaSession: this.mediaSession},
+      navigator: Object.assign(options.mediaSession === false ? {} : {mediaSession: this.mediaSession}, clipboard ? {clipboard} : {},
         options.languages ? {languages: options.languages, language: options.languages[0]} : {}),
       BroadcastChannel: options.broadcastChannel === false ? undefined : BroadcastChannel,
       IntersectionObserver, CustomEvent, MediaMetadata,
@@ -308,6 +329,7 @@ class Page {
       vm.runInContext(fs.readFileSync(path.join(browser.root, file), 'utf8'), win, {filename: file});
       doc.currentScript = null;
     }
+    doc.readyState = 'interactive';
     // deferReady leaves the page between its last script and DOMContentLoaded until ready() is called.
     if (!options.deferReady) this.ready();
   }

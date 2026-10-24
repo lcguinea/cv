@@ -161,6 +161,27 @@ html.js body{padding-bottom:4.5rem}
   .clear-filters{grid-column:auto;justify-self:end;align-self:end}
 }
 
+/* Shareable links: Share copies a link to the current view or to one recording, a shared recording is highlighted in the
+   list and, without a clipboard, the link is shown selected in a field to copy by hand. */
+.toolbar-actions{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;align-items:end}
+.share-view[data-state=copied],.pl-share[data-state=copied]{color:var(--accent)}
+.pl-share{display:inline-flex;align-items:center;min-height:44px;padding:0;border:0;background:transparent;color:var(--muted);font:.72rem var(--mono);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;cursor:pointer}
+.pl-share:hover{color:var(--accent)}
+.pl-share:focus-visible,.share-view:focus-visible,.share-fallback input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.playlist li.is-linked{background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.playlist li.is-linked .pl-row{border-left-color:var(--accent)}
+.link-notice{margin:0 0 1rem;padding:.75rem 1rem;border-left:2px solid var(--accent);background:color-mix(in srgb,var(--rule) 35%,transparent);font-size:.9rem}
+.link-notice[hidden],.share-fallback[hidden]{display:none}
+.share-fallback{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1rem;margin:1rem 0 0;padding:.75rem 0;border-top:1px solid var(--rule)}
+.playlist .share-fallback{grid-column:1/-1;margin:0;padding:.5rem .5rem .75rem}
+.share-fallback label{font:.65rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.share-fallback input{flex:1 1 16rem;min-width:0;background:transparent;border:0;border-bottom:1px solid var(--text);border-radius:0;padding:.6rem 0;color:var(--text);font:.85rem var(--mono)}
+@media(max-width:900px){.toolbar-actions{grid-column:1/-1;justify-self:start}}
+/* Phones: the artist list (long credited names) takes a whole row, credit and sort share one, and Reset all and Share
+   get a row of their own, one at each end, so neither label wraps and both keep a 44px target. On the narrowest
+   screens a row's links (platforms and Share) continue on a second line instead of being cut off. */
+@media(max-width:700px){.pl-links{flex-wrap:wrap;column-gap:1rem;row-gap:0}.field-artist{grid-column:1/-1}.toolbar-actions{grid-column:1/-1;justify-self:stretch;justify-content:space-between;flex-wrap:nowrap}}
+
 /* Music hero and platform profiles: the studio photograph leads, uncropped (5:2) at every width. */
 .music-hero{padding-top:clamp(1.5rem,3vw,2.5rem)}
 .music-stage{position:relative;margin:0 auto;width:min(1320px,calc(100% - 96px))}

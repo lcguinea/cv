@@ -98,9 +98,9 @@
   });
   // Autostart: armed for a new session until the first preview plays. Clicks on the player itself (and on the jingle
   // players of /music/#jingles, which play their own audio) are left to their controls,
-  // and utility controls (skip links, language, theme, menu) never start sound: they are often the first thing a keyboard or
+  // and utility controls (skip links, language, theme, menu, sharing a link) never start sound: they are often the first thing a keyboard or
   // screen reader user activates.
-  const GESTURES=['click','touchend'],NO_AUTOSTART='#mini-player,#player,#catalog,.feature-play,[data-player-now],.skip-link,[data-lang],[data-theme-choice],.menu-toggle,.jingle';
+  const GESTURES=['click','touchend'],NO_AUTOSTART='#mini-player,#player,#catalog,.feature-play,[data-player-now],.skip-link,[data-lang],[data-theme-choice],.menu-toggle,.jingle,#share-view,#share-fallback';
   function onGesture(event){if(event.target&&event.target.closest&&event.target.closest(NO_AUTOSTART))return;if(!isPlaying())start()}
   function armAutostart(){
     if(!autostart){autostart=true;GESTURES.forEach(type=>document.addEventListener(type,onGesture,true))}
@@ -134,8 +134,17 @@
     const policy=navigator.getAutoplayPolicy?navigator.getAutoplayPolicy('mediaelement'):'';
     if(saved.playing&&policy!=='disallowed'){audio.preload='auto';start()}else save();
   }
-  const saved=readSaved();
-  if(saved){played=new Set(saved.played);load(saved.index,saved.time,saved.duration);if(saved.auto&&!saved.playing)armAutostart();else resume(saved)}
+  // A shared link to one recording (/music/?song=<work id>, its preview's name without .mp3) opens on that recording,
+  // paused: the link never starts sound, so it neither resumes nor arms the autostart. js/music-page.js locates it.
+  function linkedIndex(){
+    if(!document.getElementById('catalog'))return -1;
+    let id='';
+    try{id=new URLSearchParams(location.search).get('song')||''}catch(e){id=''}
+    return /^[a-z0-9][a-z0-9-]*$/.test(id)?tracks.findIndex(x=>x.preview===id+'.mp3'):-1;
+  }
+  const saved=readSaved(),linked=linkedIndex();
+  if(linked>=0){if(saved)played=new Set(saved.played);const same=!!saved&&saved.index===linked;load(linked,same?saved.time:0,same?saved.duration:0);save()}
+  else if(saved){played=new Set(saved.played);load(saved.index,saved.time,saved.duration);if(saved.auto&&!saved.playing)armAutostart();else resume(saved)}
   else{load(randomIndex(-1),0,0);armAutostart()}
   // Back/forward cache: this page comes back as it was left, so it catches up with what later pages saved.
   window.addEventListener('pageshow',event=>{

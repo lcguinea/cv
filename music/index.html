@@ -45,12 +45,15 @@
 <p id="style-note" class="explore-note"></p>
 <div class="music-toolbar">
 <div class="field field-search"><label for="search" data-i18n="music.searchLabel">Search</label><input id="search" type="search" placeholder="Search catalogue" data-i18n-placeholder="music.search"></div>
-<div class="field"><label for="artist" data-i18n="music.artistFilter">Artist</label><select id="artist"><option value="" data-i18n="music.allArtists">All artists</option></select></div>
+<div class="field field-artist"><label for="artist" data-i18n="music.artistFilter">Artist</label><select id="artist"><option value="" data-i18n="music.allArtists">All artists</option></select></div>
 <div class="field"><label for="role" data-i18n="music.roleLabel">Luis Guinea credit</label><select id="role"><option value="" data-i18n="music.allCredits">All credits</option><option value="Artist" data-i18n="music.artist">Artist</option><option value="Producer" data-i18n="music.producer">Producer</option><option value="Composer" data-i18n="music.composer">Songwriter</option></select></div>
 <div class="field"><label for="sort" data-i18n="music.sortLabel">Sort by</label><select id="sort"><option value="curated" data-i18n="music.sortCurated">Curated selection</option><option value="year-desc" data-i18n="music.sortYearDesc" selected>Newest first</option><option value="year-asc" data-i18n="music.sortYearAsc">Oldest first</option><option value="artist-asc" data-i18n="music.sortArtistAsc">Artist A–Z</option><option value="artist-desc" data-i18n="music.sortArtistDesc">Artist Z–A</option></select></div>
-<button id="clear" class="clear-filters" type="button" hidden><span data-i18n="music.clear">Reset all</span> <span aria-hidden="true">↺</span></button>
+<div class="toolbar-actions"><button id="clear" class="clear-filters" type="button" hidden><span data-i18n="music.clear">Reset all</span> <span aria-hidden="true">↺</span></button><button id="share-view" class="clear-filters share-view" type="button" aria-label="Share: copy a link to this view of the catalogue" data-i18n-label="music.shareView" hidden><span class="share-text" data-i18n="music.share">Share</span> <span aria-hidden="true">↗</span></button></div>
 </div>
+<div id="share-fallback" class="share-fallback" hidden><label for="share-url" data-i18n="music.shareManual">Copy this link:</label><input id="share-url" type="text" readonly><button id="share-close" class="clear-filters" type="button" data-i18n="music.shareClose">Close</button></div>
 </div>
+<p id="share-status" class="sr-only" role="status" aria-live="polite"></p>
+<p id="link-notice" class="link-notice" role="status" hidden></p>
 <ol id="catalog" class="playlist" aria-labelledby="playlist-heading"></ol>
 <div id="empty" class="empty-state" hidden><p data-i18n="music.noResults">No recordings match this search.</p><button id="reset" class="button button-quiet" type="button" data-i18n="music.resetAll">Show all recordings</button></div>
 </div></section>

@@ -83,8 +83,145 @@
     search.value='';role.value='';if(artistFilter)artistFilter.value='';
     chosen.mood.clear();chosen.genre.clear();
     if(order&&sort)sort.value=DEFAULT_SORT;
-    renderList();
   }
+  // Shareable state. The filters live in the query string with the catalogue's own values, never translated labels:
+  // q (search), artist (credited name), credit (artist, producer, composer), mood and genre (comma-separated ids) and
+  // sort (only when it is not the default). ?song=<work id> points at one recording: its preview's name without .mp3,
+  // fixed by the catalogue and independent of order and titles. The language is the visitor's own and never travels in
+  // the link; the hash (#jingles) and any other parameter are kept as they are. Without filters the URL stays /music/.
+  const songId=x=>String(x.preview).replace(/\.mp3$/,'');
+  const OWN=['song','q','artist','credit','mood','genre','sort'];
+  const optionValues=select=>select?[...select.querySelectorAll('option')].map(o=>o.value).filter(Boolean):[];
+  let linked=-1,notes=[],typing=false;
+  function readUrl(){
+    let params;
+    try{params=new URLSearchParams(location.search)}catch(e){params=new URLSearchParams('')}
+    const first=key=>{const value=params.getAll(key).map(v=>v.trim()).find(Boolean);return value||''};
+    const state={q:first('q').slice(0,100),artist:'',credit:'',mood:[],genre:[],sort:DEFAULT_SORT,song:-1},ignored=[];
+    const artist=first('artist');
+    if(artist){
+      // Exact name first; case and accents are forgiven only when that leaves one artist (Carla Calderon and Carla
+      // Calderón are two people).
+      const names=artistFilter?optionValues(artistFilter):[],only=list=>list.length===1?list[0]:'';
+      state.artist=names.find(name=>name===artist)||only(names.filter(name=>name.toLowerCase()===artist.toLowerCase()))||only(names.filter(name=>norm(name)===norm(artist)));
+      if(!state.artist)ignored.push('artist');
+    }
+    const credit=first('credit');
+    if(credit){state.credit=optionValues(role).find(value=>value.toLowerCase()===credit.toLowerCase())||'';if(!state.credit)ignored.push('credit')}
+    Object.keys(FACETS).forEach(group=>{
+      const known=termsOf(group);
+      params.getAll(group).join(',').split(',').map(v=>v.trim().toLowerCase()).filter(Boolean).forEach(id=>{
+        if(known.includes(id)){if(!state[group].includes(id))state[group].push(id)}else ignored.push(group);
+      });
+    });
+    const order=first('sort');
+    if(order){if(optionValues(sort).includes(order))state.sort=order;else ignored.push('sort')}
+    const song=first('song');
+    if(song){state.song=tracks.findIndex(x=>songId(x)===song);if(state.song<0)state.missing=true}
+    state.ignored=ignored;
+    return state;
+  }
+  function applyState(state){
+    search.value=state.q;role.value=state.credit;if(artistFilter)artistFilter.value=state.artist;
+    Object.keys(chosen).forEach(group=>{chosen[group].clear();state[group].forEach(id=>chosen[group].add(id))});
+    if(sort)sort.value=state.sort;
+    linked=state.song;
+  }
+  const enc=encodeURIComponent;
+  function filterQuery(){
+    const parts=[];
+    if(search.value.trim())parts.push('q='+enc(search.value.trim()));
+    if(artistFilter&&artistFilter.value)parts.push('artist='+enc(artistFilter.value));
+    if(role.value)parts.push('credit='+enc(role.value.toLowerCase()));
+    Object.keys(chosen).forEach(group=>{if(chosen[group].size)parts.push(group+'='+[...chosen[group]].map(enc).join(','))});
+    if(sort&&sort.value!==DEFAULT_SORT)parts.push('sort='+enc(sort.value));
+    return parts;
+  }
+  function pageUrl(parts){const url=new URL(location.href);url.search=parts.length?'?'+parts.join('&'):'';url.hash='';return url.href}
+  function writeUrl(replace){
+    const parts=(linked>=0?['song='+enc(songId(tracks[linked]))]:[]).concat(filterQuery());
+    let params;
+    try{params=new URLSearchParams(location.search)}catch(e){params=new URLSearchParams('')}
+    params.forEach((value,key)=>{if(!OWN.includes(key))parts.push(enc(key)+'='+enc(value))});
+    const next=(parts.length?'?'+parts.join('&'):'')+location.hash;
+    if(next===location.search+location.hash||!window.history||!history.pushState)return;
+    try{history[replace?'replaceState':'pushState'](null,'',location.pathname+next)}catch(e){}
+  }
+  // A change made on the page leaves the shared link behind: the recording it pointed at and its notes. Typing in the
+  // search box updates one history entry instead of adding one per key.
+  function commit(fromSearch){
+    const replace=!!fromSearch&&typing;
+    typing=!!fromSearch;
+    linked=-1;notes=[];showNotes();renderList();writeUrl(replace);
+  }
+  // Opening, reloading or stepping through history: the URL decides. A shared recording wins over filters that would
+  // hide it (they are cleared and the notice says so); unknown values and recordings that are not (or no longer) in the
+  // catalogue are left out and reported instead of producing a misleading list, and the URL is rewritten without them.
+  function restore(initial){
+    const state=readUrl();
+    applyState(state);
+    renderList();
+    const cleared=linked>=0&&!visible.includes(linked);
+    if(cleared){resetFilters(false);renderList()}
+    notes=[];
+    if(linked>=0)notes.push(['music.linkFound',linked]);
+    if(cleared)notes.push(['music.linkCleared']);
+    if(state.missing)notes.push(['music.linkMissing']);
+    if(state.ignored.length)notes.push(['music.linkIgnored']);
+    showNotes();
+    if(initial)writeUrl(true);
+    // The engine opened on the shared recording (js/player.js); a history step only selects it when nothing sounds.
+    else if(linked>=0&&!P.isPlaying()&&P.index()!==linked)P.select(linked,false);
+  }
+  const notice=$('link-notice');
+  function showNotes(){
+    if(!notice)return;
+    notice.textContent=notes.map(([key,i])=>{const x=tracks[i];return t(key).replace('{title}',x?x.title:'').replace('{artist}',x?x.artist:'')}).join(' ');
+    notice.hidden=!notes.length;
+  }
+  // Share copies a link. Without a clipboard (an insecure origin, a refused permission, an older browser) the link
+  // appears selected in a field to copy by hand. Copying is announced and shown on the button for a moment.
+  const shareView=$('share-view'),shareStatus=$('share-status'),fallback=$('share-fallback'),fallbackUrl=$('share-url');
+  const fallbackHome=fallback&&fallback.parentNode;
+  let opener=null,statusTimer=0;
+  function share(url,button){
+    let copy;
+    try{copy=navigator.clipboard&&navigator.clipboard.writeText&&window.isSecureContext!==false?Promise.resolve(navigator.clipboard.writeText(url)):Promise.reject(new Error('clipboard'))}catch(e){copy=Promise.reject(e)}
+    return copy.then(()=>copied(button),()=>openFallback(url,button));
+  }
+  function copied(button){
+    closeFallback(false);
+    const text=button.querySelector('.share-text');
+    button.dataset.state='copied';
+    if(text)text.textContent=t('music.shareDone');
+    if(shareStatus)shareStatus.textContent=t('music.shareCopied');
+    clearTimeout(statusTimer);
+    statusTimer=setTimeout(()=>{
+      if(shareStatus)shareStatus.textContent='';
+      document.querySelectorAll('[data-state="copied"]').forEach(b=>{delete b.dataset.state;const s=b.querySelector('.share-text');if(s)s.textContent=t('music.share')});
+    },2500);
+  }
+  function openFallback(url,button){
+    if(!fallback)return;
+    opener=button;
+    (button.closest('#catalog > li')||fallbackHome).appendChild(fallback);
+    fallbackUrl.value=url;
+    fallback.hidden=false;
+    fallbackUrl.focus();
+    if(fallbackUrl.select)fallbackUrl.select();
+  }
+  function closeFallback(refocus){
+    if(!fallback)return;
+    fallback.hidden=true;
+    if(fallback.parentNode!==fallbackHome)fallbackHome.appendChild(fallback);
+    if(refocus&&opener&&document.body.contains(opener))opener.focus();
+    opener=null;
+  }
+  if(fallback){
+    $('share-close').addEventListener('click',()=>closeFallback(true));
+    fallback.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();closeFallback(true)}});
+  }
+  if(shareView){shareView.hidden=false;shareView.addEventListener('click',()=>share(pageUrl(filterQuery()),shareView))}
   function norm(value){return String(value||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')}
   function esc(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
   function roleKey(name){return 'music.role'+String(name).replace(/[^A-Za-z]/g,'')}
@@ -121,7 +258,8 @@
     count.textContent=visible.length;
     empty.hidden=visible.length>0;
     if(clear)clear.disabled=!changed();
-    catalog.innerHTML=visible.map((i,at)=>{const x=tracks[i];return `<li><button type="button" class="pl-row" data-index="${i}" aria-current="false"><span class="pl-num">${pad(at+1)}</span><img class="pl-thumb" src="${P.artworkUrl(x.artwork)}" alt="" loading="lazy" width="56" height="56"><span class="pl-main"><span class="pl-title">${esc(x.title)}</span><span class="pl-artist">${[x.artist].concat(tags(x)).map(esc).join(' · ')}</span></span><span class="pl-roles">${x.roles.map(r=>`<span data-i18n="${roleKey(r)}">${esc(t(roleKey(r)))}</span>`).join(' · ')}</span><span class="pl-year">${x.year??''}</span><span class="pl-state"></span></button>${hasLinks(x)?`<ul class="pl-links">${platformLinks(x)}</ul>`:''}</li>`}).join('');
+    if(fallback&&catalog.contains(fallback))closeFallback(false);
+    catalog.innerHTML=visible.map((i,at)=>{const x=tracks[i];return `<li${i===linked?' class="is-linked"':''}><button type="button" class="pl-row" data-index="${i}" aria-current="false"><span class="pl-num">${pad(at+1)}</span><img class="pl-thumb" src="${P.artworkUrl(x.artwork)}" alt="" loading="lazy" width="56" height="56"><span class="pl-main"><span class="pl-title">${esc(x.title)}</span><span class="pl-artist">${[x.artist].concat(tags(x)).map(esc).join(' · ')}</span></span><span class="pl-roles">${x.roles.map(r=>`<span data-i18n="${roleKey(r)}">${esc(t(roleKey(r)))}</span>`).join(' · ')}</span><span class="pl-year">${x.year??''}</span><span class="pl-state"></span></button><ul class="pl-links">${platformLinks(x)}<li><button type="button" class="pl-share" data-song="${esc(songId(x))}" aria-label="${esc(t('music.shareSong').replace('{title}',x.title).replace('{artist}',x.artist))}"><span class="share-text">${esc(t('music.share'))}</span></button></li></ul></li>`}).join('');
     updateRows();
   }
   function updateRows(){
@@ -186,31 +324,45 @@
   seek.addEventListener('input',()=>P.seek(seek.value));
   volume.addEventListener('input',()=>P.setVolume(volume.value));
   if(!P.volumeSupported)$('np-volume-field').hidden=true;
-  catalog.addEventListener('click',event=>{const row=event.target.closest('.pl-row');if(!row)return;const i=Number(row.dataset.index);if(i===P.index()&&P.isPlaying())P.pause();else P.select(i,true)});
+  catalog.addEventListener('click',event=>{const button=event.target.closest('.pl-share');if(button){share(pageUrl(['song='+enc(button.dataset.song)]),button);return}const row=event.target.closest('.pl-row');if(!row)return;const i=Number(row.dataset.index);if(i===P.index()&&P.isPlaying())P.pause();else P.select(i,true)});
   catalog.addEventListener('keydown',event=>{
     const rows=[...catalog.querySelectorAll('.pl-row')],at=rows.indexOf(document.activeElement);
     const target={ArrowDown:at+1,ArrowUp:at-1,Home:0,End:rows.length-1}[event.key];
     if(at<0||target===undefined||!rows[target])return;
     event.preventDefault();rows[target].focus();
   });
-  search.addEventListener('input',renderList);role.addEventListener('change',renderList);
-  if(artistFilter)artistFilter.addEventListener('change',renderList);
-  if(sort)sort.addEventListener('change',renderList);
+  search.addEventListener('input',()=>commit(true));role.addEventListener('change',()=>commit());
+  if(artistFilter)artistFilter.addEventListener('change',()=>commit());
+  if(sort)sort.addEventListener('change',()=>commit());
   Object.keys(chipBoxes).forEach(group=>{if(chipBoxes[group])chipBoxes[group].addEventListener('click',event=>{
     const chip=event.target.closest('.chip');if(!chip||chip.disabled)return;
     const id=chip.dataset.id;if(chosen[group].has(id))chosen[group].delete(id);else chosen[group].add(id);
-    renderList();
+    commit();
   })});
   // Reset all returns to the initial state; focus moves to the first filter so it is not lost on a now-disabled button.
-  if(clear){clear.hidden=false;clear.addEventListener('click',()=>{resetFilters(true);const first=[...document.querySelectorAll('.catalog-explore .chip')].find(chip=>!chip.disabled)||search;first.focus()})}
+  if(clear){clear.hidden=false;clear.addEventListener('click',()=>{resetFilters(true);commit();const first=[...document.querySelectorAll('.catalog-explore .chip')].find(chip=>!chip.disabled)||search;first.focus()})}
   const reset=$('reset');
-  if(reset)reset.addEventListener('click',()=>{resetFilters();const row=catalog.querySelector('.pl-row');(row||search).focus()});
+  if(reset)reset.addEventListener('click',()=>{resetFilters();commit();const row=catalog.querySelector('.pl-row');(row||search).focus()});
   P.on(type=>{if(type==='track')renderTrack();else if(type==='time')updateTime();else updatePlayer()});
   const cover=$('music-cover');
   function updateCover(){if(cover)cover.alt=t('music.coverAlt')}
-  document.addEventListener('lg:language',()=>{updateCover();buildChips();buildArtists();renderList();updatePlayer()});
+  document.addEventListener('lg:language',()=>{updateCover();buildChips();buildArtists();renderList();updatePlayer();showNotes()});
   $('total').textContent=tracks.length;
-  updateCover();buildChips();buildArtists();renderList();renderTrack();
+  updateCover();buildChips();buildArtists();
+  restore(true);renderTrack();
+  // Back and Forward between views of the catalogue restore them without reloading; what is playing is never interrupted.
+  window.addEventListener('popstate',()=>{typing=false;restore(false)});
+  // A shared recording is brought into view once the layout is final, only when the link was just opened: a reload or
+  // a history step keeps the position the browser restores, and a hash (#jingles) keeps its own destination.
+  function reveal(){
+    const entry=window.performance&&performance.getEntriesByType?performance.getEntriesByType('navigation')[0]:null;
+    if(linked<0||location.hash||(entry&&entry.type!=='navigate'))return;
+    const row=catalog.querySelector('.is-linked .pl-row');
+    if(!row)return;
+    if(row.scrollIntoView)row.scrollIntoView({block:'center',behavior:'instant'});
+    try{row.focus({preventScroll:true})}catch(e){row.focus()}
+  }
+  if(document.readyState==='complete')reveal();else window.addEventListener('load',()=>requestAnimationFrame(reveal));
   // Jingles (#jingles) use their own native players: one at a time. The engine already pauses when any of them plays.
   document.addEventListener('play',event=>{const own=event.target;if(!own.closest||!own.closest('.jingle'))return;document.querySelectorAll('.jingle audio').forEach(media=>{if(media!==own)media.pause()})},true);
 })();
