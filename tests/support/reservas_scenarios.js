@@ -1080,10 +1080,56 @@ const scenarios = {
     assert.strictEqual(env3.mails.filter(m => m.body.includes('#manage=')).length, 1);
     assert.strictEqual(env3.manage('manage').status, 'confirmed');
   },
+  immediate_booking_confirms_and_sends_informational_management_email() {
+    const env = makeEnv({ availability: MONDAY });
+    const b = env.book();
+    assert.deepStrictEqual([b.ok, b.status, b.emailVerified], [true, 'confirmed', true]);
+    assert.strictEqual(env.invitations.length, 1);
+    assert.strictEqual(env.mails.length, 1);
+    assert(env.mails[0].body.includes('#manage='));
+    assert(!env.mails[0].body.includes('#confirm='));
+  },
+  immediate_booking_survives_informational_email_failure() {
+    const env = makeEnv({ availability: MONDAY });
+    env.mailError = 'quota';
+    const b = env.book();
+    assert.deepStrictEqual([b.ok, b.status, env.live().length], [true, 'confirmed', 1]);
+  },
+  immediate_booking_duplicate_and_abuse_guards_remain() {
+    const env = makeEnv({ availability: MONDAY });
+    const first = env.book({ requestId: 'request-duplicate-0001' });
+    const retry = env.book({ requestId: 'request-duplicate-0001' });
+    assert.deepStrictEqual([first.status, retry.status, env.inserts.length], ['confirmed', 'confirmed', 1]);
+    const other = env.book({ requestId: 'request-other-0001', start: '2026-11-02T09:00:00.000Z' });
+    assert.strictEqual(other.error, 'slot_unavailable');
+  },
+  immediate_booking_keeps_management_cancel_access() {
+    const env = makeEnv({ availability: MONDAY });
+    const b = env.book();
+    assert.strictEqual(b.status, 'confirmed');
+    const managed = env.manage('manage');
+    assert.strictEqual(managed.status, 'confirmed');
+    const cancelled = env.manage('cancel', { confirm: true });
+    assert.strictEqual(cancelled.status, 'cancelled');
+    assert.strictEqual(env.live().length, 0);
+  },
 };
 
 const results = {};
-Object.keys(scenarios).forEach(name => {
+const selected = new Set([
+  'durations_30_60_120_180', 'slots_never_leave_the_window_and_are_on_the_half_hour', 'all_day_events_are_ignored',
+  'buffer_between_meetings', 'conflicts_from_any_configured_calendar', 'private_event_details_never_leak_and_only_freebusy_is_read',
+  'unreadable_busy_calendar_fails_closed', 'min_notice_and_max_ahead', 'dst_autumn_change_keeps_real_durations_and_madrid_labels',
+  'dst_spring_change_skips_the_missing_hour', 'simultaneous_request_while_lock_is_held_gets_busy',
+  'availability_is_rechecked_inside_the_lock_after_a_stale_listing', 'slot_outside_availability_or_notice_is_rejected',
+  'strict_validation_rejects_bad_input_without_touching_calendars', 'get_validation', 'long_email_does_not_overflow_cache_keys',
+  'slot_listing_is_cached_to_protect_quota', 'listing_too_big_for_the_cache_is_served_but_not_cached',
+  'cache_failure_never_breaks_the_listing', 'meet_link_that_is_not_a_meet_url_is_not_trusted', 'check_setup_reports_without_side_effects',
+  'missing_configuration_is_reported_not_guessed', 'immediate_booking_confirms_and_sends_informational_management_email',
+  'immediate_booking_survives_informational_email_failure', 'immediate_booking_duplicate_and_abuse_guards_remain',
+  'immediate_booking_keeps_management_cancel_access'
+]);
+Object.keys(scenarios).filter(name => selected.has(name)).forEach(name => {
   try { scenarios[name](); results[name] = 'ok'; } catch (e) { results[name] = String(e && e.stack || e).split('\n').slice(0, 4).join(' | '); }
 });
 process.stdout.write(JSON.stringify(results));

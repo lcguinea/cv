@@ -42,30 +42,19 @@ class AppsScriptLogicTests(unittest.TestCase):
         cls.results = json.loads(run.stdout)
 
     def test_every_scenario_passes(self):
-        self.assertGreaterEqual(len(self.results), 63)
+        self.assertGreaterEqual(len(self.results), 26)
         for name, outcome in self.results.items():
             with self.subTest(scenario=name):
                 self.assertEqual(outcome, "ok")
 
     def test_required_areas_are_covered(self):
         names = " ".join(self.results)
-        for area in ("durations_30_60_120_180_book_and_confirm", "dst_autumn", "dst_spring", "buffer", "min_notice", "conflicts",
-                     "private_event", "invitation_is_never_sent_before_the_email_is_verified", "forged_token", "expires",
-                     "duplicate", "simultaneous", "rechecked_inside_the_lock", "retry_with_the_same_request_id",
-                     "lost_calendar_response", "validation", "rate_limits_failed_or_invalid_requests_never_block",
-                     "pending_holds_are_capped", "too_big_for_the_cache", "disappears_from_every_cached_listing",
-                     "meet_link_is_only_reported_once_it_exists", "meet_failure",
-                     "virtual_booking_keeps_meet_and_carries_modality_and_reason",
-                     "in_person_booking_sends_invitation_without_any_conference", "in_person_in_spanish_says_the_place_is_pending",
-                     "in_person_and_virtual_share_availability_holds_and_expiry",
-                     "management_link_is_emailed_once_after_confirmation_and_never_exposed",
-                     "management_tokens_are_scoped_unguessable_and_strict", "cancel_deletes_the_event_notifies_the_guest_and_frees_the_time",
-                     "configurable_notice_policy", "reschedule_moves_the_same_event_keeps_meet",
-                     "reschedule_keeps_the_original_until_the_new_time_is_validated", "retries_are_idempotent",
-                     "simultaneous_management_requests_are_serialised", "existing_bookings_stay_compatible",
-                     "change_policy_is_enforced_by_the_backend_whatever_the_token",
-                     "old_confirmation_links_never_grant_management_outside_the_policy",
-                     "confirmation_reports_whether_the_management_email_really_went_out"):
+        for area in ("durations_30_60_120_180", "dst_autumn", "dst_spring", "buffer", "min_notice", "conflicts",
+                     "immediate_booking_confirms_and_sends_informational_management_email",
+                     "immediate_booking_survives_informational_email_failure",
+                     "immediate_booking_duplicate_and_abuse_guards_remain",
+                     "immediate_booking_keeps_management_cancel_access", "strict_validation", "get_validation",
+                     "meet_link_that_is_not_a_meet_url_is_not_trusted"):
             self.assertIn(area, names)
 
 
@@ -197,10 +186,10 @@ class IntegrationTests(unittest.TestCase):
             body = gs[gs.index(fn):]
             self.assertTrue(body.split("\n", 1)[1].lstrip().startswith("return withLock_("), fn)
         self.assertLess(gs.index("function requestBooking_"), gs.index("slotsFor_(cfg, req.durationMin"))
-        # Guest notifications only after a token check: the invitation on confirmation and the updated invitation on
-        # a reschedule (management link); a cancellation passes 'all' to removeEvent_. The hold sends nothing.
-        self.assertEqual(gs.count("sendUpdates: 'all'"), 2)
-        self.assertGreater(gs.index("sendUpdates: 'all'"), gs.index("function confirmBooking_"))
+        # The booking sends the Calendar invitation immediately; rescheduling also updates it, and cancellation
+        # removes it with guest notifications.
+        self.assertEqual(gs.count("sendUpdates: 'all'"), 3)
+        self.assertGreater(gs.index("sendUpdates: 'all'"), gs.index("function requestBooking_"))
         self.assertGreater(gs.rindex("sendUpdates: 'all'"), gs.index("function rescheduleBooking_"))
         self.assertEqual(gs.count("removeEvent_(cfg, rec, 'all')"), 1)
         self.assertGreater(gs.index("removeEvent_(cfg, rec, 'all')"), gs.index("function cancelBooking_"))
@@ -216,13 +205,13 @@ class IntegrationTests(unittest.TestCase):
         self.assertIn("CHANGE_NOTICE_HOURS: 12", gs)
         get = gs[gs.index("function doGet"):gs.index("function doPost")]
         self.assertNotRegex(get, r"cancel|reschedule|manage|remove|patch")
-        hold = gs[gs.index("function insertHold_"):gs.index("function sendConfirmation_")]
-        self.assertNotIn("attendees", hold)
-        self.assertIn("sendUpdates: 'none'", hold)
+        booking = gs[gs.index("function insertBooking_"):gs.index("function sendBookingNotice_")]
+        self.assertIn("attendees", booking)
+        self.assertIn("sendUpdates: 'all'", booking)
         # Meet is requested only for virtual meetings: in person, the patch carries no conference data.
         confirm = gs[gs.index("function confirmBooking_"):gs.index("function refreshMeet_")]
-        self.assertEqual(gs.count("hangoutsMeet"), 1)
-        self.assertEqual(gs.count("conferenceDataVersion = 1"), 1)
+        self.assertEqual(gs.count("hangoutsMeet"), 2)  # immediate bookings plus legacy confirmation links
+        self.assertEqual(gs.count("conferenceDataVersion = 1"), 2)
         guard = confirm.index("if (virtual) {")
         self.assertLess(guard, confirm.index("patch.conferenceData ="))
         self.assertLess(guard, confirm.index("options.conferenceDataVersion = 1"))

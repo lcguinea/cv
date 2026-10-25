@@ -2,6 +2,19 @@
   'use strict';
   var app = document.getElementById('agenda-app');
   if (!app) return;
+  // New bookings are confirmed in the same request; the email is informational only.
+  if (window.STRINGS && window.STRINGS.en && window.STRINGS.es) {
+    window.STRINGS.en.agenda.stageConfirm = 'Confirmed';
+    window.STRINGS.en.agenda.stageDone = 'Confirmed';
+    window.STRINGS.en.agenda.submit = 'Confirm booking';
+    window.STRINGS.en.agenda.submitHint = 'Your booking is confirmed immediately. The email is informational and includes your management link.';
+    window.STRINGS.en.agenda.doneBody = 'Your booking is confirmed immediately. The invitation and an informational email with a private management link are on their way.';
+    window.STRINGS.es.agenda.stageConfirm = 'Confirmada';
+    window.STRINGS.es.agenda.stageDone = 'Confirmada';
+    window.STRINGS.es.agenda.submit = 'Confirmar reserva';
+    window.STRINGS.es.agenda.submitHint = 'Tu reserva queda confirmada inmediatamente. El correo es informativo e incluye el enlace de gestión.';
+    window.STRINGS.es.agenda.doneBody = 'Tu reserva queda confirmada inmediatamente. La invitación y un correo informativo con un enlace privado de gestión están en camino.';
+  }
   var ENDPOINT_RE = /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/;
   var TOKEN_RE = /^#confirm=([0-9a-f]{32}\.[0-9a-f]{64})$/;
   var MANAGE_RE = /^#manage=([0-9a-f]{32}\.[0-9a-f]{64})$/;
@@ -118,7 +131,7 @@
     if (at + accent.length < title.length) h1.appendChild(document.createTextNode(title.slice(at + accent.length)));
   }
 
-  // ---------- progress: 01 choose, 02 confirm by email, 03 invitation ----------
+  // ---------- progress: 01 choose, 02 confirmed ----------
   function setStage(stage) {
     var list = $('agenda-progress');
     list.hidden = !stage;
@@ -297,7 +310,6 @@
     var body = Object.assign({ op: 'book', requestId: requestIdFor(payload) }, payload);
     post(body)
       .then(function (data) {
-        if (data && data.ok && data.status === 'verification_sent') { showCheckEmail(data, payload); return; }
         if (data && data.ok && data.status === 'confirmed') { showConfirmed(withMeeting(data, payload), null); return; }
         showError(ERRORS[data && data.error] || 'agenda.errGeneric');
         if (data && data.error === 'slot_unavailable') loadSlots();
@@ -312,7 +324,7 @@
   // ---------- panels: provisional hold, confirmed, manage ----------
   function showPanel(id) {
     booking.hidden = true;
-    ['agenda-check', 'agenda-done', 'agenda-manage'].forEach(function (p) { $(p).hidden = p !== id; });
+    ['agenda-done', 'agenda-manage'].forEach(function (p) { $(p).hidden = p !== id; });
     var panel = $(id), heading = panel && panel.querySelector('h2');
     if (panel) { panel.classList.remove('is-entering'); void panel.offsetWidth; panel.classList.add('is-entering'); }
     reveal(app); focusQuietly(heading);
@@ -336,26 +348,14 @@
   function renderShown() {
     var s = state.shown;
     if (!s) return;
-    if (s.panel === 'check') {
-      $('agenda-check-time').textContent = when(s); $('agenda-check-until').textContent = timeLabel(s.expiresAt);
-      renderMeeting('agenda-check', s);
-    } else {
-      $('agenda-done-time').textContent = when(s);
-      renderMeeting('agenda-done', s);
-      $('agenda-place').hidden = s.modality !== 'in_person';
-      var note = Object.prototype.hasOwnProperty.call(MANAGE_NOTES, s.manageEmail) ? MANAGE_NOTES[s.manageEmail] : '';
-      $('agenda-manage-note').textContent = note ? t(note) : '';
-      $('agenda-manage-note').hidden = !note;
-    }
+    $('agenda-done-time').textContent = when(s);
+    renderMeeting('agenda-done', s);
+    $('agenda-place').hidden = s.modality !== 'in_person';
+    var note = Object.prototype.hasOwnProperty.call(MANAGE_NOTES, s.manageEmail) ? MANAGE_NOTES[s.manageEmail] : '';
+    $('agenda-manage-note').textContent = note ? t(note) : '';
+    $('agenda-manage-note').hidden = !note;
     renderZone();
   }
-  // Step 1 done: nothing is booked or sent to a calendar until the visitor opens the link in the email.
-  function showCheckEmail(data, payload) {
-    var d = withMeeting(data, payload);
-    state.shown = { panel: 'check', start: d.start, end: d.end, expiresAt: d.expiresAt, modality: d.modality, reason: d.reason };
-    renderShown(); setStage('confirm'); showPanel('agenda-check'); say('');
-  }
-
   // A Meet link is only shown once the backend reports one that exists; otherwise say what is known.
   // In-person meetings have no conference ("none"): nothing to show and nothing to wait for.
   function setMeet(meet) {
@@ -385,8 +385,7 @@
     })();
   }
 
-  // Step 2: the visitor arrives from the link in the email (#confirm=...). The token lives in the fragment,
-  // so it is never sent to GitHub Pages, and it is removed from the address bar before anything else.
+  // Legacy confirmation links are still accepted for existing bookings, but new bookings never use this path.
   function forgetFragment() {
     try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { location.hash = ''; }
   }

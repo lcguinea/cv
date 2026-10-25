@@ -2,15 +2,12 @@
  * Booking backend for luisguinea.com (Google Apps Script web app).
  *
  * Reads bookable windows from a dedicated "availability" Google Calendar, subtracts the busy time of the
- * configured calendars (free/busy only: titles and details of private events are never read) and books in two
- * steps so that nobody can make this script send calendar invitations to an address they do not own:
+ * configured calendars (free/busy only: titles and details of private events are never read) and confirms each
+ * successful booking inside one lock-protected operation:
  *
- *   1. op "book": the slot is re-checked inside the lock and held with an event that has NO attendees and sends
- *      nothing. The only message sent is a fixed-text email with a one-time confirmation link (no visitor text).
- *   2. op "confirm": whoever opens that link proves they read that mailbox. Only then is the visitor added as an
- *      attendee, the invitation sent and, for virtual meetings, the Google Meet conference requested. In-person
- *      meetings get no conference: the place is agreed afterwards. Unconfirmed holds expire.
- *   3. After confirming, the verified address receives a second private link (#manage=...) to see, cancel or
+ *   1. op "book": the slot is re-checked inside the lock, the visitor is added, the invitation is sent and, for
+ *      virtual meetings, the Google Meet conference is requested. In-person meetings get no conference.
+ *   2. The address receives an informational email with a private link (#manage=...) to see, cancel or
  *      reschedule the meeting (ops "manage", "cancel", "reschedule"; POST only, cancelling needs confirm:true).
  *      Changes are allowed until CHANGE_NOTICE_HOURS before the start. A reschedule moves the same event, so the
  *      invitation and the Meet link stay; the original time is kept until the new one is checked inside the lock.
@@ -477,75 +474,68 @@ function requestBooking_(cfg, req) {
   return withLock_(function () {
     var now = Date.now();
     sweep_(cfg, now);
-    var id = bookingId_(req.requestId);
-    var fp = fingerprint_(req);
-    var rec = getRecord_(id);
+    var id = bookingId_(req.requestId), fp = fingerprint_(req), rec = getRecord_(id);
     if (rec) {
-      // A retry of a request we already handled: never a second hold, never a second email once one went out.
       if (rec.fp !== fp) return { ok: false, error: 'invalid_request' };
-      if (rec.state !== 'pending') return { ok: true, status: rec.state, start: new Date(rec.startMs).toISOString(), end: new Date(rec.endMs).toISOString() };
-      if (!rec.mailed) return sendConfirmation_(cfg, rec, null);
-      return pendingResponse_(rec);
+      return confirmedResponse_(cfg, refreshMeet_(cfg, rec));
     }
     var limited = limitError_(cfg, req.email, now);
     if (limited) return { ok: false, error: limited };
-    if (MailApp.getRemainingDailyQuota() < 1) return { ok: false, error: 'unavailable' };
-
-    // Re-check inside the lock against fresh calendar data: the slot list the visitor saw may be stale.
     var fresh = slotsFor_(cfg, req.durationMin, now);
     if (!fresh.some(function (s) { return s.start === req.startMs; })) return { ok: false, error: 'slot_unavailable' };
-
-    var secret = randomHex_(64);
-    rec = {
-      id: id, eventId: 'lg' + id, fp: fp, state: 'pending', mailed: false,
+    rec = { id: id, eventId: 'lg' + id, fp: fp, state: 'confirmed', mailed: false,
       name: req.name, email: req.email, lang: req.lang, modality: req.modality, reason: req.reason,
-      startMs: req.startMs, endMs: req.startMs + req.durationMin * 60000,
-      expiresMs: now + cfg.holdMs, tokenHash: sha256Hex_(secret)
-    };
-    rec.purgeMs = rec.expiresMs;
-    insertHold_(cfg, rec, req);
+      startMs: req.startMs, endMs: req.startMs + req.durationMin * 60000, expiresMs: 0,
+      tokenHash: sha256Hex_(randomHex_(64)) };
+    rec.purgeMs = rec.endMs + 86400000;
+    insertBooking_(cfg, rec, req);
     putRecord_(rec);
-    invalidateSlots_(); // the held slot must disappear from every cached listing right away
-    return sendConfirmation_(cfg, rec, secret);
+    invalidateSlots_();
+    sendBookingNotice_(cfg, rec);
+    countSuccess_(rec.email, Date.now());
+    return confirmedResponse_(cfg, refreshMeet_(cfg, rec));
   });
 }
 
-/** Event with no attendees and no notifications: it only blocks the time until the email is confirmed. */
-function insertHold_(cfg, rec, req) {
+/** Confirmed event with its guest and optional Meet conference; the email does not gate the booking. */
+function insertBooking_(cfg, rec, req) {
+  var virtual = rec.modality !== 'in_person';
   var resource = {
     id: rec.eventId,
-    summary: eventSummary_(rec, true),
+    summary: eventSummary_(rec, false),
     description: eventDescription_(rec, req.notes),
     start: { dateTime: new Date(rec.startMs).toISOString(), timeZone: cfg.timeZone },
     end: { dateTime: new Date(rec.endMs).toISOString(), timeZone: cfg.timeZone },
     transparency: 'opaque',
     guestsCanModify: false,
     guestsCanInviteOthers: false,
+    attendees: [{ email: rec.email, displayName: rec.name }],
     extendedProperties: { private: { lgBooking: rec.id, lgModality: rec.modality } }
   };
   if (rec.modality === 'in_person') resource.location = meetingText_(rec).place;
+  if (virtual) resource.conferenceData = { createRequest: { requestId: rec.id, conferenceSolutionKey: { type: 'hangoutsMeet' } } };
+  var options = { sendUpdates: 'all' };
+  if (virtual) options.conferenceDataVersion = 1;
   try {
-    Calendar.Events.insert(resource, cfg.bookingCalendarId, { sendUpdates: 'none' });
+    var ev = Calendar.Events.insert(resource, cfg.bookingCalendarId, options);
+    rec.meet = virtual ? meetState_(ev) : { status: 'none' };
   } catch (err) {
     // The deterministic id makes a retry after a timeout safe: if our event is already there, reuse it.
     var ev = getEventOrNull_(cfg, rec.eventId);
     var mine = ev && ev.status !== 'cancelled' && ev.extendedProperties && ev.extendedProperties.private &&
       ev.extendedProperties.private.lgBooking === rec.id;
     if (!mine) throw err;
+    rec.meet = virtual ? meetState_(ev) : { status: 'none' };
   }
 }
 
-function sendConfirmation_(cfg, rec, secret) {
-  if (!secret) {
-    // The previous attempt stored the hold but the email never left: issue a fresh link.
-    secret = randomHex_(64);
-    rec.tokenHash = sha256Hex_(secret);
-    putRecord_(rec);
-  }
-  var link = cfg.confirmUrl + '#confirm=' + rec.id + '.' + secret;
+function sendBookingNotice_(cfg, rec) {
+  var secret = randomHex_(64);
+  rec.manageHash = sha256Hex_('manage:' + secret);
+  putRecord_(rec);
+  var link = cfg.confirmUrl + '#manage=' + rec.id + '.' + secret;
   var when = localParts_(rec.startMs, cfg.timeZone);
   var minutes = (rec.endMs - rec.startMs) / 60000;
-  var until = localParts_(rec.expiresMs, cfg.timeZone);
   var es = rec.lang === 'es';
   var inPerson = rec.modality === 'in_person';
   // Fixed text only: the visitor's name, reason and notes are never echoed to the address they typed (that
@@ -554,22 +544,10 @@ function sendConfirmation_(cfg, rec, secret) {
   var place = inPerson ? (es ? '\n\nEl lugar está pendiente de acordar: Luis te escribirá para acordarlo.' : '\n\nThe place is still to be agreed: Luis will write to you to agree on it.') : '';
   var body = es
     ? 'Se ha solicitado ' + kind + ' de ' + minutes + ' minutos con Luis Guinea el ' + when.day + ' a las ' + when.time +
-      ' (hora de Madrid) usando esta dirección de correo.' + place + '\n\nPara confirmarlo y recibir la invitación de Google Calendar, abre este enlace antes de las ' +
-      until.time + ' (hora de Madrid) del ' + until.day + ':\n' + link + '\n\nSi no has sido tú, ignora este mensaje: no se creará ninguna reserva y el horario se liberará solo.'
+      ' (hora de Madrid). La reserva queda confirmada inmediatamente.' + place + '\n\nEste correo es informativo. Usa este enlace privado para consultar, cambiar o cancelar la reserva:\n' + link + '\n'
     : 'You requested ' + kind + ' of ' + minutes + ' minutes with Luis Guinea on ' + when.day + ' at ' + when.time +
-      ' (Madrid time) using this email address.' + place + '\n\nTo confirm it and receive the Google Calendar invitation, open this link before ' +
-      until.time + ' (Madrid time) on ' + until.day + ':\n' + link + '\n\nIf this was not you, ignore this message: no booking will be made and the time will be released automatically.';
-  try {
-    MailApp.sendEmail({ to: rec.email, subject: es ? 'Confirma tu reserva con Luis Guinea' : 'Confirm your booking with Luis Guinea', body: body, name: 'Luis Guinea' });
-  } catch (err) {
-    if (releaseHold_(cfg, rec)) deleteRecord_(rec.id); // otherwise the sweep frees it when it expires
-    invalidateSlots_();
-    return { ok: false, error: 'unavailable' };
-  }
-  rec.mailed = true;
-  putRecord_(rec);
-  countSuccess_(rec.email, Date.now());
-  return pendingResponse_(rec);
+      ' (Madrid time). The booking is confirmed immediately.' + place + '\n\nThis email is informational. Use this private link to view, change or cancel the booking:\n' + link + '\n';
+  try { MailApp.sendEmail({ to: rec.email, subject: es ? 'Tu reserva con Luis Guinea está confirmada' : 'Your booking with Luis Guinea is confirmed', body: body, name: 'Luis Guinea' }); rec.mailed = true; putRecord_(rec); } catch (err) { /* informational only */ }
 }
 
 // ---------- step 2: the mailbox owner confirms ----------

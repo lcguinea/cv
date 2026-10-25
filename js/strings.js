@@ -42,3 +42,15 @@ window.STRINGS = {
     ui: { language: 'Idioma', theme: 'Tema', light: 'Claro', dark: 'Oscuro', menu: 'Menú', close: 'Cerrar', footerNav: 'Sitio', footerSocial: 'Redes sociales y música', skip:'Saltar al contenido', skipPlayer:'Saltar al reproductor', primaryNav: 'Principal', footerPlaces: 'Valencia / Ciudad de México', newTab: ' (se abre en una pestaña nueva)' }
   }
 };
+
+// Agenda bookings are confirmed immediately; the follow-up email is informational.
+window.STRINGS.en.agenda.stageConfirm = 'Confirmed';
+window.STRINGS.en.agenda.stageDone = 'Confirmed';
+window.STRINGS.en.agenda.submit = 'Confirm booking';
+window.STRINGS.en.agenda.submitHint = 'Your booking is confirmed immediately. The email is informational and includes your management link.';
+window.STRINGS.en.agenda.doneBody = 'Your booking is confirmed immediately. The invitation and an informational email with a private management link are on their way.';
+window.STRINGS.es.agenda.stageConfirm = 'Confirmada';
+window.STRINGS.es.agenda.stageDone = 'Confirmada';
+window.STRINGS.es.agenda.submit = 'Confirmar reserva';
+window.STRINGS.es.agenda.submitHint = 'Tu reserva queda confirmada inmediatamente. El correo es informativo e incluye el enlace de gestión.';
+window.STRINGS.es.agenda.doneBody = 'Tu reserva queda confirmada inmediatamente. La invitación y un correo informativo con un enlace privado de gestión están en camino.';
