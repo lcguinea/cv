@@ -591,13 +591,12 @@ html[lang=es] .agenda-page .agenda-stage h1{font-size:clamp(3.4rem,7.4vw,8rem)}
 .film-meta dt{font:.62rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .film-meta dd{margin:.1rem 0 0;font-size:.92rem}
 .film-more{margin:2rem 0 0}
-/* Jingles & Advertising Music (/music/#jingles): academic exercises, kept apart from commissioned credits. */
+/* Jingles & Advertising Music (/music/#jingles): three pieces with their own players, apart from the catalogue. */
 .jingles.section{padding-top:clamp(3rem,6vw,5rem)}
 .jingles-intro{max-width:62ch;color:var(--muted);margin:1.5rem 0 2.5rem}
 .jingle-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1.25rem,2.5vw,2.5rem);list-style:none;margin:0;padding:2rem 0 0;border-top:2px solid var(--text)}
 .jingle{display:flex;flex-direction:column;min-width:0}
 .jingle-kicker{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .75rem;margin:0;font:.68rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.badge-ai{display:inline-block;padding:.2rem .5rem;border:1px solid var(--accent);border-radius:999px;color:var(--accent);font:.62rem var(--mono);letter-spacing:.08em;line-height:1.2}
 .jingle-title{font-size:clamp(1.5rem,2.2vw,2.1rem);letter-spacing:-.01em;margin:.6rem 0 1rem}
 .jingle-meta{display:grid;gap:.6rem;margin:0 0 1.25rem;padding-top:.8rem;border-top:1px solid var(--rule)}
 .jingle-meta dt{font:.62rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}

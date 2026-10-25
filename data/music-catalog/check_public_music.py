@@ -147,9 +147,7 @@ def _check():
     jingle_files = _check_jingles(errors)
     jingle_tag = re.compile(r'<audio class="jingle-audio" controls preload="none" src="\.\./(assets/audio/jingles/[a-z0-9-]+\.mp3)"[^>]*></audio>')
     declared = jingle_tag.findall(html)
-    badges = re.findall(r'<span class="badge-ai">([^<]*)</span>', html)
-    if badges != ["AI-Generated Version"] * len(jingle_files):
-        errors.append("every jingle must carry the «AI-Generated Version» label of jingles_manifest.json")
+    _check_jingle_copy(html, jingle_files, errors)
     if sorted(declared) != sorted(jingle_files):
         errors.append("music/index.html must declare exactly one jingle player per jingles_manifest.json entry")
     pages = [jingle_tag.sub("", html)] + pages[1:]
@@ -405,6 +403,34 @@ def _jingle_files():
         return []
 
 
+# Public copy of /music/#jingles (owner's instruction of 2026-10-25): the pieces are presented as creative work with
+# the credit for the original music, without provenance labels or disclaimers, and without claiming a client, a
+# campaign or commercial use. Their real provenance stays in jingles_manifest.json.
+JINGLE_LABELS_RE = re.compile(r"(?i)AI-generated|\bSuno\b|academic|affiliation|generada con IA|académic|afiliación")
+JINGLE_CLAIMS_RE = re.compile(r"(?i)client|campaign|commission|hired|sponsor|cliente|campaña|encargo|contrat|patrocin")
+JINGLE_CREDIT = '<dt data-i18n="jingles.originalLabel">Original music</dt><dd data-i18n="jingles.original">Composed and produced by Luis Guinea</dd>'
+
+
+def _check_jingle_copy(html, jingle_files, errors):
+    """The jingles section and its EN/ES strings: original-music credit on every piece, no labels, no claims."""
+    section = re.search(r'<section id="jingles".*?</section>', html, re.S)
+    try:
+        strings = (REPO / "js" / "strings.js").read_text(encoding="utf-8")
+    except OSError:
+        strings = ""
+    texts = re.findall(r"^\s*jingles: \{.*\},?$", strings, re.M)
+    if not section or len(texts) != 2:
+        errors.append("cannot read the /music/#jingles section and its EN/ES strings")
+        return
+    copy = [re.sub(r"<[^>]+>", " ", section.group(0))] + texts
+    if section.group(0).count(JINGLE_CREDIT) != len(jingle_files):
+        errors.append("every jingle must carry the credit for its original music (composition and production)")
+    if any(JINGLE_LABELS_RE.search(text) for text in copy) or "badge-ai" in section.group(0):
+        errors.append("/music/#jingles must not show provenance labels or disclaimers (they stay in jingles_manifest.json)")
+    if any(JINGLE_CLAIMS_RE.search(text) for text in copy):
+        errors.append("/music/#jingles must not claim a client, a campaign or commercial use")
+
+
 def _check_jingles(errors):
     """Validate /music/#jingles audio: manifest -> file sha256 -> playable MP3 without metadata; return paths."""
     try:
@@ -412,8 +438,10 @@ def _check_jingles(errors):
     except (OSError, ValueError) as exc:
         errors.append(f"cannot read jingles_manifest.json: {exc}")
         return []
-    if doc.get("schema") != "jingles-manifest-v1" or doc.get("public_label") != "AI-Generated Version":
-        errors.append("jingles_manifest.json has an unexpected schema or public label")
+    presentation = doc.get("public_presentation") or {}
+    if doc.get("schema") != "jingles-manifest-v1" or presentation.get("labels_shown") != [] \
+            or not presentation.get("decision") or not presentation.get("limits"):
+        errors.append("jingles_manifest.json has an unexpected schema or public presentation")
     files = []
     for entry in doc.get("entries") or []:
         rel = entry.get("file", "")

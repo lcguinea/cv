@@ -1,7 +1,11 @@
 {
   "schema": "jingles-manifest-v1",
   "description": "Única fuente autorizada del audio de /music/#jingles: tres ejercicios académicos de jingles, no encargos. Cada archivo publicado bajo assets/audio/jingles/ debe figurar aquí con su sha256; ningún otro audio fuera de assets/audio/previews/ es publicable. Las marcas no son clientes; no se usan logotipos.",
-  "public_label": "AI-Generated Version",
+  "public_presentation": {
+    "labels_shown": [],
+    "decision": "Instrucción de Luis Guinea del 2026-10-25: la interfaz pública presenta las tres piezas como ejemplos de su trabajo creativo en música publicitaria, con el crédito de su música original (composición y producción), sin las etiquetas «AI-Generated Version», «This recording: AI-generated version (Suno)», «Academic exercise», «Brand: not a client» ni «No affiliation» y sin advertencias equivalentes. Hasta esa fecha la interfaz mostraba «AI-Generated Version».",
+    "limits": "La interfaz no afirma que las marcas lo contrataran, que existiera una campaña oficial ni que las grabaciones se usaran comercialmente. El crédito público se refiere a la música original; la procedencia real de cada grabación (ejercicio académico, versión generada con Suno) consta en provenance y owner_statement y no cambia."
+  },
   "entries": [
     {
       "id": "bachoco",

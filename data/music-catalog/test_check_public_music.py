@@ -229,6 +229,37 @@ class JinglesTest(unittest.TestCase):
         self.assertIn(f"jingle {self.manifest['entries'][1]['file']} shows a date no source confirms", errors)
         self.assertIn(f"{check.JINGLES_DIR} contains an undeclared file: {dropped['file']}", errors)
 
+    def test_the_manifest_keeps_the_real_provenance_behind_the_public_presentation(self):
+        self.assertEqual(self.manifest["public_presentation"]["labels_shown"], [])
+        for entry in self.manifest["entries"]:
+            self.assertEqual(entry["provenance"]["ai_tool"], "Suno")
+            self.assertIn("ejercicio académico", entry["owner_statement"])
+        manifest = json.loads(json.dumps(self.manifest))
+        manifest["public_presentation"]["labels_shown"] = ["AI-Generated Version"]
+        self.assertIn("jingles_manifest.json has an unexpected schema or public presentation", self.errors_with(manifest))
+
+    def test_the_public_copy_credits_the_original_music_without_labels_or_claims(self):
+        html = check.MUSIC_HTML.read_text(encoding="utf-8")
+        files = [e["file"] for e in self.manifest["entries"]]
+        errors = []
+        check._check_jingle_copy(html, files, errors)
+        self.assertEqual(errors, [])
+        cases = {
+            '<span class="badge-ai">AI-Generated Version</span>':
+                "/music/#jingles must not show provenance labels or disclaimers (they stay in jingles_manifest.json)",
+            "<dd>Not a client · no affiliation</dd>":
+                "/music/#jingles must not show provenance labels or disclaimers (they stay in jingles_manifest.json)",
+            "<p>Official campaign for the brand.</p>": "/music/#jingles must not claim a client, a campaign or commercial use",
+        }
+        for extra, error in cases.items():
+            with self.subTest(extra=extra):
+                errors = []
+                check._check_jingle_copy(html.replace('<ol class="jingle-list">', extra + '<ol class="jingle-list">'), files, errors)
+                self.assertIn(error, errors)
+        errors = []
+        check._check_jingle_copy(html.replace(check.JINGLE_CREDIT, "", 1), files, errors)
+        self.assertIn("every jingle must carry the credit for its original music (composition and production)", errors)
+
     def test_an_undeclared_jingle_is_unauthorized_audio(self):
         root = Path(self.tmp.name)
         declared, stray = f"{check.JINGLES_DIR}/declared.mp3", f"{check.JINGLES_DIR}/stray.mp3"
