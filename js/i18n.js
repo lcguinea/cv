@@ -10,14 +10,23 @@
     for (const tag of list) { const base = String(tag).toLowerCase().split('-')[0]; if (base === 'es' || base === 'en') return base; }
     return 'en';
   }
+  // Pages written in Spanish (the Formación section, <html lang="es" data-lang-default="es">) keep their language
+  // unless the visitor chose one or is already browsing the site in the other language in this tab: a visitor (or a
+  // search engine) arriving from a Spanish search reads Spanish, one coming from the English site keeps English.
+  function readSession() { try { return sessionStorage.getItem('lg-language-session'); } catch (e) { return null; } }
+  const html = document.documentElement;
+  const pageLang = (html.getAttribute('lang') || 'en').slice(0, 2) === 'es' ? 'es' : 'en';
+  const pageDefault = html.getAttribute('data-lang-default');
+  const session = readSession();
   const saved = read('lg-language');
   const manual = saved === 'es' || (saved === 'en' && read('lg-language-manual') === '1');
-  const lang = manual ? saved : detect();
+  const lang = manual ? saved : pageDefault ? (session === 'es' || session === 'en' ? session : pageDefault) : detect();
+  try { sessionStorage.setItem('lg-language-session', lang); } catch (e) {}
   window.currentLanguage = lang;
   window.t = function (path) { return path.split('.').reduce((o, k) => o && o[k], STRINGS[window.currentLanguage]) || path; };
   window.setLanguage = function (next) { window.currentLanguage = next === 'es' ? 'es' : 'en'; document.documentElement.lang = window.currentLanguage; document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); }); document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); }); document.querySelectorAll('[data-lang]').forEach(el => el.setAttribute('aria-pressed', String(el.dataset.lang === window.currentLanguage))); };
   // The page is fully parsed (scripts load last), so a non-default language is applied now, before later
   // scripts load and the browser paints the English fallback; DOMContentLoaded repeats it with site.js's extras.
-  if (lang !== 'en') window.setLanguage(lang);
-  document.addEventListener('DOMContentLoaded', () => { setLanguage(lang); document.querySelectorAll('[data-lang]').forEach(el => el.addEventListener('click', () => { const next = el.dataset.lang === 'es' ? 'es' : 'en'; write('lg-language', next); write('lg-language-manual', '1'); setLanguage(next); })); });
+  if (lang !== pageLang) window.setLanguage(lang);
+  document.addEventListener('DOMContentLoaded', () => { setLanguage(lang); document.querySelectorAll('[data-lang]').forEach(el => el.addEventListener('click', () => { const next = el.dataset.lang === 'es' ? 'es' : 'en'; write('lg-language', next); write('lg-language-manual', '1'); try { sessionStorage.setItem('lg-language-session', next); } catch (e) {} setLanguage(next); })); });
 })();
