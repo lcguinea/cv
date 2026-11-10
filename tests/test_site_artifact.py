@@ -69,8 +69,8 @@ class ArtifactTest(unittest.TestCase):
     def test_exact_composition(self):
         self.assertEqual(self.present, sorted(self.files))
         top = {p.split("/")[0] for p in self.present}
-        self.assertEqual(top, {"404.html", "agenda", "assets", "css", "cv.html", "fonts", "formacion", "index.html", "js", "music",
-                               "robots.txt", "sitemap.xml", "sobre-mi.html"})
+        self.assertEqual(top, {"404.html", "agenda", "assets", "css", "cv.html", "en", "es", "fonts", "formacion", "index.html", "js",
+                               "music", "robots.txt", "sitemap.xml", "sobre-mi.html"})
         previews = [p for p in self.present if p.startswith("assets/audio/previews/")]
         images = [p for p in self.present if p.startswith("assets/images/") and not p.startswith("assets/images/share/")]
         artworks, published = build_site.music_files()
@@ -92,7 +92,9 @@ class ArtifactTest(unittest.TestCase):
         self.assertEqual(sorted(p for p in self.present if p.startswith("assets/images/share/")), share_images)
         self.assertTrue(set(pages) <= set(self.present))
         self.assertEqual(len(self.present), len(build_site.STATIC_FILES) + len(set(artworks)) + len(published)
-                         + len(jingles) + len(pages) + len(share_images))
+                         + len(jingles) + len(pages) + len(share_images) + len(build_site.lang_preview_files()))
+        # Language link previews of the main pages: one per language for each of them.
+        self.assertEqual(len(build_site.lang_preview_files()), 18)
 
     def test_no_private_or_development_content(self):
         for rel in self.present:

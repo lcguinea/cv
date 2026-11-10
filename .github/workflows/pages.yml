@@ -28,6 +28,9 @@ jobs:
       # of a retired recording, out-of-date metadata or index, or an image whose cover changed. Writes nothing.
       - name: Check link-preview pages
         run: node tools/build_share_pages.js --check
+      # Language link previews of the main pages (en/..., es/...) must match the pages' metadata. Writes nothing.
+      - name: Check language link previews
+        run: python3 tools/build_lang_previews.py --check
       - name: Build and validate _site
         run: python3 tools/build_site.py --out _site
       - name: Focused checks
