@@ -35,10 +35,15 @@
   // The queue narrows those picks to the recordings the filters of /music/ show (null: the whole catalogue). Every
   // recording in a selection takes part, orchestral pieces included: the exclusion applies to the whole catalogue only.
   // An empty selection has nothing to continue with.
+  // Recordings Luis keeps out of every automatic pick, by preview (2026-11-10: "Gracias Por Todo"). They stay in the
+  // catalogue and play when chosen by hand or opened by their own ?song= link, but never start a session, follow the end
+  // of a preview, answer Next or lead a filtered selection, inside a /music/ selection too.
+  const MANUAL_ONLY=['gracias-por-todo--canciones-de-puno-y-letra.mp3'];
+  const manualOnly=i=>MANUAL_ONLY.includes(tracks[i].preview);
   const orchestral=i=>(tracks[i].genres||[]).includes('cinematic_classical');
-  const shuffled=tracks.map((x,i)=>i).filter(i=>!orchestral(i));
-  const automatic=shuffled.length?shuffled:tracks.map((x,i)=>i);
-  function candidates(){return queue||automatic}
+  const shuffled=tracks.map((x,i)=>i).filter(i=>!orchestral(i)&&!manualOnly(i));
+  const automatic=shuffled.length?shuffled:tracks.map((x,i)=>i).filter(i=>!manualOnly(i));
+  function candidates(){return queue?queue.filter(i=>!manualOnly(i)):automatic}
   function randomIndex(exclude){
     const from=candidates();
     if(!from.length)return -1;
@@ -225,6 +230,7 @@
     toggle:()=>{if(isPlaying()){audio.pause();return Promise.resolve(false)}return start()},
     next,seek,setVolume,setMuted,
     queue:()=>queue?queue.slice():null,setQueue,
+    autoplayable:i=>i>=0&&i<tracks.length&&!manualOnly(i),
     linkPending:()=>awaiting,openLink,settleLink,
     // Returns the unsubscribe function; js/soft-nav.js releases the subscriptions of a page when it is left.
     on:fn=>{listeners.push(fn);const off=()=>{const at=listeners.indexOf(fn);if(at>=0)listeners.splice(at,1)};if(window.LGSoftNav)window.LGSoftNav.track(off);return off},

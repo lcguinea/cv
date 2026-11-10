@@ -24,6 +24,10 @@ RUNNER = ROOT / "tests" / "support" / "run_scenario.js"
 NODE = shutil.which("node")
 PREVIEWS = re.findall(r"preview:'([^']+)\.mp3'", (ROOT / "js" / "music-data.js").read_text(encoding="utf-8"))
 SONG = "como-decirte--luis-guinea--2022"
+# Recordings kept out of every automatic pick (js/player.js MANUAL_ONLY, 2026-11-10: "Gracias Por Todo"): random play
+# in a selection skips them too, while they stay listed and playable by hand.
+MANUAL_ONLY = [PREVIEWS.index(p[:-4]) for p in re.findall(r"'([a-z0-9-]+\.mp3)'", re.search(
+    r"const MANUAL_ONLY=\[([^\]]*)\]", (ROOT / "js" / "player.js").read_text(encoding="utf-8")).group(1))]
 
 PRELUDE = r"""
 const BASE = 'music/index.html';
@@ -141,9 +145,11 @@ class MusicLinkPlaybackTests(unittest.TestCase):
         # Next and Previous follow the list as shown and wrap around inside it.
         self.assertEqual(out["next"], rows[1:] + rows[:3])
         self.assertEqual(out["prev"], [rows[1], rows[0], rows[-1]])
-        # Continuous play is a shuffle of the results only: each one plays once before any repeats.
-        self.assertEqual(sorted(out["ended"][:len(rows)]), sorted(rows))
-        self.assertTrue(set(out["ended"]) <= set(rows))
+        # Continuous play is a shuffle of the results only: each one plays once before any repeats, except the
+        # recordings that are never picked automatically.
+        auto = [i for i in rows if i not in MANUAL_ONLY]
+        self.assertEqual(sorted(out["ended"][:len(auto)]), sorted(auto))
+        self.assertTrue(set(out["ended"]) <= set(auto))
         self.assertTrue(set(out["bar"]) <= set(rows))
         self.assertTrue(out["playing"])
 
@@ -164,7 +170,9 @@ class MusicLinkPlaybackTests(unittest.TestCase):
         self.assertTrue(orchestral)
         self.assertLess(len(orchestral), len(rows))
         self.assertNotIn(rows[0], orchestral)
-        self.assertEqual(sorted(out["ended"][:len(rows) - 1]), sorted(rows[1:]))
+        auto = [i for i in rows[1:] if i not in MANUAL_ONLY]
+        self.assertEqual(sorted(out["ended"][:len(auto)]), sorted(auto))
+        self.assertFalse(set(MANUAL_ONLY) & set(out["ended"] + out["whole"]))
         self.assertTrue(set(orchestral) <= set(out["ended"]))
         self.assertTrue(set(out["bar"]) <= set(rows))
         # Without filters, random play keeps leaving orchestral pieces out.

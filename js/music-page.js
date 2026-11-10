@@ -198,7 +198,8 @@
   }
   function openLink(state){
     if(!P.linkPending())return;
-    const first=linked>=0?linked:filtering()&&visible.length?visible[0]:-1;
+    const auto=visible.find(i=>P.autoplayable(i));
+    const first=linked>=0?linked:filtering()&&auto!==undefined?auto:-1;
     // A recording that is not there, or a hash with its own destination, selects without playing.
     if(first<0||state.missing||location.hash){P.settleLink(first);return}
     P.openLink(first).then(ok=>{
@@ -208,7 +209,7 @@
     });
   }
   if(startSong)startSong.addEventListener('click',()=>P.play());
-  if(startSelection)startSelection.addEventListener('click',()=>P.select(visible.includes(P.index())?P.index():visible[0],true));
+  if(startSelection)startSelection.addEventListener('click',()=>{const auto=visible.find(i=>P.autoplayable(i));P.select(visible.includes(P.index())?P.index():auto!==undefined?auto:visible[0],true)});
   // Links with a preview: WhatsApp and social networks show the title, description and image of the URL itself without
   // running JavaScript, so a recording or a usual selection is shared as its own static page (js/share-pages.js, made by
   // tools/build_share_pages.js), which opens /music/ with the same parameters. Other selections (search text, rarer

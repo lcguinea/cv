@@ -30,7 +30,11 @@ TRACKS = (ROOT / "js" / "music-data.js").read_text(encoding="utf-8").count("{ ti
 ORCHESTRAL = [i for i, line in enumerate(l for l in (ROOT / "js" / "music-data.js").read_text(encoding="utf-8")
                                          .splitlines() if l.lstrip().startswith("{ title:"))
               if "'cinematic_classical'" in re.search(r"genres:\[([^\]]*)\]", line).group(1)]
-AUTOMATIC = [i for i in range(TRACKS) if i not in ORCHESTRAL]
+# Recordings kept out of every automatic pick (js/player.js MANUAL_ONLY, 2026-11-10: "Gracias Por Todo").
+MANUAL_ONLY_PREVIEWS = re.findall(r"'([a-z0-9-]+\.mp3)'", re.search(r"const MANUAL_ONLY=\[([^\]]*)\]", (ROOT / "js" / "player.js").read_text(encoding="utf-8")).group(1))
+PREVIEWS = re.findall(r"\bpreview:'([^']+)'", "\n".join(l for l in (ROOT / "js" / "music-data.js").read_text(encoding="utf-8").splitlines() if l.lstrip().startswith("{ title:")))
+MANUAL_ONLY = [PREVIEWS.index(p) for p in MANUAL_ONLY_PREVIEWS]
+AUTOMATIC = [i for i in range(TRACKS) if i not in ORCHESTRAL and i not in MANUAL_ONLY]
 NODE = shutil.which("node")
 
 PRELUDE = r"""
@@ -127,6 +131,40 @@ class GlobalPlayerTests(unittest.TestCase):
         self.assertNotEqual(order[n], order[n - 1])
         self.assertEqual(len(set(order[n:n + 2])), 2)
         self.assertTrue(out["playing"])
+
+    def test_gracias_por_todo_never_plays_automatically_but_plays_by_hand(self):
+        self.assertEqual(MANUAL_ONLY_PREVIEWS, ["gracias-por-todo--canciones-de-puno-y-letra.mp3"])
+        gracias = MANUAL_ONLY[0]
+        out = self.run_scenario(
+            "const page = browser.tab().open('index.html'); await settle();"
+            "page.click('#mp-toggle'); await settle(); out.order = [state(page).index];"
+            # Every random value the engine could draw, over several rounds: end of a preview and Next.
+            "for (let n = 0; n < %d; n++) { browser.randomQueue.push((n * 0.137) %% 1);"
+            "  if (n %% 3) { page.audio().loadMetadata(40); page.audio().finish(); } else page.eval('LGPlayer.next()');"
+            "  await settle(); out.order.push(state(page).index); }"
+            # A filtered selection that contains it: the queue skips it as well.
+            "page.eval('LGPlayer.setQueue([%d, %d])');"
+            "for (let n = 0; n < 6; n++) { browser.randomQueue.push(n / 6); page.audio().loadMetadata(40); page.audio().finish(); await settle(); out.order.push(state(page).index); }"
+            "out.autoplayable = page.eval('LGPlayer.autoplayable(%d)');"
+            # Still in the catalogue, and chosen by hand it plays.
+            "page.eval('LGPlayer.setQueue(null)'); page.eval('LGPlayer.select(%d, true)'); await settle();"
+            "out.manual = state(page);"
+            % (3 * len(AUTOMATIC), gracias, AUTOMATIC[0], gracias, gracias)
+        )
+        self.assertNotIn(gracias, out["order"])
+        self.assertFalse(out["autoplayable"])
+        self.assertEqual(out["manual"]["index"], gracias)
+        self.assertEqual(out["manual"]["title"], "Gracias Por Todo")
+        self.assertTrue(out["manual"]["playing"])
+        self.assertIn("Gracias Por Todo", out["manual"]["data"])
+
+    def test_a_new_session_never_starts_on_a_manual_only_recording(self):
+        gracias = MANUAL_ONLY[0]
+        starts = []
+        for step in range(0, 40):
+            out = self.run_scenario("browser.randomQueue.push(%r); const page = browser.tab().open('index.html'); await settle(); out.i = state(page).index;" % (step / 40))
+            starts.append(out["i"])
+        self.assertNotIn(gracias, starts)
 
     def test_no_repeat_survives_page_changes_and_applies_to_next(self):
         out = self.run_scenario(
