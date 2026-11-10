@@ -80,7 +80,7 @@ function makeEnv(opts = {}) {
     },
     MailApp: {
       getRemainingDailyQuota: () => env.mailQuota,
-      sendEmail: msg => { if (env.mailError) throw new Error(env.mailError); env.mailQuota--; env.mails.push(clone(msg)); },
+      sendEmail: msg => { if (env.mailError || (env.mailErrorFor && msg.to === env.mailErrorFor)) throw new Error(env.mailError || 'quota'); env.mailQuota--; env.mails.push(clone(msg)); },
     },
     Logger: { log: msg => { env.logs.push(msg); } },
     ContentService: { MimeType: { JSON: 'json' }, createTextOutput: t => ({ text: t, setMimeType() { return this; } }) },
@@ -110,7 +110,7 @@ function makeEnv(opts = {}) {
           if (env.insertError) throw new Error(env.insertError);
           if (resource.id && findEvent(calId, resource.id)) throw new Error('The requested identifier already exists.');
           env.inserts.push(clone({ resource, calId, args }));
-          const ev = Object.assign(clone(resource), { id: resource.id || 'ev' + env.inserts.length, status: 'confirmed',
+          const ev = Object.assign(clone(resource), { id: resource.id || 'ev' + env.inserts.length, status: 'confirmed', htmlLink: 'https://www.google.com/calendar/event?eid=' + Buffer.from(String(resource.id || env.inserts.length)).toString('base64').replace(/=+$/, ''),
             start: Date.parse(resource.start.dateTime), end: Date.parse(resource.end.dateTime) });
           if (ev.conferenceData && ev.conferenceData.createRequest) applyMeet(ev);
           env.calendars[calId].push(ev);
@@ -1089,6 +1089,13 @@ const scenarios = {
     assert(env.mails[0].body.includes('#manage='));
     assert(!env.mails[0].body.includes('#confirm='));
   },
+  confirmation_page_reports_the_management_email_truthfully() {
+    const ok = makeEnv({ availability: MONDAY }).book();
+    assert.strictEqual(ok.manageEmail, 'sent', 'the email with the management link went out');
+    const env = makeEnv({ availability: MONDAY });
+    env.mailError = 'quota';
+    assert.strictEqual(env.book().manageEmail, 'failed');
+  },
   immediate_booking_survives_informational_email_failure() {
     const env = makeEnv({ availability: MONDAY });
     env.mailError = 'quota';
@@ -1102,6 +1109,53 @@ const scenarios = {
     assert.deepStrictEqual([first.status, retry.status, env.inserts.length], ['confirmed', 'confirmed', 1]);
     const other = env.book({ requestId: 'request-other-0001', start: '2026-11-02T09:00:00.000Z' });
     assert.strictEqual(other.error, 'slot_unavailable');
+  },
+  owner_is_notified_once_of_each_new_booking() {
+    const env = makeEnv({ availability: MONDAY, props: { NOTIFY_EMAIL: 'luis@example.com' } });
+    const b = env.book({ requestId: 'request-notify-00001', reason: 'Clases de piano' });
+    assert.strictEqual(b.status, 'confirmed');
+    const owner = env.mails.filter(m => m.to === 'luis@example.com');
+    assert.strictEqual(owner.length, 1);
+    const m = owner[0];
+    assert.strictEqual(m.replyTo, 'ana@example.com');
+    assert.ok(m.subject.startsWith('Nueva reserva: Ana Pérez · 2026-11-02 10:00'), m.subject);
+    ['Nombre: Ana Pérez', 'Correo: ana@example.com', 'Fecha: 2026-11-02', 'Hora: 10:00–11:00 (hora peninsular española, Europe/Madrid)',
+     'Modalidad: Online (Google Meet)', 'Motivo: Clases de piano', 'Google Meet: https://meet.google.com/abc-defg-hij',
+     'Ver la reserva en Google Calendar: https://www.google.com/calendar/event?eid=']
+      .forEach(line => assert.ok(m.body.includes(line), line));
+    assert.ok(!m.body.includes('#manage='), 'never the visitor\'s private management link');
+    // A retried request (network retry, double click, reload) does not notify again.
+    env.book({ requestId: 'request-notify-00001', reason: 'Clases de piano' });
+    assert.strictEqual(env.mails.filter(m => m.to === 'luis@example.com').length, 1);
+    assert.strictEqual(env.mails.length, 2, 'one email to the visitor, one to Luis');
+  },
+  owner_notice_for_in_person_booking_has_no_meet() {
+    const env = makeEnv({ availability: MONDAY, props: { NOTIFY_EMAIL: 'luis@example.com' } });
+    env.book({ modality: 'in_person' });
+    const m = env.mails.find(x => x.to === 'luis@example.com');
+    assert.ok(m.body.includes('Modalidad: Presencial (lugar por acordar)'));
+    assert.ok(m.body.includes('Motivo: sin indicar'));
+    assert.ok(!m.body.includes('Google Meet:'));
+  },
+  failed_bookings_never_notify_the_owner() {
+    const env = makeEnv({ availability: MONDAY, props: { NOTIFY_EMAIL: 'luis@example.com' } });
+    assert.strictEqual(env.book({ start: '2026-11-02T13:00:00.000Z' }).error, 'slot_unavailable');
+    assert.strictEqual(env.book({ email: 'not-an-email' }).ok, false);
+    env.busyError = 'Calendar down';
+    assert.strictEqual(env.book().ok, false);
+    assert.strictEqual(env.mails.length, 0);
+  },
+  owner_mail_failure_never_undoes_a_confirmed_booking() {
+    const env = makeEnv({ availability: MONDAY, props: { NOTIFY_EMAIL: 'luis@example.com' } });
+    env.mailErrorFor = 'luis@example.com';
+    const b = env.book({ requestId: 'request-notify-00002' });
+    assert.deepStrictEqual([b.ok, b.status, env.live().length], [true, 'confirmed', 1]);
+    assert.strictEqual(env.mails.length, 1, 'the visitor still gets the informational email');
+  },
+  no_owner_recipient_means_no_owner_mail() {
+    const env = makeEnv({ availability: MONDAY });
+    env.book();
+    assert.strictEqual(env.mails.length, 1);
   },
   immediate_booking_keeps_management_cancel_access() {
     const env = makeEnv({ availability: MONDAY });
@@ -1127,7 +1181,10 @@ const selected = new Set([
   'cache_failure_never_breaks_the_listing', 'meet_link_that_is_not_a_meet_url_is_not_trusted', 'check_setup_reports_without_side_effects',
   'missing_configuration_is_reported_not_guessed', 'immediate_booking_confirms_and_sends_informational_management_email',
   'immediate_booking_survives_informational_email_failure', 'immediate_booking_duplicate_and_abuse_guards_remain',
-  'immediate_booking_keeps_management_cancel_access'
+  'immediate_booking_keeps_management_cancel_access', 'owner_is_notified_once_of_each_new_booking',
+  'owner_notice_for_in_person_booking_has_no_meet', 'failed_bookings_never_notify_the_owner',
+  'owner_mail_failure_never_undoes_a_confirmed_booking', 'no_owner_recipient_means_no_owner_mail',
+  'confirmation_page_reports_the_management_email_truthfully'
 ]);
 Object.keys(scenarios).filter(name => selected.has(name)).forEach(name => {
   try { scenarios[name](); results[name] = 'ok'; } catch (e) { results[name] = String(e && e.stack || e).split('\n').slice(0, 4).join(' | '); }

@@ -492,6 +492,7 @@ function requestBooking_(cfg, req) {
     putRecord_(rec);
     invalidateSlots_();
     sendBookingNotice_(cfg, rec);
+    notifyNewBooking_(cfg, rec);
     countSuccess_(rec.email, Date.now());
     return confirmedResponse_(cfg, refreshMeet_(cfg, rec));
   });
@@ -519,6 +520,7 @@ function insertBooking_(cfg, rec, req) {
   try {
     var ev = Calendar.Events.insert(resource, cfg.bookingCalendarId, options);
     rec.meet = virtual ? meetState_(ev) : { status: 'none' };
+    rec.eventLink = calendarLink_(ev);
   } catch (err) {
     // The deterministic id makes a retry after a timeout safe: if our event is already there, reuse it.
     var ev = getEventOrNull_(cfg, rec.eventId);
@@ -526,7 +528,14 @@ function insertBooking_(cfg, rec, req) {
       ev.extendedProperties.private.lgBooking === rec.id;
     if (!mine) throw err;
     rec.meet = virtual ? meetState_(ev) : { status: 'none' };
+    rec.eventLink = calendarLink_(ev);
   }
+}
+
+/** Link to the event in Google Calendar (only Luis, signed in, can open it), or '' when Google gave none. */
+function calendarLink_(ev) {
+  var link = ev && ev.htmlLink;
+  return typeof link === 'string' && /^https:\/\/(?:www\.)?google\.com\/calendar\/event\?eid=[A-Za-z0-9_-]+(?:&[A-Za-z0-9=_.-]+)*$/.test(link) ? link : '';
 }
 
 function sendBookingNotice_(cfg, rec) {
@@ -547,7 +556,7 @@ function sendBookingNotice_(cfg, rec) {
       ' (hora de Madrid). La reserva queda confirmada inmediatamente.' + place + '\n\nEste correo es informativo. Usa este enlace privado para consultar, cambiar o cancelar la reserva:\n' + link + '\n'
     : 'You requested ' + kind + ' of ' + minutes + ' minutes with Luis Guinea on ' + when.day + ' at ' + when.time +
       ' (Madrid time). The booking is confirmed immediately.' + place + '\n\nThis email is informational. Use this private link to view, change or cancel the booking:\n' + link + '\n';
-  try { MailApp.sendEmail({ to: rec.email, subject: es ? 'Tu reserva con Luis Guinea está confirmada' : 'Your booking with Luis Guinea is confirmed', body: body, name: 'Luis Guinea' }); rec.mailed = true; putRecord_(rec); } catch (err) { /* informational only */ }
+  try { MailApp.sendEmail({ to: rec.email, subject: es ? 'Tu reserva con Luis Guinea está confirmada' : 'Your booking with Luis Guinea is confirmed', body: body, name: 'Luis Guinea' }); rec.mailed = true; rec.manageMailed = true; putRecord_(rec); } catch (err) { /* informational only */ }
 }
 
 // ---------- step 2: the mailbox owner confirms ----------
@@ -760,6 +769,50 @@ function rescheduleBooking_(cfg, tok, startMs) {
     notifyOwner_(cfg, rec, oldStart);
     return manageResponse_(cfg, rec, now);
   });
+}
+
+/** Where Luis is told about bookings: NOTIFY_EMAIL, or else the account the web app runs as. '' when neither. */
+function ownerEmail_(cfg) {
+  if (cfg.notifyEmail && EMAIL_RE.test(cfg.notifyEmail)) return cfg.notifyEmail;
+  try {
+    var me = Session.getEffectiveUser().getEmail();
+    return typeof me === 'string' && EMAIL_RE.test(me) ? me : '';
+  } catch (e) { return ''; }
+}
+
+/**
+ * Email to Luis for each new confirmed booking (the organizer gets no Calendar email for events of his own calendar).
+ * Runs inside the booking lock, after the event and the record exist; at most once per booking (rec.ownerNotified),
+ * so a retried request never sends a second one. Best effort: a mail failure never undoes a confirmed booking. It
+ * carries the Calendar link of the event, never the visitor's private management link.
+ */
+function notifyNewBooking_(cfg, rec) {
+  if (rec.ownerNotified) return;
+  var to = ownerEmail_(cfg);
+  if (!to) return;
+  var when = localParts_(rec.startMs, cfg.timeZone), until = localParts_(rec.endMs, cfg.timeZone);
+  var inPerson = rec.modality === 'in_person';
+  if (!inPerson) refreshMeet_(cfg, rec);
+  var meet = inPerson ? '' : rec.meet && rec.meet.status === 'ready' ? rec.meet.link :
+    'todavía generándose: aparecerá en el evento de Google Calendar';
+  var lines = [
+    'Nueva reserva confirmada en luisguinea.com/agenda/', '',
+    'Nombre: ' + rec.name,
+    'Correo: ' + rec.email,
+    'Fecha: ' + when.day,
+    'Hora: ' + when.time + '–' + until.time + ' (hora peninsular española, ' + cfg.timeZone + ')',
+    'Modalidad: ' + (inPerson ? 'Presencial (lugar por acordar)' : 'Online (Google Meet)'),
+    'Motivo: ' + (rec.reason || 'sin indicar')
+  ];
+  if (!inPerson) lines.push('Google Meet: ' + meet);
+  if (rec.eventLink) lines.push('Ver la reserva en Google Calendar: ' + rec.eventLink);
+  lines.push('', 'Responde a este correo para escribir directamente a ' + rec.name + '.');
+  try {
+    MailApp.sendEmail({ to: to, replyTo: rec.email, name: 'Agenda luisguinea.com',
+      subject: 'Nueva reserva: ' + rec.name + ' · ' + when.day + ' ' + when.time, body: lines.join('\n') });
+    rec.ownerNotified = true;
+    putRecord_(rec);
+  } catch (e) { /* best effort: the booking stays confirmed */ }
 }
 
 /** Optional email to Luis (NOTIFY_EMAIL) after a cancellation or reschedule. Best effort; never the link. */

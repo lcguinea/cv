@@ -122,8 +122,16 @@ puede cancelarla o cambiarla de horario sin escribir a Luis.
   falta de cuota; reabrir el enlace de confirmación lo reintenta una vez mientras haya plazo) o
   `"too_late"` (ya rige `CHANGE_NOTICE_HOURS` y no se emite). Es solo un estado: nunca contiene el enlace
   ni el token. La página solo dice que ha enviado el correo con `"sent"`; sin el campo no dice nada.
-- **Aviso a Luis** (opcional): con `NOTIFY_EMAIL`, cada cancelación o cambio envía un correo breve a
-  esa dirección (el organizador no recibe correo de Calendar por cambios hechos con su propia cuenta).
+- **Aviso a Luis de cada reserva nueva** (2026-11-10): Google Calendar no avisa al organizador de los eventos que
+  se crean en su propio calendario, así que tras confirmar una reserva (dentro del bloqueo, con el evento y el
+  registro ya guardados) `notifyNewBooking_` envía un correo de texto a `NOTIFY_EMAIL` o, si está vacía, a la
+  cuenta que ejecuta la web app. Contiene nombre, correo, fecha y hora (Europe/Madrid), modalidad, motivo, el enlace
+  de Meet si es virtual y el enlace del evento en Google Calendar; Reply-To es el visitante. Nunca incluye el enlace
+  privado de gestión del visitante. Se envía una sola vez por reserva (`ownerNotified` en el registro): un reintento
+  con el mismo `requestId` no repite el aviso, una reserva fallida no avisa y un fallo del correo no deshace la
+  reserva. Usa el permiso `script.send_mail` que ya tenía el proyecto: no hay permisos nuevos.
+- **Aviso a Luis de cancelaciones y cambios** (opcional): con `NOTIFY_EMAIL`, cada cancelación o cambio envía un
+  correo breve a esa dirección (el organizador no recibe correo de Calendar por cambios hechos con su propia cuenta).
 - **Compatibilidad**: las reservas confirmadas con la versión anterior no tenían enlace de gestión; si
   el invitado vuelve a abrir su enlace de confirmación, recibe uno (una sola vez). Si el correo de
   gestión falla, la reserva sigue confirmada y se reintenta igual. En ambos casos el enlace solo se
@@ -206,7 +214,7 @@ pendientes durante un rato (la reserva vuelve a funcionar al caducar). Si ocurre
    | `RATE_PER_EMAIL_HOUR` / `RATE_GLOBAL_HOUR` | no | 3 y 20 por defecto (correos enviados por hora) |
    | `CHANGE_NOTICE_HOURS` | no | Antelación mínima para que el invitado cancele o reprograme, 12 por defecto |
    | `MAX_RESCHEDULES` | no | Cambios de horario por reserva, 3 por defecto |
-   | `NOTIFY_EMAIL` | no | Dirección a la que avisar de cancelaciones y cambios (vacía = sin aviso) |
+   | `NOTIFY_EMAIL` | no | Dirección de los avisos a Luis: reservas nuevas (vacía = la cuenta que ejecuta la web app), cancelaciones y cambios (vacía = sin aviso) |
 
 5. **Autorizar y comprobar**: en el editor elige la función `checkSetup` y pulsa *Ejecutar*. Acepta los
    permisos (Calendar y "Enviar correo como tú"; la pantalla de "app no verificada" es normal para un
