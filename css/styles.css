@@ -846,3 +846,6 @@ html:has(main.learn-page){scroll-padding-bottom:6rem}
 @media(prefers-reduced-motion:reduce){.learn-button,.learn-goal b{transition:none}.learn-goal a:hover b{transform:none}}
 @media print{.learn-form,.learn-actions,.learn-alt{display:none}.learn-enquiry,.learn-sand,.learn-olive{background:none;color:#111}}
 
+/* Internal navigation without reload (js/soft-nav.js): focus moves to <main> for keyboard and screen readers, without a ring
+   on the whole page. */
+main[tabindex="-1"]:focus{outline:none}

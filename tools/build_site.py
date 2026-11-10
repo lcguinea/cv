@@ -52,6 +52,7 @@ STATIC_FILES = PAGES + (
     "js/site.js",
     MUSIC_DATA,
     "js/player.js",
+    "js/soft-nav.js",
     "js/music-page.js",
     SHARE_PAGES,
     "js/agenda.js",

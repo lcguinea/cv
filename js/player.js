@@ -226,10 +226,15 @@
     next,seek,setVolume,setMuted,
     queue:()=>queue?queue.slice():null,setQueue,
     linkPending:()=>awaiting,openLink,settleLink,
-    on:fn=>{listeners.push(fn)},
+    // Returns the unsubscribe function; js/soft-nav.js releases the subscriptions of a page when it is left.
+    on:fn=>{listeners.push(fn);const off=()=>{const at=listeners.indexOf(fn);if(at>=0)listeners.splice(at,1)};if(window.LGSoftNav)window.LGSoftNav.track(off);return off},
   };
 })();
 
+
+// Views of the engine, mounted on the page markup. js/soft-nav.js mounts them again on the markup of each page it loads
+// without a reload (window.LGPlayerViews); the engine above and its audio element are never created twice.
+function mountPlayerViews(){
 // Bottom bar: present on every page; on /music/ it only appears while the large player is out of view.
 (function(){
   const P=window.LGPlayer,bar=document.getElementById('mini-player');
@@ -315,3 +320,6 @@
   document.addEventListener('lg:language',render);
   render();
 })();
+}
+window.LGPlayerViews=mountPlayerViews;
+if(window.LGSoftNav)window.LGSoftNav.page(mountPlayerViews);else mountPlayerViews();

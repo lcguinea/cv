@@ -205,7 +205,7 @@ def head(page, root, url, json_ld):
 
 
 def scripts(root):
-    names = ("strings.js", "learn-strings.js", "i18n.js", "site.js", "music-data.js", "player.js", "learn.js")
+    names = ("soft-nav.js", "strings.js", "learn-strings.js", "i18n.js", "site.js", "music-data.js", "player.js", "learn.js")
     return "".join(f'<script src="{root}js/{n}"></script>' for n in names)
 
 

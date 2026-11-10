@@ -114,7 +114,8 @@ class IntegrationTests(unittest.TestCase):
         self.assertNotIn("playerAutostart", read("js/player.js"))
         self.assertIn('<a class="skip-link skip-player" href="#mini-player" data-i18n="ui.skipPlayer">Skip to music player</a>', html)
         scripts = re.findall(r'<script src="\.\./js/([^"]+)"', html)
-        self.assertEqual(scripts, ["theme-init.js", "strings.js", "i18n.js", "site.js", "music-data.js", "player.js", "agenda.js"])
+        # soft-nav.js first (2026-11-10): internal navigation without reload keeps the one audio element playing.
+        self.assertEqual(scripts, ["theme-init.js", "soft-nav.js", "strings.js", "i18n.js", "site.js", "music-data.js", "player.js", "agenda.js"])
         self.assertNotRegex(html, r"<audio\b|\bautoplay\b")
         self.assertNotIn("LGPlayer", read("js/agenda.js"))  # the agenda never drives or duplicates the player
 

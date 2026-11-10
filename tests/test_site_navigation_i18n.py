@@ -41,7 +41,7 @@ NAV_HREFS = {
 }
 CURRENT = {"home": None, "cv": "nav.cv", "music": "nav.music", "about": "nav.about", "agenda": "nav.agenda",
            "learn": "nav.lessons", "learnSub": "nav.lessons"}
-PUBLISHED_JS = ("strings.js", "i18n.js", "site.js", "player.js", "music-page.js", "agenda.js", "theme-init.js", "learn.js", "learn-strings.js")
+PUBLISHED_JS = ("strings.js", "i18n.js", "site.js", "player.js", "music-page.js", "agenda.js", "theme-init.js", "learn.js", "learn-strings.js", "soft-nav.js")
 # Keys built at runtime from data: 'music.role'+credit and 'music.type'+release type.
 # Genre and mood labels are looked up from the human-reviewed values in js/music-data.js.
 DYNAMIC_PREFIXES = ("music.role", "music.type", "music.version", "music.genre_", "music.mood_")
