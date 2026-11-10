@@ -20,7 +20,14 @@
   const session = readSession();
   const saved = read('lg-language');
   const manual = saved === 'es' || (saved === 'en' && read('lg-language-manual') === '1');
-  const lang = manual ? saved : pageDefault ? (session === 'es' || session === 'en' ? session : pageDefault) : detect();
+  // A shared link can set the language with ?lang=es or ?lang=en: it wins for this tab (kept in sessionStorage, so
+  // internal navigation keeps it) without replacing the visitor's saved choice. Clicking EN/ES clears it.
+  let link = null;
+  try { link = new URLSearchParams(location.search).get('lang'); } catch (e) {}
+  link = link === 'es' || link === 'en' ? link : null;
+  try { if (link) sessionStorage.setItem('lg-language-link', link); else link = sessionStorage.getItem('lg-language-link'); } catch (e) {}
+  if (link !== 'es' && link !== 'en') link = null;
+  const lang = link ? link : manual ? saved : pageDefault ? (session === 'es' || session === 'en' ? session : pageDefault) : detect();
   try { sessionStorage.setItem('lg-language-session', lang); } catch (e) {}
   window.currentLanguage = lang;
   window.t = function (path) { return path.split('.').reduce((o, k) => o && o[k], STRINGS[window.currentLanguage]) || path; };
@@ -28,5 +35,5 @@
   // The page is fully parsed (scripts load last), so a non-default language is applied now, before later
   // scripts load and the browser paints the English fallback; DOMContentLoaded repeats it with site.js's extras.
   if (lang !== pageLang) window.setLanguage(lang);
-  document.addEventListener('DOMContentLoaded', () => { setLanguage(lang); document.querySelectorAll('[data-lang]').forEach(el => el.addEventListener('click', () => { const next = el.dataset.lang === 'es' ? 'es' : 'en'; write('lg-language', next); write('lg-language-manual', '1'); try { sessionStorage.setItem('lg-language-session', next); } catch (e) {} setLanguage(next); })); });
+  document.addEventListener('DOMContentLoaded', () => { setLanguage(lang); document.querySelectorAll('[data-lang]').forEach(el => el.addEventListener('click', () => { const next = el.dataset.lang === 'es' ? 'es' : 'en'; write('lg-language', next); write('lg-language-manual', '1'); try { sessionStorage.setItem('lg-language-session', next); sessionStorage.removeItem('lg-language-link'); } catch (e) {} setLanguage(next); })); });
 })();

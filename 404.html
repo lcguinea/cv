@@ -6,7 +6,7 @@
 <title>Page not found · Luis Guinea</title>
 <link rel="icon" href="data:,">
 <!-- Served by GitHub Pages for any missing path at any depth, so it is self-contained: inline styles and script, root-absolute font URLs and root links. -->
-<script>(function(){var r=document.documentElement;try{if(localStorage.getItem('lg-theme')==='dark')r.dataset.theme='dark'}catch(e){}})();</script>
+<script>(function(){var r=document.documentElement,t=null;try{t=new URLSearchParams(location.search).get('theme')}catch(e){}t=t==='dark'||t==='light'?t:null;try{if(t)sessionStorage.setItem('lg-theme-link',t);else t=sessionStorage.getItem('lg-theme-link')}catch(e){}if(t!=='dark'&&t!=='light'){try{t=localStorage.getItem('lg-theme')}catch(e){}}if(t==='dark')r.dataset.theme='dark'})();</script>
 <style>
 @font-face{font-family:'Instrument Serif';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/instrument-serif-latin-400-normal.woff2) format('woff2')}
 @font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url(/fonts/inter-latin-wght-normal.woff2) format('woff2')}
@@ -47,8 +47,8 @@ li a:hover{color:var(--accent)}
 <li><a href="/#contact" data-text="Contact|Contacto">Contact</a></li>
 </ul></nav>
 </div></main>
-<!-- Same language rule as js/i18n.js: a manual choice (lg-language, with lg-language-manual for 'en'), else the
+<!-- Same language rule as js/i18n.js: a shared link's ?lang= (or one kept from it in this tab), else a manual choice (lg-language, with lg-language-manual for 'en'), else the
      browser's first Spanish or English language, else English. English without JavaScript. -->
-<script>(function(){var es=false;try{var s=localStorage.getItem('lg-language');if(s==='es'||(s==='en'&&localStorage.getItem('lg-language-manual')==='1'))es=s==='es';else{var l=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||''];for(var i=0;i<l.length;i++){var b=String(l[i]).toLowerCase().split('-')[0];if(b==='es'||b==='en'){es=b==='es';break}}}}catch(e){}if(!es)return;document.documentElement.lang='es';document.title='Página no encontrada · Luis Guinea';[].forEach.call(document.querySelectorAll('[data-text]'),function(el){el.textContent=el.getAttribute('data-text').split('|')[1]});[].forEach.call(document.querySelectorAll('[data-label]'),function(el){el.setAttribute('aria-label',el.getAttribute('data-label').split('|')[1])})})();</script>
+<script>(function(){var es=false;try{var k=null;try{k=new URLSearchParams(location.search).get('lang')}catch(e){}if(k!=='es'&&k!=='en')k=sessionStorage.getItem('lg-language-link');if(k==='es'||k==='en'){es=k==='es';throw 0}var s=localStorage.getItem('lg-language');if(s==='es'||(s==='en'&&localStorage.getItem('lg-language-manual')==='1'))es=s==='es';else{var l=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||''];for(var i=0;i<l.length;i++){var b=String(l[i]).toLowerCase().split('-')[0];if(b==='es'||b==='en'){es=b==='es';break}}}}catch(e){}if(!es)return;document.documentElement.lang='es';document.title='Página no encontrada · Luis Guinea';[].forEach.call(document.querySelectorAll('[data-text]'),function(el){el.textContent=el.getAttribute('data-text').split('|')[1]});[].forEach.call(document.querySelectorAll('[data-label]'),function(el){el.setAttribute('aria-label',el.getAttribute('data-label').split('|')[1])})})();</script>
 </body>
 </html>

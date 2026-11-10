@@ -47,7 +47,7 @@
   document.querySelectorAll('[data-theme-choice]').forEach(b=>b.addEventListener('click',()=>{
     const dark=b.dataset.themeChoice==='dark';
     if(dark)root.dataset.theme='dark';else delete root.dataset.theme;
-    try{localStorage.setItem('lg-theme',dark?'dark':'light')}catch(e){}
+    try{localStorage.setItem('lg-theme',dark?'dark':'light');sessionStorage.removeItem('lg-theme-link')}catch(e){}
     syncTheme();
   }));
   syncTheme();

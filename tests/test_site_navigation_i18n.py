@@ -114,7 +114,8 @@ class HeaderStaticTests(unittest.TestCase):
                 css = re.search(r'<link rel="stylesheet" href="(?:\.\./)?css/styles\.css">', head)
                 self.assertTrue(init and css and init.start() < css.start())
         init = read("js/theme-init.js")
-        self.assertIn("localStorage.getItem('lg-theme')==='dark'", init)
+        self.assertIn("localStorage.getItem('lg-theme')", init)
+        self.assertIn("if(t==='dark')root.dataset.theme='dark'", init)
         self.assertIn("classList.add('js')", init)
 
     def test_sticky_header_scroll_margin_and_touch_targets(self):
