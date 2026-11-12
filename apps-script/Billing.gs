@@ -631,8 +631,20 @@ function handleEvent_(cfg, bcfg, db, ev) {
         mailOwner_(cfg, db, 'failed:' + obj.id + ':' + (obj.attempt_count || 0), 'Pago fallido: ' + (st ? st.nombre || st.email : snap.alumno), [
           'Ha fallado el cobro de la renovación del plan ' + planLabel_(snap.plan) + ' de ' + (st ? (st.nombre || '') + ' <' + st.email + '>' : snap.alumno) + '.',
           'Factura: ' + obj.id + ' · intento ' + (obj.attempt_count || 1) + '.',
-          'Stripe reintentará el cobro y avisará al alumno según tu configuración de Billing. No se conceden clases nuevas hasta que se pague.'
+          'Stripe reintentará el cobro. El alumno ha recibido un aviso para actualizar su tarjeta. No se conceden clases nuevas hasta que se pague.'
         ]);
+        // Our own notice: the account's Stripe emails are not used (their links would point to the restaurant's site).
+        if (st) {
+          var esF = st.idioma !== 'en';
+          mailStudent_(db, 'failed-student:' + obj.id + ':' + (obj.attempt_count || 0), st,
+            esF ? 'No hemos podido cobrar la renovación de tus clases' : 'We could not charge your lesson renewal',
+            esF ? 'No se ha podido cobrar la renovación de tu plan de clases (148 €). Stripe volverá a intentarlo en los próximos días.\n\n' +
+                'Para evitarlo, revisa o cambia tu tarjeta en tu área de alumno, apartado Facturación:\n' + bcfg.studentUrl +
+                '\n\nTus clases ya pagadas siguen disponibles.'
+              : 'Your lesson plan renewal (€148) could not be charged. Stripe will try again in the coming days.\n\n' +
+                'To avoid problems, check or change your card in your student area, Billing section:\n' + bcfg.studentUrl +
+                '\n\nYour paid lessons are still available.');
+        }
       }
       return 'ok';
     case 'customer.subscription.created':
@@ -750,7 +762,7 @@ function createCheckout_(cfg, bcfg, raw) {
     billing_address_collection: 'auto',
     tax_id_collection: { enabled: 'true' },
     payment_method_types: { 0: 'card' },
-    client_reference_id: raw.requestId,
+    // No client_reference_id: another integration of this Stripe account (the restaurant's shop) keys its orders on it.
     expires_at: Math.floor(Date.now() / 1000) + 3600,
     metadata: { plan: raw.plan, lang: lang, terms: TERMS_VERSION, early_start: 'true', source: 'luisguinea.com' },
     subscription_data: { metadata: { plan: raw.plan, lang: lang, terms: TERMS_VERSION, early_start: 'true' } },
@@ -1306,6 +1318,22 @@ function notices_(cfg, bcfg, db, report) {
       (es ? 'Si no puedes venir, escribe a Luis cuanto antes respondiendo a la invitación de Google Calendar.' :
         'If you cannot come, please tell Luis as soon as possible by replying to the Google Calendar invitation.'));
     report.reminders++;
+  });
+  // Renewal reminder 3 days before each automatic charge (consumer transparency), once per period.
+  db.rows('suscripciones').forEach(function (sub) {
+    var at = Number(sub.fin_periodo);
+    if (sub.estado !== 'active' || sub.cancela_al_final || !at || at <= now || at - now > 3 * 86400000) return;
+    var st = studentByAlumno_(db, sub.alumno);
+    var es = !st || st.idioma !== 'en';
+    var plan = sub.cambio_plan || sub.plan;
+    var weeks = PLANS[plan] ? PLANS[plan].intervalWeeks : '';
+    mailStudent_(db, 'renew-notice:' + sub.suscripcion + ':' + at, st, es ? 'Tu plan de clases se renueva pronto' : 'Your lesson plan renews soon',
+      es ? 'El ' + whenText_(cfg, at) + ' (hora de Madrid) se renovará tu plan de clases: 148 € por 4 clases para las próximas ' + weeks +
+          ' semanas. No tienes que hacer nada.\n\nSi no quieres renovar, puedes cancelarlo antes de esa fecha en tu área de alumno, apartado Facturación:\n' +
+          bcfg.studentUrl + '\nLas clases ya pagadas se conservan.'
+        : 'On ' + whenText_(cfg, at) + ' (Madrid time) your lesson plan renews: €148 for 4 lessons for the next ' + weeks +
+          ' weeks. You do not need to do anything.\n\nIf you do not want to renew, you can cancel before that date in your student area, Billing section:\n' +
+          bcfg.studentUrl + '\nLessons already paid for are kept.');
   });
   if (!policy.enforced) return; // deadlines are informative until the policy is approved: no warning about them
   Object.keys(ledger.credits).forEach(function (k) {

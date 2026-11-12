@@ -696,6 +696,19 @@ Object.assign(scenarios, {
     assert.strictEqual(env.table('movimientos').length, before);
     assert(!JSON.stringify(env.sheets.sheet1.ajustes).includes('ana@example.com'));
   },
+  students_get_our_own_renewal_and_failed_payment_notices() {
+    const { env, stripe, s } = newSubscriber();
+    env.now = s.sub.current_period_end * 1000 - 2 * DAY;
+    env.hourly(); env.hourly();
+    const renew = env.mails.filter((m) => m.to === 'ana@example.com' && /se renueva pronto/.test(m.subject));
+    assert.strictEqual(renew.length, 1);
+    assert(/148 €/.test(renew[0].body) && /cancelarlo antes/.test(renew[0].body));
+    env.now = s.sub.current_period_end * 1000 + HOUR;
+    deliver(env, stripe.renew(s.sub.id, { fail: true }).events);
+    const failed = env.mails.filter((m) => m.to === 'ana@example.com' && /No hemos podido cobrar/.test(m.subject));
+    assert.strictEqual(failed.length, 1);
+    assert(!/santochilaquil/i.test(failed[0].body));
+  },
   checkout_stays_closed_until_the_terms_are_approved() {
     const { env } = setup({ props: { TERMS_APPROVED_VERSION: '' } });
     assert.strictEqual(checkout(env).error, 'not_available');

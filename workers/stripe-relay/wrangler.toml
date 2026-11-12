@@ -8,6 +8,6 @@ compatibility_date = "2026-11-01"
 workers_dev = true
 
 [vars]
-STRIPE_MODE = "test"
+STRIPE_MODE = "live"
 # Public /exec URL of the Apps Script web app (the same one js/agenda.js calls). Not a secret.
-APPS_SCRIPT_URL = ""
+APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxj7SKKv5Pn4zb3oyqC8w3K8F3Ye4Zs4EHaUeBVvV3nIrBxbKvzBg8csvQhbXWpprpe/exec"
