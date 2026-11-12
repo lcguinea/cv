@@ -68,7 +68,13 @@ def normalise(x):
     raise ValueError(f"unexpected content node: {x!r}")
 
 
-TREE = normalise(C.L)
+def build_tree():
+    """Copy tree; the plans and the student area only exist once published (or in --preview)."""
+    hidden = () if C.SUBSCRIPTIONS["published"] else ("plans", "students")
+    return normalise({k: v for k, v in C.L.items() if k not in hidden})
+
+
+TREE = build_tree()
 
 
 def leaf(path):
@@ -204,9 +210,13 @@ def head(page, root, url, json_ld):
     )
 
 
-def scripts(root):
-    names = ("soft-nav.js", "strings.js", "learn-strings.js", "i18n.js", "site.js", "music-data.js", "player.js", "learn.js")
+def scripts(root, extra=()):
+    names = ("soft-nav.js", "strings.js", "learn-strings.js", "i18n.js", "site.js", "music-data.js", "player.js", "learn.js") + tuple(extra)
     return "".join(f'<script src="{root}js/{n}"></script>' for n in names)
+
+
+def subscriptions_on():
+    return bool(C.SUBSCRIPTIONS["published"])
 
 
 # ---------- structured data ----------
@@ -339,6 +349,44 @@ def continue_nav(root):
                 for h, k, t in links) + "</ul></nav>")
 
 
+def plans_section(root):
+    """Two plans, the renewal conditions and the subscribe form (js/plans.js). Only when subscriptions are on."""
+    if not subscriptions_on():
+        return ""
+    endpoint = html.escape(C.SUBSCRIPTIONS["endpoint"])
+    cards = ""
+    for key in ("weekly", "biweekly"):
+        p = f"plans.{key}"
+        cards += (
+            f'<label class="plan-card" for="plan-{key}"><input id="plan-{key}" type="radio" name="plan" value="{key}" required>'
+            f'<span class="plan-name">{el("span", p + ".name")}</span>'
+            f'{el("span", p + ".rhythm", " class=\"plan-rhythm\"")}'
+            f'<span class="plan-price">{el("b", p + ".price")}{el("small", p + ".per")}</span>'
+            f'{el("span", p + ".detail", " class=\"plan-detail\"")}</label>')
+    terms = "".join(el("li", f"plans.terms.{i}") for i in range(len(C.L["plans"]["terms"])))
+    conditions = "".join(f'<div>{el("dt", f"plans.conditions.{i}.title")}{el("dd", f"plans.conditions.{i}.text")}</div>'
+                         for i in range(len(C.L["plans"]["conditions"])))
+    return (
+        '<section id="planes" class="learn-section plans" aria-labelledby="plans-title"><div class="wrap">'
+        + head_block("plans.kicker", "plans.title", "plans-title", "plans.intro")
+        + f'<form id="plans-form" class="plans-form" novalidate data-endpoint="{endpoint}">'
+        f'<fieldset class="plan-cards"><legend class="sr-only" data-i18n="learn.plans.legend">{es("plans.legend")}</legend>{cards}</fieldset>'
+        '<div class="plans-terms">' + el("h3", "plans.termsTitle") + f'<ul>{terms}</ul>'
+        f'<details class="learn-more plans-conditions">{el("summary", "plans.conditionsSummary")}<dl>{conditions}</dl></details></div>'
+        '<div class="plans-consent">'
+        f'<label class="plans-check"><input id="plans-accept" type="checkbox" required>{el("span", "plans.acceptTerms")}</label>'
+        f'<label class="plans-check"><input id="plans-early" type="checkbox" required>{el("span", "plans.earlyStart")}</label>'
+        '<div class="learn-trap" aria-hidden="true"><label for="plans-website">Website</label>'
+        '<input id="plans-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>'
+        '<p id="plans-error" class="learn-error" role="alert"></p>'
+        f'<div class="plans-actions"><button class="learn-button" type="submit" data-i18n="learn.plans.submit">{es("plans.submit")}</button>'
+        + el("p", "plans.secure", ' class="learn-hint"') + '</div>'
+        '<p id="plans-status" class="learn-status" role="status" aria-live="polite"></p>'
+        f'<p class="plans-already">{el("span", "plans.already")} '
+        + arrow_link(root + "alumnos/", "plans.studentLink") + "</p></div></form></div></section>"
+    )
+
+
 def area_target(a):
     return SUBPAGES[a] + "/" if a in SUBPAGES else "#" + a
 
@@ -438,10 +486,11 @@ def hub(es_tree):
         + enquiry_form() + "</div></section>"
     )
 
-    main = (f'<main id="content" class="learn-page">{hero}{selector}{areas}{method}{about}{formats}{questions}'
-            f"{enquiry}{continue_nav(root)}</main>")
+    main = (f'<main id="content" class="learn-page">{hero}{selector}{areas}{method}{about}{formats}{plans_section(root)}'
+            f"{questions}{enquiry}{continue_nav(root)}</main>")
+    extra = ("plans.js",) if subscriptions_on() else ()
     return (head("hub", root, url, ld) + "<body>" + skip_links(es_tree) + "\n" + header + "\n" + main + footer
-            + player + scripts(root) + "</body></html>\n")
+            + player + scripts(root, extra) + "</body></html>\n")
 
 
 def subpage(es_tree, key):
@@ -508,6 +557,69 @@ def subpage(es_tree, key):
             + player + scripts(root) + "</body></html>\n")
 
 
+def students_page(es_tree):
+    """/alumnos/: sign-in by email link, Checkout return, plan, lessons, bookings and billing (js/alumnos.js).
+    Private area: noindex, not in the sitemap, no personal data in the HTML."""
+    root = "../"
+    url = SITE + "alumnos/"
+    header, footer, player = chrome(es_tree, root, "true")
+    # chrome() points the Formación entry at "../" (right for its subpages); from /alumnos/ it lives at ../formacion/.
+    header = header.replace('href="../" data-section="lessons" aria-current="true"', 'href="../formacion/" data-section="lessons" aria-current="true"')
+    footer = footer.replace('href="../" aria-current="true" data-i18n="nav.lessons"', 'href="../formacion/" aria-current="true" data-i18n="nav.lessons"')
+    header = header.replace('<span> / <span data-i18n="nav.lessons">', '<span> / <span data-i18n="learn.students.eyebrow">', 1)
+    header = re.sub(r'(<span data-i18n="learn.students.eyebrow">)[^<]*', r"\1" + es("students.eyebrow"), header, count=1)
+    endpoint = html.escape(C.SUBSCRIPTIONS["endpoint"])
+    title = leaf("students.pageTitle")[0]
+    page_head = (
+        '<!doctype html>\n<html lang="es" data-lang-default="es">\n<head>\n'
+        '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">\n'
+        '<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">\n'
+        f'<link rel="canonical" href="{url}"><link rel="icon" href="data:,">\n'
+        f'<title data-i18n="learn.students.pageTitle">{html.escape(title)}</title>\n'
+        f'<script src="{root}js/theme-init.js"></script>'
+        f'<link rel="preload" href="{root}fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>'
+        f'<link rel="preload" href="{root}fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>'
+        f'<link rel="stylesheet" href="{root}css/styles.css">\n</head>\n')
+    main = (
+        f'<main id="content" class="learn-page students" data-endpoint="{endpoint}">'
+        '<section class="learn-hero learn-hero-sub wrap students-hero" aria-labelledby="learn-title"><div class="learn-hero-copy">'
+        + el("p", "students.eyebrow", ' class="eyebrow"') + accent_title("students", ' id="learn-title"') + "</div></section>"
+        '<div class="wrap students-app">'
+        '<p id="stu-status" class="learn-status students-status" role="status" aria-live="polite"></p>'
+        # sign in
+        '<section id="stu-login" class="students-panel" aria-labelledby="stu-login-title" hidden>'
+        + el("h2", "students.loginTitle", ' id="stu-login-title"') + el("p", "students.loginIntro", ' class="learn-intro"')
+        + '<form id="stu-login-form" class="learn-form students-login" novalidate><div class="learn-field">'
+        f'<label for="stu-email" data-i18n="learn.students.email">{es("students.email")}</label>'
+        '<input id="stu-email" type="email" maxlength="254" autocomplete="email" required aria-describedby="stu-login-error"></div>'
+        '<div class="learn-trap" aria-hidden="true"><label for="stu-website">Website</label>'
+        '<input id="stu-website" type="text" tabindex="-1" autocomplete="off"></div>'
+        '<p id="stu-login-error" class="learn-error" role="alert"></p>'
+        f'<button class="learn-button" type="submit" data-i18n="learn.students.sendLink">{es("students.sendLink")}</button></form></section>'
+        # dashboard
+        '<div id="stu-dash" class="students-dash" hidden>'
+        '<div class="students-top"><p id="stu-hello" class="students-hello"></p>'
+        f'<button id="stu-signout" class="learn-button learn-button-quiet" type="button" data-i18n="learn.students.signOut">{es("students.signOut")}</button></div>'
+        '<section class="students-panel" aria-labelledby="stu-plan-title">' + el("h2", "students.planTitle", ' id="stu-plan-title" class="kicker"')
+        + '<div id="stu-plan"></div></section>'
+        '<section class="students-panel" aria-labelledby="stu-classes-title">' + el("h2", "students.classesTitle", ' id="stu-classes-title" class="kicker"')
+        + '<dl id="stu-counts" class="students-counts"></dl><ul id="stu-credits" class="students-credits"></ul><p id="stu-policy" class="learn-hint"></p></section>'
+        '<section class="students-panel" aria-labelledby="stu-book-title">' + el("h2", "students.bookTitle", ' id="stu-book-title" class="kicker"')
+        + '<div id="stu-book"></div></section>'
+        '<section class="students-panel" aria-labelledby="stu-bookings-title">' + el("h2", "students.bookingsTitle", ' id="stu-bookings-title" class="kicker"')
+        + '<ol id="stu-bookings" class="students-bookings"></ol></section>'
+        '<section class="students-panel" aria-labelledby="stu-billing-title">' + el("h2", "students.billingTitle", ' id="stu-billing-title" class="kicker"')
+        + el("p", "students.billingIntro") + f'<button id="stu-portal" class="learn-button learn-button-quiet" type="button" data-i18n="learn.students.portal">{es("students.portal")}</button></section>'
+        + el("p", "students.help", ' class="learn-hint students-help"') + "</div>"
+        # checkout return
+        '<section id="stu-checkout" class="students-panel" hidden><p id="stu-checkout-text" class="students-checkout"></p>'
+        + arrow_link(root + "formacion/#planes", "students.backToPlans", cls=" students-back") + "</section>"
+        "</div></main>"
+    )
+    return (page_head + "<body>" + skip_links(es_tree) + "\n" + header + "\n" + main + footer + player
+            + scripts(root, ("alumnos.js",)) + "</body></html>\n")
+
+
 def strings_js():
     data = {lang: lang_tree(TREE, i) for i, lang in enumerate(("es", "en"))}
     body = ("// Generated by tools/build_formacion.py from tools/formacion_content.py. Do not edit by hand.\n"
@@ -523,6 +635,8 @@ def outputs():
     files = {"formacion/index.html": hub(tree), OUT_STRINGS: strings_js()}
     for key, slug in SUBPAGES.items():
         files[f"formacion/{slug}/index.html"] = subpage(tree, key)
+    if subscriptions_on():
+        files["alumnos/index.html"] = students_page(tree)
     for rel, text in files.items():
         if "—" in text:
             raise SystemExit(f"{rel}: em dash in published copy")
@@ -532,7 +646,21 @@ def outputs():
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--check", action="store_true", help="fail if a generated file is out of date")
+    parser.add_argument("--preview", metavar="ENDPOINT", help="build with the class plans on, calling ENDPOINT (needs --out)")
+    parser.add_argument("--out", metavar="DIR", help="with --preview: directory for the preview files (never the repo)")
     args = parser.parse_args(argv)
+    if args.preview:
+        out = Path(args.out or "").resolve()
+        if not args.out or out == ROOT or ROOT in out.parents:
+            parser.error("--preview needs --out outside the repository")
+        global TREE
+        C.SUBSCRIPTIONS = {"published": True, "endpoint": args.preview}
+        TREE = build_tree()
+        for rel, text in outputs().items():
+            (out / rel).parent.mkdir(parents=True, exist_ok=True)
+            (out / rel).write_text(text, encoding="utf-8")
+            print("preview", out / rel)
+        return 0
     stale = []
     for rel, text in outputs().items():
         path = ROOT / rel

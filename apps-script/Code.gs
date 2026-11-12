@@ -399,6 +399,11 @@ function doPost(e) {
     var raw;
     try { raw = JSON.parse(contents); } catch (parseErr) { return json_({ ok: false, error: 'invalid_request' }); }
     var op = raw && typeof raw === 'object' ? raw.op : undefined;
+    // Class subscriptions (Billing.gs, same project): their own operations, never mixed with the agenda's.
+    if (typeof op === 'string' && typeof BILLING_OPS !== 'undefined' && !Array.isArray(raw) &&
+        Object.prototype.hasOwnProperty.call(BILLING_OPS, op)) {
+      return json_(billingPost_(raw));
+    }
     if (typeof op === 'string' && Object.prototype.hasOwnProperty.call(MANAGE_FIELDS, op)) {
       var mtok = validateToken_(raw, MANAGE_FIELDS[op]);
       if (!mtok) return json_({ ok: false, error: 'invalid_token' });

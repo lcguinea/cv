@@ -849,3 +849,82 @@ html:has(main.learn-page){scroll-padding-bottom:6rem}
 /* Internal navigation without reload (js/soft-nav.js): focus moves to <main> for keyboard and screen readers, without a ring
    on the whole page. */
 main[tabindex="-1"]:focus{outline:none}
+
+/* ---------- Class plans (/formacion/#planes) and student area (/alumnos/), mission 04 ---------- */
+.plans-form{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(2rem,5vw,5rem);align-items:start}
+.plan-cards{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(1.5rem,3vw,3rem);margin:0;padding:0;border:0;min-width:0}
+.plan-card{position:relative;display:grid;gap:.55rem;padding:1.4rem 0 1.6rem;border-top:2px solid var(--text);border-bottom:1px solid var(--rule);cursor:pointer;transition:border-color .15s}
+.plan-card input{position:absolute;opacity:0;pointer-events:none}
+.plan-card:hover{border-top-color:var(--accent)}
+.plan-card:has(input:checked){border-top:4px solid var(--accent);padding-top:calc(1.4rem - 2px)}
+.plan-card:has(input:focus-visible){outline:3px solid var(--accent);outline-offset:4px}
+.plan-name{display:flex;justify-content:space-between;align-items:center;font:.74rem var(--mono);text-transform:uppercase;letter-spacing:.08em}
+.plan-name:after{content:'';width:1rem;height:1rem;border:1px solid currentColor;border-radius:50%}
+.plan-card:has(input:checked) .plan-name:after{background:var(--accent);border-color:var(--accent);box-shadow:inset 0 0 0 3px var(--bg)}
+.plan-rhythm{font:clamp(1.7rem,3vw,2.6rem)/1 var(--serif)}
+.plan-price{display:flex;align-items:baseline;gap:.8rem;flex-wrap:wrap}
+.plan-price b{font:400 clamp(3.4rem,7vw,6rem)/.9 var(--serif);color:var(--accent);letter-spacing:-.02em}
+.plan-price small{font:.72rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.plan-detail{color:var(--muted);max-width:40ch}
+.plans-terms h3{font-size:clamp(1.5rem,2.4vw,2rem);margin-bottom:1rem}
+.plans-terms ul{list-style:none;margin:0;padding:0;counter-reset:pt}
+.plans-terms li{counter-increment:pt;display:grid;grid-template-columns:2.2rem 1fr;padding:.7rem 0;border-top:1px solid var(--rule)}
+.plans-terms li:before{content:'0' counter(pt);font:.7rem var(--mono);color:var(--accent);padding-top:.25rem}
+.plans-consent{display:grid;gap:1rem;padding-top:1.2rem;border-top:2px solid var(--text)}
+.plans-check{display:grid;grid-template-columns:1.4rem 1fr;gap:.8rem;align-items:start;font-size:.95rem;cursor:pointer}
+.plans-check input{width:1.15rem;height:1.15rem;margin:.15rem 0 0;accent-color:var(--accent)}
+.plans-actions{display:grid;gap:.7rem;justify-items:start}
+.plans-already{display:flex;flex-wrap:wrap;gap:.2rem 1rem;align-items:baseline;margin:.5rem 0 0;padding-top:1rem;border-top:1px solid var(--rule);color:var(--muted)}
+.plans-already .text-link{margin-top:0}
+.students-hero{padding-bottom:1rem}
+.students-app{padding-bottom:clamp(4rem,8vw,7rem)}
+.students-status:not(:empty){padding:.9rem 0;border-top:2px solid var(--accent);font-size:1.05rem}
+.students-panel{padding:1.6rem 0 2rem;border-top:1px solid var(--rule)}
+.students-panel>h2{font-size:clamp(2rem,4vw,3rem)}
+.students-panel>h2.kicker{font:.74rem var(--mono);margin-bottom:1rem}
+.students-login{max-width:32rem;margin-top:1.5rem;display:grid;gap:1rem;justify-items:start}
+.students-login .learn-field{width:100%}
+.students-dash{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(2rem,5vw,5rem)}
+.students-top,.students-dash>.students-panel:nth-of-type(3),.students-dash>.students-panel:nth-of-type(4),.students-help{grid-column:1/-1}
+.students-top{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem 0}
+.students-hello{font:clamp(1.8rem,3.4vw,2.8rem)/1 var(--serif);margin:0}
+.students-plan-name{font:clamp(1.5rem,2.4vw,2rem)/1.1 var(--serif);margin:0 0 .4rem}
+.students-plan-price{font:.8rem var(--mono);text-transform:uppercase;letter-spacing:.06em;margin:0 0 .8rem}
+.students-plan-status{display:inline-block;font:.7rem var(--mono);text-transform:uppercase;letter-spacing:.06em;padding:.25rem .5rem;border:1px solid currentColor;margin:0 0 .6rem}
+.students-plan-status.status-past_due,.students-plan-status.status-unpaid{color:var(--accent)}
+.students-counts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem;margin:0 0 1rem}
+.students-counts div{border-top:2px solid var(--text);padding-top:.5rem}
+.students-counts dt{font:.66rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.students-counts dd{margin:.2rem 0 0;font:clamp(2.4rem,4vw,3.4rem)/1 var(--serif);color:var(--accent)}
+.students-credits{list-style:none;margin:0 0 .8rem;padding:0}
+.students-credits li{display:flex;gap:1rem;align-items:baseline;padding:.45rem 0;border-top:1px solid var(--rule)}
+.students-credits b{font:.7rem var(--mono);color:var(--accent)}
+.students-credits small{font:.66rem var(--mono);text-transform:uppercase;color:var(--muted);margin-left:auto}
+.students-credits .status-expired_review,.students-credits .status-past_deadline{color:var(--accent)}
+.students-days{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(6.5rem,1fr);gap:.8rem;overflow-x:auto;padding:.5rem 0 1rem;scroll-snap-type:x proximity}
+.students-day{display:grid;gap:.4rem;align-content:start;scroll-snap-align:start}
+.students-day-name{font:.7rem var(--mono);text-transform:uppercase;letter-spacing:.06em;margin:0 0 .3rem;padding-bottom:.4rem;border-bottom:2px solid var(--text)}
+.students-time{min-height:44px;border:1px solid var(--rule);background:transparent;color:var(--text);font:.85rem var(--mono);cursor:pointer}
+.students-time:hover{border-color:var(--accent)}
+.students-time[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#111}
+.students-time:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.students-bookbar{position:sticky;bottom:0;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.8rem 0;background:var(--bg);border-top:2px solid var(--text)}
+.students-bookbar p{margin:0;font:.74rem var(--mono);text-transform:uppercase}
+.students-bookings{list-style:none;margin:0;padding:0}
+.students-booking{padding:1rem 0;border-top:1px solid var(--rule)}
+.students-booking-when{font:clamp(1.3rem,2vw,1.7rem)/1.1 var(--serif);margin:0 0 .3rem}
+.students-booking-when:first-letter{text-transform:uppercase}
+.students-booking-meta{font:.72rem var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0}
+.students-booking.status-cancelada .students-booking-when,.students-booking.status-realizada .students-booking-when{color:var(--muted)}
+.students-booking.status-cancelada .students-booking-when{text-decoration:line-through}
+.students-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.6rem}
+.students-move{margin-top:1rem}
+.students-checkout{font:clamp(1.5rem,2.6vw,2.2rem)/1.15 var(--serif);max-width:32ch;margin:0 0 1rem}
+@media(max-width:700px){
+  .plans-form,.plan-cards,.students-dash{grid-template-columns:minmax(0,1fr)}
+  .students-counts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .students-top{flex-wrap:wrap}
+  .students-dash>.students-panel{grid-column:1/-1}
+}
+@media(prefers-reduced-motion:reduce){.plan-card{transition:none}}
+@media print{.plans-form,.students-app{display:none}}

@@ -1,0 +1,13 @@
+# Cloudflare Worker that receives Stripe webhooks and relays them to the Apps Script backend (see worker.js).
+# Deploy: npx wrangler deploy (account of Luis; free plan). Secrets are never written here:
+#   npx wrangler secret put STRIPE_WEBHOOK_SECRET   # whsec_... of the webhook endpoint in Stripe
+#   npx wrangler secret put RELAY_SECRET            # same 64-hex value as RELAY_SECRET in the Apps Script properties
+name = "luisguinea-stripe-relay"
+main = "worker.js"
+compatibility_date = "2026-11-01"
+workers_dev = true
+
+[vars]
+STRIPE_MODE = "test"
+# Public /exec URL of the Apps Script web app (the same one js/agenda.js calls). Not a secret.
+APPS_SCRIPT_URL = ""

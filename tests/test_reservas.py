@@ -223,7 +223,7 @@ class IntegrationTests(unittest.TestCase):
 
     def test_no_secrets_or_real_identifiers(self):
         pattern = re.compile(r"AKfycb[\w-]{20,}|AIza[\w-]{30,}|-----BEGIN|client_secret|[\w-]{20,}@group\.calendar\.google\.com|ya29\.")
-        for rel in ("apps-script/Code.gs", "apps-script/README.md", "apps-script/appsscript.json", "agenda/index.html", "js/agenda.js"):
+        for rel in ("apps-script/Code.gs", "apps-script/Billing.gs", "apps-script/README.md", "apps-script/appsscript.json", "agenda/index.html", "js/agenda.js"):
             # Only the public endpoint attribute is exempt; the same id anywhere else is still flagged.
             self.assertIsNone(pattern.search(ENDPOINT_ATTR.sub('data-endpoint=""', read(rel))), rel)
 
@@ -232,8 +232,13 @@ class IntegrationTests(unittest.TestCase):
         self.assertEqual(manifest["timeZone"], "Europe/Madrid")
         self.assertEqual(manifest["webapp"]["access"], "ANYONE_ANONYMOUS")
         self.assertEqual(manifest["webapp"]["executeAs"], "USER_DEPLOYING")
+        # calendar and send_mail for the agenda; spreadsheets (ledger), external_request (Stripe API) and scriptapp
+        # (hourly trigger) for the class subscriptions of apps-script/Billing.gs.
         self.assertEqual(sorted(manifest["oauthScopes"]), ["https://www.googleapis.com/auth/calendar",
-                                                           "https://www.googleapis.com/auth/script.send_mail"])
+                                                           "https://www.googleapis.com/auth/script.external_request",
+                                                           "https://www.googleapis.com/auth/script.scriptapp",
+                                                           "https://www.googleapis.com/auth/script.send_mail",
+                                                           "https://www.googleapis.com/auth/spreadsheets"])
         services = [s["serviceId"] for s in manifest["dependencies"]["enabledAdvancedServices"]]
         self.assertEqual(services, ["calendar"])
 

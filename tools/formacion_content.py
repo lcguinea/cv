@@ -30,6 +30,12 @@ COMMERCIAL = {
     "cancelHours": 24,
 }
 
+# Class plans paid with Stripe (mission 04). NOT published while "published" is False: the plans section, the student
+# area (alumnos/index.html), js/plans.js, js/alumnos.js and their copy are only generated once Luis approves going live.
+# "endpoint": public /exec URL of the Apps Script web app (the same one as /agenda/). Preview without publishing:
+#     python3 tools/build_formacion.py --preview http://127.0.0.1:8792/exec --out <scratch dir>
+SUBSCRIPTIONS = {"published": False, "endpoint": ""}
+
 # Areas, in the order of the hub. AREA_PAGES: areas with their own subpage (slug).
 AREAS = ["piano", "composicion", "produccion", "armonia", "carrera"]
 AREA_PAGES = {"piano": "piano", "composicion": "composicion", "produccion": "produccion-musical"}
@@ -500,4 +506,201 @@ L = {
             "ctaTitle": ("¿Tienes una canción que quieres producir?", "Have a song you want to produce?"),
         },
     },
+}
+
+
+# ---------- class plans and student area (only built when SUBSCRIPTIONS["published"] or --preview) ----------
+
+L["plans"] = {
+    "kicker": ("06 / Planes", "06 / Plans"),
+    "title": ("Clases presenciales, cada semana o cada quince días.", "In-person lessons, every week or every two weeks."),
+    "intro": ("Cuatro clases individuales de 60 minutos por 148 €. Tú eliges el ritmo y reservas tus horas desde tu área "
+              "de alumno, sin escribirme cada vez.",
+              "Four one-to-one 60-minute lessons for €148. You choose the pace and book your times from your student "
+              "area, without writing to me each time."),
+    "legend": ("Elige tu plan", "Choose your plan"),
+    "weekly": {
+        "name": ("Semanal", "Weekly"),
+        "rhythm": ("Una clase cada semana", "One lesson every week"),
+        "price": ("148 €", "€148"),
+        "per": ("cada 4 semanas", "every 4 weeks"),
+        "detail": ("4 clases de 60 minutos · 37 € por clase · se renueva cada 28 días",
+                   "4 lessons of 60 minutes · €37 per lesson · renews every 28 days"),
+    },
+    "biweekly": {
+        "name": ("Quincenal", "Every two weeks"),
+        "rhythm": ("Una clase cada dos semanas", "One lesson every two weeks"),
+        "price": ("148 €", "€148"),
+        "per": ("cada 8 semanas", "every 8 weeks"),
+        "detail": ("4 clases de 60 minutos · 37 € por clase · se renueva cada 56 días",
+                   "4 lessons of 60 minutes · €37 per lesson · renews every 56 days"),
+    },
+    "termsTitle": ("Antes de contratar", "Before you subscribe"),
+    "terms": [
+        ("Precio final por periodo, sin matrícula ni cargos adicionales.", "Final price per period, with no sign-up fee or extra charges."),
+        ("La suscripción se renueva automáticamente. Puedes cancelar la renovación cuando quieras desde tu área de "
+         "alumno; tendrá efecto al final del periodo ya pagado y conservas las clases pagadas.",
+         "The subscription renews automatically. You can cancel the renewal at any time from your student area; it "
+         "takes effect at the end of the period already paid and you keep the lessons you paid for."),
+        ("Reservas, cambias o cancelas cada clase tú mismo hasta 24 horas antes.",
+         "You book, move or cancel each lesson yourself up to 24 hours before."),
+        ("Si soy yo quien cancela una clase, la conservas íntegra.", "If I am the one who cancels a lesson, you keep it in full."),
+        ("Clases sin usar: hasta dos pasan al periodo siguiente y tienes 30 días para recuperarlas.",
+         "Unused lessons: up to two move on to the next period and you have 30 days to make them up."),
+        ("Tienes 14 días naturales para desistir del contrato.", "You have 14 calendar days to withdraw from the contract."),
+    ],
+    "conditionsSummary": ("Leer las condiciones completas", "Read the full conditions"),
+    "conditions": [
+        (("Qué contratas", "What you buy"),
+         ("Un plan de clases particulares presenciales e individuales de música con Luis Guinea en Valencia. Cada periodo "
+          "pagado incluye cuatro clases de 60 minutos. Plan semanal: 148 € cada 4 semanas (28 días). Plan quincenal: "
+          "148 € cada 8 semanas (56 días).",
+          "A plan of one-to-one, in-person private music lessons with Luis Guinea in Valencia. Each paid period includes "
+          "four 60-minute lessons. Weekly plan: €148 every 4 weeks (28 days). Every-two-weeks plan: €148 every 8 weeks (56 days).")),
+        (("Pago y renovación", "Payment and renewal"),
+         ("El pago se hace con tarjeta a través de Stripe, que guarda los datos de pago: este sitio nunca los ve. El "
+          "importe se cobra al contratar y después al inicio de cada periodo hasta que canceles la renovación. Recibirás "
+          "el recibo de cada cobro por correo.",
+          "Payment is made by card through Stripe, which keeps the payment details: this site never sees them. The "
+          "amount is charged when you subscribe and then at the start of each period until you cancel the renewal. "
+          "You receive a receipt by email for each charge.")),
+        (("Cancelación", "Cancellation"),
+         ("Puedes cancelar la renovación en cualquier momento desde tu área de alumno, sin permanencia ni penalización. "
+          "La cancelación evita los cobros siguientes; las clases ya pagadas siguen disponibles.",
+          "You can cancel the renewal at any time from your student area, with no minimum term or penalty. Cancelling "
+          "stops future charges; lessons already paid for remain available.")),
+        (("Reservas y cambios", "Bookings and changes"),
+         ("Cada clase pagada se reserva desde tu área de alumno según la disponibilidad publicada. Puedes cambiarla o "
+          "cancelarla hasta 24 horas antes; con menos antelación, escríbeme. Si yo cancelo una clase, la conservas sin "
+          "fecha límite.",
+          "Each paid lesson is booked from your student area according to the published availability. You can move or "
+          "cancel it up to 24 hours before; with less notice, write to me. If I cancel a lesson, you keep it with no deadline.")),
+        (("Clases sin usar", "Unused lessons"),
+         ("Las clases de un periodo están pensadas para ese periodo. Al terminar, hasta dos clases sin usar pasan al "
+          "periodo siguiente y pueden recuperarse durante los 30 días posteriores. Si no hay horarios adecuados, "
+          "escríbeme y buscamos una solución.",
+          "The lessons of a period are meant for that period. When it ends, up to two unused lessons move on to the next "
+          "period and can be made up within the following 30 days. If there are no suitable times, write to me and "
+          "we will find a solution.")),
+        (("Desistimiento", "Right of withdrawal"),
+         ("Dispones de 14 días naturales desde la contratación para desistir sin indicar el motivo, escribiendo a "
+          "lguinea@berklee.edu. Si has pedido empezar las clases dentro de ese plazo, se descontará la parte "
+          "proporcional de las clases ya recibidas.",
+          "You have 14 calendar days from subscribing to withdraw without giving a reason, by writing to "
+          "lguinea@berklee.edu. If you asked to start the lessons within that period, the proportional part of the "
+          "lessons already received will be deducted.")),
+    ],
+    "acceptTerms": ("He leído y acepto las condiciones de contratación.", "I have read and accept the conditions."),
+    "earlyStart": ("Quiero empezar las clases antes de que terminen los 14 días de desistimiento. Si desisto, pagaré "
+                   "solo la parte proporcional de las clases recibidas.",
+                   "I want to start the lessons before the 14-day withdrawal period ends. If I withdraw, I will only "
+                   "pay the proportional part of the lessons received."),
+    "submit": ("Contratar plan", "Subscribe"),
+    "secure": ("Pagas en Stripe Checkout, donde verás de nuevo el importe y la frecuencia de renovación antes de confirmar.",
+               "You pay on Stripe Checkout, where you will see the amount and the renewal frequency again before confirming."),
+    "already": ("¿Ya eres alumno?", "Already a student?"),
+    "studentLink": ("Entra en tu área de alumno", "Go to your student area"),
+    "redirecting": ("Te llevamos a Stripe…", "Taking you to Stripe…"),
+    "errPlan": ("Elige un plan.", "Choose a plan."),
+    "errTerms": ("Acepta las condiciones para continuar.", "Accept the conditions to continue."),
+    "errEarly": ("Para reservar clases dentro de los 14 primeros días, necesitamos tu solicitud expresa.",
+                 "To book lessons within the first 14 days, we need your express request."),
+    "errGeneric": ("No se ha podido abrir el pago. Inténtalo de nuevo en unos minutos.",
+                   "The payment could not be opened. Please try again in a few minutes."),
+    "errOff": ("La contratación en línea todavía no está disponible. Escríbeme y te reservo plaza.",
+               "Online subscription is not available yet. Write to me and I will keep a place for you."),
+}
+
+L["students"] = {
+    "pageTitle": ("Área de alumno · Luis Guinea", "Student area · Luis Guinea"),
+    "eyebrow": ("Área de alumno", "Student area"),
+    "title": ("Tus clases, en un solo sitio.", "Your lessons, in one place."),
+    "titleAccent": ("un solo sitio.", "one place."),
+    "loginTitle": ("Entra con tu correo", "Sign in with your email"),
+    "loginIntro": ("Escribe el correo con el que contrataste tu plan y te enviaremos un enlace de acceso. Sin contraseñas.",
+                   "Enter the email you used for your plan and we will send you an access link. No passwords."),
+    "email": ("Correo electrónico", "Email"),
+    "sendLink": ("Enviar enlace", "Send link"),
+    "linkSent": ("Si ese correo corresponde a un alumno, acabamos de enviarle un enlace de acceso. Revisa también el correo no deseado.",
+                 "If that email belongs to a student, we have just sent it an access link. Check your spam folder too."),
+    "errEmail": ("Revisa el correo electrónico.", "Check the email address."),
+    "errRate": ("Demasiadas solicitudes. Prueba dentro de una hora.", "Too many requests. Try again in an hour."),
+    "errLink": ("Este enlace ya se usó o ha caducado. Pide uno nuevo.", "This link was already used or has expired. Ask for a new one."),
+    "errSession": ("Tu sesión ha caducado. Vuelve a entrar con tu correo.", "Your session has expired. Sign in again with your email."),
+    "errGeneric": ("No se ha podido completar. Inténtalo de nuevo en unos minutos.", "That did not work. Please try again in a few minutes."),
+    "errBusy": ("Hay otra operación en curso. Inténtalo de nuevo en unos segundos.", "Another operation is in progress. Try again in a few seconds."),
+    "checkingPayment": ("Comprobando tu pago con Stripe…", "Checking your payment with Stripe…"),
+    "paymentReady": ("Pago confirmado. Tus clases ya están disponibles y te hemos enviado a tu correo el enlace para entrar.",
+                     "Payment confirmed. Your lessons are ready and we have emailed you the link to sign in."),
+    "paymentPending": ("Estamos esperando la confirmación de Stripe. Esta página se actualizará sola; no hace falta pagar de nuevo.",
+                       "We are waiting for Stripe's confirmation. This page will update by itself; there is no need to pay again."),
+    "paymentOpen": ("El pago no se ha completado. No se ha hecho ningún cargo.", "The payment was not completed. You have not been charged."),
+    "paymentExpired": ("La sesión de pago caducó sin cobro. Puedes volver a elegir tu plan.", "The payment session expired without a charge. You can choose your plan again."),
+    "backToPlans": ("Volver a los planes", "Back to the plans"),
+    "hello": ("Hola, {name}", "Hello, {name}"),
+    "helloAnon": ("Hola", "Hello"),
+    "signOut": ("Cerrar sesión", "Sign out"),
+    "planTitle": ("Mi plan", "My plan"),
+    "noPlan": ("No hay ningún plan activo.", "There is no active plan."),
+    "plan_weekly": ("Semanal · una clase cada semana", "Weekly · one lesson every week"),
+    "plan_biweekly": ("Quincenal · una clase cada dos semanas", "Every two weeks · one lesson every two weeks"),
+    "price": ("{amount} cada {weeks} semanas", "{amount} every {weeks} weeks"),
+    "renews": ("Próxima renovación: {date}", "Next renewal: {date}"),
+    "ends": ("Termina el {date}. No habrá más cobros.", "Ends on {date}. There will be no further charges."),
+    "status_active": ("Activa", "Active"),
+    "status_past_due": ("Pago pendiente", "Payment due"),
+    "status_unpaid": ("Impagada", "Unpaid"),
+    "status_canceled": ("Terminada", "Ended"),
+    "status_incomplete": ("Pendiente de pago", "Awaiting payment"),
+    "status_other": ("En revisión", "Under review"),
+    "pastDueNote": ("Stripe no ha podido cobrar la renovación. Actualiza tu tarjeta en Facturación; las clases nuevas llegan al confirmarse el pago.",
+                    "Stripe could not charge the renewal. Update your card in Billing; new lessons arrive once the payment is confirmed."),
+    "classesTitle": ("Mis clases", "My lessons"),
+    "available": ("Disponibles", "Available"),
+    "reserved": ("Reservadas", "Booked"),
+    "done": ("Realizadas", "Done"),
+    "carried": ("Para recuperar", "To make up"),
+    "deadline": ("Usar antes del {date}", "Use before {date}"),
+    "noDeadline": ("Sin fecha límite", "No deadline"),
+    "carriedTag": ("trasladada", "carried over"),
+    "pastDeadline": ("Fuera de plazo: escríbeme y lo resolvemos", "Past its deadline: write to me and we will sort it out"),
+    "expiredReview": ("Plazo vencido, en revisión: escríbeme", "Deadline passed, under review: write to me"),
+    "bookTitle": ("Reservar clases", "Book lessons"),
+    "bookIntro": ("Elige hasta {n} horas (una por clase disponible). Clases presenciales de 60 minutos.",
+                  "Choose up to {n} times (one per available lesson). In-person 60-minute lessons."),
+    "noCredits": ("No te quedan clases por reservar.", "You have no lessons left to book."),
+    "loadingSlots": ("Cargando horarios…", "Loading times…"),
+    "noSlots": ("No hay horarios libres ahora mismo. Escríbeme y buscamos uno.", "There are no free times right now. Write to me and we will find one."),
+    "selected": ("{n} seleccionadas", "{n} selected"),
+    "confirmBook": ("Reservar {n}", "Book {n}"),
+    "booked": ("Reserva hecha. Recibirás la invitación de Google Calendar.", "Booked. You will receive the Google Calendar invitation."),
+    "errSlot": ("Alguno de esos horarios acaba de ocuparse. Elige otro.", "One of those times has just been taken. Choose another."),
+    "errNoCredits": ("No tienes clases suficientes para esa reserva.", "You do not have enough lessons for that booking."),
+    "errOverlap": ("Dos de las horas se solapan.", "Two of the times overlap."),
+    "bookingsTitle": ("Mis reservas", "My bookings"),
+    "noBookings": ("Todavía no has reservado ninguna clase.", "You have not booked any lessons yet."),
+    "inPerson": ("Presencial", "In person"),
+    "status_reservada": ("Reservada", "Booked"),
+    "status_realizada": ("Realizada", "Done"),
+    "status_cancelada": ("Cancelada", "Cancelled"),
+    "cancelledByTeacher": ("Cancelada por Luis: la clase vuelve a tu saldo", "Cancelled by Luis: the lesson is back in your balance"),
+    "move": ("Cambiar hora", "Change time"),
+    "cancel": ("Cancelar clase", "Cancel lesson"),
+    "confirmCancel": ("Sí, cancelar", "Yes, cancel"),
+    "keep": ("No, mantener", "No, keep it"),
+    "changeUntil": ("Puedes cambiarla hasta el {date}", "You can change it until {date}"),
+    "tooLate": ("Faltan menos de 24 horas: para cambiarla, escríbeme.", "Less than 24 hours to go: to change it, write to me."),
+    "chooseNew": ("Elige la nueva hora", "Choose the new time"),
+    "moved": ("Clase cambiada. La invitación se ha actualizado.", "Lesson moved. The invitation has been updated."),
+    "cancelled": ("Clase cancelada. Recuperas la clase.", "Lesson cancelled. You get the lesson back."),
+    "errTooLate": ("Ya no se puede cambiar desde aquí: faltan menos de 24 horas.", "It can no longer be changed here: less than 24 hours to go."),
+    "errLimit": ("Has alcanzado el número máximo de cambios para esta clase.", "You have reached the maximum number of changes for this lesson."),
+    "errAfterDeadline": ("Esa hora es posterior a la fecha límite de la clase.", "That time is after the lesson's deadline."),
+    "billingTitle": ("Facturación", "Billing"),
+    "billingIntro": ("Tarjeta, recibos y cancelación de la renovación, en el portal seguro de Stripe.",
+                     "Card, receipts and cancelling the renewal, on Stripe's secure portal."),
+    "portal": ("Abrir el portal de facturación", "Open the billing portal"),
+    "policyNote": ("Puedes cambiar o cancelar una clase hasta {h} horas antes. Hasta {carry} clases sin usar pasan al periodo siguiente durante {days} días.",
+                   "You can move or cancel a lesson up to {h} hours before. Up to {carry} unused lessons move on to the next period for {days} days."),
+    "help": ("¿Dudas? Escríbeme a lguinea@berklee.edu", "Questions? Write to me at lguinea@berklee.edu"),
 }
