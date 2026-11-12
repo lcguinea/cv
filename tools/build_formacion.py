@@ -350,19 +350,25 @@ def continue_nav(root):
 
 
 def plans_section(root):
-    """Two plans, the renewal conditions and the subscribe form (js/plans.js). Only when subscriptions are on."""
+    """One plan card with a weekly / every-two-weeks switch, the renewal conditions and the subscribe form (js/plans.js). Only when subscriptions are on."""
     if not subscriptions_on():
         return ""
     endpoint = html.escape(C.SUBSCRIPTIONS["endpoint"])
-    cards = ""
-    for key in ("weekly", "biweekly"):
-        p = f"plans.{key}"
-        cards += (
-            f'<label class="plan-card" for="plan-{key}"><input id="plan-{key}" type="radio" name="plan" value="{key}" required>'
-            f'<span class="plan-name">{el("span", p + ".name")}</span>'
-            f'{el("span", p + ".rhythm", " class=\"plan-rhythm\"")}'
-            f'<span class="plan-price">{el("b", p + ".price")}{el("small", p + ".per")}</span>'
-            f'{el("span", p + ".detail", " class=\"plan-detail\"")}</label>')
+    # One card: the price is the same for both rhythms, so a weekly / every-two-weeks switch picks the plan and the
+    # lines that differ (renewal period) follow the checked radio (CSS :has). Weekly is preselected.
+    switch = "".join(
+        f'<label class="plan-option" for="plan-{key}"><input id="plan-{key}" type="radio" name="plan" value="{key}" required'
+        f'{" checked" if key == "weekly" else ""}>{el("span", f"plans.{key}.name")}</label>'
+        for key in ("weekly", "biweekly"))
+    per = "".join(el("small", f"plans.{key}.per", f' data-plan="{key}"') for key in ("weekly", "biweekly"))
+    lines = "".join(
+        f'<span class="plan-detail" data-plan="{key}">{el("span", f"plans.{key}.rhythm", " class=\"plan-rhythm\"")}'
+        f'{el("span", f"plans.{key}.detail")}</span>' for key in ("weekly", "biweekly"))
+    cards = ('<div class="plan-card">'
+             f'{el("p", "plans.cardTitle", " class=\"plan-name\"")}'
+             f'<span class="plan-price">{el("b", "plans.weekly.price")}{per}</span>'
+             f'<fieldset class="plan-switch"><legend class="sr-only" data-i18n="learn.plans.legend">{es("plans.legend")}</legend>'
+             f'{switch}</fieldset>{lines}</div>')
     terms = "".join(el("li", f"plans.terms.{i}") for i in range(len(C.L["plans"]["terms"])))
     conditions = "".join(f'<div>{el("dt", f"plans.conditions.{i}.title")}{el("dd", f"plans.conditions.{i}.text")}</div>'
                          for i in range(len(C.L["plans"]["conditions"])))
@@ -370,7 +376,7 @@ def plans_section(root):
         '<section id="planes" class="learn-section plans" aria-labelledby="plans-title"><div class="wrap">'
         + head_block("plans.kicker", "plans.title", "plans-title", "plans.intro")
         + f'<form id="plans-form" class="plans-form" novalidate data-endpoint="{endpoint}">'
-        f'<fieldset class="plan-cards"><legend class="sr-only" data-i18n="learn.plans.legend">{es("plans.legend")}</legend>{cards}</fieldset>'
+        f'<div class="plan-cards">{cards}</div>'
         '<div class="plans-terms">' + el("h3", "plans.termsTitle") + f'<ul>{terms}</ul>'
         f'<details class="learn-more plans-conditions">{el("summary", "plans.conditionsSummary")}<dl>{conditions}</dl></details></div>'
         '<div class="plans-consent">'

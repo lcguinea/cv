@@ -530,7 +530,8 @@ L["plans"] = {
               "de alumno, sin escribirme cada vez.",
               "Four one-to-one 60-minute lessons for €148. You choose the pace and book your times from your student "
               "area, without writing to me each time."),
-    "legend": ("Elige tu plan", "Choose your plan"),
+    "legend": ("Elige tu ritmo", "Choose your pace"),
+    "cardTitle": ("Clases individuales · 60 minutos", "One-to-one lessons · 60 minutes"),
     "weekly": {
         "name": ("Semanal", "Weekly"),
         "rhythm": ("Una clase cada semana", "One lesson every week"),
