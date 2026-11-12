@@ -79,7 +79,18 @@ function makeStripe(env, opts = {}) {
   // ---- what happens on Stripe's side ----
   s.pay = (sessionId, { email = 'ana@example.com', name = 'Ana Pérez', declined = false } = {}) => {
     const cs = s.sessions[sessionId];
-    if (declined) return { events: [] }; // a declined card leaves the session open: nothing is created
+    if (declined) {
+      // Like the real API: the customer and an "incomplete" subscription with an open first invoice exist, the
+      // session stays open, and Stripe emits subscription.created and invoice.payment_failed.
+      const c = { id: id('cus'), object: 'customer', email, name }; s.customers[c.id] = c;
+      const p0 = s.prices[cs.price];
+      const sub0 = { id: id('sub'), object: 'subscription', livemode: s.livemode, customer: c.id, status: 'incomplete', cancel_at_period_end: false,
+        cancel_at: null, ended_at: null, current_period_start: nowS(), current_period_end: nowS() + p0.recurring.interval_count * WEEK,
+        metadata: { plan: cs.metadata.plan, lang: cs.metadata.lang }, items: { data: [{ price: { id: p0.id }, quantity: 1 }] } };
+      s.subs[sub0.id] = sub0;
+      const inv0 = invoiceFor(sub0, 'subscription_create', 'open', nowS());
+      return { sub: sub0, inv: inv0, events: [emit('customer.subscription.created', sub0), emit('invoice.payment_failed', inv0)] };
+    }
     let cus = Object.values(s.customers).find((c) => c.email === email && opts.reuseCustomers);
     if (!cus) { cus = { id: id('cus'), object: 'customer', email, name }; s.customers[cus.id] = cus; }
     const start = nowS();

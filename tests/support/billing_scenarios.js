@@ -111,9 +111,12 @@ const scenarios = {
     const { env, stripe } = setup();
     const co = checkout(env);
     const sid = co.url.split('/').pop();
-    stripe.pay(sid, { declined: true });
+    const d = stripe.pay(sid, { declined: true });
+    deliver(env, d.events);
     assert.strictEqual(env.post({ op: 'checkout_status', session: sid }).state, 'open');
     env.hourly();
+    assert.strictEqual(env.mails.length, 0, 'no "payment failed" notice for a declined first payment');
+    assert.strictEqual(env.table('suscripciones').length, 0);
     assert.strictEqual(grants(env).length, 0);
     assert.strictEqual(env.table('alumnos').length, 0);
   },

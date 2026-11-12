@@ -113,7 +113,7 @@ class NotPublishedUntilApproved(unittest.TestCase):
 
 class SecurityStatics(unittest.TestCase):
     FILES = ("apps-script/Billing.gs", "apps-script/Code.gs", "workers/stripe-relay/worker.js", "workers/stripe-relay/wrangler.toml",
-             "js/plans.js", "js/alumnos.js", "tools/billing_dev_server.js", "tools/stripe_setup.py", "tools/formacion_content.py",
+             "js/plans.js", "js/alumnos.js", "tools/billing_dev_server.js", "tools/stripe_setup.py", "tools/stripe_testclock_e2e.py", "tools/formacion_content.py",
              "apps-script/BILLING.md")
     SECRET = re.compile(r"(?:sk|rk)_(?:test|live)_[A-Za-z0-9]{12,}|whsec_[A-Za-z0-9]{20,}|pk_live_[A-Za-z0-9]{12,}")
 

@@ -876,6 +876,7 @@ main[tabindex="-1"]:focus{outline:none}
 .plans-actions{display:grid;gap:.7rem;justify-items:start}
 .plans-already{display:flex;flex-wrap:wrap;gap:.2rem 1rem;align-items:baseline;margin:.5rem 0 0;padding-top:1rem;border-top:1px solid var(--rule);color:var(--muted)}
 .plans-already .text-link{margin-top:0}
+.students [hidden]{display:none!important}
 .students-hero{padding-bottom:1rem}
 .students-app{padding-bottom:clamp(4rem,8vw,7rem)}
 .students-status:not(:empty){padding:.9rem 0;border-top:2px solid var(--accent);font-size:1.05rem}
@@ -908,7 +909,7 @@ main[tabindex="-1"]:focus{outline:none}
 .students-time:hover{border-color:var(--accent)}
 .students-time[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#111}
 .students-time:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-.students-bookbar{position:sticky;bottom:0;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.8rem 0;background:var(--bg);border-top:2px solid var(--text)}
+.students-bookbar{position:sticky;bottom:4.5rem;z-index:26;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.8rem 0;background:var(--bg);border-top:2px solid var(--text)}
 .students-bookbar p{margin:0;font:.74rem var(--mono);text-transform:uppercase}
 .students-bookings{list-style:none;margin:0;padding:0}
 .students-booking{padding:1rem 0;border-top:1px solid var(--rule)}

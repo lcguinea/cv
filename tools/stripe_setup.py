@@ -28,7 +28,8 @@ def stripe(*args):
     out = subprocess.run(["stripe", *args], capture_output=True, text=True)
     if out.returncode != 0:
         raise SystemExit(out.stderr.strip() or out.stdout.strip())
-    data = json.loads(out.stdout)
+    text = out.stdout
+    data = json.loads(text[text.index("{"):])  # the CLI prints a "Running in <account>" line first
     if isinstance(data, dict) and data.get("error"):
         raise SystemExit(json.dumps(data["error"]))
     if isinstance(data, dict) and data.get("livemode"):

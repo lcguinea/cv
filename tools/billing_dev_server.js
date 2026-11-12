@@ -11,9 +11,8 @@
 //   /stripe/webhook   workers/stripe-relay/worker.js (the production relay), forwarding to /exec
 //   /__dev/...        helpers for the tests: mails, tables, hourly job, clock
 //
-// Secrets: the test key is read from the environment (STRIPE_TEST_KEY) or from the Stripe CLI config, kept in memory,
-// passed to curl through stdin (never argv) and refused unless it is a TEST key. The webhook secret comes from
-// `stripe listen --print-secret`. Nothing secret is written to disk or logged. Listens on 127.0.0.1 only.
+// Secrets: none handled here. Stripe calls go through the logged-in Stripe CLI; the webhook secret comes from
+// `stripe listen --print-secret` and stays in memory. Nothing secret is written to disk or logged. 127.0.0.1 only.
 'use strict';
 const http = require('http');
 const fs = require('fs');
@@ -29,38 +28,31 @@ const PORT = Number(args.port || 8792);
 const PREVIEW = args.preview ? path.resolve(args.preview) : null;
 const STATE = args.state ? path.resolve(args.state) : null;
 
-function testKey() {
-  let key = process.env.STRIPE_TEST_KEY || '';
-  if (!key) {
-    const cfg = fs.readFileSync(path.join(os.homedir(), '.config', 'stripe', 'config.toml'), 'utf8');
-    const m = /test_mode_api_key\s*=\s*'([^']+)'/.exec(cfg) || /test_mode_api_key\s*=\s*"([^"]+)"/.exec(cfg);
-    key = m ? m[1] : '';
-  }
-  if (!/^(?:sk|rk)_test_[A-Za-z0-9]+$/.test(key)) throw new Error('A Stripe TEST key is required (stripe login, or STRIPE_TEST_KEY).');
-  return key;
+// The Stripe CLI (stripe login, sandbox "Luis Guinea Formacion (pruebas)") is the transport: it holds the credentials,
+// so this server never sees or stores a key. A sandbox cannot move real money. Refuses to start on a live account.
+function cli(args) {
+  const r = spawnSync('stripe', args, { encoding: 'utf8', timeout: 60000 });
+  const text = r.stdout || '';
+  const at = text.indexOf('{');
+  if (at < 0) throw new Error('stripe cli: ' + (r.stderr || text).slice(0, 200));
+  return JSON.parse(text.slice(at));
 }
-const KEY = testKey();
-const WHSEC = execFileSync('stripe', ['listen', '--print-secret'], { encoding: 'utf8' }).trim();
+const WHSEC = execFileSync('stripe', ['listen', '--print-secret'], { encoding: 'utf8' }).trim().split('\n').pop();
 const RELAY_SECRET = crypto.randomBytes(32).toString('hex');
+const PLACEHOLDER_KEY = 'rk_test_cli'; // satisfies the mode check of Billing.gs; never sent anywhere
 
-// Synchronous HTTPS for UrlFetchApp (Apps Script is synchronous). Headers, including the key, go through curl's
-// stdin config; the form body goes through a temporary file without secrets.
+// Synchronous Stripe calls for UrlFetchApp (Apps Script is synchronous), through the CLI.
 function realFetch(url, o) {
   if (!/^https:\/\/api\.stripe\.com\/v1\//.test(url)) throw new Error('only the Stripe API is reachable from the dev backend');
-  const headers = Object.assign({}, o.headers, { Authorization: 'Bearer ' + KEY });
-  const q = (s) => '"' + String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
-  let config = Object.entries(headers).map(([k, v]) => `header = ${q(k + ': ' + v)}`).join('\n') + '\n';
-  let tmp = null;
-  if (o.method === 'post') {
-    tmp = path.join(os.tmpdir(), 'lg-billing-' + crypto.randomBytes(6).toString('hex'));
-    fs.writeFileSync(tmp, o.payload || '', { mode: 0o600 });
-    config += `header = "Content-Type: application/x-www-form-urlencoded"\ndata-binary = ${q('@' + tmp)}\n`;
-  }
-  const r = spawnSync('curl', ['-sS', '-K', '-', '-X', o.method.toUpperCase(), '-w', '\n%{http_code}', url], { input: config, encoding: 'utf8', timeout: 30000 });
-  if (tmp) fs.rmSync(tmp, { force: true });
-  if (r.status !== 0) throw new Error('network: ' + (r.stderr || '').slice(0, 200));
-  const at = r.stdout.lastIndexOf('\n');
-  return { code: Number(r.stdout.slice(at + 1)), body: JSON.parse(r.stdout.slice(0, at) || 'null') };
+  const [p, query] = url.replace('https://api.stripe.com', '').split('?');
+  const params = (o.method === 'post' ? o.payload : query) || '';
+  const args = [o.method === 'post' ? 'post' : 'get', p, '--stripe-version', o.headers['Stripe-Version']];
+  params.split('&').filter(Boolean).forEach((kv) => { const [k, v] = kv.split('=').map(decodeURIComponent); args.push('-d', `${k}=${v}`); });
+  if (o.headers['Idempotency-Key']) args.push('--idempotency', o.headers['Idempotency-Key']);
+  const body = cli(args);
+  if (body && body.livemode === true) throw new Error('live object received: stop');
+  if (body && body.error) return { code: body.error.code === 'resource_missing' ? 404 : 400, body };
+  return { code: 200, body };
 }
 
 const { makeEnv } = require(path.join(ROOT, 'tests', 'support', 'billing_env.js'));
@@ -70,7 +62,7 @@ const env = makeEnv({
   sheets: saved ? saved.sheets : { dev: {} },
   calendars: saved ? saved.calendars : undefined,
   props: {
-    STRIPE_SECRET_KEY: KEY, STRIPE_MODE: 'test', LEDGER_SPREADSHEET_ID: 'dev', RELAY_SECRET,
+    STRIPE_SECRET_KEY: PLACEHOLDER_KEY, STRIPE_MODE: 'test', LEDGER_SPREADSHEET_ID: 'dev', RELAY_SECRET,
     STRIPE_PRICE_WEEKLY: process.env.STRIPE_PRICE_WEEKLY || '', STRIPE_PRICE_BIWEEKLY: process.env.STRIPE_PRICE_BIWEEKLY || '',
     STRIPE_PORTAL_CONFIG: process.env.STRIPE_PORTAL_CONFIG || '',
     STUDENT_URL: `http://127.0.0.1:${PORT}/alumnos/`, PLANS_URL: `http://127.0.0.1:${PORT}/formacion/#planes`,

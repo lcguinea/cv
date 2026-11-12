@@ -586,6 +586,9 @@ def students_page(es_tree):
         + el("p", "students.eyebrow", ' class="eyebrow"') + accent_title("students", ' id="learn-title"') + "</div></section>"
         '<div class="wrap students-app">'
         '<p id="stu-status" class="learn-status students-status" role="status" aria-live="polite"></p>'
+        # return from Checkout: first thing on the page
+        '<section id="stu-checkout" class="students-panel" hidden><p id="stu-checkout-text" class="students-checkout" role="status" aria-live="polite"></p>'
+        + arrow_link(root + "formacion/#planes", "students.backToPlans", cls=" students-back") + "</section>"
         # sign in
         '<section id="stu-login" class="students-panel" aria-labelledby="stu-login-title" hidden>'
         + el("h2", "students.loginTitle", ' id="stu-login-title"') + el("p", "students.loginIntro", ' class="learn-intro"')
@@ -611,9 +614,6 @@ def students_page(es_tree):
         '<section class="students-panel" aria-labelledby="stu-billing-title">' + el("h2", "students.billingTitle", ' id="stu-billing-title" class="kicker"')
         + el("p", "students.billingIntro") + f'<button id="stu-portal" class="learn-button learn-button-quiet" type="button" data-i18n="learn.students.portal">{es("students.portal")}</button></section>'
         + el("p", "students.help", ' class="learn-hint students-help"') + "</div>"
-        # checkout return
-        '<section id="stu-checkout" class="students-panel" hidden><p id="stu-checkout-text" class="students-checkout"></p>'
-        + arrow_link(root + "formacion/#planes", "students.backToPlans", cls=" students-back") + "</section>"
         "</div></main>"
     )
     return (page_head + "<body>" + skip_links(es_tree) + "\n" + header + "\n" + main + footer + player

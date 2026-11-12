@@ -129,7 +129,7 @@
       var li = el('li', 'students-credit status-' + cr.status);
       li.appendChild(el('b', '', '0' + cr.n));
       var text = cr.status === 'expired_review' ? tr('expiredReview') : cr.status === 'past_deadline' ? tr('pastDeadline')
-        : cr.expiresAt ? tr('deadline', { date: when(cr.expiresAt) }) : tr('noDeadline');
+        : cr.expiresAt ? tr(state.view.policy.enforced ? 'deadline' : 'deadlineSoft', { date: when(cr.expiresAt) }) : tr('noDeadline');
       li.appendChild(el('span', '', text));
       if (cr.carried) li.appendChild(el('small', '', tr('carriedTag')));
       ul.appendChild(li);
@@ -169,7 +169,7 @@
     clear(box);
     var n = maxPick();
     if (n < 1) { box.appendChild(el('p', 'learn-hint', tr('noCredits'))); return; }
-    box.appendChild(el('p', 'learn-intro', tr('bookIntro', { n: n })));
+    box.appendChild(el('p', 'learn-intro', n === 1 ? tr('bookIntroOne') : tr('bookIntro', { n: n })));
     picker(box, function (start) {
       var at = state.picked.indexOf(start);
       if (at !== -1) state.picked.splice(at, 1);
@@ -280,13 +280,20 @@
     checkCheckout();
   }
   if (!endpoint) { show('stu-login'); say('errGeneric'); return; }
-  if (link) {
-    post({ op: 'stu_login', token: link[1] }).then(function (res) {
-      if (res && res.ok && TOKEN_RE.test(res.session || '')) { state.token = res.session; store(res.session); load(); return; }
+  function exchange(linkToken) {
+    post({ op: 'stu_login', token: linkToken }).then(function (res) {
+      if (res && res.ok && TOKEN_RE.test(res.session || '')) { state.token = res.session; store(res.session); say(''); load(); return; }
       show('stu-login'); say('errLink');
     }).catch(function () { show('stu-login'); say('errGeneric'); });
-    return;
   }
+  // A link pasted into this same tab only changes the fragment: no reload, so it is handled here too.
+  window.addEventListener('hashchange', function () {
+    var m = LINK_RE.exec(location.hash);
+    if (!m) return;
+    history.replaceState(null, '', location.pathname);
+    exchange(m[1]);
+  });
+  if (link) { exchange(link[1]); return; }
   state.token = stored();
   if (state.token) load(); else show('stu-login');
 })();

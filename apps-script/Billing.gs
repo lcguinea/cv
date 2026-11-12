@@ -525,6 +525,10 @@ function syncSubscription_(cfg, bcfg, db, subId) {
   if (sub.livemode !== (bcfg.mode === 'live')) return null;
   var plan = planForPrice_(bcfg, subscriptionPrice_(sub));
   if (!plan) return null; // another product of the account: not ours
+  // A Checkout whose first payment has not gone through (declined card, abandoned 3-D Secure) leaves an "incomplete"
+  // subscription in Stripe. It is nobody's plan yet: no student, no snapshot, no notice until Stripe says it is paid.
+  var row0 = db.find('suscripciones', 'suscripcion', sub.id);
+  if (!row0 && (sub.status === 'incomplete' || sub.status === 'incomplete_expired')) return null;
   var lang = sub.metadata && sub.metadata.lang === 'en' ? 'en' : 'es';
   var student = ensureStudent_(bcfg, db, idOf_(sub.customer), lang);
   var snap = { suscripcion: sub.id, alumno: student.alumno, cliente_stripe: idOf_(sub.customer), plan: plan, precio: subscriptionPrice_(sub),
@@ -586,7 +590,8 @@ function handleEvent_(cfg, bcfg, db, ev) {
     case 'invoice.payment_failed':
       var s2 = invoiceSubscription_(obj);
       var snap = s2 ? syncSubscription_(cfg, bcfg, db, s2) : null;
-      if (snap) {
+      // Only renewals: a declined first payment is shown by Checkout itself and no subscription starts.
+      if (snap && obj.billing_reason !== 'subscription_create') {
         var st = studentByAlumno_(db, snap.alumno);
         mailOwner_(cfg, db, 'failed:' + obj.id + ':' + (obj.attempt_count || 0), 'Pago fallido: ' + (st ? st.nombre || st.email : snap.alumno), [
           'Ha fallado el cobro de la renovación del plan ' + planLabel_(snap.plan) + ' de ' + (st ? (st.nombre || '') + ' <' + st.email + '>' : snap.alumno) + '.',
