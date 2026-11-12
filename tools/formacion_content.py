@@ -36,6 +36,16 @@ COMMERCIAL = {
 #     python3 tools/build_formacion.py --preview http://127.0.0.1:8792/exec --out <scratch dir>
 SUBSCRIPTIONS = {"published": False, "endpoint": ""}
 
+# Provider data published in /formacion/condiciones/ (information duties of LSSI art. 10 and TRLGDCU art. 97). The
+# build refuses to publish the plans while any value is empty: these data are never invented.
+PROVIDER = {
+    "name": "Luis Carlos Guinea Moctezuma",
+    "nif": "",
+    "address": "",
+    "classPlace": "",
+    "email": "lguinea@berklee.edu",
+}
+
 # Areas, in the order of the hub. AREA_PAGES: areas with their own subpage (slug).
 AREAS = ["piano", "composicion", "produccion", "armonia", "carrera"]
 AREA_PAGES = {"piano": "piano", "composicion": "composicion", "produccion": "produccion-musical"}
@@ -511,6 +521,8 @@ L = {
 
 # ---------- class plans and student area (only built when SUBSCRIPTIONS["published"] or --preview) ----------
 
+L["legalNote"] = ("Este texto se ofrece en español.", "This text is provided in Spanish, which is the binding version.")
+
 L["plans"] = {
     "kicker": ("06 / Planes", "06 / Plans"),
     "title": ("Clases presenciales, cada semana o cada quince días.", "In-person lessons, every week or every two weeks."),
@@ -594,7 +606,11 @@ L["plans"] = {
           "lguinea@berklee.edu. If you asked to start the lessons within that period, the proportional part of the "
           "lessons already received will be deducted.")),
     ],
-    "acceptTerms": ("He leído y acepto las condiciones de contratación.", "I have read and accept the conditions."),
+    "acceptTerms": ("He leído y acepto las condiciones de contratación y la política de privacidad. Soy mayor de edad o "
+                    "contrato como representante legal del alumno menor.",
+                    "I have read and accept the terms and the privacy policy. I am of age or I am subscribing as the "
+                    "legal representative of the underage student."),
+    "termsLink": ("Condiciones de contratación y privacidad", "Terms and privacy policy"),
     "earlyStart": ("Quiero empezar las clases antes de que terminen los 14 días de desistimiento. Si desisto, pagaré "
                    "solo la parte proporcional de las clases recibidas.",
                    "I want to start the lessons before the 14-day withdrawal period ends. If I withdraw, I will only "
@@ -733,3 +749,106 @@ L["students"] = {
     "writeLuis": ("Escribir a Luis", "Write to Luis"),
     "justified": ("Ausencia justificada: la clase vuelve a tu saldo", "Justified absence: the lesson is back in your balance"),
 }
+
+
+# ---------- terms and privacy page (/formacion/condiciones/), Spanish only: the Spanish text is the binding one ----------
+# {name}, {nif}, {address}, {classPlace}, {email} come from PROVIDER. Version must match TERMS_VERSION in Billing.gs.
+LEGAL_VERSION = "2026-11-12-v1"
+LEGAL = [
+    ("1. Prestador del servicio", [
+        "{name}, profesional autónomo, NIF {nif}, con domicilio en {address}. Contacto: {email}.",
+        "Los cobros se procesan a través de Stripe en la cuenta del titular, cuyo nombre comercial en Stripe es «Santo Chilaquil». "
+        "En tu extracto bancario el cargo aparecerá como LUISGUINEA CLASES o con ese nombre comercial.",
+    ]),
+    ("2. Servicio", [
+        "Clases particulares de música (piano, armonía, composición o producción musical), individuales y presenciales, de 60 minutos, "
+        "en {classPlace}. El contenido se adapta al nivel y los objetivos de cada alumno.",
+    ]),
+    ("3. Planes y precio", [
+        "Plan semanal: 148 € cada 28 días, que incluyen 4 clases (una por semana como calendario habitual).",
+        "Plan quincenal: 148 € cada 56 días, que incluyen 4 clases (una cada dos semanas como calendario habitual).",
+        "Es el precio final por periodo. No hay matrícula, permanencia ni otros cargos. El pago se hace con tarjeta a través de Stripe; "
+        "el prestador no recibe ni guarda los datos de la tarjeta.",
+    ]),
+    ("4. Contratación y renovación automática", [
+        "El contrato se formaliza al confirmarse el pago del primer periodo. Recibirás por correo la confirmación y el acceso a tu área de alumno.",
+        "La suscripción se renueva automáticamente al terminar cada periodo, por el mismo importe y duración, hasta que la canceles. "
+        "Antes de pagar, la pantalla de pago muestra el importe y la frecuencia de renovación. Recibirás un recibo por cada cobro.",
+    ]),
+    ("5. Cancelación", [
+        "Puedes cancelar la renovación cuando quieras desde tu área de alumno (portal de facturación de Stripe), sin penalización. "
+        "La cancelación evita los cobros siguientes y tiene efecto al final del periodo ya pagado. Conservas las clases que ya has pagado.",
+    ]),
+    ("6. Derecho de desistimiento", [
+        "Puedes desistir del contrato en los 14 días naturales siguientes a la contratación, sin indicar el motivo, escribiendo a {email} "
+        "(puedes usar el modelo del final de esta página). Te devolveremos el importe en un máximo de 14 días por el mismo medio de pago.",
+        "Si al contratar pediste expresamente empezar las clases dentro de ese plazo y después desistes, se descontará la parte proporcional "
+        "de las clases ya recibidas: 37 € por clase.",
+    ]),
+    ("7. Reservas, cambios y cancelaciones de clases", [
+        "Reservas tus clases desde tu área de alumno según la disponibilidad publicada. Puedes cambiar o cancelar cada clase sin penalización "
+        "hasta 24 horas antes de su inicio (hasta 3 cambios por clase). Con menos de 24 horas, escríbeme y lo valoraremos según el apartado 8.",
+        "Si soy yo quien cancela una clase, la conservas íntegra y sin fecha límite.",
+    ]),
+    ("8. Ausencias", [
+        "Si no asistes a una clase reservada sin haber avisado con al menos 24 horas, la clase se considera realizada. "
+        "Si hay una causa justificada (por ejemplo, enfermedad o fuerza mayor) y me la comunicas, conservas la clase.",
+    ]),
+    ("9. Clases no utilizadas y recuperación", [
+        "Las clases de cada periodo están pensadas para ese periodo. Al terminarlo, hasta dos clases sin usar pasan al periodo siguiente y "
+        "pueden recuperarse durante los 30 días posteriores; se usan primero las de fecha límite más próxima. Las clases de recuperación se "
+        "reservan en horarios libres.",
+        "Actualmente las clases no utilizadas no caducan de forma automática. Cualquier cambio de esta condición se comunicará con antelación "
+        "y no afectará a las clases ya pagadas. Si no hay horarios adecuados para recuperar una clase, buscaremos una solución.",
+    ]),
+    ("10. Cambio de plan", [
+        "Puedes pasar del plan semanal al quincenal, o al revés, desde tu área de alumno. El cambio se aplica en la siguiente renovación, "
+        "sin prorrateos ni cobros adicionales.",
+    ]),
+    ("11. Reembolsos e impagos", [
+        "Las solicitudes de reembolso se estudian individualmente y se responden por escrito. Un reembolso puede anular las clases que cubre, "
+        "lo que se te indicará.",
+        "Si falla el cobro de una renovación, Stripe reintentará el cargo y te avisará. Hasta que se pague no se añaden clases nuevas; las ya "
+        "pagadas se mantienen.",
+    ]),
+    ("12. Menores de edad", [
+        "Si el alumno es menor de edad, la contratación la realiza su madre, padre o representante legal, que acepta estas condiciones y "
+        "gestiona el área de alumno.",
+    ]),
+    ("13. Atención al cliente y reclamaciones", [
+        "Puedes enviar consultas y reclamaciones a {email}. Responderé en un plazo máximo de 7 días. Este contrato se rige por la ley española; "
+        "como consumidor, puedes acudir a los tribunales de tu domicilio y a los organismos de consumo competentes.",
+    ]),
+    ("14. Modificaciones", [
+        "Cualquier cambio de precio o condiciones se comunicará al menos 30 días antes de la siguiente renovación, y podrás cancelar sin coste.",
+    ]),
+]
+PRIVACY = [
+    ("Responsable", ["{name}, NIF {nif}, {address}. Contacto: {email}."]),
+    ("Datos y finalidades", [
+        "Nombre, correo electrónico y las fechas de tus clases, para prestar el servicio (reservas, recordatorios y avisos); datos de cobro "
+        "para gestionar la suscripción y cumplir las obligaciones fiscales y contables. Los datos de la tarjeta los trata Stripe y no llegan "
+        "al prestador. No se usan para publicidad ni para decisiones automatizadas.",
+        "Base jurídica: la ejecución del contrato y el cumplimiento de obligaciones legales.",
+    ]),
+    ("Conservación", [
+        "Mientras dure la relación y, después, durante los plazos legales (la documentación contable y fiscal, hasta seis años). "
+        "Los enlaces de acceso caducan a las 72 horas y las sesiones del área de alumno a los 30 días.",
+    ]),
+    ("Proveedores", [
+        "Stripe (pagos y suscripciones), Google (calendario, correo y registro privado de clases), Cloudflare (reenvío técnico de avisos de "
+        "Stripe, sin datos personales) y GitHub (alojamiento de la web). Algunos pueden tratar datos fuera del Espacio Económico Europeo con "
+        "las garantías previstas en el RGPD (cláusulas contractuales tipo o Marco de Privacidad de Datos UE-EE. UU.).",
+    ]),
+    ("Menores", ["Si el alumno es menor de 14 años, sus datos los facilita y gestiona su representante legal."]),
+    ("Tus derechos", [
+        "Puedes ejercer los derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad escribiendo a {email}, "
+        "y reclamar ante la Agencia Española de Protección de Datos (aepd.es).",
+    ]),
+    ("Cookies y almacenamiento", [
+        "La web no usa cookies de publicidad ni de analítica. El área de alumno guarda en tu navegador solo el identificador de tu sesión, "
+        "necesario para el servicio; se borra al cerrar sesión.",
+    ]),
+]
+WITHDRAWAL_FORM = ("A la atención de {name}, {address}, {email}: por la presente le comunico que desisto de mi contrato de clases "
+                   "(plan …), contratado el …. Nombre del consumidor: …. Domicilio: …. Fecha: ….")

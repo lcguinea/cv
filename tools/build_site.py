@@ -48,9 +48,10 @@ PAGES = ("index.html", "cv.html", "music/index.html", "sobre-mi.html", "agenda/i
 sys.path.insert(0, str(ROOT / "tools"))
 import formacion_content  # noqa: E402
 
-SUBSCRIPTION_FILES = ("alumnos/index.html", "js/plans.js", "js/alumnos.js") if formacion_content.SUBSCRIPTIONS["published"] else ()
-PAGES = PAGES + SUBSCRIPTION_FILES[:1]
-STATIC_FILES = PAGES + SUBSCRIPTION_FILES[1:] + (
+SUBSCRIPTION_FILES = (("alumnos/index.html", "formacion/condiciones/index.html", "js/plans.js", "js/alumnos.js")
+                      if formacion_content.SUBSCRIPTIONS["published"] else ())
+PAGES = PAGES + SUBSCRIPTION_FILES[:2]
+STATIC_FILES = PAGES + SUBSCRIPTION_FILES[2:] + (
     "robots.txt",
     "sitemap.xml",
     "css/styles.css",

@@ -10,8 +10,11 @@ Objects (found again by lookup_key / metadata, so running it twice never duplica
     price    14800 EUR, recurring week x8, lookup_key lg_clases_quincenal   -> STRIPE_PRICE_BIWEEKLY
     portal   payment method, invoices, cancel at period end (no plan changes, no pause, no prorations)
                                                                               -> STRIPE_PORTAL_CONFIG
-Prices are never modified: a wrong price is reported, not changed. Live mode is refused: going live is a separate,
-approved step (apps-script/BILLING.md, "Activación en real").
+Prices are never modified: a wrong price is reported, not changed. Other products of the account (Santo Chilaquil) are
+never read for changes nor touched: objects are found only by their lg_key / lookup_key.
+
+Live mode only with an explicit --live (authorised by Luis in mission 06):
+    python3 tools/stripe_setup.py --live
 """
 import json
 import subprocess
@@ -22,18 +25,19 @@ PRICES = {"weekly": ("lg_clases_semanal", 4), "biweekly": ("lg_clases_quincenal"
 SITE = "https://luisguinea.com/"
 
 
+LIVE = "--live" in sys.argv[1:]
+
+
 def stripe(*args):
-    if "--live" in args:
-        raise SystemExit("live mode is not allowed from this script")
-    out = subprocess.run(["stripe", *args], capture_output=True, text=True)
+    out = subprocess.run(["stripe", *args, *(["--live"] if LIVE else [])], capture_output=True, text=True)
     if out.returncode != 0:
         raise SystemExit(out.stderr.strip() or out.stdout.strip())
     text = out.stdout
     data = json.loads(text[text.index("{"):])  # the CLI prints a "Running in <account>" line first
     if isinstance(data, dict) and data.get("error"):
         raise SystemExit(json.dumps(data["error"]))
-    if isinstance(data, dict) and data.get("livemode"):
-        raise SystemExit("the CLI is pointing at live mode: stop")
+    if isinstance(data, dict) and "livemode" in data and data["livemode"] != LIVE:
+        raise SystemExit("unexpected mode: the CLI answered with livemode=%s" % data["livemode"])
     return data
 
 
@@ -47,7 +51,7 @@ def find_product():
 def main():
     product = find_product()
     if not product:
-        product = stripe("products", "create", "--name", "Clases particulares de música · Luis Guinea",
+        product = stripe("products", "create", "--name", "Clases de música · Luis Guinea",
                          "--description", "Plan de 4 clases individuales presenciales de 60 minutos en Valencia.",
                          "-d", f"metadata[lg_key]={PRODUCT_KEY}",
                          "--statement-descriptor", "LUISGUINEA CLASES")
@@ -81,8 +85,8 @@ def main():
             "post", "/v1/billing_portal/configurations",
             "-d", "metadata[lg_key]=" + PRODUCT_KEY,
             "-d", "business_profile[headline]=Clases de música con Luis Guinea",
-            "-d", f"business_profile[privacy_policy_url]={SITE}formacion/#planes",
-            "-d", f"business_profile[terms_of_service_url]={SITE}formacion/#planes",
+            "-d", f"business_profile[privacy_policy_url]={SITE}formacion/condiciones/#privacidad",
+            "-d", f"business_profile[terms_of_service_url]={SITE}formacion/condiciones/",
             "-d", f"default_return_url={SITE}alumnos/",
             "-d", "features[invoice_history][enabled]=true",
             "-d", "features[payment_method_update][enabled]=true",
@@ -99,8 +103,8 @@ def main():
         print("created portal configuration", portal["id"])
     else:
         print("reusing portal configuration", portal["id"])
-    print("\nScript Properties (test):")
-    print("  STRIPE_MODE           = test")
+    print("\nScript Properties (%s):" % ("live" if LIVE else "test"))
+    print("  STRIPE_MODE           =", "live" if LIVE else "test")
     print("  STRIPE_PRICE_WEEKLY   =", ids["weekly"])
     print("  STRIPE_PRICE_BIWEEKLY =", ids["biweekly"])
     print("  STRIPE_PORTAL_CONFIG  =", portal["id"])

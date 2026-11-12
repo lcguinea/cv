@@ -139,6 +139,10 @@ class SecurityStatics(unittest.TestCase):
         self.assertIn("keyMode !== mode", gs)  # a live key never runs in test mode and vice versa
         self.assertNotRegex(gs, r"trial_period|coupon|discounts")
 
+    def test_terms_version_matches_the_published_page(self):
+        version = re.search(r"var TERMS_VERSION = '([^']+)'", read("apps-script/Billing.gs")).group(1)
+        self.assertEqual(version, formacion_content.LEGAL_VERSION)
+
     def test_relay_does_not_forward_payloads(self):
         worker = read("workers/stripe-relay/worker.js")
         self.assertIn("verifyStripeSignature", worker)

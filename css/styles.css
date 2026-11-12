@@ -933,3 +933,14 @@ main[tabindex="-1"]:focus{outline:none}
 }
 @media(prefers-reduced-motion:reduce){.plan-card{transition:none}}
 @media print{.plans-form,.students-app{display:none}}
+
+/* ---------- terms and privacy (/formacion/condiciones/) ---------- */
+.legal-wrap{max-width:46rem;padding:clamp(3rem,7vw,6rem) 0 clamp(4rem,8vw,7rem)}
+.legal-title{font-size:clamp(3rem,7vw,5.5rem);margin:.6rem 0 1rem}
+.legal-meta,.legal-toc{font:.72rem var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.legal-toc{margin:1rem 0 3rem;padding:1rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.legal-body{padding-top:1rem;margin-bottom:3rem;border-top:2px solid var(--text)}
+.legal-body>h2.kicker{font:.74rem var(--mono);margin:0 0 1.5rem}
+.legal-section h2,.legal-section h3{font-size:clamp(1.5rem,2.6vw,2rem);margin:2rem 0 .6rem}
+.legal-section p{max-width:68ch;line-height:1.6}
+.plans-terms-link{margin:.2rem 0 0}

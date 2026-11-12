@@ -26,7 +26,7 @@ var CLASS_MINUTES = 60;
 var MAX_CLASSES_PER_REQUEST = 4;
 // Version of the contract conditions shown at checkout. Checkout stays closed until the Script Property
 // TERMS_APPROVED_VERSION equals it, i.e. until Luis records that a lawyer approved exactly this text (launch gate).
-var TERMS_VERSION = '2026-11-13-borrador-revision-juridica';
+var TERMS_VERSION = '2026-11-12-v1'; // = LEGAL_VERSION in tools/formacion_content.py (tests/test_billing.py)
 var ACCESS_TOKEN_RE = /^([0-9a-f]{32})\.([0-9a-f]{64})$/;
 var SESSION_ID_RE = /^cs_(test|live)_[A-Za-z0-9]{10,200}$/;
 var BOOKING_ID_RE = /^[0-9a-f]{32}$/;
@@ -755,8 +755,8 @@ function createCheckout_(cfg, bcfg, raw) {
     metadata: { plan: raw.plan, lang: lang, terms: TERMS_VERSION, early_start: 'true', source: 'luisguinea.com' },
     subscription_data: { metadata: { plan: raw.plan, lang: lang, terms: TERMS_VERSION, early_start: 'true' } },
     custom_text: { submit: { message: es
-      ? 'Se renovará automáticamente ' + every + ' por 148 € (4 clases presenciales de 60 minutos). Puedes cancelar la renovación cuando quieras desde tu área de alumno; tendrá efecto al final del periodo pagado.'
-      : 'Renews automatically ' + every + ' for €148 (4 in-person 60-minute lessons). You can cancel the renewal at any time from your student area; it takes effect at the end of the paid period.' } }
+      ? 'Clases de música de Luis Carlos Guinea Moctezuma (titular de la cuenta de cobro «Santo Chilaquil»). Se renovará automáticamente ' + every + ' por 148 € (4 clases presenciales de 60 minutos). Puedes cancelar la renovación cuando quieras desde tu área de alumno; tendrá efecto al final del periodo pagado.'
+      : 'Music lessons by Luis Carlos Guinea Moctezuma (holder of the payment account "Santo Chilaquil"). Renews automatically ' + every + ' for €148 (4 in-person 60-minute lessons). You can cancel the renewal at any time from your student area; it takes effect at the end of the paid period.' } }
   };
   try {
     var session = stripe_(bcfg, 'post', '/checkout/sessions', params, 'checkout:' + raw.requestId);
