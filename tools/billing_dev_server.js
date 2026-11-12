@@ -112,6 +112,7 @@ http.createServer(async (req, res) => {
     }
     if (url.pathname === '/stripe/webhook') {
       const raw = await body(req);
+      if (env.dropWebhooks) { res.writeHead(503); return res.end('simulated outage'); } // /__dev/outage?on=1
       const r = await relay.handle(new Request(url.href, { method: req.method, body: raw, headers: { 'stripe-signature': req.headers['stripe-signature'] || '' } }), relayEnv);
       res.writeHead(r.status, { 'Content-Type': 'text/plain' });
       return res.end(await r.text());
@@ -130,6 +131,8 @@ http.createServer(async (req, res) => {
       ['CREDIT_POLICY_ENFORCED', 'BILLING_CHECKOUT_ENABLED'].forEach((k) => { if (url.searchParams.has(k)) env.props[k] = url.searchParams.get(k); });
       return json(res, { CREDIT_POLICY_ENFORCED: env.props.CREDIT_POLICY_ENFORCED || 'false', BILLING_CHECKOUT_ENABLED: env.props.BILLING_CHECKOUT_ENABLED });
     }
+    if (url.pathname === '/__dev/outage') { env.dropWebhooks = url.searchParams.get('on') === '1'; return json(res, { dropWebhooks: env.dropWebhooks }); }
+    if (url.pathname === '/__dev/post') { const out = env.ctx.doPost({ postData: { contents: await body(req) } }); persist(); return json(res, JSON.parse(out.getContent())); }
     if (url.pathname === '/__dev/teacher-cancel') { env.deleteEvent(url.searchParams.get('event')); return json(res, { ok: true }); }
     return serveFile(req, res, url.pathname);
   } catch (e) {

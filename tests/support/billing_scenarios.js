@@ -551,6 +551,159 @@ const scenarios = {
   },
 };
 
+// ---------- mission 05: commercial rules ----------
+Object.assign(scenarios, {
+  plan_change_weekly_to_biweekly_happens_at_renewal_without_extra_charges() {
+    const { env, stripe, s, token } = newSubscriber();
+    assert.strictEqual(env.post({ op: 'stu_plan', token, plan: 'biweekly' }).error, 'confirmation_required');
+    const v = env.post({ op: 'stu_plan', token, plan: 'biweekly', confirm: true });
+    assert.strictEqual(v.ok, true, JSON.stringify(v));
+    assert.strictEqual(v.plan.plan, 'weekly');
+    assert.strictEqual(v.plan.pendingPlan, 'biweekly');
+    assert.strictEqual(Date.parse(v.plan.changeAt), s.sub.current_period_end * 1000);
+    assert.strictEqual(Object.keys(stripe.invoices).length, 1, 'nothing is charged now');
+    assert(!stripe.unsafeSchedule, 'every phase has proration_behavior none');
+    assert.strictEqual(ownerMails(env, /Cambio de plan programado/).length, 1);
+    env.now = s.sub.current_period_end * 1000 + HOUR;
+    const r = stripe.renew(s.sub.id);
+    assert.strictEqual(r.inv.billing_reason, 'subscription_update');
+    deliver(env, r.events);
+    assert.strictEqual(grants(env).length, 8, 'the plan-change invoice grants the new cycle');
+    const second = grants(env).map((g) => JSON.parse(g.datos)).filter((d) => d.factura === r.inv.id);
+    assert.strictEqual(second[0].fin - second[0].inicio, 56 * DAY);
+    assert.strictEqual(second[0].plan, 'biweekly');
+    const w = view(env, relogin(env));
+    assert.strictEqual(w.plan.plan, 'biweekly');
+    assert.strictEqual(w.plan.intervalWeeks, 8);
+    assert.strictEqual(env.table('incidencias').length, 0);
+    void token;
+  },
+  plan_change_biweekly_to_weekly_and_undo() {
+    const { env, stripe, s, token } = newSubscriber({ plan: 'biweekly' });
+    env.post({ op: 'stu_plan', token, plan: 'weekly', confirm: true });
+    const u = env.post({ op: 'stu_plan_undo', token });
+    assert.strictEqual(u.ok, true, JSON.stringify(u));
+    assert.strictEqual(u.plan.pendingPlan, null);
+    env.now = s.sub.current_period_end * 1000 + HOUR;
+    const r = stripe.renew(s.sub.id);
+    assert.strictEqual(r.inv.billing_reason, 'subscription_cycle', 'undone: plain renewal of the same plan');
+    deliver(env, r.events);
+    assert.strictEqual(grants(env).length, 8);
+    // and the other direction for real
+    const b = newSubscriber({ plan: 'biweekly', who: { email: 'bea@example.com', name: 'Bea' } });
+    b.env.post({ op: 'stu_plan', token: b.token, plan: 'weekly', confirm: true });
+    b.env.now = b.s.sub.current_period_end * 1000 + HOUR;
+    const r2 = b.stripe.renew(b.s.sub.id);
+    deliver(b.env, r2.events);
+    const d = grants(b.env).map((g) => JSON.parse(g.datos)).filter((x) => x.factura === r2.inv.id)[0];
+    assert.strictEqual(d.fin - d.inicio, 28 * DAY);
+  },
+  plan_change_is_refused_when_cancelling_or_inactive() {
+    const { env, stripe, s, token } = newSubscriber();
+    assert.strictEqual(env.post({ op: 'stu_plan', token, plan: 'monthly', confirm: true }).error, 'invalid_plan');
+    deliver(env, stripe.cancelAtPeriodEnd(s.sub.id).events);
+    assert.strictEqual(env.post({ op: 'stu_plan', token, plan: 'biweekly', confirm: true }).error, 'not_active');
+    assert.strictEqual(view(env, token).plan.canChangePlan, false);
+  },
+  partial_and_total_refunds_are_recorded_and_change_no_credit() {
+    const { env, stripe, s, token } = newSubscriber();
+    deliver(env, stripe.refund(s.inv.id, 3700).events);
+    let refunds = env.table('movimientos').filter((m) => m.tipo === 'refund').map((m) => JSON.parse(m.datos));
+    assert.deepStrictEqual(refunds.map((r) => [r.reembolsado, r.total]), [[3700, false]]);
+    assert.strictEqual(env.table('incidencias')[0].tipo, 'reembolso_parcial');
+    assert(/Clases de esa factura sin usar: 4/.test(env.table('incidencias')[0].detalle));
+    const again = stripe.refund(s.inv.id, 11100).events;
+    deliver(env, again); deliver(env, again);
+    refunds = env.table('movimientos').filter((m) => m.tipo === 'refund').map((m) => JSON.parse(m.datos));
+    assert.deepStrictEqual(refunds.map((r) => [r.reembolsado, r.total]), [[3700, false], [14800, true]]);
+    assert.strictEqual(view(env, token).counts.available, 4, 'no automatic denial or removal');
+    assert(env.sheets.sheet1.panel.some((row) => row[0] === 'REEMBOLSOS'));
+  },
+  justified_absence_gives_the_class_back() {
+    const { env, token } = newSubscriber();
+    const [first] = spaced(slots(env, token), 1);
+    book(env, token, [first]);
+    env.now = Date.parse(first) + 60 * HOUR;
+    env.hourly();
+    let v = view(env, relogin(env));
+    assert.strictEqual(v.counts.done, 1);
+    const credit = env.table('movimientos').find((m) => m.tipo === 'consume').credito;
+    adjust(env, ['', 'justificar', '', credit, '', 'enfermedad con aviso tardío', '', '']);
+    env.hourly();
+    assert.strictEqual(env.table('ajustes')[0].estado, 'hecho');
+    v = view(env, relogin(env));
+    assert.strictEqual(v.counts.done, 0);
+    assert.strictEqual(v.counts.available, 4);
+    assert.strictEqual(v.bookings[0].reason, 'justificada');
+    assert(v.credits.some((c) => c.protected && c.expiresAt === null));
+    void token;
+  },
+  no_available_times_is_reported_and_luis_can_extend_or_grant() {
+    const { env, token } = newSubscriber({ availability: [] });
+    assert.deepStrictEqual(slots(env, token), []);
+    assert.strictEqual(book(env, token, [new Date(env.now + 3 * DAY).toISOString().replace(/T.*/, 'T09:00:00.000Z')]).error, 'slot_unavailable');
+    adjust(env, ['', 'conceder', 'ana@example.com', '', '1', 'sin horarios este mes', '', '']);
+    env.hourly();
+    assert.strictEqual(view(env, relogin(env)).counts.available, 5);
+    void token;
+  },
+  student_keeps_access_and_classes_after_the_subscription_ends() {
+    const { env, stripe, s } = newSubscriber();
+    deliver(env, stripe.cancelAtPeriodEnd(s.sub.id).events);
+    env.now = s.sub.current_period_end * 1000 + 5 * DAY;
+    deliver(env, stripe.endNow(s.sub.id).events);
+    const t = relogin(env);
+    const v = view(env, t);
+    assert.strictEqual(v.plan.status, 'canceled');
+    assert.strictEqual(v.credits.length, 4);
+    assert.strictEqual(book(env, t, spaced(slots(env, t), 1)).ok, true, 'paid classes can still be booked');
+  },
+  reschedule_limit_never_blocks_a_class_luis_cancelled() {
+    const { env, token } = newSubscriber();
+    const list = slots(env, token);
+    const id = book(env, token, [list[0]]).bookings[0].id;
+    const free = spaced(list, 5, 10);
+    for (let i = 0; i < 3; i++) assert.strictEqual(env.post({ op: 'stu_move', token, booking: id, start: free[i] }).ok, true);
+    assert.strictEqual(env.post({ op: 'stu_move', token, booking: id, start: free[3] }).error, 'reschedule_limit');
+    env.deleteEvent(env.events()[0].id); // Luis cancels it
+    env.hourly();
+    const t = relogin(env);
+    const nid = book(env, t, [free[3]]).bookings.find((b) => b.status === 'reservada').id;
+    assert.strictEqual(env.post({ op: 'stu_move', token: t, booking: nid, start: free[4] }).ok, true, 'a new booking, a new allowance');
+  },
+  make_up_classes_never_displace_other_bookings() {
+    const { env, stripe, s, token } = newSubscriber();
+    const b2 = subscribe(env, stripe, 'weekly', { email: 'bea@example.com', name: 'Bea' });
+    deliver(env, b2.events);
+    const t2 = login(env, 'bea@example.com');
+    book(env, token, spaced(slots(env, token), 2));
+    env.now = s.sub.current_period_end * 1000 + HOUR;
+    env.hourly(); // Ana carries 2 classes over
+    const t = relogin(env);
+    const target = spaced(slots(env, t2), 1)[0];
+    assert.strictEqual(book(env, t2, [target]).ok, true);
+    assert.strictEqual(book(env, t, [target]).error, 'slot_unavailable', 'a make-up class takes only free time');
+    assert.strictEqual(env.events().filter((e) => e.start === Date.parse(target)).length, 1);
+    void stripe;
+  },
+  anonymising_a_student_keeps_the_ledger() {
+    const { env, token } = newSubscriber();
+    const before = env.table('movimientos').length;
+    adjust(env, ['', 'anonimizar', 'ana@example.com', '', '', 'solicitud de supresión', '', '']);
+    env.hourly();
+    assert(env.table('alumnos').every((a) => a.email === '[suprimido]' && a.nombre === '[suprimido]'));
+    assert.strictEqual(env.post({ op: 'stu_view', token }).error, 'invalid_token');
+    assert.strictEqual(env.table('movimientos').length, before);
+    assert(!JSON.stringify(env.sheets.sheet1.ajustes).includes('ana@example.com'));
+  },
+  checkout_stays_closed_until_the_terms_are_approved() {
+    const { env } = setup({ props: { TERMS_APPROVED_VERSION: '' } });
+    assert.strictEqual(checkout(env).error, 'not_available');
+    env.props.TERMS_APPROVED_VERSION = 'otra-version';
+    assert.strictEqual(checkout(env).error, 'not_available');
+  },
+});
+
 const results = {};
 for (const [name, fn] of Object.entries(scenarios)) {
   try { fn(); results[name] = 'ok'; } catch (e) { results[name] = String(e && e.stack || e).split('\n').slice(0, 4).join(' | '); }

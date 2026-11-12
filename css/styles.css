@@ -920,6 +920,10 @@ main[tabindex="-1"]:focus{outline:none}
 .students-booking.status-cancelada .students-booking-when{text-decoration:line-through}
 .students-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.6rem}
 .students-move{margin-top:1rem}
+.students-note{margin:.8rem 0;padding-left:.8rem;border-left:2px solid var(--accent);max-width:44ch}
+.students-plan-change,.students-repeat{margin:.6rem 0 1rem}
+.students-late{margin-top:.6rem;padding:.6rem 0 0;border-top:1px dashed var(--rule)}
+.students-late-title{margin:0 0 .2rem;font:.74rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
 .students-checkout{font:clamp(1.5rem,2.6vw,2.2rem)/1.15 var(--serif);max-width:32ch;margin:0 0 1rem}
 @media(max-width:700px){
   .plans-form,.plan-cards,.students-dash{grid-template-columns:minmax(0,1fr)}

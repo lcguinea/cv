@@ -77,6 +77,7 @@ function makeEnv(opts = {}) {
       BUSY_CALENDAR_IDS: 'owner@example.com', BUFFER_MINUTES: '0', MIN_NOTICE_HOURS: '24', MAX_DAYS_AHEAD: '60',
       NOTIFY_EMAIL: 'owner@example.com', STRIPE_MODE: 'test', STRIPE_SECRET_KEY: 'rk_test_FAKEKEYFORTESTSONLY',
       STRIPE_PRICE_WEEKLY: 'price_weekly', STRIPE_PRICE_BIWEEKLY: 'price_biweekly', RELAY_SECRET: 'ab'.repeat(32),
+      TERMS_APPROVED_VERSION: '2026-11-13-borrador-revision-juridica',
       LEDGER_SPREADSHEET_ID: 'sheet1', BILLING_CHECKOUT_ENABLED: 'true', CLASS_LOCATION: 'Estudio de Luis, Valencia',
     }, opts.props),
     sheets: opts.sheets || { sheet1: {} },
@@ -184,7 +185,7 @@ function makeEnv(opts = {}) {
       const r = env.fetch(url, o);
       return { getResponseCode: () => r.code, getContentText: () => JSON.stringify(r.body) };
     } },
-    ScriptApp: { getProjectTriggers: () => [], newTrigger: () => ({ timeBased: () => ({ everyHours: () => ({ create: () => null }) }) }) },
+    ScriptApp: { getProjectTriggers: () => [], newTrigger: () => ({ timeBased: () => ({ everyHours: () => ({ create: () => null }), everyWeeks: () => ({ create: () => null }) }) }) },
     Logger: { log: (s) => env.logs.push(s) },
   };
   vm.createContext(ctx);

@@ -24,7 +24,9 @@ var PLANS = {
 };
 var CLASS_MINUTES = 60;
 var MAX_CLASSES_PER_REQUEST = 4;
-var TERMS_VERSION = '2026-11-12-borrador';
+// Version of the contract conditions shown at checkout. Checkout stays closed until the Script Property
+// TERMS_APPROVED_VERSION equals it, i.e. until Luis records that a lawyer approved exactly this text (launch gate).
+var TERMS_VERSION = '2026-11-13-borrador-revision-juridica';
 var ACCESS_TOKEN_RE = /^([0-9a-f]{32})\.([0-9a-f]{64})$/;
 var SESSION_ID_RE = /^cs_(test|live)_[A-Za-z0-9]{10,200}$/;
 var BOOKING_ID_RE = /^[0-9a-f]{32}$/;
@@ -58,6 +60,8 @@ var BILLING_OPS = {
   stu_move: ['op', 'token', 'booking', 'start'],
   stu_portal: ['op', 'token'],
   stu_logout: ['op', 'token'],
+  stu_plan: ['op', 'token', 'plan', 'confirm'],
+  stu_plan_undo: ['op', 'token'],
   stripe_event: ['op', 'id', 'type', 'ts', 'sig']
 };
 
@@ -65,7 +69,7 @@ var TABLES = {
   movimientos: ['id', 'ts', 'tipo', 'alumno', 'credito', 'reserva', 'datos'],
   alumnos: ['cliente_stripe', 'alumno', 'email', 'nombre', 'idioma', 'creado'],
   suscripciones: ['suscripcion', 'alumno', 'cliente_stripe', 'plan', 'precio', 'estado', 'cancela_al_final', 'cancela_en',
-    'fin_periodo', 'terminada_en', 'actualizada'],
+    'fin_periodo', 'terminada_en', 'actualizada', 'cambio_plan', 'cambio_en', 'programacion'],
   eventos: ['evento', 'tipo', 'procesado', 'resultado'],
   accesos: ['id', 'hash', 'tipo', 'alumno', 'creado', 'expira', 'usado', 'revocado'],
   avisos: ['clave', 'ts'],
@@ -107,6 +111,7 @@ function billingConfig_() {
     relaySecret: /^[0-9a-f]{64}$/.test(relay) ? relay : '',
     spreadsheetId: p.getProperty('LEDGER_SPREADSHEET_ID') || '',
     checkoutEnabled: p.getProperty('BILLING_CHECKOUT_ENABLED') === 'true',
+    termsApproved: p.getProperty('TERMS_APPROVED_VERSION') === TERMS_VERSION,
     policyEnforced: p.getProperty('CREDIT_POLICY_ENFORCED') === 'true',
     classAvailabilityId: p.getProperty('CLASS_AVAILABILITY_CALENDAR_ID') || '',
     classLocation: cleanText_(p.getProperty('CLASS_LOCATION') || '', 200, false) || '',
@@ -312,6 +317,12 @@ function deriveLedger_(moves, policy) {
         c.traslado = !!m.datos.traslado;
         c.expira = c.traslado ? c.fin + policy.carryMs : c.fin;
         break;
+      case 'restore':
+        // Justified absence (adjustment "justificar"): the class counted as done goes back, with no deadline.
+        if (!c || c.estado !== 'consumido') break;
+        c.estado = 'disponible'; c.reserva = ''; c.protegido = true; c.expira = null;
+        if (bookings[m.reserva]) { bookings[m.reserva].estado = 'cancelada'; bookings[m.reserva].motivo = 'justificada'; }
+        break;
       case 'extend':
         if (c) { c.expira = m.datos.hasta; }
         break;
@@ -480,7 +491,12 @@ function syncInvoice_(cfg, bcfg, db, invoiceId) {
   lines.forEach(function (l) { var p = planForPrice_(bcfg, linePrice_(l)); if (p && !line && !l.proration) { line = l; plan = p; } });
   if (!line) return { granted: 0, reason: 'unknown_price' };
   var reason = inv.billing_reason;
-  if (reason !== 'subscription_create' && reason !== 'subscription_cycle') {
+  // A plan change scheduled for the end of the paid cycle (changePlan_) starts the new cycle with a
+  // "subscription_update" invoice: verified with Stripe Test Clocks to be one full 148 EUR charge with no proration.
+  // It counts as a renewal only when it is exactly that; anything with proration lines stays an incident.
+  var cleanUpdate = reason === 'subscription_update' && lines.every(function (l) { return !l.proration; }) &&
+    lines.filter(function (l) { return planForPrice_(bcfg, linePrice_(l)); }).length === 1 && Number(inv.amount_paid) === PLANS[plan].amount;
+  if (reason !== 'subscription_create' && reason !== 'subscription_cycle' && !cleanUpdate) {
     incident_(cfg, db, 'invoice-reason:' + inv.id, 'factura_inesperada', '', 'La factura ' + inv.id + ' (' + reason +
       ') está pagada pero no es un alta ni una renovación: no se han concedido clases.');
     return { granted: 0, reason: 'unexpected_reason' };
@@ -533,7 +549,10 @@ function syncSubscription_(cfg, bcfg, db, subId) {
   var student = ensureStudent_(bcfg, db, idOf_(sub.customer), lang);
   var snap = { suscripcion: sub.id, alumno: student.alumno, cliente_stripe: idOf_(sub.customer), plan: plan, precio: subscriptionPrice_(sub),
     estado: sub.status, cancela_al_final: sub.cancel_at_period_end ? 'sí' : '', cancela_en: sub.cancel_at ? sub.cancel_at * 1000 : '',
-    fin_periodo: subscriptionPeriodEnd_(sub), terminada_en: sub.ended_at ? sub.ended_at * 1000 : '', actualizada: Date.now() };
+    fin_periodo: subscriptionPeriodEnd_(sub), terminada_en: sub.ended_at ? sub.ended_at * 1000 : '', actualizada: Date.now(),
+    cambio_plan: '', cambio_en: '', programacion: idOf_(sub.schedule) };
+  var pending = pendingChange_(bcfg, sub, plan);
+  if (pending) { snap.cambio_plan = pending.plan; snap.cambio_en = pending.at; }
   var row = db.find('suscripciones', 'suscripcion', sub.id);
   if (row) db.update('suscripciones', row, snap); else db.append('suscripciones', snap);
   var es = student.idioma !== 'en';
@@ -569,6 +588,22 @@ function syncSubscription_(cfg, bcfg, db, subId) {
       'La suscripción ' + sub.id + ' está en estado ' + sub.status + '. No se conceden clases hasta que se pague una factura.');
   }
   return snap;
+}
+
+/** Plan the subscription moves to at a future phase of its schedule, or null. */
+function pendingChange_(bcfg, sub, currentPlan) {
+  var schedId = idOf_(sub.schedule);
+  if (!schedId) return null;
+  var sch = stripe_(bcfg, 'get', '/subscription_schedules/' + encodeURIComponent(schedId));
+  if (sch.status !== 'active' && sch.status !== 'not_started') return null;
+  var now = Date.now() / 1000;
+  var next = null;
+  (sch.phases || []).forEach(function (ph) {
+    var price = ph.items && ph.items[0] && idOf_(ph.items[0].price);
+    var p = planForPrice_(bcfg, price);
+    if (!next && ph.start_date > now && p && p !== currentPlan) next = { plan: p, at: ph.start_date * 1000 };
+  });
+  return next;
 }
 
 /** Processes one Stripe event (already downloaded from the API). Returns a short result for the "eventos" tab. */
@@ -608,6 +643,8 @@ function handleEvent_(cfg, bcfg, db, ev) {
       syncSubscription_(cfg, bcfg, db, obj.id);
       return 'ok';
     case 'charge.refunded':
+      recordRefund_(cfg, bcfg, db, obj.id);
+      return 'refund';
     case 'charge.dispute.created':
     case 'charge.dispute.closed':
     case 'credit_note.created':
@@ -619,6 +656,30 @@ function handleEvent_(cfg, bcfg, db, ev) {
     default:
       return 'ignored';
   }
+}
+
+/**
+ * Records a refund (total or partial) in the ledger with its invoice and amount, and tells Luis what it covers. Credits
+ * are NOT changed automatically: whether a refund cancels lessons is decided by hand ("anular" in the "ajustes" tab).
+ * The movement id carries the refunded total, so each new partial refund is recorded once.
+ */
+function recordRefund_(cfg, bcfg, db, chargeId) {
+  var ch = stripe_(bcfg, 'get', '/charges/' + encodeURIComponent(chargeId));
+  if (ch.livemode !== (bcfg.mode === 'live')) return;
+  var invId = idOf_(ch.invoice);
+  var student = ch.customer ? ensureStudent_(bcfg, db, idOf_(ch.customer), '') : null;
+  var total = Number(ch.amount_refunded) >= Number(ch.amount);
+  var unused = 0;
+  if (invId) {
+    var led = deriveLedger_(movements_(db), policy_(bcfg));
+    Object.keys(led.credits).forEach(function (k) { var c = led.credits[k]; if (c.factura === invId && c.estado === 'disponible') unused++; });
+  }
+  var written = addMovement_(db, { id: 'refund:' + ch.id + ':' + ch.amount_refunded, tipo: 'refund', alumno: student ? student.alumno : '',
+    datos: { cargo: ch.id, factura: invId, reembolsado: Number(ch.amount_refunded), cobrado: Number(ch.amount), total: total, moneda: ch.currency } });
+  if (!written) return;
+  incident_(cfg, db, 'refund:' + ch.id + ':' + ch.amount_refunded, total ? 'reembolso_total' : 'reembolso_parcial', student ? student.alumno : '',
+    'Reembolso de ' + (Number(ch.amount_refunded) / 100).toFixed(2) + ' € de ' + (Number(ch.amount) / 100).toFixed(2) + ' € (factura ' + (invId || '?') +
+    '). Clases de esa factura sin usar: ' + unused + '. No se ha anulado ninguna: si el reembolso las cubre, anúlalas en "ajustes".');
 }
 
 /** Webhook entry point (via the Worker relay): authenticated by RELAY_SECRET, then re-downloaded from Stripe. */
@@ -667,7 +728,8 @@ function rateHit_(key, limit) {
 }
 
 function createCheckout_(cfg, bcfg, raw) {
-  if (!bcfg.checkoutEnabled) return { ok: false, error: 'not_available' };
+  // Launch gate: both switches, set by hand by Luis (see docs/lanzamiento/CHECKLIST-LANZAMIENTO.md).
+  if (!bcfg.checkoutEnabled || !bcfg.termsApproved) return { ok: false, error: 'not_available' };
   if (raw.website !== undefined && raw.website !== '') return { ok: false, error: 'rejected' };
   if (!PLANS.hasOwnProperty(raw.plan)) return { ok: false, error: 'invalid_plan' };
   if (typeof raw.requestId !== 'string' || !REQUEST_ID_RE.test(raw.requestId)) return { ok: false, error: 'invalid_request' };
@@ -798,7 +860,8 @@ function studentView_(cfg, bcfg, db, student) {
   return {
     ok: true,
     student: { name: student.nombre || '', lang: student.idioma },
-    plan: plan ? { plan: plan.plan, amount: PLANS[plan.plan] ? PLANS[plan.plan].amount : null, currency: 'eur',
+    plan: plan ? { plan: plan.plan, pendingPlan: plan.cambio_plan || null, changeAt: iso_(plan.cambio_en || null),
+      canChangePlan: plan.estado === 'active' && !plan.cancela_al_final, amount: PLANS[plan.plan] ? PLANS[plan.plan].amount : null, currency: 'eur',
       intervalWeeks: PLANS[plan.plan] ? PLANS[plan.plan].intervalWeeks : null, status: plan.estado,
       renewsAt: plan.cancela_al_final || plan.estado === 'canceled' ? null : iso_(plan.fin_periodo),
       endsAt: plan.cancela_al_final ? iso_(plan.cancela_en || plan.fin_periodo) : plan.estado === 'canceled' ? iso_(plan.terminada_en) : null } : null,
@@ -1018,6 +1081,68 @@ function portal_(cfg, bcfg, raw) {
   } catch (e) { return { ok: false, error: 'unavailable' }; }
 }
 
+// ---------- plan change at the end of the paid cycle ----------
+
+function activeSubscription_(db, student) {
+  var subs = db.rows('suscripciones').filter(function (s) { return s.alumno === student.alumno && s.estado === 'active'; })
+    .sort(function (a, b) { return Number(b.fin_periodo) - Number(a.fin_periodo); });
+  return subs[0] || null;
+}
+
+/**
+ * Weekly <-> every-two-weeks, only from the next renewal. A Stripe subscription schedule keeps the current price until
+ * the end of the paid cycle and starts the new one there, with proration_behavior "none" everywhere: verified with
+ * Test Clocks to produce no charge now and one 148 EUR invoice at the renewal date (billing_reason
+ * "subscription_update", accepted by syncInvoice_). Nothing is charged or credited by this call.
+ */
+function changePlan_(cfg, bcfg, raw) {
+  if (!PLANS.hasOwnProperty(raw.plan)) return { ok: false, error: 'invalid_plan' };
+  if (raw.confirm !== true) return { ok: false, error: 'confirmation_required' };
+  return withLock_(function () {
+    var db = db_(bcfg);
+    var student = sessionStudent_(bcfg, db, raw.token);
+    if (!student) return { ok: false, error: 'invalid_token' };
+    var row = activeSubscription_(db, student);
+    if (!row) return { ok: false, error: 'not_active' };
+    var sub = stripe_(bcfg, 'get', '/subscriptions/' + encodeURIComponent(row.suscripcion));
+    var current = planForPrice_(bcfg, subscriptionPrice_(sub));
+    if (sub.status !== 'active' || sub.cancel_at_period_end || sub.cancel_at) return { ok: false, error: 'not_active' };
+    // Always start from a clean subscription: releasing a schedule changes neither the price nor the billing date.
+    if (sub.schedule) stripe_(bcfg, 'post', '/subscription_schedules/' + encodeURIComponent(idOf_(sub.schedule)) + '/release', {});
+    if (current !== raw.plan) {
+      var sch = stripe_(bcfg, 'post', '/subscription_schedules', { from_subscription: sub.id });
+      stripe_(bcfg, 'post', '/subscription_schedules/' + encodeURIComponent(sch.id), {
+        end_behavior: 'release', proration_behavior: 'none',
+        phases: {
+          0: { items: { 0: { price: bcfg.prices[current], quantity: 1 } }, start_date: sch.phases[0].start_date, end_date: sub.current_period_end,
+            proration_behavior: 'none' },
+          1: { items: { 0: { price: bcfg.prices[raw.plan], quantity: 1 } }, iterations: 1, proration_behavior: 'none',
+            metadata: { plan: raw.plan, lang: student.idioma === 'en' ? 'en' : 'es' } }
+        }
+      });
+    }
+    syncSubscription_(cfg, bcfg, db, sub.id);
+    var at = sub.current_period_end * 1000;
+    if (current !== raw.plan) {
+      mailOwner_(cfg, db, 'planchange:' + sub.id + ':' + raw.plan + ':' + at, 'Cambio de plan programado: ' + (student.nombre || student.email), [
+        (student.nombre || student.email) + ' <' + student.email + '> pasará del plan ' + planLabel_(current) + ' al ' + planLabel_(raw.plan) +
+        ' el ' + whenText_(cfg, at) + ', al terminar su periodo pagado. No se cobra nada ahora ni hay prorrateo.'
+      ]);
+    }
+    refreshPanel_(cfg, bcfg, db);
+    return studentView_(cfg, bcfg, db, student);
+  });
+}
+
+function undoPlanChange_(cfg, bcfg, raw) {
+  return changePlan_(cfg, bcfg, { token: raw.token, confirm: true, plan: (function () {
+    var db = db_(bcfg);
+    var st = sessionStudent_(bcfg, db, raw.token);
+    var row = st && activeSubscription_(db, st);
+    return row ? row.plan : 'none';
+  })() });
+}
+
 // ---------- entry point from doPost (Code.gs) ----------
 
 function billingPost_(raw) {
@@ -1050,6 +1175,8 @@ function billingPost_(raw) {
     case 'stu_cancel': return cancelClass_(cfg, bcfg, raw);
     case 'stu_move': return moveClass_(cfg, bcfg, raw);
     case 'stu_portal': return portal_(cfg, bcfg, raw);
+    case 'stu_plan': return changePlan_(cfg, bcfg, raw);
+    case 'stu_plan_undo': return undoPlanChange_(cfg, bcfg, raw);
   }
   return { ok: false, error: 'invalid_request' };
 }
@@ -1083,16 +1210,22 @@ function billingHourly() {
 
 function reconcile_(cfg, bcfg, db) {
   var n = 0;
+  // Subscriptions to check: every one Stripe lists with our prices, plus every one already known to the ledger
+  // (the list is capped at 100 and leaves out some, such as those on Test Clocks).
+  var ids = {};
   var list = stripe_(bcfg, 'get', '/subscriptions', { status: 'all', limit: 100 });
-  (list.data || []).forEach(function (sub) {
-    if (!planForPrice_(bcfg, subscriptionPrice_(sub))) return;
-    syncSubscription_(cfg, bcfg, db, sub.id);
-    if (sub.status === 'canceled' && sub.ended_at && sub.ended_at * 1000 < Date.now() - 60 * 86400000) return;
-    var invs = stripe_(bcfg, 'get', '/invoices', { subscription: sub.id, status: 'paid', limit: 10 });
+  (list.data || []).forEach(function (sub) { if (planForPrice_(bcfg, subscriptionPrice_(sub))) ids[sub.id] = true; });
+  db.rows('suscripciones').forEach(function (r) {
+    var ended = r.estado === 'canceled' && Number(r.terminada_en) && Number(r.terminada_en) < Date.now() - 60 * 86400000;
+    if (!ended) ids[r.suscripcion] = true;
+  });
+  Object.keys(ids).forEach(function (subId) {
+    var snap = syncSubscription_(cfg, bcfg, db, subId);
+    if (!snap) return;
+    var invs = stripe_(bcfg, 'get', '/invoices', { subscription: subId, status: 'paid', limit: 10 });
     (invs.data || []).forEach(function (inv) {
       if (!db.find('movimientos', 'id', 'grant:' + inv.id + ':1') && !db.find('incidencias', 'id', 'invoice-reason:' + inv.id)) {
-        var r = syncInvoice_(cfg, bcfg, db, inv.id);
-        n += r.granted;
+        n += syncInvoice_(cfg, bcfg, db, inv.id).granted;
       }
     });
   });
@@ -1239,12 +1372,28 @@ function applyAdjustment_(cfg, bcfg, db, row) {
     }
     return 'hecho';
   }
+  if (tipo === 'justificar') {
+    if (!c) return 'error: crédito desconocido (columna credito, ver "CLASES RECIENTES" en el panel)';
+    if (c.estado !== 'consumido') return 'error: esa clase no consta como realizada (' + c.estado + ')';
+    addMovement_(db, { id: 'restore:' + c.reserva, tipo: 'restore', alumno: c.alumno, credito: c.id, reserva: c.reserva, datos: { motivo: motivo, ajuste: row.id } });
+    return 'hecho';
+  }
+  if (tipo === 'anonimizar') {
+    // Right to erasure: personal data leave the Sheet; the pseudonymous id stays for the accounting record.
+    if (!alumno) return 'error: falta el correo del alumno';
+    var rowsA = db.rows('alumnos').filter(function (a) { return a.alumno === alumno; });
+    if (!rowsA.length) return 'error: alumno desconocido';
+    rowsA.forEach(function (a) { db.update('alumnos', a, { email: '[suprimido]', nombre: '[suprimido]' }); });
+    db.rows('accesos').forEach(function (a) { if (a.alumno === alumno && !a.revocado) db.update('accesos', a, { revocado: Date.now() }); });
+    db.update('ajustes', row, { alumno: '[suprimido]' });
+    return 'hecho: borra también el cliente en Stripe si ya no hay obligación de conservarlo';
+  }
   if (tipo === 'revocar') {
     if (!alumno) return 'error: falta el correo del alumno';
     db.rows('accesos').forEach(function (a) { if (a.alumno === alumno && !a.revocado) db.update('accesos', a, { revocado: Date.now() }); });
     return 'hecho';
   }
-  return 'error: tipo desconocido (anular, ampliar, conceder, revocar)';
+  return 'error: tipo desconocido (anular, ampliar, conceder, justificar, revocar, anonimizar)';
 }
 
 // ---------- admin panel (tab "panel" of the same private Sheet) ----------
@@ -1264,7 +1413,8 @@ function refreshPanel_(cfg, bcfg, db) {
     subs.slice().sort(function (a, b) { return String(a.estado).localeCompare(String(b.estado)); }).forEach(function (s) {
       var st = students[s.alumno] || {};
       var mine = studentCredits_(ledger, s.alumno);
-      out.push([st.nombre || '', st.email || '', planLabel_(s.plan), s.estado + (s.cancela_al_final ? ' (cancela al final)' : ''),
+      out.push([st.nombre || '', st.email || '', planLabel_(s.plan) + (s.cambio_plan ? ' → ' + planLabel_(s.cambio_plan) : ''),
+        s.estado + (s.cancela_al_final ? ' (cancela al final)' : ''),
         whenText_(cfg, Number(s.cancela_al_final ? (s.cancela_en || s.fin_periodo) : s.fin_periodo)),
         mine.filter(function (c) { return c.estado === 'disponible'; }).length,
         mine.filter(function (c) { return c.estado === 'reservado'; }).length,
@@ -1288,6 +1438,21 @@ function refreshPanel_(cfg, bcfg, db) {
         out.push([st.nombre || '', st.email || '', c.id, c.expira === null ? '' : whenText_(cfg, c.expira), c.traslado ? 'sí' : '',
           c.protegido ? 'sí' : '', c.expira !== null && now >= c.expira ? (policy.enforced ? 'vencido: revisar' : 'fuera de plazo (informativo)') : 'disponible', '']);
       });
+    out.push(['', '', '', '', '', '', '', '']);
+    out.push(['CLASES RECIENTES (30 días)', 'Correo', 'Inicio (Madrid)', 'Crédito', 'Estado', 'Motivo', '', '']);
+    Object.keys(ledger.bookings).map(function (k) { return ledger.bookings[k]; })
+      .filter(function (b) { return b.estado !== 'reservada' && b.inicio > now - 30 * 86400000 && b.inicio <= now; })
+      .sort(function (a, b) { return b.inicio - a.inicio; })
+      .forEach(function (b) {
+        var st = students[b.alumno] || {};
+        out.push([st.nombre || '', st.email || '', whenText_(cfg, b.inicio), b.credito, b.estado, b.motivo || '', '', '']);
+      });
+    out.push(['', '', '', '', '', '', '', '']);
+    out.push(['REEMBOLSOS', 'Correo', 'Fecha', 'Factura', 'Importe', 'Total', '', '']);
+    movements_(db).filter(function (m) { return m.tipo === 'refund'; }).forEach(function (m) {
+      var st = students[m.alumno] || {};
+      out.push([st.nombre || '', st.email || '', whenText_(cfg, m.ts), m.datos.factura, (m.datos.reembolsado / 100).toFixed(2) + ' €', m.datos.total ? 'sí' : 'parcial', '', '']);
+    });
     out.push(['', '', '', '', '', '', '', '']);
     out.push(['INCIDENCIAS ABIERTAS', 'Tipo', 'Fecha', 'Detalle', '', '', '', '']);
     db.rows('incidencias').filter(function (i) { return i.estado !== 'cerrada'; }).forEach(function (i) {
@@ -1324,8 +1489,22 @@ function checkBillingSetup() {
 
 /** Installs the hourly maintenance trigger once (needs the script.scriptapp permission). */
 function installBillingTriggers() {
-  var exists = ScriptApp.getProjectTriggers().some(function (t) { return t.getHandlerFunction() === 'billingHourly'; });
-  if (!exists) ScriptApp.newTrigger('billingHourly').timeBased().everyHours(1).create();
+  var handlers = ScriptApp.getProjectTriggers().map(function (t) { return t.getHandlerFunction(); });
+  if (handlers.indexOf('billingHourly') === -1) ScriptApp.newTrigger('billingHourly').timeBased().everyHours(1).create();
+  if (handlers.indexOf('billingWeeklyBackup') === -1) ScriptApp.newTrigger('billingWeeklyBackup').timeBased().everyWeeks(1).create();
+}
+
+/**
+ * Weekly copy of the whole ledger Sheet (same Drive, same owner, private like the original), so a mistaken edit or
+ * deletion can be undone beyond Sheets' own version history. Needs no permission beyond "spreadsheets".
+ */
+function billingWeeklyBackup() {
+  resetDb_();
+  var bcfg = billingConfig_();
+  var ss = SpreadsheetApp.openById(bcfg.spreadsheetId);
+  var name = 'Copia de seguridad clases ' + Utilities.formatDate(new Date(), 'Europe/Madrid', 'yyyy-MM-dd');
+  ss.copy(name);
+  return name;
 }
 
 if (typeof module !== 'undefined' && module.exports) {

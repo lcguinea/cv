@@ -21,7 +21,8 @@
   var $ = function (id) { return document.getElementById(id); };
   var S = 'learn.students.';
   var state = { token: null, view: null, slots: null, slotsState: 'idle', picked: [], requestId: null, moving: null, confirming: null, busy: false,
-    checkout: null, polls: 0, message: '' };
+    checkout: null, polls: 0, message: '', planConfirm: false };
+  var EMAIL = 'lguinea@berklee.edu';
 
   function tr(key, vars) { return t(S + key).replace(/\{(\w+)\}/g, function (m, k) { return vars && vars[k] !== undefined ? vars[k] : m; }); }
   function say(key, vars) { state.message = key ? [key, vars] : ''; $('stu-status').textContent = key ? tr(key, vars) : ''; }
@@ -54,7 +55,8 @@
     var e = res && res.error;
     if (e === 'invalid_token') { signOutLocal(); say('errSession'); return; }
     var map = { busy: 'errBusy', slot_unavailable: 'errSlot', no_credits: 'errNoCredits', overlap: 'errOverlap', too_late: 'errTooLate',
-      reschedule_limit: 'errLimit', after_deadline: 'errAfterDeadline', rate_limited: 'errRate', invalid_email: 'errEmail' };
+      reschedule_limit: 'errLimit', after_deadline: 'errAfterDeadline', rate_limited: 'errRate', invalid_email: 'errEmail',
+      not_active: 'errNotActive' };
     say(map[e] || 'errGeneric');
   }
 
@@ -116,6 +118,31 @@
     if (p.renewsAt) box.appendChild(el('p', '', tr('renews', { date: when(p.renewsAt) })));
     if (p.endsAt) box.appendChild(el('p', '', tr('ends', { date: when(p.endsAt) })));
     if (p.status === 'past_due' || p.status === 'unpaid') box.appendChild(el('p', 'learn-hint', tr('pastDueNote')));
+    // Plan change: only from the next renewal, never charged now (the backend schedules it in Stripe).
+    if (p.pendingPlan) {
+      box.appendChild(el('p', 'students-note', tr('pendingChange', { date: when(p.changeAt), plan: tr('planName_' + p.pendingPlan) })));
+      box.appendChild(button('learn-button learn-button-quiet', tr('keepPlan'), function () { planCall({ op: 'stu_plan_undo', token: state.token }, 'planKept'); }));
+    } else if (p.canChangePlan && p.renewsAt) {
+      var other = p.plan === 'weekly' ? 'biweekly' : 'weekly';
+      if (state.planConfirm) {
+        box.appendChild(el('p', 'students-note', tr('changePlanConfirm', { date: when(p.renewsAt) })));
+        var row = el('div', 'students-actions');
+        row.appendChild(button('learn-button', tr('confirmChange'), function () { planCall({ op: 'stu_plan', token: state.token, plan: other, confirm: true }, 'planChanged'); }));
+        row.appendChild(button('learn-button learn-button-quiet', tr('keep'), function () { state.planConfirm = false; renderPlan(); }));
+        box.appendChild(row);
+      } else {
+        box.appendChild(button('learn-button learn-button-quiet students-plan-change', tr('changePlanTo_' + other), function () { state.planConfirm = true; renderPlan(); }));
+      }
+    }
+  }
+  function planCall(body, okKey) {
+    if (state.busy) return;
+    state.busy = true;
+    post(body).then(function (res) {
+      state.busy = false; state.planConfirm = false;
+      if (!res || !res.ok) { failed(res); renderPlan(); return; }
+      state.view = res; say(okKey); render();
+    }).catch(function () { state.busy = false; say('errGeneric'); });
   }
   function renderCounts() {
     var c = state.view.counts, dl = $('stu-counts');
@@ -170,6 +197,26 @@
     var n = maxPick();
     if (n < 1) { box.appendChild(el('p', 'learn-hint', tr('noCredits'))); return; }
     box.appendChild(el('p', 'learn-intro', n === 1 ? tr('bookIntroOne') : tr('bookIntro', { n: n })));
+    // Regular rhythm in one tap: the first chosen time repeated every week (weekly plan) or every two weeks.
+    var plan = state.view.plan;
+    if (state.picked.length === 1 && n > 1 && plan) {
+      var stepDays = plan.plan === 'biweekly' ? 14 : 7;
+      box.appendChild(button('learn-button learn-button-quiet students-repeat', tr('repeat_' + (plan.plan === 'biweekly' ? 'biweekly' : 'weekly')), function () {
+        var free = {};
+        (state.slots || []).forEach(function (sl) { free[sl.start] = true; });
+        var base = Date.parse(state.picked[0]), missing = false;
+        for (var k = 1; k < n; k++) {
+          var iso = new Date(base + k * stepDays * 86400000).toISOString();
+          // the same Madrid wall-clock time: shift by an hour if daylight saving changed in between
+          var cands = [iso, new Date(Date.parse(iso) - 3600000).toISOString(), new Date(Date.parse(iso) + 3600000).toISOString()]
+            .filter(function (c) { return free[c] && hour(c) === hour(state.picked[0]); });
+          if (cands.length) state.picked.push(cands[0]); else missing = true;
+        }
+        state.requestId = null;
+        if (missing) say('repeatPartial');
+        renderBook();
+      }));
+    }
     picker(box, function (start) {
       var at = state.picked.indexOf(start);
       if (at !== -1) state.picked.splice(at, 1);
@@ -204,7 +251,8 @@
     list.forEach(function (b) {
       var li = el('li', 'students-booking status-' + b.status);
       li.appendChild(el('p', 'students-booking-when', when(b.start)));
-      var meta = tr('inPerson') + (b.location ? ' · ' + b.location : '') + ' · ' + (b.status === 'cancelada' && b.reason === 'profesor' ? tr('cancelledByTeacher') : tr('status_' + b.status));
+      var meta = tr('inPerson') + (b.location ? ' · ' + b.location : '') + ' · ' + (b.status === 'cancelada' && b.reason === 'profesor' ? tr('cancelledByTeacher')
+        : b.status === 'cancelada' && b.reason === 'justificada' ? tr('justified') : tr('status_' + b.status));
       li.appendChild(el('p', 'students-booking-meta', meta));
       if (b.status === 'reservada') {
         if (b.canChange) {
@@ -225,7 +273,14 @@
             li.appendChild(pick);
           }
         } else {
-          li.appendChild(el('p', 'learn-hint', tr('tooLate')));
+          // Inside 24 hours: say what applies and how to reach Luis, instead of a bare refusal.
+          var late = el('div', 'students-late');
+          late.appendChild(el('p', 'students-late-title', tr('lateTitle')));
+          late.appendChild(el('p', 'learn-hint', tr('lateBody')));
+          var a = el('a', 'text-link', tr('writeLuis'));
+          a.href = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent(tr('status_reservada') + ': ' + when(b.start));
+          late.appendChild(a);
+          li.appendChild(late);
         }
       }
       ol.appendChild(li);
