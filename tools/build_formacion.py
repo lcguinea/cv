@@ -630,7 +630,16 @@ def strings_js():
     return body
 
 
+PREVIEW = False
+
+
 def outputs():
+    if subscriptions_on() and not PREVIEW:
+        # Publishing the plans needs the signed launch checklist (docs/lanzamiento/CHECKLIST-LANZAMIENTO.md).
+        import launch_gate
+        missing = launch_gate.check()
+        if missing:
+            raise SystemExit("LAUNCH GATE: the plans cannot be published yet. Missing:\n  - " + "\n  - ".join(missing))
     tree = site_strings()["es"]
     files = {"formacion/index.html": hub(tree), OUT_STRINGS: strings_js()}
     for key, slug in SUBPAGES.items():
@@ -653,7 +662,8 @@ def main(argv=None):
         out = Path(args.out or "").resolve()
         if not args.out or out == ROOT or ROOT in out.parents:
             parser.error("--preview needs --out outside the repository")
-        global TREE
+        global TREE, PREVIEW
+        PREVIEW = True
         C.SUBSCRIPTIONS = {"published": True, "endpoint": args.preview}
         TREE = build_tree()
         for rel, text in outputs().items():

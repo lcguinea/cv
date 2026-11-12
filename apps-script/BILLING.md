@@ -76,6 +76,8 @@ No hay otro panel que mantener. La hoja no se comparte con nadie.
 | `ampliar` | `credito`, `valor` = `aaaa-mm-dd` | Nueva fecha límite |
 | `conceder` | `alumno` (correo), `valor` = 1 a 8 | Clases extra sin fecha límite |
 | `revocar` | `alumno` (correo) | Cierra todas las sesiones de ese alumno |
+| `justificar` | `credito` (ver «CLASES RECIENTES» en el panel) | Ausencia justificada: la clase realizada vuelve al saldo, sin fecha límite |
+| `anonimizar` | `alumno` (correo) | Supresión: borra nombre y correo de la hoja y cierra sesiones; el registro contable queda con el id seudónimo |
 
 **Cancelar una clase como profesor:** borra el evento en Google Calendar. En menos de una hora el alumno recupera la
 clase **sin fecha límite** y recibe un correo. Mover el evento en Calendar también se refleja en su área.
@@ -94,6 +96,8 @@ clase **sin fecha límite** y recibe un correo. Mover el evento en Calendar tamb
 | `stu_move` | `token`, `booking`, `start` | Hasta 24 h antes: mueve el mismo evento (máx. `MAX_RESCHEDULES`) |
 | `stu_portal` | `token` | URL del Customer Portal de Stripe |
 | `stu_logout` | `token` | Revoca la sesión |
+| `stu_plan` | `token`, `plan`, `confirm: true` | Programa el cambio semanal ↔ quincenal para la próxima renovación (Subscription Schedule, sin prorrateo). Nada se cobra ahora |
+| `stu_plan_undo` | `token` | Anula el cambio programado |
 | `stripe_event` | `id`, `type`, `ts`, `sig` | Solo desde el relé |
 
 Acceso de alumnos: enlace mágico por correo (prueba que controla el buzón), de un solo uso, canjeado por una sesión
@@ -113,6 +117,14 @@ Stripe no son credenciales; un alumno no puede ver ni tocar reservas de otro (`n
   (queda "en revisión", visible para Luis, recuperable con `ampliar`), una clase no puede programarse después de la
   fecha límite de su crédito, y el alumno recibe un aviso 7 días antes.
 - Cancelar la suscripción (al final del periodo o inmediata) no toca los créditos pagados.
+- **Cambio de plan:** programado para el final del ciclo pagado. Stripe cobra entonces una factura `subscription_update`
+  de 148 € sin prorrateo (verificado con Test Clocks), que concede las 4 clases del nuevo ciclo. Una factura
+  `subscription_update` con prorrateo o con otro importe no concede nada y abre incidencia. Cancelar en el portal con un
+  cambio pendiente anula el cambio.
+- **Reembolsos:** cada `charge.refunded` deja un movimiento `refund` (importe, factura, parcial o total) y una incidencia;
+  no se anula ninguna clase sin un ajuste `anular`.
+- **Conciliación horaria:** revisa las suscripciones que lista Stripe **y** las ya conocidas por el registro.
+- **Copia de seguridad:** `billingWeeklyBackup` (activador semanal) duplica la hoja en el mismo Drive.
 
 ## Propiedades de la secuencia de comandos (nuevas)
 
@@ -125,6 +137,7 @@ Stripe no son credenciales; un alumno no puede ver ni tocar reservas de otro (`n
 | `RELAY_SECRET` | 64 hex aleatorios, el mismo que en el Worker |
 | `LEDGER_SPREADSHEET_ID` | id de la hoja privada nueva |
 | `BILLING_CHECKOUT_ENABLED` | `true` para permitir contratar (interruptor de emergencia) |
+| `TERMS_APPROVED_VERSION` | Debe ser igual a `TERMS_VERSION` de `Billing.gs` (versión de las condiciones revisada por el abogado); si no, Checkout sigue cerrado |
 | `CREDIT_POLICY_ENFORCED` | `false` hasta aprobar la política |
 | `CLASS_LOCATION` | Dirección que aparece en la invitación (opcional) |
 | `CLASS_AVAILABILITY_CALENDAR_ID` | Calendario de franjas solo para clases (opcional; si no, el de la agenda) |
@@ -154,6 +167,9 @@ open http://127.0.0.1:8792/formacion/#planes    # tarjeta 4242 4242 4242 4242; r
 ```
 
 ## Despliegue (cuando Luis lo apruebe; nada de esto está hecho)
+
+> Procedimiento vigente y verificable: `docs/lanzamiento/08-DESPLIEGUE-Y-REVERSION.md` y el checklist bloqueante
+> `docs/lanzamiento/CHECKLIST-LANZAMIENTO.md`. Lo que sigue es el resumen original de la Misión 04.
 
 Orden pensado para que en ningún momento haya un botón de pago que no funcione:
 
