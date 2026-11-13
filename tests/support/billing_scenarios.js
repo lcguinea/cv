@@ -696,6 +696,15 @@ Object.assign(scenarios, {
     assert.strictEqual(env.table('movimientos').length, before);
     assert(!JSON.stringify(env.sheets.sheet1.ajustes).includes('ana@example.com'));
   },
+  maintenance_triggers_install_once_with_a_weekday_for_the_backup() {
+    const { env } = setup();
+    env.ctx.installBillingTriggers();
+    env.ctx.installBillingTriggers();
+    assert.strictEqual(env.triggers.length, 2, 'running it again adds nothing');
+    const [hourly, weekly] = env.triggers;
+    assert.deepStrictEqual([hourly.handler, hourly.everyHours], ['billingHourly', 1]);
+    assert.deepStrictEqual([weekly.handler, weekly.everyWeeks, weekly.weekDay], ['billingWeeklyBackup', 1, 'MONDAY']);
+  },
   students_get_our_own_renewal_and_failed_payment_notices() {
     const { env, stripe, s } = newSubscriber();
     env.now = s.sub.current_period_end * 1000 - 2 * DAY;

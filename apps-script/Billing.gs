@@ -1519,7 +1519,8 @@ function checkBillingSetup() {
 function installBillingTriggers() {
   var handlers = ScriptApp.getProjectTriggers().map(function (t) { return t.getHandlerFunction(); });
   if (handlers.indexOf('billingHourly') === -1) ScriptApp.newTrigger('billingHourly').timeBased().everyHours(1).create();
-  if (handlers.indexOf('billingWeeklyBackup') === -1) ScriptApp.newTrigger('billingWeeklyBackup').timeBased().everyWeeks(1).create();
+  if (handlers.indexOf('billingWeeklyBackup') === -1) ScriptApp.newTrigger('billingWeeklyBackup').timeBased().everyWeeks(1)
+    .onWeekDay(ScriptApp.WeekDay.MONDAY).atHour(4).create();
 }
 
 /**

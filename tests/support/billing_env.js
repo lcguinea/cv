@@ -84,7 +84,7 @@ function makeEnv(opts = {}) {
     availability: opts.availability || null,
     calendars: opts.calendars || { 'owner@example.com': [] },
     mails: [], logs: [], cache: {}, lockHeld: false, insertError: null, removeError: null, patchError: null, sheetError: null,
-    fetch: opts.fetch || null, fetches: [],
+    fetch: opts.fetch || null, fetches: [], triggers: [],
   };
   const availability = () => env.availability || weekdayWindows(env.now - 86400000, 70);
   const cacheApi = {
@@ -185,7 +185,22 @@ function makeEnv(opts = {}) {
       const r = env.fetch(url, o);
       return { getResponseCode: () => r.code, getContentText: () => JSON.stringify(r.body) };
     } },
-    ScriptApp: { getProjectTriggers: () => [], newTrigger: () => ({ timeBased: () => ({ everyHours: () => ({ create: () => null }), everyWeeks: () => ({ create: () => null }) }) }) },
+    // Like the real service: a weekly time trigger must name its weekday before create() (Apps Script throws otherwise).
+    ScriptApp: {
+      WeekDay: { MONDAY: 'MONDAY' },
+      getProjectTriggers: () => env.triggers.map((t) => ({ getHandlerFunction: () => t.handler })),
+      newTrigger: (handler) => ({ timeBased: () => {
+        const t = { handler };
+        const done = { create: () => { env.triggers.push(t); return t; } };
+        const atHour = (h) => { t.hour = h; return done; };
+        return {
+          everyHours: (n) => { t.everyHours = n; return done; },
+          everyWeeks: (n) => { t.everyWeeks = n; return {
+            create: () => { throw new Error('You tried to create a weekly trigger, but did not specify which day in the week.'); },
+            onWeekDay: (d) => { t.weekDay = d; return Object.assign({ atHour }, done); } }; },
+        };
+      } }),
+    },
     Logger: { log: (s) => env.logs.push(s) },
   };
   vm.createContext(ctx);
