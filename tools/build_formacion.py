@@ -398,6 +398,10 @@ def area_target(a):
     return SUBPAGES[a] + "/" if a in SUBPAGES else "#" + a
 
 
+# Lessons covered by the class plans (terms, section 2): mentoring ("carrera") is not part of them.
+PLAN_AREAS = ("piano", "composicion", "produccion", "armonia")
+
+
 def hero_actions(h):
     """Hub hero buttons. With the class plans published, the first button and a price line lead to #planes, so a
     visitor exploring the lessons finds the plans without scrolling; the enquiry stays one link away."""
@@ -456,6 +460,11 @@ def hub(es_tree):
                     f'<div>{el("dt", "labelWho")}{el("dd", p + ".who")}</div>'
                     f'<div>{el("dt", "labelOutcome")}{el("dd", p + ".outcome")}</div></dl></details>'
                     + arrow_link(f"?area={a}#consulta", "ctaButton", extra=f' data-area="{a}"', sr=f"area.{a}"))
+        if subscriptions_on() and a in PLAN_AREAS:
+            # Every lesson the plans cover offers them right next to its own link (the enquiry or the lesson page).
+            plan = arrow_link("#planes", "plans.jumpShort", extra=" data-plans", sr=f"area.{a}")
+            more = (more.replace("</details><a ", '</details><div class="learn-block-actions"><a ', 1) + plan + "</div>"
+                    if "</details>" in more else f'<div class="learn-block-actions">{more}{plan}</div>')
         blocks += (
             f'<li class="learn-block{" learn-block-flip" if i % 2 else ""}" id="{a}">'
             + figure_for(a, root, cap)
