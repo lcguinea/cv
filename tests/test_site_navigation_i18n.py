@@ -12,6 +12,7 @@ import json
 import re
 import shutil
 import subprocess
+import sys
 import unittest
 from pathlib import Path
 
@@ -41,6 +42,9 @@ NAV_HREFS = {
 }
 CURRENT = {"home": None, "cv": "nav.cv", "music": "nav.music", "about": "nav.about", "agenda": "nav.agenda",
            "learn": "nav.lessons", "learnSub": "nav.lessons"}
+sys.path.insert(0, str(ROOT / "tools"))
+from build_site import SUBSCRIPTION_FILES  # noqa: E402  (empty while the class plans are not published)
+
 PUBLISHED_JS = ("strings.js", "i18n.js", "site.js", "player.js", "music-page.js", "agenda.js", "theme-init.js", "learn.js", "learn-strings.js", "soft-nav.js")
 # Keys built at runtime from data: 'music.role'+credit and 'music.type'+release type.
 # Genre and mood labels are looked up from the human-reviewed values in js/music-data.js.
@@ -151,10 +155,21 @@ class StringsTests(unittest.TestCase):
             code += re.findall(r"<script>(.*?)</script>", html, re.S)
         used |= set(re.findall(r'data-i18n(?:-label|-placeholder)?="([\w.]+)"', read("sobre-mi.html")))
         used |= set(re.findall(r'data-i18n(?:-label|-placeholder)?="([\w.]+)"', read("agenda/index.html")))
-        for rel in LEARN_PAGES:
+        # Class plans (published in Mission 06): the student area, the terms page and their scripts use learn.* keys too.
+        for rel in [r for r in SUBSCRIPTION_FILES if r.endswith(".html")] + list(LEARN_PAGES):
             used |= set(re.findall(r'data-(?:i18n(?:-label|-placeholder)?|accent)="([\w.]+)"', read(rel)))
+        code += [read(r) for r in SUBSCRIPTION_FILES if r.endswith(".js")]
         for source in code:
-            used |= {m for m in re.findall(r"'([a-z]+\.[A-Za-z]+(?:\.[A-Za-z]+)?)'", source) if m in self.en}
+            used |= {m for m in re.findall(r"'([a-z]+\.[A-Za-z]+(?:\.[A-Za-z0-9_]+)?)'", source) if m in self.en}
+            # Keys completed at runtime, e.g. t('learn.students.status_' + state): every key under such a prefix counts.
+            for prefix in re.findall(r"'([a-z]+\.[A-Za-z]+\.[A-Za-z]+_)'\s*\+", source):
+                used |= {k for k in self.en if k.startswith(prefix)}
+            # js/alumnos.js names its keys relative to its namespace: tr('noBookings'), say('linkSent'), tr('status_' + x).
+            ns = re.search(r"var S = '([a-z]+\.[a-z]+\.)'", source)
+            if ns:
+                for name in re.findall(r"'([A-Za-z0-9_]+)'(\s*\+)?", source):  # also keys kept in lookup tables
+                    key = ns.group(1) + name[0]
+                    used |= {k for k in self.en if k.startswith(key)} if name[1] else ({key} & set(self.en))
         return used
 
     def test_both_languages_have_the_same_non_empty_keys(self):

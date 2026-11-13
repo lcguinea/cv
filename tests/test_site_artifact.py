@@ -69,8 +69,11 @@ class ArtifactTest(unittest.TestCase):
     def test_exact_composition(self):
         self.assertEqual(self.present, sorted(self.files))
         top = {p.split("/")[0] for p in self.present}
-        self.assertEqual(top, {"404.html", "agenda", "assets", "css", "cv.html", "en", "es", "fonts", "formacion", "index.html", "js",
-                               "music", "robots.txt", "sitemap.xml", "sobre-mi.html"})
+        expected = {"404.html", "agenda", "assets", "css", "cv.html", "en", "es", "fonts", "formacion", "index.html", "js",
+                    "music", "robots.txt", "sitemap.xml", "sobre-mi.html"}
+        if build_site.SUBSCRIPTION_FILES:  # class plans published (Mission 06): the student area joins the site
+            expected.add("alumnos")
+        self.assertEqual(top, expected)
         previews = [p for p in self.present if p.startswith("assets/audio/previews/")]
         images = [p for p in self.present if p.startswith("assets/images/") and not p.startswith("assets/images/share/")]
         artworks, published = build_site.music_files()

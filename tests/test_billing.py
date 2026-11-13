@@ -71,24 +71,33 @@ class RelayScenarios(unittest.TestCase):
                 self.assertEqual(outcome, "ok")
 
 
-class NotPublishedUntilApproved(unittest.TestCase):
-    def test_flag_is_off(self):
-        self.assertFalse(formacion_content.SUBSCRIPTIONS["published"])
+class PublishedWithTheLiveBackend(unittest.TestCase):
+    """Launched on 2026-11-13 (Mission 06) with the signed checklist: the plans are public and call the production
+    Apps Script; nothing of the test environment may leak into the published pages."""
+    LIVE = "https://script.google.com/macros/s/AKfycbxj7SKKv5Pn4zb3oyqC8w3K8F3Ye4Zs4EHaUeBVvV3nIrBxbKvzBg8csvQhbXWpprpe/exec"
 
-    def test_generated_pages_carry_no_plans(self):
+    def test_flag_is_on_with_the_production_endpoint(self):
+        self.assertTrue(formacion_content.SUBSCRIPTIONS["published"])
+        self.assertEqual(formacion_content.SUBSCRIPTIONS["endpoint"], self.LIVE)
+
+    def test_generated_pages_carry_the_plans_and_no_test_identifiers(self):
         hub = read("formacion/index.html")
-        self.assertNotIn('id="planes"', hub)
-        self.assertNotIn("plans.js", hub)
-        self.assertNotIn("148", read("js/learn-strings.js"))
-        self.assertFalse((ROOT / "alumnos" / "index.html").exists())
+        self.assertIn('id="planes"', hub)
+        self.assertIn("plans.js", hub)
+        self.assertIn(f'data-endpoint="{self.LIVE}"', hub)
+        self.assertTrue((ROOT / "alumnos" / "index.html").exists())
+        self.assertTrue((ROOT / "formacion" / "condiciones" / "index.html").exists())
+        for page in ("formacion/index.html", "alumnos/index.html", "formacion/condiciones/index.html", "js/learn-strings.js"):
+            text = read(page)
+            self.assertNotRegex(text, r"127\.0\.0\.1|cs_test_|pk_test_|sk_test_|rk_test_|price_1Ub0", page)
 
-    def test_site_artifact_leaves_them_out(self):
+    def test_site_artifact_includes_them_and_nothing_private(self):
         with tempfile.TemporaryDirectory() as out:
             subprocess.run([sys.executable, str(ROOT / "tools" / "build_site.py"), "--out", out], check=True, capture_output=True)
             files = {str(p.relative_to(out)) for p in Path(out).rglob("*") if p.is_file()}
-        for rel in ("alumnos/index.html", "js/plans.js", "js/alumnos.js"):
-            self.assertNotIn(rel, files)
-        self.assertFalse(any(f.startswith(("apps-script/", "workers/", "tools/")) for f in files))
+        for rel in ("alumnos/index.html", "js/plans.js", "js/alumnos.js", "formacion/condiciones/index.html"):
+            self.assertIn(rel, files)
+        self.assertFalse(any(f.startswith(("apps-script/", "workers/", "tools/", "docs/", "tests/")) for f in files))
 
     def test_preview_builds_outside_the_repository_only(self):
         with tempfile.TemporaryDirectory() as out:

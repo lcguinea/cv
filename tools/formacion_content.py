@@ -34,7 +34,8 @@ COMMERCIAL = {
 # area (alumnos/index.html), js/plans.js, js/alumnos.js and their copy are only generated once Luis approves going live.
 # "endpoint": public /exec URL of the Apps Script web app (the same one as /agenda/). Preview without publishing:
 #     python3 tools/build_formacion.py --preview http://127.0.0.1:8792/exec --out <scratch dir>
-SUBSCRIPTIONS = {"published": False, "endpoint": ""}
+SUBSCRIPTIONS = {"published": True,
+                 "endpoint": "https://script.google.com/macros/s/AKfycbxj7SKKv5Pn4zb3oyqC8w3K8F3Ye4Zs4EHaUeBVvV3nIrBxbKvzBg8csvQhbXWpprpe/exec"}
 
 # Provider data published in /formacion/condiciones/ (information duties of LSSI art. 10 and TRLGDCU art. 97). The
 # build refuses to publish the plans while any value is empty: these data are never invented.
@@ -543,7 +544,6 @@ L["plans"] = {
     "biweekly": {
         "name": ("Quincenal", "Every two weeks"),
         "rhythm": ("Una clase cada dos semanas", "One lesson every two weeks"),
-        "price": ("148 €", "€148"),
         "per": ("cada 8 semanas", "every 8 weeks"),
         "detail": ("4 clases de 60 minutos · 37 € por clase · se renueva cada 56 días",
                    "4 lessons of 60 minutes · €37 per lesson · renews every 56 days"),
@@ -713,7 +713,6 @@ L["students"] = {
     "confirmCancel": ("Sí, cancelar", "Yes, cancel"),
     "keep": ("No, mantener", "No, keep it"),
     "changeUntil": ("Puedes cambiarla hasta el {date}", "You can change it until {date}"),
-    "tooLate": ("Faltan menos de 24 horas: para cambiarla, escríbeme.", "Less than 24 hours to go: to change it, write to me."),
     "chooseNew": ("Elige la nueva hora", "Choose the new time"),
     "moved": ("Clase cambiada. La invitación se ha actualizado.", "Lesson moved. The invitation has been updated."),
     "cancelled": ("Clase cancelada. Recuperas la clase.", "Lesson cancelled. You get the lesson back."),
