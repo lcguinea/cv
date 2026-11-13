@@ -40,9 +40,9 @@ SUBSCRIPTIONS = {"published": False, "endpoint": ""}
 # build refuses to publish the plans while any value is empty: these data are never invented.
 PROVIDER = {
     "name": "Luis Carlos Guinea Moctezuma",
-    "nif": "",
-    "address": "",
-    "classPlace": "",
+    "nif": "16830408C",
+    "address": "C/ Joaquín Ballester, 15, 12, 46009 Valencia",
+    "classPlace": "Jazztone Studios, C/ Pérez Escrich, 15 (Extramurs), 46008 Valencia",
     "email": "lguinea@berklee.edu",
 }
 
