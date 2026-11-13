@@ -398,6 +398,23 @@ def area_target(a):
     return SUBPAGES[a] + "/" if a in SUBPAGES else "#" + a
 
 
+def hero_actions(h):
+    """Hub hero buttons. With the class plans published, the first button and a price line lead to #planes, so a
+    visitor exploring the lessons finds the plans without scrolling; the enquiry stays one link away."""
+    if not subscriptions_on():
+        return ('<div class="learn-actions">' + el("a", f"{h}.cta", ' class="learn-button" href="#empezar"')
+                + el("a", f"{h}.cta2", ' class="learn-button learn-button-quiet" href="#consulta"') + "</div>")
+    return ('<div class="learn-actions">' + el("a", "plans.jump", ' class="learn-button" href="#planes" data-plans')
+            + el("a", f"{h}.cta", ' class="learn-button learn-button-quiet" href="#empezar"') + "</div>"
+            + el("p", "plans.jumpHint", ' class="learn-plans-hint" data-plans')
+            + arrow_link("#consulta", f"{h}.cta2", cls=" learn-hero-ask"))
+
+
+def plans_button(href, cls):
+    """"See plans and prices" on the lesson pages (only once the plans are published)."""
+    return el("a", "plans.jump", f' class="{cls}" href="{href}" data-plans') if subscriptions_on() else ""
+
+
 def hub(es_tree):
     root = "../"
     url = SITE + "formacion/"
@@ -411,9 +428,7 @@ def hub(es_tree):
     hero = (
         '<section class="learn-hero wrap" aria-labelledby="learn-title"><div class="learn-hero-copy">'
         + el("p", f"{h}.eyebrow", ' class="eyebrow"') + accent_title(h, ' id="learn-title"')
-        + el("p", f"{h}.lede", ' class="learn-lede"') + '<div class="learn-actions">'
-        + el("a", f"{h}.cta", ' class="learn-button" href="#empezar"')
-        + el("a", f"{h}.cta2", ' class="learn-button learn-button-quiet" href="#consulta"') + "</div></div>"
+        + el("p", f"{h}.lede", ' class="learn-lede"') + hero_actions(h) + "</div>"
         + photo("hero", root, "learn-hero-photo", caption=f"{h}.caption", eager=True,
                 sizes="(max-width: 700px) 100vw, 46vw") + "</section>"
     )
@@ -522,8 +537,12 @@ def subpage(es_tree, key):
         '<section class="learn-hero learn-hero-sub wrap" aria-labelledby="learn-title"><div class="learn-hero-copy">'
         + el("p", f"{p}.eyebrow", ' class="eyebrow"') + accent_title(p, ' id="learn-title"')
         + el("p", f"{p}.lede", ' class="learn-lede"') + f'<ul class="learn-meta">{meta}</ul>'
-        '<div class="learn-actions">' + el("a", "ctaButton", f' class="learn-button" href="{ask}"')
-        + el("a", "bookTalk", f' class="learn-button learn-button-quiet" href="{root}agenda/"') + "</div></div>"
+        '<div class="learn-actions">'
+        + (plans_button("../#planes", "learn-button") + el("a", "ctaButton", f' class="learn-button learn-button-quiet" href="{ask}"')
+           if subscriptions_on() else
+           el("a", "ctaButton", f' class="learn-button" href="{ask}"')
+           + el("a", "bookTalk", f' class="learn-button learn-button-quiet" href="{root}agenda/"'))
+        + "</div></div>"
         + figure + "</section>"
     )
     who = "".join(f'<li>{el("h3", f"{p}.who.{i}.title")}{el("p", f"{p}.who.{i}.text")}</li>' for i in range(3))
@@ -549,7 +568,8 @@ def subpage(es_tree, key):
                  f'<div class="learn-faq">{faq(f"{p}.faq", len(page["faq"]))}</div></div></section>')
     cta = ('<section class="learn-section learn-enquiry learn-cta" aria-labelledby="cta-title"><div class="wrap learn-cta-inner">'
            + el("h2", f"{p}.ctaTitle", ' id="cta-title"') + el("p", "ctaIntro", ' class="learn-intro"')
-           + '<div class="learn-actions">' + el("a", "ctaButton", f' class="learn-button learn-button-invert" href="{ask}"')
+           + '<div class="learn-actions">' + plans_button("../#planes", "learn-button learn-button-invert")
+           + el("a", "ctaButton", f' class="learn-button {"learn-button-quiet" if subscriptions_on() else "learn-button-invert"}" href="{ask}"')
            + el("a", "bookTalk", f' class="learn-button learn-button-quiet" href="{root}agenda/"')
            + "</div></div></section>")
     others = [k for k in SUBPAGES if k != key]

@@ -639,6 +639,8 @@ html:has(main.learn-page){scroll-padding-bottom:6rem}
 .learn-button{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:.75rem 1.3rem;border:1px solid var(--text);background:var(--text);color:var(--bg);font:500 .78rem var(--mono);text-transform:uppercase;letter-spacing:.06em;text-decoration:none;text-align:center;cursor:pointer;transition:background-color .15s,border-color .15s,color .15s}
 .learn-button:hover{background:var(--accent);border-color:var(--accent);color:#111}
 .learn-button-quiet{background:transparent;color:var(--text)}
+.learn-plans-hint{margin:1rem 0 0;max-width:40ch;font:.78rem/1.5 var(--mono);color:var(--muted)}
+.learn-hero-ask{margin-top:.8rem}
 .learn-button-quiet:hover{background:transparent;color:var(--text);border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
 .learn-button-invert{background:var(--bg);border-color:var(--bg);color:var(--text)}
 .learn-button[disabled]{opacity:.6;cursor:progress}

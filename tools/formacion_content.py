@@ -532,6 +532,10 @@ L["plans"] = {
               "Four one-to-one 60-minute lessons for €148. You choose the pace and book your times from your student "
               "area, without writing to me each time."),
     "legend": ("Elige tu ritmo", "Choose your pace"),
+    # Ways in from the top of /formacion/ and from each lesson page, so the plans are found without scrolling.
+    "jump": ("Ver planes y precios", "See plans and prices"),
+    "jumpHint": ("4 clases individuales de 60 minutos por 148 €, cada semana o cada quince días.",
+                 "4 one-to-one 60-minute lessons for €148, every week or every two weeks."),
     "cardTitle": ("Clases individuales · 60 minutos", "One-to-one lessons · 60 minutes"),
     "weekly": {
         "name": ("Semanal", "Weekly"),

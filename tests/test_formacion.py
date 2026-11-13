@@ -103,9 +103,16 @@ class SecondIterationTest(unittest.TestCase):
         self.assertEqual(hub.count('<details class="learn-q">'), 5)
         self.assertEqual(len(re.findall(r'<ol class="learn-principles">(?:<li>.*?</li>){3}</ol>', hub)), 1)
         self.assertEqual(re.findall(r'<li id="(\w+)"><h3', hub), ["presencial", "online", "mentorias"])
-        # Hero: the two actions of the brief, in order.
+        # Hero: with the class plans published (2026-11-13) the plans come first, then the lessons; the enquiry stays
+        # one link away. Before that, the two actions of the brief.
         actions = re.search(r'<section class="learn-hero.*?</section>', hub, re.S).group(0)
-        self.assertEqual(re.findall(r'class="learn-button[^"]*" href="([^"]+)"', actions), ["#empezar", "#consulta"])
+        buttons = re.findall(r'class="learn-button[^"]*" href="([^"]+)"', actions)
+        if C.SUBSCRIPTIONS["published"]:
+            self.assertEqual(buttons, ["#planes", "#empezar"])
+            self.assertIn('href="#consulta"', actions)
+            self.assertIn("148", actions)
+        else:
+            self.assertEqual(buttons, ["#empezar", "#consulta"])
 
     def test_detail_is_kept_in_disclosures_and_subpages(self):
         hub = read("formacion/index.html")
@@ -250,7 +257,8 @@ class StaticPagesTest(unittest.TestCase):
         """The class plans (prices, renewal, cancellation, 24 h rule, venue) were approved by Luis in Mission 06 and are
         checked by tests/test_billing.py; every other wording rule below still applies to the rest of the content."""
         if rel.endswith(".html"):
-            return re.sub(r'<section id="planes".*?</section>', "", text, flags=re.S)
+            text = re.sub(r'<section id="planes".*?</section>', "", text, flags=re.S)
+            return re.sub(r'<(a|p)\b[^>]*\bdata-plans\b[^>]*>.*?</\1>', "", text, flags=re.S)  # ways in to #planes
         start = text.index("var L=") + len("var L=")
         tree, end = json.JSONDecoder().raw_decode(text, start)
         for lang in tree.values():
